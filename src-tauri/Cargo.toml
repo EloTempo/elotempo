@@ -4,7 +4,8 @@ version = "0.1.0"
 description = "Software desktop offline para árvores genealógicas, compatível com GEDCOM 7.0"
 authors = ["Gabriel Nascimento"]
 license = "MIT"
-repository = "https://github.com/SEU-USUARIO/arvore-genealogica"
+# `repository` fica de fora até o projeto ser publicado — um endereço que não
+# existe é pior do que campo ausente.
 edition = "2021"
 rust-version = "1.77"
 

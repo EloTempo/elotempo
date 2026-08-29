@@ -55,9 +55,9 @@ Precisa de [Node.js 20+](https://nodejs.org) e do
 [dependências do Tauri](https://tauri.app/start/prerequisites/) para o seu
 sistema).
 
+A partir da raiz do projeto:
+
 ```bash
-git clone https://github.com/SEU-USUARIO/arvore-genealogica.git
-cd arvore-genealogica
 npm install
 npm run tauri dev
 ```
