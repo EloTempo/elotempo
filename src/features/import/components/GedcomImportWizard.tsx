@@ -1,4 +1,16 @@
-// src/features/import/components/GedcomImportWizard.tsx
+/**
+ * PROTÓTIPO VISUAL — não ligado ao banco.
+ *
+ * Assistente de importação GEDCOM. Implementa o desenho da seção 4 — import/export GEDCOM 7.0, com dados fixos
+ * escritos no próprio componente. Nenhum dado real passa por aqui ainda: é a
+ * maquete aprovada do layout, guardada no código para não se perder e para
+ * continuar sendo verificada pelo TypeScript.
+ *
+ * Previsto para: Depois do MVP.
+ *
+ * Ao ligar de verdade: trocar os valores fixos por `useQuery` sobre os
+ * comandos de `src/lib/api`, e apagar este aviso.
+ */
 import { useState } from 'react';
 
 export function GedcomImportWizard() {

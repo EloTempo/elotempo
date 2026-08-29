@@ -1,4 +1,16 @@
-// src/features/search/components/SearchAndStatsPanel.tsx
+/**
+ * PROTÓTIPO VISUAL — não ligado ao banco.
+ *
+ * Pesquisa e estatísticas. Implementa o desenho da seção 7 — filtros combináveis e gráficos, com dados fixos
+ * escritos no próprio componente. Nenhum dado real passa por aqui ainda: é a
+ * maquete aprovada do layout, guardada no código para não se perder e para
+ * continuar sendo verificada pelo TypeScript.
+ *
+ * Previsto para: MVP (item 9) e pós-MVP.
+ *
+ * Ao ligar de verdade: trocar os valores fixos por `useQuery` sobre os
+ * comandos de `src/lib/api`, e apagar este aviso.
+ */
 import { useState } from 'react';
 
 interface SearchAndStatsPanelProps {

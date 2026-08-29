@@ -1,19 +1,30 @@
-// src/lib/api/person.ts
-import { invoke } from '@tauri-apps/api/core';
-import type { Person } from '../../types';
+import { chamar } from './index';
+import type { Person, NewPerson } from '../../types';
 
-export const createPerson = async (person: Person): Promise<string> => {
-  return await invoke('create_pessoa', { pessoa: person });
-};
+/** Cria a pessoa e devolve o id gerado pelo backend. */
+export const criarPessoa = (nova: NewPerson): Promise<string> =>
+  chamar<string>('criar_pessoa', { nova });
 
-export const getPerson = async (id: string): Promise<Person> => {
-  return await invoke('get_pessoa', { id });
-};
+export const obterPessoa = (id: string): Promise<Person> =>
+  chamar<Person>('obter_pessoa', { id });
 
-export const updatePerson = async (person: Person): Promise<void> => {
-  await invoke('update_pessoa', { pessoa: person });
-};
+export const atualizarPessoa = (pessoa: Person): Promise<void> =>
+  chamar<void>('atualizar_pessoa', { pessoa });
 
-export const deletePerson = async (id: string): Promise<void> => {
-  await invoke('delete_pessoa', { id });
-};
+/**
+ * Recusa se a pessoa ocupa um slot de união — apagar deixaria a união com um
+ * lado só. O erro vem como `PessoaEmUso`.
+ */
+export const removerPessoa = (id: string): Promise<void> =>
+  chamar<void>('remover_pessoa', { id });
+
+/**
+ * Transforma o placeholder no ancestral real, preservando os filhos já
+ * pendurados nele (seção 2.2).
+ */
+export const promoverPlaceholder = (
+  pessoaId: string,
+  nome: string,
+  sobrenome?: string | null,
+): Promise<void> =>
+  chamar<void>('promover_placeholder', { pessoaId, nome, sobrenome: sobrenome ?? null });

@@ -1,18 +1,43 @@
-import { invoke } from '@tauri-apps/api/core';
-import type { Union, UnionChild } from '../../types';
+import { chamar } from './index';
+import type { UnionStatus, ChildLinkType } from '../../types';
 
-export const createUnion = async (union: Union): Promise<string> => {
-  return await invoke('create_uniao', { uniao: union });
-};
+/**
+ * Cria a união.
+ *
+ * Passar `null` num slot faz o backend criar a pessoa-placeholder — é assim
+ * que se cadastra um filho conhecendo só um dos pais (seção 2.2). O modelo
+ * nunca guarda slot vazio.
+ */
+export const criarUniao = (
+  slotMasculinoId: string | null,
+  slotFemininoId: string | null,
+  estadoVinculo: UnionStatus = 'nao_informado',
+): Promise<string> =>
+  chamar<string>('criar_uniao', { slotMasculinoId, slotFemininoId, estadoVinculo });
 
-export const updateUnion = async (union: Union): Promise<void> => {
-  await invoke('update_uniao', { uniao: union });
-};
+export const atualizarUniao = (
+  id: string,
+  estadoVinculo: UnionStatus,
+  nota?: string | null,
+): Promise<void> =>
+  chamar<void>('atualizar_uniao', {
+    uniao: { id, estado_vinculo: estadoVinculo, nota: nota ?? null },
+  });
 
-export const deleteUnion = async (id: string): Promise<void> => {
-  await invoke('delete_uniao', { id });
-};
+export const removerUniao = (id: string): Promise<void> =>
+  chamar<void>('remover_uniao', { id });
 
-export const addChildToUnion = async (childLink: UnionChild): Promise<void> => {
-  await invoke('add_filho_uniao', { vinculo: childLink });
-};
+/**
+ * Anexa um filho à união.
+ *
+ * Recusa se a pessoa já é filha de outra união (`FilhoJaTemUniao`) ou se a
+ * ligação fecharia um laço no grafo (`CicloGenealogico`).
+ */
+export const anexarFilho = (
+  uniaoId: string,
+  pessoaId: string,
+  tipoVinculo: ChildLinkType = 'biologico',
+): Promise<void> => chamar<void>('anexar_filho', { uniaoId, pessoaId, tipoVinculo });
+
+export const desvincularFilho = (pessoaId: string): Promise<void> =>
+  chamar<void>('desvincular_filho', { pessoaId });

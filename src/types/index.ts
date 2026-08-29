@@ -1,16 +1,51 @@
+/**
+ * Tipos espelhando os modelos do backend Rust.
+ *
+ * Os nomes de campo são os do banco (`is_vivo`, `slot_masculino_id`) porque é
+ * assim que o serde serializa do outro lado. Traduzir aqui só criaria um
+ * dicionário a mais para manter em dia.
+ */
+
 export type Sex = 'M' | 'F' | 'X' | 'U';
 export type UnionStatus = 'casamento' | 'estavel' | 'dissolvida' | 'nao_informado';
 export type ChildLinkType = 'biologico' | 'adotado' | 'enteado' | 'tutelado';
 
+export type DateQualifier =
+  | 'exata'
+  | 'cerca_de'
+  | 'antes_de'
+  | 'apos'
+  | 'intervalo'
+  | 'desconhecida';
+
+/** Tipos canônicos de evento — sempre minúsculos, como o Rust normaliza. */
+export const TIPOS_EVENTO = {
+  nascimento: 'nascimento',
+  batismo: 'batismo',
+  casamento: 'casamento',
+  falecimento: 'falecimento',
+  sepultamento: 'sepultamento',
+} as const;
+
 export interface Person {
   id: string;
   nome: string;
-  sobrenome?: string;
+  sobrenome?: string | null;
   sexo: Sex;
-  minibiografia?: string;
+  minibiografia?: string | null;
   is_vivo: boolean;
   is_placeholder: boolean;
-  foto_url?: string;
+  foto_url?: string | null;
+}
+
+/** O que se envia para criar — sem `id`, que o backend gera. */
+export interface NewPerson {
+  nome: string;
+  sobrenome?: string | null;
+  sexo: Sex;
+  minibiografia?: string | null;
+  is_vivo: boolean;
+  foto_url?: string | null;
 }
 
 export interface Union {
@@ -18,39 +53,71 @@ export interface Union {
   slot_masculino_id: string;
   slot_feminino_id: string;
   estado_vinculo: UnionStatus;
-  nota?: string;
-}
-
-export interface UnionChild {
-  uniao_id: string;
-  pessoa_id: string;
-  tipo_vinculo: ChildLinkType;
-  ordem?: number;
+  nota?: string | null;
 }
 
 export interface Event {
   id: string;
-  pessoa_id?: string;
-  uniao_id?: string;
+  pessoa_id?: string | null;
+  uniao_id?: string | null;
   tipo_evento: string;
-  data_texto?: string;
-  local_id?: string;
-  rotulo_historico_livre?: string;
-  nota?: string;
+  data_texto?: string | null;
+  data_qualificador: DateQualifier;
+  ano_inicio?: number | null;
+  ano_fim?: number | null;
+  local_id?: string | null;
+  rotulo_historico_livre?: string | null;
+  denominacao_religiosa?: string | null;
+  instituicao?: string | null;
+  nota?: string | null;
+}
+
+export interface NewEvent {
+  pessoa_id?: string | null;
+  uniao_id?: string | null;
+  tipo_evento: string;
+  data_texto?: string | null;
+  local_id?: string | null;
+  rotulo_historico_livre?: string | null;
+  denominacao_religiosa?: string | null;
+  instituicao?: string | null;
+  nota?: string | null;
 }
 
 export interface Country {
   id: string;
   nome: string;
-  codigo_iso?: string;
+  codigo_iso?: string | null;
+  ordem_destaque: number;
 }
 
-export interface Location {
+export interface Religion {
   id: string;
-  nome: string;
-  uf?: string;
-  pais_id: string;
-  codigo_ibge?: string;
+  pessoa_id: string;
+  denominacao: string;
+  periodo?: string | null;
+}
+
+export interface Education {
+  id: string;
+  pessoa_id: string;
+  nivel: string;
+  instituicao?: string | null;
+  periodo?: string | null;
+}
+
+export interface Profession {
+  id: string;
+  pessoa_id: string;
+  ocupacao: string;
+  empregador_local?: string | null;
+  periodo?: string | null;
+}
+
+export interface Language {
+  id: string;
+  pessoa_id: string;
+  idioma: string;
 }
 
 export interface Nickname {
@@ -65,64 +132,64 @@ export interface Nationality {
   pais_id: string;
 }
 
-export interface Religion {
-  id: string;
-  pessoa_id: string;
-  denominacao: string;
-  periodo?: string;
-}
+// ---------------------------------------------------------------------------
+// Grafo da árvore (o que `buscar_grafo_arvore` devolve)
+// ---------------------------------------------------------------------------
 
-export interface Education {
-  id: string;
-  pessoa_id: string;
-  nivel: string;
-  instituicao?: string;
-  periodo?: string;
-}
-
-export interface Profession {
-  id: string;
-  pessoa_id: string;
-  ocupacao: string;
-  empregador_local?: string;
-  periodo?: string;
-}
-
-export interface Language {
-  id: string;
-  pessoa_id: string;
-  idioma: string;
-}
-
-// For D3 Graph mapping
 export interface PersonNode {
   id: string;
   nome: string;
-  sobrenome?: string;
+  sobrenome?: string | null;
   sexo: string;
   is_vivo: boolean;
   is_placeholder: boolean;
-  ano_nascimento?: string;
-  x?: number;
-  y?: number;
+  ano_nascimento?: number | null;
+  ano_falecimento?: number | null;
+  /** Ícones de presença do card (seção 10). */
+  tem_foto: boolean;
+  tem_biografia: boolean;
+  tem_documentos: boolean;
+  tem_religiao: boolean;
 }
 
 export interface UnionNode {
   id: string;
   estado_vinculo: string;
-  data_casamento?: string;
-  x?: number;
-  y?: number;
+  ano_casamento?: number | null;
+  slot_masculino_id: string;
+  slot_feminino_id: string;
 }
 
 export interface GraphLink {
   source: string;
   target: string;
-  tipo: string;
+  tipo: 'pai_uniao' | 'mae_uniao' | 'uniao_filho';
+  tipo_vinculo?: string | null;
 }
 
 export interface TreeGraph {
+  raiz_id: string;
   nodes: PersonNode[];
   unions: UnionNode[];
   links: GraphLink[];
+}
+
+// ---------------------------------------------------------------------------
+// Erros do domínio (espelha `ErroDominio` no Rust)
+// ---------------------------------------------------------------------------
+
+export type DomainErrorCode =
+  | 'PessoaNaoEncontrada'
+  | 'UniaoNaoEncontrada'
+  | 'SlotIncompativel'
+  | 'FilhoJaTemUniao'
+  | 'CicloGenealogico'
+  | 'SexoTravadoPorUniao'
+  | 'PessoaEmUso'
+  | 'ValorInvalido'
+  | 'Persistencia';
+
+export interface DomainError {
+  codigo: DomainErrorCode;
+  detalhe?: unknown;
 }

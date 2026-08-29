@@ -1,50 +1,103 @@
-import { invoke } from '@tauri-apps/api/core';
-import type { Nickname, Nationality, Religion, Education, Profession, Language } from '../../types';
+/**
+ * Atributos de vida em lista (seção 2.5).
+ *
+ * Em todos, o período é opcional: a data nunca é obrigatória para salvar.
+ */
 
-export const addReligion = async (religion: Religion): Promise<string> => {
-  return await invoke('add_religiao', { religiao: religion });
-};
+import { chamar } from './index';
+import type {
+  Religion,
+  Education,
+  Profession,
+  Language,
+  Nickname,
+  Nationality,
+  Country,
+} from '../../types';
 
-export const removeReligion = async (id: string): Promise<void> => {
-  await invoke('remove_religiao', { id });
-};
+// Religião
+export const adicionarReligiao = (
+  pessoaId: string,
+  denominacao: string,
+  periodo?: string | null,
+): Promise<string> =>
+  chamar<string>('adicionar_religiao', { pessoaId, denominacao, periodo: periodo ?? null });
 
-export const addProfession = async (profession: Profession): Promise<string> => {
-  return await invoke('add_profissao', { profissao: profession });
-};
+export const removerReligiao = (id: string): Promise<void> =>
+  chamar<void>('remover_religiao', { id });
 
-export const removeProfession = async (id: string): Promise<void> => {
-  await invoke('remove_profissao', { id });
-};
+export const listarReligioes = (pessoaId: string): Promise<Religion[]> =>
+  chamar<Religion[]>('listar_religioes', { pessoaId });
 
-export const addLanguage = async (language: Language): Promise<string> => {
-  return await invoke('add_idioma', { idioma: language });
-};
+// Profissão
+export const adicionarProfissao = (
+  pessoaId: string,
+  ocupacao: string,
+  empregadorLocal?: string | null,
+  periodo?: string | null,
+): Promise<string> =>
+  chamar<string>('adicionar_profissao', {
+    pessoaId,
+    ocupacao,
+    empregadorLocal: empregadorLocal ?? null,
+    periodo: periodo ?? null,
+  });
 
-export const removeLanguage = async (id: string): Promise<void> => {
-  await invoke('remove_idioma', { id });
-};
+export const removerProfissao = (id: string): Promise<void> =>
+  chamar<void>('remover_profissao', { id });
 
-export const addEducation = async (education: Education): Promise<string> => {
-  return await invoke('add_escolaridade', { escolaridade: education });
-};
+export const listarProfissoes = (pessoaId: string): Promise<Profession[]> =>
+  chamar<Profession[]>('listar_profissoes', { pessoaId });
 
-export const removeEducation = async (id: string): Promise<void> => {
-  await invoke('remove_escolaridade', { id });
-};
+// Idioma
+export const adicionarIdioma = (pessoaId: string, idioma: string): Promise<string> =>
+  chamar<string>('adicionar_idioma', { pessoaId, idioma });
 
-export const addNationality = async (nationality: Nationality): Promise<string> => {
-  return await invoke('add_nacionalidade', { nacionalidade: nationality });
-};
+export const removerIdioma = (id: string): Promise<void> =>
+  chamar<void>('remover_idioma', { id });
 
-export const removeNationality = async (id: string): Promise<void> => {
-  await invoke('remove_nacionalidade', { id });
-};
+export const listarIdiomas = (pessoaId: string): Promise<Language[]> =>
+  chamar<Language[]>('listar_idiomas', { pessoaId });
 
-export const addNickname = async (nickname: Nickname): Promise<string> => {
-  return await invoke('add_apelido', { apelido: nickname });
-};
+// Escolaridade
+export const adicionarEscolaridade = (
+  pessoaId: string,
+  nivel: string,
+  instituicao?: string | null,
+  periodo?: string | null,
+): Promise<string> =>
+  chamar<string>('adicionar_escolaridade', {
+    pessoaId,
+    nivel,
+    instituicao: instituicao ?? null,
+    periodo: periodo ?? null,
+  });
 
-export const removeNickname = async (id: string): Promise<void> => {
-  await invoke('remove_apelido', { id });
-};
+export const removerEscolaridade = (id: string): Promise<void> =>
+  chamar<void>('remover_escolaridade', { id });
+
+export const listarEscolaridade = (pessoaId: string): Promise<Education[]> =>
+  chamar<Education[]>('listar_escolaridade', { pessoaId });
+
+// Nacionalidade
+export const adicionarNacionalidade = (pessoaId: string, paisId: string): Promise<string> =>
+  chamar<string>('adicionar_nacionalidade', { pessoaId, paisId });
+
+export const removerNacionalidade = (id: string): Promise<void> =>
+  chamar<void>('remover_nacionalidade', { id });
+
+export const listarNacionalidades = (pessoaId: string): Promise<Nationality[]> =>
+  chamar<Nationality[]>('listar_nacionalidades', { pessoaId });
+
+// Apelido
+export const adicionarApelido = (pessoaId: string, apelido: string): Promise<string> =>
+  chamar<string>('adicionar_apelido', { pessoaId, apelido });
+
+export const removerApelido = (id: string): Promise<void> =>
+  chamar<void>('remover_apelido', { id });
+
+export const listarApelidos = (pessoaId: string): Promise<Nickname[]> =>
+  chamar<Nickname[]>('listar_apelidos', { pessoaId });
+
+/** Países, com os de imigração no topo (seção 2.4). */
+export const listarPaises = (): Promise<Country[]> => chamar<Country[]>('listar_paises');

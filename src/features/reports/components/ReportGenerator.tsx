@@ -1,4 +1,16 @@
-// src/features/reports/components/ReportGenerator.tsx
+/**
+ * PROTÓTIPO VISUAL — não ligado ao banco.
+ *
+ * Gerador de relatórios. Implementa o desenho da seção 6 — três modos de impressão em PDF, com dados fixos
+ * escritos no próprio componente. Nenhum dado real passa por aqui ainda: é a
+ * maquete aprovada do layout, guardada no código para não se perder e para
+ * continuar sendo verificada pelo TypeScript.
+ *
+ * Previsto para: MVP (item 8).
+ *
+ * Ao ligar de verdade: trocar os valores fixos por `useQuery` sobre os
+ * comandos de `src/lib/api`, e apagar este aviso.
+ */
 import { useState } from 'react';
 
 type PrintMode = 'hierarquia' | 'texto' | 'combinado';
@@ -115,7 +127,7 @@ export function ReportGenerator({ onClose }: ReportGeneratorProps) {
               Imprimir...
             </button>
             <span className="text-[12.5px] text-tinta3 leading-relaxed mt-1">
-              A4 retrato · margens de 18 mm · o diagrama quebra por ramo, nunca no meio de um card[cite: 2].
+              A4 retrato · margens de 18 mm · o diagrama quebra por ramo, nunca no meio de um card.
             </span>
           </div>
         </div>
@@ -181,7 +193,7 @@ export function ReportGenerator({ onClose }: ReportGeneratorProps) {
               </div>
 
               <div className="mt-auto flex items-center justify-between border-t border-[#d9d1bf] pt-2 text-[8px] text-[#8a7f6a]" style={{ fontFamily: "'Source Serif 4', Georgia, serif" }}>
-                <span>⚭ casamento · ⚯ união estável · ⚮ dissolvida · tracejado: sem registro[cite: 2]</span>
+                <span>⚭ casamento · ⚯ união estável · ⚮ dissolvida · tracejado: sem registro</span>
                 <span>gerado localmente</span>
               </div>
             </div>
@@ -227,7 +239,7 @@ export function ReportGenerator({ onClose }: ReportGeneratorProps) {
               </div>
 
               <div className="mt-auto flex items-center justify-between border-t border-[#d9d1bf] pt-2 text-[8px] text-[#8a7f6a]" style={{ fontFamily: "'Source Serif 4', Georgia, serif" }}>
-                <span>Ausência de dado é registrada como “sem registro”, nunca como campo vazio[cite: 2]</span>
+                <span>Ausência de dado é registrada como “sem registro”, nunca como campo vazio</span>
                 <span>gerado localmente</span>
               </div>
             </div>

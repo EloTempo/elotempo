@@ -1,125 +1,219 @@
-import { useState } from 'react';
+/**
+ * Casca do aplicativo.
+ *
+ * Antes esta tela renderizava um `mockTree` fixo com Machado de Assis e não
+ * tocava no banco. Agora lê o acervo de verdade: escolhe uma raiz, monta o
+ * grafo pelo Rust e desenha com o layout vertical.
+ *
+ * O que ainda não está ligado (editor de união, detalhes, relatórios, linhas
+ * do tempo) segue como protótipo visual em `src/features/` — ver CLAUDE.md.
+ */
+
+import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { Plus, Search, TreeDeciduous } from 'lucide-react';
 import { Button } from './components/ui/Button';
 import { Input } from './components/ui/Input';
 import { Modal } from './components/ui/Modal';
-import { NodeCard } from './components/tree/NodeCard';
-import { PersonForm } from './features/person/PersonForm';
-import { TreeGraphViewer } from './components/tree/TreeGraphViewer';
-import type { PersonNode, Person, TreeGraph } from './types';
+import { TreeCanvas } from './components/tree/TreeCanvas';
+import { PersonForm } from './features/person/components/PersonForm';
+import { useCriarPessoa, usePessoas } from './features/person/hooks/usePessoas';
+import { buscarGrafoArvore } from './lib/api';
 
-function App() {
-  const [tema, setTema] = useState('classico-claro');
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<'components' | 'tree'>('tree');
+type Tema = 'classico-claro' | 'classico-escuro' | 'moderno-claro' | 'moderno-escuro';
 
-  const mockPerson: PersonNode = {
-    id: '1',
-    nome: 'Machado',
-    sobrenome: 'de Assis',
-    sexo: 'M',
-    is_vivo: false,
-    is_placeholder: false,
-    ano_nascimento: '1839',
-  };
+const TEMAS: Array<{ id: Tema; rotulo: string }> = [
+  { id: 'classico-claro', rotulo: 'Clássico claro' },
+  { id: 'classico-escuro', rotulo: 'Clássico escuro' },
+  { id: 'moderno-claro', rotulo: 'Moderno claro' },
+  { id: 'moderno-escuro', rotulo: 'Moderno escuro' },
+];
 
-  const mockPlaceholder: PersonNode = {
-    id: '2',
-    nome: 'Carolina',
-    sobrenome: 'Augusta',
-    sexo: 'F',
-    is_vivo: false,
-    is_placeholder: false,
-  };
+export default function App() {
+  const [tema, setTema] = useState<Tema>('classico-claro');
+  const [termoBusca, setTermoBusca] = useState('');
+  const [raizId, setRaizId] = useState<string | null>(null);
+  const [selecionadaId, setSelecionadaId] = useState<string | null>(null);
+  const [formAberto, setFormAberto] = useState(false);
 
-  const mockTree: TreeGraph = {
-    nodes: [mockPerson, mockPlaceholder],
-    unions: [{ id: 'u1', estado_vinculo: 'casamento', data_casamento: '1869' }],
-    links: [
-      { source: '1', target: 'u1', tipo: 'pai_uniao' },
-      { source: '2', target: 'u1', tipo: 'mae_uniao' }
-    ]
-  };
+  const { data: pessoas, isLoading: carregandoPessoas } = usePessoas(termoBusca);
+  const criar = useCriarPessoa();
 
-  const handlePersonSaved = (person: Person) => {
-    console.log('Pessoa salva com sucesso:', person);
-    alert(`Salvo com sucesso: ${person.nome}`);
-    setIsModalOpen(false);
-  };
+  // Sem raiz escolhida, adota a primeira pessoa do acervo — assim o programa
+  // abre mostrando alguma coisa em vez de uma tela vazia.
+  useEffect(() => {
+    if (!raizId && pessoas && pessoas.length > 0) {
+      setRaizId(pessoas[0].id);
+    }
+  }, [pessoas, raizId]);
+
+  const {
+    data: grafo,
+    isLoading: carregandoArvore,
+    error: erroArvore,
+  } = useQuery({
+    queryKey: ['arvore', raizId],
+    queryFn: () => buscarGrafoArvore(raizId!),
+    enabled: !!raizId,
+  });
+
+  const acervoVazio = !carregandoPessoas && (pessoas?.length ?? 0) === 0 && !termoBusca;
 
   return (
-    <div data-tema={tema} className="min-h-screen bg-mesa flex flex-col items-center p-4 md:p-8 font-corpo">
-      <h1 className="text-3xl font-tit font-bold mb-4 text-tinta">Árvore Genealógica</h1>
-      
-      <div className="flex gap-4 mb-8">
-        <Button variant={activeTab === 'tree' ? 'primary' : 'outline'} onClick={() => setActiveTab('tree')}>
-          Ver Árvore
-        </Button>
-        <Button variant={activeTab === 'components' ? 'primary' : 'outline'} onClick={() => setActiveTab('components')}>
-          Componentes UI
-        </Button>
-      </div>
+    <div data-tema={tema} className="h-screen flex flex-col bg-mesa text-tinta font-corpo">
+      {/* Barra superior */}
+      <header className="flex items-center gap-3 px-4 py-2.5 bg-sup border-b border-borda flex-none">
+        <TreeDeciduous className="w-5 h-5 text-acento flex-none" />
+        <h1 className="font-tit font-bold text-base tracking-tit m-0 flex-none">
+          Árvore Genealógica
+        </h1>
 
-      <div className="w-full max-w-6xl">
-        {activeTab === 'tree' ? (
-          <div className="bg-card shadow-sombra p-4 md:p-6 rounded-raio border border-borda">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-tit font-bold">Visualização D3</h2>
-              <Button className="bg-masc text-white hover:opacity-90" onClick={() => setIsModalOpen(true)}>
-                Nova Pessoa
-              </Button>
+        <div className="flex-1" />
+
+        <select
+          aria-label="Tema visual"
+          value={tema}
+          onChange={(e) => setTema(e.target.value as Tema)}
+          className="text-xs px-2 py-1.5 rounded-raio-s border border-borda2 bg-card text-tinta2"
+        >
+          {TEMAS.map((t) => (
+            <option key={t.id} value={t.id}>
+              {t.rotulo}
+            </option>
+          ))}
+        </select>
+
+        <Button size="sm" onClick={() => setFormAberto(true)}>
+          <Plus className="w-4 h-4 mr-1" />
+          Nova pessoa
+        </Button>
+      </header>
+
+      <div className="flex flex-1 min-h-0">
+        {/* Painel lateral: busca e escolha da raiz */}
+        <aside className="w-72 flex-none border-r border-borda bg-sup flex flex-col min-h-0">
+          <div className="p-3 border-b border-borda">
+            <div className="relative">
+              <Search className="w-4 h-4 absolute left-2.5 top-1/2 -translate-y-1/2 text-tinta3 pointer-events-none" />
+              <Input
+                aria-label="Buscar pessoa"
+                placeholder="Buscar por nome ou sobrenome"
+                value={termoBusca}
+                onChange={(e) => setTermoBusca(e.target.value)}
+                className="pl-8"
+              />
             </div>
-            <TreeGraphViewer 
-              data={mockTree} 
-              onPersonClick={(p) => console.log('Clicou em:', p.nome)} 
+          </div>
+
+          <div className="flex-1 overflow-y-auto min-h-0">
+            {carregandoPessoas && (
+              <p className="p-3 text-sm text-tinta3">Lendo o acervo…</p>
+            )}
+
+            {!carregandoPessoas && pessoas?.length === 0 && (
+              <p className="p-3 text-sm text-tinta3">
+                {termoBusca ? 'Ninguém com esse nome.' : 'O acervo está vazio.'}
+              </p>
+            )}
+
+            <ul className="list-none m-0 p-0">
+              {pessoas?.map((p) => (
+                <li key={p.id}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setRaizId(p.id);
+                      setSelecionadaId(p.id);
+                    }}
+                    className={`w-full text-left px-3 py-2 border-b border-borda/60 hover:bg-card transition-colors ${
+                      raizId === p.id ? 'bg-card border-l-2 border-l-acento' : ''
+                    }`}
+                  >
+                    <span className="block text-sm text-tinta truncate">
+                      {[p.nome, p.sobrenome].filter(Boolean).join(' ')}
+                      {p.is_placeholder && (
+                        <span className="text-tinta3 italic"> · placeholder</span>
+                      )}
+                    </span>
+                    <span className="block font-num text-[11px] text-tinta3">
+                      {p.ano_nascimento ? `n. ${p.ano_nascimento}` : 'sem data'}
+                      {p.ano_falecimento ? ` · † ${p.ano_falecimento}` : ''}
+                    </span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </aside>
+
+        {/* Palco da árvore */}
+        <main className="flex-1 min-w-0 relative">
+          {acervoVazio && (
+            <div className="absolute inset-0 grid place-items-center p-8 text-center">
+              <div className="max-w-md flex flex-col gap-3 items-center">
+                <TreeDeciduous className="w-10 h-10 text-tinta3" />
+                <h2 className="font-tit font-bold text-xl m-0">Comece pela pessoa mais nova</h2>
+                <p className="text-sm text-tinta2 m-0 leading-relaxed">
+                  Cadastre você mesmo, ou o parente mais recente que conhecer, e vá subindo. Se
+                  não souber o nome de um dos pais, o programa cria um nó “desconhecido” no
+                  lugar — e você troca pelo nome real quando descobrir, sem perder os filhos já
+                  pendurados nele.
+                </p>
+                <Button onClick={() => setFormAberto(true)}>
+                  <Plus className="w-4 h-4 mr-1" />
+                  Cadastrar a primeira pessoa
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {!acervoVazio && carregandoArvore && (
+            <div className="absolute inset-0 grid place-items-center">
+              <span className="font-num text-sm text-tinta3">Montando a árvore…</span>
+            </div>
+          )}
+
+          {!acervoVazio && erroArvore && (
+            <div className="absolute inset-0 grid place-items-center p-8">
+              <p className="text-sm text-fem text-center max-w-sm">
+                {erroArvore instanceof Error
+                  ? erroArvore.message
+                  : 'Não foi possível montar a árvore.'}
+              </p>
+            </div>
+          )}
+
+          {!acervoVazio && grafo && !carregandoArvore && (
+            <TreeCanvas
+              grafo={grafo}
+              pessoaSelecionadaId={selecionadaId}
+              onSelecionarPessoa={setSelecionadaId}
             />
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
-            {/* Tema */}
-            <div className="bg-card shadow-sombra p-6 rounded-raio border border-borda">
-              <h2 className="text-xl font-tit mb-4 font-bold">Tema Visual</h2>
-              <div className="flex flex-wrap gap-2 mb-6">
-                <Button variant={tema === 'classico-claro' ? 'primary' : 'secondary'} size="sm" onClick={() => setTema('classico-claro')}>Clássico Claro</Button>
-                <Button variant={tema === 'classico-escuro' ? 'primary' : 'secondary'} size="sm" onClick={() => setTema('classico-escuro')}>Clássico Escuro</Button>
-                <Button variant={tema === 'moderno-claro' ? 'primary' : 'secondary'} size="sm" onClick={() => setTema('moderno-claro')}>Moderno Claro</Button>
-                <Button variant={tema === 'moderno-escuro' ? 'primary' : 'secondary'} size="sm" onClick={() => setTema('moderno-escuro')}>Moderno Escuro</Button>
-              </div>
-            </div>
-
-            {/* Inputs */}
-            <div className="bg-card shadow-sombra p-6 rounded-raio border border-borda space-y-4 hidden md:block">
-              <h2 className="text-xl font-tit mb-4 font-bold">Preview de Inputs</h2>
-              <Input label="Nome" placeholder="Ex: Machado" defaultValue="Machado" />
-              <Input label="Sobrenome" placeholder="Ex: de Assis" />
-            </div>
-
-            {/* Cards */}
-            <div className="bg-card shadow-sombra p-6 rounded-raio border border-borda md:col-span-2">
-              <h2 className="text-xl font-tit mb-4 font-bold">Nós da Árvore (NodeCards)</h2>
-              <div className="flex flex-wrap gap-8 items-center bg-bg p-8 rounded-raio-s border border-borda shadow-inner">
-                <NodeCard person={mockPerson} hasBio hasDocuments />
-                
-                <div className="w-px h-16 bg-linha"></div>
-                
-                <NodeCard person={mockPlaceholder} />
-              </div>
-            </div>
-          </div>
-        )}
+          )}
+        </main>
       </div>
 
-      <Modal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)}
-        title="Cadastrar Nova Pessoa"
+      <Modal
+        isOpen={formAberto}
+        onClose={() => setFormAberto(false)}
+        title="Cadastrar pessoa"
+        className="max-w-2xl"
       >
-        <PersonForm 
-          onSuccess={handlePersonSaved}
-          onCancel={() => setIsModalOpen(false)}
+        <PersonForm
+          salvando={criar.isPending}
+          erro={criar.error}
+          onCancelar={() => setFormAberto(false)}
+          onSalvar={(dados) =>
+            criar.mutate(dados, {
+              onSuccess: (id) => {
+                setFormAberto(false);
+                setSelecionadaId(id);
+                if (!raizId) setRaizId(id);
+              },
+            })
+          }
         />
       </Modal>
     </div>
   );
 }
-
-export default App;

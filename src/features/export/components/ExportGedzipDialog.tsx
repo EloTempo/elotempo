@@ -1,4 +1,16 @@
-// src/features/export/components/ExportGedzipDialog.tsx
+/**
+ * PROTÓTIPO VISUAL — não ligado ao banco.
+ *
+ * Exportação GEDZip. Implementa o desenho da seção 4 — o .ged mais a pasta de mídia num zip, com dados fixos
+ * escritos no próprio componente. Nenhum dado real passa por aqui ainda: é a
+ * maquete aprovada do layout, guardada no código para não se perder e para
+ * continuar sendo verificada pelo TypeScript.
+ *
+ * Previsto para: Depois do MVP.
+ *
+ * Ao ligar de verdade: trocar os valores fixos por `useQuery` sobre os
+ * comandos de `src/lib/api`, e apagar este aviso.
+ */
 import { useState } from 'react';
 
 interface ExportGedzipDialogProps {
@@ -27,7 +39,7 @@ export function ExportGedzipDialog({ onClose, onExport }: ExportGedzipDialogProp
       <div className="p-5 md:px-6 border-b border-borda flex flex-col gap-1.5">
         <span className="font-tit font-fw7 text-lg tracking-tit text-tinta">Exportar GEDZip</span>
         <span className="text-[13px] text-tinta2">
-          Um zip com o <span className="font-num text-[12.5px]">.ged</span> e a pasta de mídia — o formato para levar o acervo para outro programa ou outra máquina[cite: 2].
+          Um zip com o <span className="font-num text-[12.5px]">.ged</span> e a pasta de mídia — o formato para levar o acervo para outro programa ou outra máquina.
         </span>
       </div>
 

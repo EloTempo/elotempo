@@ -1,4 +1,4 @@
-use serde::{Deserialize, Serialize};
+use serde::ser::{Serialize, SerializeStruct, Serializer};
 use std::fmt;
 
 /// Erros de domínio.
@@ -6,8 +6,7 @@ use std::fmt;
 /// São tipados, e não `String`, por dois motivos: o frontend pode reagir ao
 /// `codigo` sem depender do texto em português, e os testes podem afirmar
 /// *qual* invariante foi violada em vez de comparar mensagens.
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
-#[serde(tag = "codigo", content = "detalhe")]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ErroDominio {
     /// A pessoa referenciada não existe no acervo.
     PessoaNaoEncontrada(String),
@@ -84,6 +83,39 @@ impl fmt::Display for ErroDominio {
             }
             Persistencia(msg) => write!(f, "Erro ao acessar o acervo: {msg}"),
         }
+    }
+}
+
+impl ErroDominio {
+    /// Identificador estável da variante. O frontend liga comportamento a
+    /// isto, nunca ao texto — que pode mudar ou ser traduzido.
+    pub fn codigo(&self) -> &'static str {
+        use ErroDominio::*;
+        match self {
+            PessoaNaoEncontrada(_) => "PessoaNaoEncontrada",
+            UniaoNaoEncontrada(_) => "UniaoNaoEncontrada",
+            SlotIncompativel { .. } => "SlotIncompativel",
+            FilhoJaTemUniao { .. } => "FilhoJaTemUniao",
+            CicloGenealogico { .. } => "CicloGenealogico",
+            SexoTravadoPorUniao { .. } => "SexoTravadoPorUniao",
+            PessoaEmUso { .. } => "PessoaEmUso",
+            ValorInvalido { .. } => "ValorInvalido",
+            Persistencia(_) => "Persistencia",
+        }
+    }
+}
+
+/// Serializa `{ codigo, mensagem }`.
+///
+/// A mensagem vem do `Display` acima, o que mantém o texto em um lugar só —
+/// caso contrário o frontend teria de reescrever em TypeScript cada frase que
+/// já existe aqui, e as duas versões divergiriam na primeira alteração.
+impl Serialize for ErroDominio {
+    fn serialize<S: Serializer>(&self, serializador: S) -> Result<S::Ok, S::Error> {
+        let mut estado = serializador.serialize_struct("ErroDominio", 2)?;
+        estado.serialize_field("codigo", self.codigo())?;
+        estado.serialize_field("mensagem", &self.to_string())?;
+        estado.end()
     }
 }
 

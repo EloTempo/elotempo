@@ -1,4 +1,16 @@
-// src/features/person/components/PersonDetails.tsx
+/**
+ * PROTÓTIPO VISUAL — não ligado ao banco.
+ *
+ * Ficha completa da pessoa. Implementa o desenho da seção 10 — o botão Detalhes do card, com dados fixos
+ * escritos no próprio componente. Nenhum dado real passa por aqui ainda: é a
+ * maquete aprovada do layout, guardada no código para não se perder e para
+ * continuar sendo verificada pelo TypeScript.
+ *
+ * Previsto para: MVP.
+ *
+ * Ao ligar de verdade: trocar os valores fixos por `useQuery` sobre os
+ * comandos de `src/lib/api`, e apagar este aviso.
+ */
 interface PersonDetailsProps {
   personId: string;
   onClose: () => void;

@@ -1,4 +1,16 @@
-// src/features/union/components/UnionEditor.tsx
+/**
+ * PROTÓTIPO VISUAL — não ligado ao banco.
+ *
+ * Editor de união. Implementa o desenho da seções 2.2 e 3 — os dois slots e o placeholder, com dados fixos
+ * escritos no próprio componente. Nenhum dado real passa por aqui ainda: é a
+ * maquete aprovada do layout, guardada no código para não se perder e para
+ * continuar sendo verificada pelo TypeScript.
+ *
+ * Previsto para: MVP (item 2).
+ *
+ * Ao ligar de verdade: trocar os valores fixos por `useQuery` sobre os
+ * comandos de `src/lib/api`, e apagar este aviso.
+ */
 import { useState } from 'react';
 
 // Tipagem simplificada para o exemplo
@@ -73,7 +85,7 @@ export function UnionEditor({ maleSlot, femaleSlot }: UnionEditorProps) {
               </div>
             </div>
             <p className="text-xs text-tinta3 leading-relaxed mt-1">
-              O slot nunca fica vazio no banco: sem nome, ele guarda um placeholder com sexo definido — e ao ser identificado, os filhos permanecem pendurados nele[cite: 2, 5].
+              O slot nunca fica vazio no banco: sem nome, ele guarda um placeholder com sexo definido — e ao ser identificado, os filhos permanecem pendurados nele.
             </p>
           </section>
 
@@ -129,8 +141,8 @@ export function UnionEditor({ maleSlot, femaleSlot }: UnionEditorProps) {
           <section className="flex flex-col gap-3">
             <span className="font-num text-xs tracking-[0.14em] uppercase text-tinta3">Invariantes verificadas</span>
             <div className="flex flex-col gap-2 text-xs text-tinta2 leading-relaxed">
-              <span className="flex gap-2"><span className="text-masc">✓</span> Exatamente um slot masculino e um feminino[cite: 5]</span>
-              <span className="flex gap-2"><span className="text-masc">✓</span> Filhos pertencem a uma única união[cite: 5]</span>
+              <span className="flex gap-2"><span className="text-masc">✓</span> Exatamente um slot masculino e um feminino</span>
+              <span className="flex gap-2"><span className="text-masc">✓</span> Filhos pertencem a uma única união</span>
             </div>
           </section>
         </div>

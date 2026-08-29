@@ -1,4 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+/* Fontes servidas do próprio binário.
+ *
+ * Antes isto era um @import do fonts.googleapis.com — o app pedia à internet
+ * no boot e, offline, caía no fallback serifado, perdendo a identidade dos
+ * quatro temas. Um programa que se anuncia 100% offline (seção 1) não pode
+ * depender de um CDN para desenhar a própria tipografia.
+ *
+ * Só o subconjunto `latin` é embarcado: cobre todo o português (á ã ç é ê í ó
+ * ô õ ú) e mantém o instalador pequeno. */
+@import './fontes.css';
 
 @tailwind base;
 @tailwind components;
