@@ -133,6 +133,11 @@ topo. **Não são features** — não os cite como prontos:
 `PersonDetails` · `UnionEditor` · `TimelineDrawer` · `ReportGenerator` ·
 `SearchAndStatsPanel` · `GedcomImportWizard` · `ExportGedzipDialog`
 
+O `UnionEditor` foi superado na prática pelo `PainelConexoes`, que é a tela de
+conexões que realmente funciona. Ele segue guardado porque desenha uma tela
+dedicada de união (com os dois slots lado a lado) que o painel lateral não
+cobre; se essa tela não for construída, o certo é apagá-lo.
+
 Ao ligar um deles, troque os valores fixos por `useQuery` sobre `src/lib/api` e
 apague o aviso.
 
@@ -169,13 +174,16 @@ conexão, o layout da árvore, o zoom semântico da linha do tempo.
 
 ## Estado atual
 
-**Funciona ponta a ponta:** cadastro de pessoa com nascimento/falecimento,
-montagem do grafo, layout vertical com pan/zoom, busca por nome, placeholders,
-e todas as invariantes com teste.
+**Funciona ponta a ponta:** cadastro de pessoa com nascimento/falecimento;
+montagem do grafo; layout vertical com pan/zoom; busca por nome; **construção
+da família pelo painel de conexões** — adicionar pais (que nascem como
+placeholders), cônjuge, filhos, identificar um placeholder, desvincular,
+trocar o estado do vínculo; e todas as invariantes com teste.
 
-**Ainda não:** uniões pela interface (o backend já suporta, falta a tela),
-documentos e fotos, locais com autocomplete, relatórios em PDF, estatísticas,
-GEDCOM, linhas do tempo.
+**Ainda não:** ficha completa da pessoa (o botão "Detalhes" do card não abre
+nada), múltiplas árvores nomeadas da seção 5 (as tabelas `arvores` e
+`arvore_membros` existem, sem comando nem tela), documentos e fotos, locais com
+autocomplete, relatórios em PDF, estatísticas, GEDCOM, linhas do tempo.
 
 Trabalhe em **fatias verticais**: cada feature ponta a ponta (dado → domínio →
 UI) antes de começar a próxima.

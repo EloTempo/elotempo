@@ -1,5 +1,15 @@
 import { chamar } from './index';
-import type { Person, NewPerson } from '../../types';
+import type { Person, NewPerson, PersonConnections } from '../../types';
+
+/**
+ * Pais, cônjuges e filhos de uma pessoa.
+ *
+ * Consulta direta ao banco, não derivada do grafo da árvore — o grafo é podado
+ * pelo limite de gerações, e um cônjuge fora do recorte sumiria justamente do
+ * lugar onde ele não pode faltar.
+ */
+export const obterConexoesPessoa = (pessoaId: string): Promise<PersonConnections> =>
+  chamar<PersonConnections>('obter_conexoes_pessoa', { pessoaId });
 
 /** Cria a pessoa e devolve o id gerado pelo backend. */
 export const criarPessoa = (nova: NewPerson): Promise<string> =>

@@ -17,6 +17,7 @@ import { Input } from './components/ui/Input';
 import { Modal } from './components/ui/Modal';
 import { TreeCanvas } from './components/tree/TreeCanvas';
 import { PersonForm } from './features/person/components/PersonForm';
+import { PainelConexoes } from './features/union/components/PainelConexoes';
 import { useCriarPessoa, usePessoas } from './features/person/hooks/usePessoas';
 import { buscarGrafoArvore } from './lib/api';
 
@@ -228,6 +229,16 @@ export default function App() {
             />
           )}
         </main>
+
+        {/* Painel de conexões da pessoa selecionada */}
+        {selecionadaId && !acervoVazio && (
+          <PainelConexoes
+            key={selecionadaId}
+            pessoaId={selecionadaId}
+            onSelecionarPessoa={setSelecionadaId}
+            onFechar={() => setSelecionadaId(null)}
+          />
+        )}
       </div>
 
       <Modal

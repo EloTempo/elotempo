@@ -175,6 +175,47 @@ export interface TreeGraph {
 }
 
 // ---------------------------------------------------------------------------
+// Conexões de uma pessoa (o que `obter_conexoes_pessoa` devolve)
+// ---------------------------------------------------------------------------
+
+export interface PersonSummary {
+  id: string;
+  nome: string;
+  sobrenome?: string | null;
+  sexo: Sex;
+  is_placeholder: boolean;
+}
+
+export interface UnionSummary {
+  id: string;
+  estado_vinculo: UnionStatus;
+  /** Ocupante do slot masculino. Nunca nulo — no pior caso, um placeholder. */
+  masculino: PersonSummary;
+  /** Ocupante do slot feminino. Nunca nulo. */
+  feminino: PersonSummary;
+  /**
+   * Onde está a pessoa consultada. `nenhum` é o caso da união dos pais dela —
+   * e é por isso que os dois lados vêm resolvidos em vez de um campo "cônjuge":
+   * ali não há cônjuge, há pai e mãe, e os dois têm de aparecer.
+   */
+  slot_da_pessoa: 'masculino' | 'feminino' | 'nenhum';
+  filhos: PersonSummary[];
+}
+
+/** O outro lado da união, do ponto de vista de quem foi consultado. */
+export function conjugeDe(u: UnionSummary): PersonSummary {
+  return u.slot_da_pessoa === 'masculino' ? u.feminino : u.masculino;
+}
+
+export interface PersonConnections {
+  pessoa: PersonSummary;
+  /** A união da qual ela é filha. No máximo uma — invariante da seção 3. */
+  uniao_de_origem?: UnionSummary | null;
+  /** As uniões em que ela é cônjuge. Podem ser várias. */
+  unioes: UnionSummary[];
+}
+
+// ---------------------------------------------------------------------------
 // Erros do domínio (espelha `ErroDominio` no Rust)
 // ---------------------------------------------------------------------------
 

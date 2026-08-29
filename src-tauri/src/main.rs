@@ -59,6 +59,7 @@ fn main() {
             // Núcleo genealógico
             criar_pessoa,
             obter_pessoa,
+            obter_conexoes_pessoa,
             atualizar_pessoa,
             remover_pessoa,
             promover_placeholder,

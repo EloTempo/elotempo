@@ -49,6 +49,15 @@ pub async fn obter_pessoa(id: String, db: State<'_, SqlitePool>) -> Resultado<Pe
     regras::buscar_pessoa(&db, &id).await
 }
 
+/// Pais, cônjuges e filhos de uma pessoa — o que o painel de conexões mostra.
+#[tauri::command]
+pub async fn obter_conexoes_pessoa(
+    pessoa_id: String,
+    db: State<'_, SqlitePool>,
+) -> Resultado<regras::ConexoesPessoa> {
+    regras::buscar_conexoes(&db, &pessoa_id).await
+}
+
 #[tauri::command]
 pub async fn atualizar_pessoa(pessoa: Pessoa, db: State<'_, SqlitePool>) -> Resultado<()> {
     regras::atualizar_pessoa(&db, &pessoa).await

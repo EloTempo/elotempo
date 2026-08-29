@@ -134,6 +134,141 @@ async fn uniao_existe(pool: &SqlitePool, uniao_id: &str) -> Resultado<()> {
     Ok(())
 }
 
+// =====================================================================
+// Leitura das conexões de uma pessoa
+// =====================================================================
+
+/// Pessoa reduzida ao que o painel de conexões precisa mostrar.
+#[derive(Debug, Clone, serde::Serialize, sqlx::FromRow)]
+pub struct PessoaResumo {
+    pub id: String,
+    pub nome: String,
+    pub sobrenome: Option<String>,
+    pub sexo: String,
+    pub is_placeholder: bool,
+}
+
+/// Uma união com os dois lados resolvidos.
+///
+/// Os dois slots vêm sempre preenchidos — é a invariante 2, e é o que permite
+/// a mesma estrutura servir para a união *dos pais* (onde a pessoa consultada
+/// não é cônjuge de ninguém e precisa enxergar pai **e** mãe) e para a união
+/// *da pessoa* (onde um dos dois é ela mesma).
+#[derive(Debug, Clone, serde::Serialize)]
+pub struct UniaoResumo {
+    pub id: String,
+    pub estado_vinculo: String,
+    /// Ocupante do slot masculino. Nunca nulo — no pior caso, um placeholder.
+    pub masculino: PessoaResumo,
+    /// Ocupante do slot feminino. Nunca nulo.
+    pub feminino: PessoaResumo,
+    /// Onde está a pessoa consultada: "masculino", "feminino" ou "nenhum"
+    /// (este último no caso da união dos pais dela).
+    pub slot_da_pessoa: String,
+    pub filhos: Vec<PessoaResumo>,
+}
+
+/// Pais e uniões de uma pessoa.
+#[derive(Debug, Clone, serde::Serialize)]
+pub struct ConexoesPessoa {
+    pub pessoa: PessoaResumo,
+    /// A união da qual ela é filha, se houver. No máximo uma (invariante 1).
+    pub uniao_de_origem: Option<UniaoResumo>,
+    /// As uniões em que ela é cônjuge. Podem ser várias.
+    pub unioes: Vec<UniaoResumo>,
+}
+
+async fn resumo(pool: &SqlitePool, id: &str) -> Resultado<PessoaResumo> {
+    sqlx::query_as::<_, PessoaResumo>(
+        "SELECT id, nome, sobrenome, sexo, is_placeholder FROM pessoas WHERE id = ?",
+    )
+    .bind(id)
+    .fetch_optional(pool)
+    .await?
+    .ok_or_else(|| ErroDominio::PessoaNaoEncontrada(id.to_string()))
+}
+
+/// Monta o `UniaoResumo` de uma união, visto por `pessoa_id`.
+async fn montar_uniao(
+    pool: &SqlitePool,
+    uniao_id: &str,
+    pessoa_id: &str,
+) -> Resultado<UniaoResumo> {
+    let linha = sqlx::query(
+        "SELECT slot_masculino_id, slot_feminino_id, estado_vinculo FROM unioes WHERE id = ?",
+    )
+    .bind(uniao_id)
+    .fetch_optional(pool)
+    .await?
+    .ok_or_else(|| ErroDominio::UniaoNaoEncontrada(uniao_id.to_string()))?;
+
+    let masculino: String = linha.try_get("slot_masculino_id")?;
+    let feminino: String = linha.try_get("slot_feminino_id")?;
+    let estado_vinculo: String = linha.try_get("estado_vinculo")?;
+
+    // Quem consultou pode ocupar um dos slots — ou nenhum, que é o caso da
+    // união dos próprios pais.
+    let slot_da_pessoa = if masculino == pessoa_id {
+        "masculino"
+    } else if feminino == pessoa_id {
+        "feminino"
+    } else {
+        "nenhum"
+    };
+
+    let filhos = sqlx::query_as::<_, PessoaResumo>(
+        "SELECT p.id, p.nome, p.sobrenome, p.sexo, p.is_placeholder
+         FROM uniao_filhos f
+         JOIN pessoas p ON p.id = f.pessoa_id
+         WHERE f.uniao_id = ?
+         ORDER BY f.ordem",
+    )
+    .bind(uniao_id)
+    .fetch_all(pool)
+    .await?;
+
+    Ok(UniaoResumo {
+        id: uniao_id.to_string(),
+        estado_vinculo,
+        masculino: resumo(pool, &masculino).await?,
+        feminino: resumo(pool, &feminino).await?,
+        slot_da_pessoa: slot_da_pessoa.to_string(),
+        filhos,
+    })
+}
+
+/// Tudo que o painel de conexões precisa para uma pessoa.
+///
+/// Consulta direta, sem passar pelo grafo da árvore: o grafo é podado pelo
+/// limite de gerações, e um cônjuge fora do recorte sumiria daqui — que é
+/// justamente o lugar onde ele não pode faltar.
+pub async fn buscar_conexoes(pool: &SqlitePool, pessoa_id: &str) -> Resultado<ConexoesPessoa> {
+    let pessoa = resumo(pool, pessoa_id).await?;
+
+    let origem = match uniao_de_origem(pool, pessoa_id).await? {
+        Some(uid) => Some(montar_uniao(pool, &uid, pessoa_id).await?),
+        None => None,
+    };
+
+    let ids_unioes: Vec<String> = sqlx::query_scalar(
+        "SELECT id FROM unioes WHERE slot_masculino_id = ?1 OR slot_feminino_id = ?1 ORDER BY id",
+    )
+    .bind(pessoa_id)
+    .fetch_all(pool)
+    .await?;
+
+    let mut unioes = Vec::with_capacity(ids_unioes.len());
+    for uid in ids_unioes {
+        unioes.push(montar_uniao(pool, &uid, pessoa_id).await?);
+    }
+
+    Ok(ConexoesPessoa {
+        pessoa,
+        uniao_de_origem: origem,
+        unioes,
+    })
+}
+
 /// A união da qual esta pessoa é filha, se houver.
 pub async fn uniao_de_origem(pool: &SqlitePool, pessoa_id: &str) -> Resultado<Option<String>> {
     let r: Option<String> =
@@ -820,6 +955,93 @@ mod testes {
             .await
             .unwrap_err();
         assert!(matches!(erro, ErroDominio::UniaoNaoEncontrada(_)), "{erro:?}");
+    }
+
+    // ---------- Leitura das conexões ----------
+
+    #[tokio::test]
+    async fn conexoes_trazem_pais_conjuge_e_filhos() {
+        let pool = pool_de_teste().await;
+
+        let avo_m = pessoa(&pool, "Avô", "M").await;
+        let avo_f = pessoa(&pool, "Avó", "F").await;
+        let pai = pessoa(&pool, "Pai", "M").await;
+        let mae = pessoa(&pool, "Mãe", "F").await;
+        let filha = pessoa(&pool, "Filha", "F").await;
+
+        let u_avos = criar_uniao(&pool, Some(&avo_m), Some(&avo_f), "casamento").await.unwrap();
+        anexar_filho(&pool, &u_avos, &pai, "biologico").await.unwrap();
+
+        let u_pais = criar_uniao(&pool, Some(&pai), Some(&mae), "casamento").await.unwrap();
+        anexar_filho(&pool, &u_pais, &filha, "biologico").await.unwrap();
+
+        let c = buscar_conexoes(&pool, &pai).await.unwrap();
+
+        assert_eq!(c.pessoa.nome, "Pai");
+
+        // Os pais dele: na união de origem ele não ocupa slot nenhum, e é
+        // justamente por isso que os DOIS lados precisam vir resolvidos —
+        // senão o pai sumiria do painel.
+        let origem = c.uniao_de_origem.expect("o pai é filho da união dos avós");
+        assert_eq!(origem.id, u_avos);
+        assert_eq!(origem.slot_da_pessoa, "nenhum");
+        assert_eq!(origem.masculino.nome, "Avô");
+        assert_eq!(origem.feminino.nome, "Avó");
+        assert_eq!(origem.filhos.len(), 1);
+
+        // A união dele
+        assert_eq!(c.unioes.len(), 1);
+        assert_eq!(c.unioes[0].slot_da_pessoa, "masculino");
+        assert_eq!(c.unioes[0].masculino.nome, "Pai");
+        assert_eq!(c.unioes[0].feminino.nome, "Mãe");
+        assert_eq!(c.unioes[0].filhos.len(), 1);
+        assert_eq!(c.unioes[0].filhos[0].nome, "Filha");
+    }
+
+    #[tokio::test]
+    async fn conexoes_veem_o_placeholder_como_conjuge() {
+        // O caso que motiva a regra da seção 2.2: cadastrar um filho sabendo
+        // só o nome da mãe. O painel precisa mostrar o pai desconhecido como
+        // um nó clicável, não como um vazio.
+        let pool = pool_de_teste().await;
+        let mae = pessoa(&pool, "Mãe", "F").await;
+        let uniao = criar_uniao(&pool, None, Some(&mae), "nao_informado").await.unwrap();
+
+        let c = buscar_conexoes(&pool, &mae).await.unwrap();
+        assert_eq!(c.unioes.len(), 1);
+        assert_eq!(c.unioes[0].id, uniao);
+        assert_eq!(c.unioes[0].slot_da_pessoa, "feminino");
+        assert!(c.unioes[0].masculino.is_placeholder);
+        assert_eq!(c.unioes[0].masculino.sexo, "M");
+        assert!(!c.unioes[0].feminino.is_placeholder);
+    }
+
+    #[tokio::test]
+    async fn conexoes_de_quem_nao_tem_ninguem_nao_falham() {
+        let pool = pool_de_teste().await;
+        let sozinha = pessoa(&pool, "Sozinha", "F").await;
+        let c = buscar_conexoes(&pool, &sozinha).await.unwrap();
+        assert!(c.uniao_de_origem.is_none());
+        assert!(c.unioes.is_empty());
+    }
+
+    #[tokio::test]
+    async fn conexoes_listam_as_duas_unioes_de_quem_casou_de_novo() {
+        let pool = pool_de_teste().await;
+        let homem = pessoa(&pool, "Homem", "M").await;
+        let primeira = pessoa(&pool, "Primeira", "F").await;
+        let segunda = pessoa(&pool, "Segunda", "F").await;
+
+        criar_uniao(&pool, Some(&homem), Some(&primeira), "dissolvida").await.unwrap();
+        criar_uniao(&pool, Some(&homem), Some(&segunda), "casamento").await.unwrap();
+
+        let c = buscar_conexoes(&pool, &homem).await.unwrap();
+        assert_eq!(c.unioes.len(), 2);
+        let esposas: Vec<&str> = c.unioes.iter().map(|u| u.feminino.nome.as_str()).collect();
+        assert!(esposas.contains(&"Primeira"));
+        assert!(esposas.contains(&"Segunda"));
+        // E ele aparece do lado masculino nas duas.
+        assert!(c.unioes.iter().all(|u| u.masculino.nome == "Homem"));
     }
 
     // ---------- Ordem dos filhos ----------
