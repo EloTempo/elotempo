@@ -33,7 +33,12 @@ import {
   adicionarNacionalidade,
   removerNacionalidade,
   listarPaises,
+  listarNomesPessoa,
+  adicionarNome,
+  removerNome,
+  usarNomeNaArvore,
 } from '../../../lib/api';
+import type { NewPersonName } from '../../../types';
 
 // ---------------------------------------------------------------------------
 // Pessoa e eventos
@@ -197,6 +202,48 @@ export const nacionalidades = criarHooksDeAtributo(
   (pessoaId, paisId: string) => adicionarNacionalidade(pessoaId, paisId),
   removerNacionalidade,
 );
+
+// ---------------------------------------------------------------------------
+// Nomes ao longo da vida (fatia 02)
+// ---------------------------------------------------------------------------
+
+export function useNomes(pessoaId: string | null) {
+  return useQuery({
+    queryKey: ['nomes', pessoaId],
+    queryFn: () => listarNomesPessoa(pessoaId!),
+    enabled: !!pessoaId,
+  });
+}
+
+export function useAdicionarNome(pessoaId: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (novo: NewPersonName) => adicionarNome(novo),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['nomes', pessoaId] }),
+  });
+}
+
+export function useRemoverNome(pessoaId: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: removerNome,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['nomes', pessoaId] }),
+  });
+}
+
+/**
+ * Adota um nome como o de exibição.
+ *
+ * Invalida a árvore e a busca junto, porque o card e a lista lateral passam a
+ * mostrar outra coisa.
+ */
+export function useUsarNomeNaArvore(pessoaId: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: usarNomeNaArvore,
+    onSuccess: () => invalidarPessoa(queryClient, pessoaId),
+  });
+}
 
 /** Países, com Brasil e os de imigração no topo (seção 2.4). */
 export function usePaises() {

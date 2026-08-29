@@ -25,6 +25,10 @@ import {
   useCriarEvento,
   useRemoverEvento,
   usePaises,
+  useNomes,
+  useAdicionarNome,
+  useRemoverNome,
+  useUsarNomeNaArvore,
   religioes,
   profissoes,
   idiomas,
@@ -32,9 +36,17 @@ import {
   apelidos,
   nacionalidades,
 } from '../hooks/useFicha';
-import { RELIGIOES, NIVEIS_ESCOLARIDADE, IDIOMAS, TIPOS_DE_EVENTO, rotuloDoTipo } from '../taxonomias';
+import {
+  RELIGIOES,
+  NIVEIS_ESCOLARIDADE,
+  IDIOMAS,
+  TIPOS_DE_EVENTO,
+  TIPOS_DE_NOME,
+  rotuloDoTipo,
+  rotuloDoTipoDeNome,
+} from '../taxonomias';
 import { ErroDoAcervo } from '../../../lib/api';
-import type { Person, Sex } from '../../../types';
+import type { NameType, Person, Sex } from '../../../types';
 
 interface PersonDetailsProps {
   pessoaId: string;
@@ -52,6 +64,19 @@ function mensagemDeErro(erro: unknown): string | null {
   if (!erro) return null;
   if (erro instanceof ErroDoAcervo || erro instanceof Error) return erro.message;
   return String(erro);
+}
+
+/**
+ * Concorda com o sexo em vez de fixar o feminino.
+ *
+ * Estava escrito "Falecida" direto, o que fazia D. João VI aparecer no
+ * feminino. Para `X` e `U` usa-se a forma que se apoia em "pessoa", substantivo
+ * feminino, e que por isso não atribui gênero a quem não o declarou.
+ */
+function situacaoDeFalecimento(sexo: string): string {
+  if (sexo === 'M') return 'Falecido';
+  if (sexo === 'F') return 'Falecida';
+  return 'Pessoa falecida';
 }
 
 export function PersonDetails({ pessoaId, onFechar }: PersonDetailsProps) {
@@ -88,6 +113,11 @@ export function PersonDetails({ pessoaId, onFechar }: PersonDetailsProps) {
   const addNacionalidade = nacionalidades.useAdicionar(pessoaId);
   const delNacionalidade = nacionalidades.useRemover(pessoaId);
 
+  const listaNomes = useNomes(pessoaId);
+  const addNome = useAdicionarNome(pessoaId);
+  const delNome = useRemoverNome(pessoaId);
+  const usarNome = useUsarNomeNaArvore(pessoaId);
+
   // --- Edição dos campos básicos ---
   const [editando, setEditando] = useState(false);
   const [rascunho, setRascunho] = useState<Person | null>(null);
@@ -104,6 +134,14 @@ export function PersonDetails({ pessoaId, onFechar }: PersonDetailsProps) {
   const [novaEscolaridade, setNovaEscolaridade] = useState({ nivel: '', instituicao: '', periodo: '' });
   const [novoApelido, setNovoApelido] = useState('');
   const [novaNacionalidade, setNovaNacionalidade] = useState('');
+  const [novoNome, setNovoNome] = useState({
+    tipo: 'nascimento' as NameType,
+    prefixo: '',
+    nome: '',
+    sobrenome: '',
+    sufixo: '',
+    periodo: '',
+  });
 
   if (isLoading) {
     return (
@@ -153,7 +191,7 @@ export function PersonDetails({ pessoaId, onFechar }: PersonDetailsProps) {
             </p>
           )}
           <p className="font-num text-[12.5px] text-tinta2 m-0">
-            {pessoa.is_vivo ? 'Pessoa viva' : 'Falecida'}
+            {pessoa.is_vivo ? 'Pessoa viva' : situacaoDeFalecimento(pessoa.sexo)}
           </p>
         </div>
 
@@ -265,6 +303,128 @@ export function PersonDetails({ pessoaId, onFechar }: PersonDetailsProps) {
                 {pessoa.minibiografia}
               </p>
             )
+          )}
+        </section>
+
+        {/* ---------------- Nomes ---------------- */}
+        <section className="md:col-span-2">
+          <SecaoAtributo
+            titulo="Nomes ao longo da vida"
+            vazio="Só o nome de exibição está registrado. Use esta lista para guardar o nome completo de nascimento, o nome público, o religioso — o que a pessoa carregou."
+            itens={(listaNomes.data ?? []).map((n) => ({
+              id: n.id,
+              principal: [n.prefixo, n.nome, n.sufixo, n.sobrenome]
+                .filter(Boolean)
+                .join(' '),
+              secundario: [rotuloDoTipoDeNome(n.tipo), n.periodo].filter(Boolean).join(' · '),
+            }))}
+            carregando={listaNomes.isLoading}
+            erro={
+              mensagemDeErro(addNome.error) ??
+              mensagemDeErro(delNome.error) ??
+              mensagemDeErro(usarNome.error)
+            }
+            onRemover={(id) => delNome.mutate(id)}
+            removendo={delNome.isPending}
+            adicionando={addNome.isPending}
+            podeAdicionar={!!novoNome.nome.trim()}
+            onAdicionar={() =>
+              addNome.mutate(
+                {
+                  pessoa_id: pessoaId,
+                  tipo: novoNome.tipo,
+                  prefixo: novoNome.prefixo.trim() || null,
+                  nome: novoNome.nome.trim(),
+                  sobrenome: novoNome.sobrenome.trim() || null,
+                  sufixo: novoNome.sufixo.trim() || null,
+                  periodo: novoNome.periodo.trim() || null,
+                },
+                {
+                  onSuccess: () =>
+                    setNovoNome({
+                      tipo: 'nascimento',
+                      prefixo: '',
+                      nome: '',
+                      sobrenome: '',
+                      sufixo: '',
+                      periodo: '',
+                    }),
+                },
+              )
+            }
+          >
+            <label className="flex flex-col gap-1">
+              <span className="text-[11px] text-tinta2">Tipo</span>
+              <select
+                value={novoNome.tipo}
+                onChange={(e) => setNovoNome({ ...novoNome, tipo: e.target.value as NameType })}
+                className="text-sm px-2 py-1.5 rounded-raio-s border border-borda2 bg-bg text-tinta"
+              >
+                {TIPOS_DE_NOME.map((t) => (
+                  <option key={t.valor} value={t.valor}>
+                    {t.rotulo}
+                  </option>
+                ))}
+              </select>
+              <span className="text-[11px] text-tinta3 leading-relaxed">
+                {TIPOS_DE_NOME.find((t) => t.valor === novoNome.tipo)?.ajuda}
+              </span>
+            </label>
+
+            <div className="grid grid-cols-[80px_1fr] gap-2">
+              <CampoCurto
+                rotulo="Prefixo"
+                valor={novoNome.prefixo}
+                aoMudar={(v) => setNovoNome({ ...novoNome, prefixo: v })}
+                placeholder="D."
+              />
+              <CampoCurto
+                rotulo="Nome"
+                valor={novoNome.nome}
+                aoMudar={(v) => setNovoNome({ ...novoNome, nome: v })}
+                placeholder="João"
+              />
+            </div>
+
+            <div className="grid grid-cols-[1fr_80px] gap-2">
+              <CampoCurto
+                rotulo="Sobrenome"
+                valor={novoNome.sobrenome}
+                aoMudar={(v) => setNovoNome({ ...novoNome, sobrenome: v })}
+                placeholder="de Bragança"
+              />
+              <CampoCurto
+                rotulo="Sufixo"
+                valor={novoNome.sufixo}
+                aoMudar={(v) => setNovoNome({ ...novoNome, sufixo: v })}
+                placeholder="VI"
+              />
+            </div>
+
+            <CampoCurto
+              rotulo="Período (opcional)"
+              valor={novoNome.periodo}
+              aoMudar={(v) => setNovoNome({ ...novoNome, periodo: v })}
+              placeholder="a partir de 1816"
+            />
+          </SecaoAtributo>
+
+          {/* Adotar um dos nomes como o do card. Fica fora da SecaoAtributo
+              porque é ação por item, não do conjunto. */}
+          {(listaNomes.data ?? []).length > 0 && (
+            <div className="flex flex-wrap gap-1.5 mt-2">
+              {(listaNomes.data ?? []).map((n) => (
+                <button
+                  key={n.id}
+                  type="button"
+                  disabled={usarNome.isPending}
+                  onClick={() => usarNome.mutate(n.id)}
+                  className="text-[11px] px-2 py-1 rounded-raio-s border border-borda2 bg-card text-tinta2 hover:border-acento hover:text-tinta transition-colors cursor-pointer disabled:opacity-50"
+                >
+                  Usar “{[n.prefixo, n.nome, n.sufixo].filter(Boolean).join(' ')}” na árvore
+                </button>
+              ))}
+            </div>
           )}
         </section>
 

@@ -194,6 +194,15 @@ sobrenome do filho a partir dos pais, e deduz o do pai/mãe a partir do filho ao
 identificar um placeholder. É palpite editável, nunca imposição; partículas
 ("da Silva", "dos Santos") andam grudadas.
 
+**Nomes ao longo da vida** (fatia 02): `nomes_pessoa` guarda vários nomes por
+pessoa, com tipo (nascimento, público, religioso, de casada, de imigração…),
+prefixo e sufixo. `pessoas.nome`/`sobrenome` continuam sendo o **nome de
+exibição** — o que aparece no card, na busca e nos relatórios; a tabela é o
+registro completo, e "usar na árvore" copia um deles para a exibição. A
+duplicação é consciente: derivar a exibição da tabela obrigaria a mexer no
+grafo, na busca e nos índices NOCASE. **Apelido não é nome público**: alcunha
+afetiva segue em `apelidos_pessoa`, e "D. João VI" é nome, não apelido.
+
 **Ficha da pessoa** (fatia 01): o botão "Detalhes" abre o registro completo, e
 é onde os atributos de vida da seção 2.5 finalmente ganharam tela — apelidos,
 nacionalidades, religiões, escolaridade, profissões e idiomas, mais os eventos

@@ -72,6 +72,60 @@ export const IDIOMAS = [
   'Libras',
 ] as const;
 
+/**
+ * Tipos de nome (fatia 02), com uma frase que diz quando cada um se aplica.
+ *
+ * A explicação existe porque a distinção entre "público" e "apelido" não é
+ * óbvia — e errá-la é justamente o problema que a fatia veio resolver.
+ */
+export const TIPOS_DE_NOME = [
+  {
+    valor: 'nascimento',
+    rotulo: 'De nascimento',
+    ajuda: 'O nome completo de registro, como está na certidão.',
+  },
+  {
+    valor: 'publico',
+    rotulo: 'Público',
+    ajuda: 'O nome pelo qual a pessoa é conhecida. Ex.: D. João VI, Pelé.',
+  },
+  {
+    valor: 'religioso',
+    rotulo: 'Religioso',
+    ajuda: 'Adotado em ordem, ministério ou pontificado. Ex.: Papa Francisco.',
+  },
+  {
+    valor: 'casada',
+    rotulo: 'De casada',
+    ajuda: 'Assumido na união.',
+  },
+  {
+    valor: 'solteira',
+    rotulo: 'De solteira',
+    ajuda: 'O de antes da união.',
+  },
+  {
+    valor: 'artistico',
+    rotulo: 'Artístico',
+    ajuda: 'Usado em palco, obra ou publicação.',
+  },
+  {
+    valor: 'profissional',
+    rotulo: 'Profissional',
+    ajuda: 'Usado no exercício de um ofício ou cargo.',
+  },
+  {
+    valor: 'imigracao',
+    rotulo: 'De imigração',
+    ajuda: 'Aportuguesado ou alterado na chegada. Ex.: Giovanni → João.',
+  },
+  { valor: 'outro', rotulo: 'Outro', ajuda: '' },
+] as const;
+
+export function rotuloDoTipoDeNome(tipo: string): string {
+  return TIPOS_DE_NOME.find((t) => t.valor === tipo)?.rotulo ?? tipo;
+}
+
 /** Tipos de evento, com rótulo para a interface. */
 export const TIPOS_DE_EVENTO = [
   { valor: 'nascimento', rotulo: 'Nascimento' },

@@ -4,4 +4,5 @@ pub mod datas;
 pub mod erros;
 pub mod eventos_cmds;
 pub mod models;
+pub mod nomes_cmds;
 pub mod regras;

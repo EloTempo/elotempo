@@ -16,6 +16,9 @@ use domain::core_cmds::*;
 use domain::eventos_cmds::{
     atualizar_evento, criar_evento, listar_eventos_pessoa, remover_evento,
 };
+use domain::nomes_cmds::{
+    adicionar_nome, listar_nomes_pessoa, remover_nome, usar_nome_na_arvore,
+};
 
 /// Nome do arquivo de acervo dentro da pasta de dados do app.
 const ARQUIVO_ACERVO: &str = "acervo.sqlite";
@@ -68,6 +71,11 @@ fn main() {
             remover_uniao,
             anexar_filho,
             desvincular_filho,
+            // Nomes ao longo da vida
+            listar_nomes_pessoa,
+            adicionar_nome,
+            remover_nome,
+            usar_nome_na_arvore,
             // Eventos de vida
             criar_evento,
             atualizar_evento,

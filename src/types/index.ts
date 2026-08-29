@@ -120,10 +120,54 @@ export interface Language {
   idioma: string;
 }
 
+/** Apelido: alcunha afetiva ("Zezinho", "a Tia Chica"). GEDCOM `NICK`. */
 export interface Nickname {
   id: string;
   pessoa_id: string;
   apelido: string;
+}
+
+/**
+ * Tipos de nome (fatia 02).
+ *
+ * `publico`, `religioso` e `artistico` caem todos em `AKA` no GEDCOM, mas aqui
+ * ficam separados: num acervo de figuras históricas, saber que "Francisco" é
+ * nome religioso e não apelido é o dado, não um detalhe.
+ */
+export type NameType =
+  | 'nascimento'
+  | 'publico'
+  | 'religioso'
+  | 'casada'
+  | 'solteira'
+  | 'artistico'
+  | 'profissional'
+  | 'imigracao'
+  | 'outro';
+
+/** Um nome que a pessoa carregou. Distinto do nome de exibição em `Person`. */
+export interface PersonName {
+  id: string;
+  pessoa_id: string;
+  tipo: NameType;
+  prefixo?: string | null;
+  nome: string;
+  sobrenome?: string | null;
+  sufixo?: string | null;
+  periodo?: string | null;
+  nota?: string | null;
+  ordem?: number | null;
+}
+
+export interface NewPersonName {
+  pessoa_id: string;
+  tipo: NameType;
+  prefixo?: string | null;
+  nome: string;
+  sobrenome?: string | null;
+  sufixo?: string | null;
+  periodo?: string | null;
+  nota?: string | null;
 }
 
 export interface Nationality {

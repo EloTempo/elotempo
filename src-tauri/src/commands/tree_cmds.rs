@@ -319,6 +319,15 @@ pub async fn buscar_pessoas(
         FROM pessoas p
         WHERE p.nome LIKE ?1 COLLATE NOCASE
            OR COALESCE(p.sobrenome,'') LIKE ?1 COLLATE NOCASE
+           -- Também pelos outros nomes que a pessoa carregou (fatia 02):
+           -- é o que permite procurar "Bergoglio" e chegar em "Francisco",
+           -- ou o nome de solteira de uma bisavó cadastrada como casada.
+           OR EXISTS (
+                SELECT 1 FROM nomes_pessoa n
+                 WHERE n.pessoa_id = p.id
+                   AND (n.nome LIKE ?1 COLLATE NOCASE
+                        OR COALESCE(n.sobrenome,'') LIKE ?1 COLLATE NOCASE)
+              )
         ORDER BY p.is_placeholder, p.sobrenome COLLATE NOCASE, p.nome COLLATE NOCASE
         LIMIT ?2
         "#,
@@ -411,6 +420,51 @@ mod testes {
         .await
         .unwrap();
         assert_eq!(achadas, 1);
+    }
+
+    /// A busca alcança nomes que não estão no card.
+    ///
+    /// Sem isto, cadastrar alguém como "Papa Francisco" tornaria "Bergoglio"
+    /// inencontrável — e o nome de solteira de uma bisavó, também.
+    #[tokio::test]
+    async fn busca_encontra_pelos_outros_nomes_da_pessoa() {
+        let pool = pool_de_teste().await;
+        let p = pessoa(&pool, "Francisco", "M").await;
+
+        sqlx::query(
+            "INSERT INTO nomes_pessoa (id,pessoa_id,tipo,nome,sobrenome,ordem)
+             VALUES ('n1',?,'nascimento','Jorge Mario','Bergoglio',1)",
+        )
+        .bind(&p)
+        .execute(&pool)
+        .await
+        .unwrap();
+
+        let achados: Vec<String> = sqlx::query_scalar(
+            "SELECT p.id FROM pessoas p
+             WHERE p.nome LIKE ?1 COLLATE NOCASE
+                OR COALESCE(p.sobrenome,'') LIKE ?1 COLLATE NOCASE
+                OR EXISTS (SELECT 1 FROM nomes_pessoa n
+                            WHERE n.pessoa_id = p.id
+                              AND (n.nome LIKE ?1 COLLATE NOCASE
+                                   OR COALESCE(n.sobrenome,'') LIKE ?1 COLLATE NOCASE))",
+        )
+        .bind("%bergoglio%")
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+
+        assert_eq!(achados, vec![p.clone()], "deveria achar pelo nome de nascimento");
+
+        // E continua achando pelo nome de exibição.
+        let por_exibicao: Vec<String> = sqlx::query_scalar(
+            "SELECT id FROM pessoas WHERE nome LIKE ?1 COLLATE NOCASE",
+        )
+        .bind("%francisco%")
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+        assert_eq!(por_exibicao, vec![p]);
     }
 
     #[tokio::test]
