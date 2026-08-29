@@ -17,6 +17,7 @@ import { Input } from './components/ui/Input';
 import { Modal } from './components/ui/Modal';
 import { TreeCanvas } from './components/tree/TreeCanvas';
 import { PersonForm } from './features/person/components/PersonForm';
+import { PersonDetails } from './features/person/components/PersonDetails';
 import { PainelConexoes } from './features/union/components/PainelConexoes';
 import { useCriarPessoa, usePessoas } from './features/person/hooks/usePessoas';
 import { buscarGrafoArvore } from './lib/api';
@@ -47,6 +48,7 @@ export default function App() {
   const [raizId, setRaizId] = useState<string | null>(null);
   const [selecionadaId, setSelecionadaId] = useState<string | null>(null);
   const [formAberto, setFormAberto] = useState(false);
+  const [fichaAberta, setFichaAberta] = useState<string | null>(null);
 
   const { data: pessoas, isLoading: carregandoPessoas, error: erroPessoas } = usePessoas(termoBusca);
   const criar = useCriarPessoa();
@@ -226,6 +228,7 @@ export default function App() {
               grafo={grafo}
               pessoaSelecionadaId={selecionadaId}
               onSelecionarPessoa={setSelecionadaId}
+              onAbrirDetalhes={setFichaAberta}
             />
           )}
         </main>
@@ -246,6 +249,20 @@ export default function App() {
           />
         )}
       </div>
+
+      {/* Ficha completa — o que o botão "Detalhes" do card abre. */}
+      {fichaAberta && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+          <div
+            className="absolute inset-0"
+            onClick={() => setFichaAberta(null)}
+            aria-hidden
+          />
+          <div className="relative w-full max-w-4xl bg-card rounded-raio border border-borda shadow-sombra overflow-hidden">
+            <PersonDetails pessoaId={fichaAberta} onFechar={() => setFichaAberta(null)} />
+          </div>
+        </div>
+      )}
 
       <Modal
         isOpen={formAberto}

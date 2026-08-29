@@ -130,13 +130,19 @@ Estes componentes são maquetes com dados fixos, guardadas no código para não 
 perder e para continuarem passando pelo TypeScript. Cada um traz um aviso no
 topo. **Não são features** — não os cite como prontos:
 
-`PersonDetails` · `UnionEditor` · `TimelineDrawer` · `ReportGenerator` ·
+`UnionEditor` · `TimelineDrawer` · `ReportGenerator` ·
 `SearchAndStatsPanel` · `GedcomImportWizard` · `ExportGedzipDialog`
 
 O `UnionEditor` foi superado na prática pelo `PainelConexoes`, que é a tela de
 conexões que realmente funciona. Ele segue guardado porque desenha uma tela
 dedicada de união (com os dois slots lado a lado) que o painel lateral não
 cobre; se essa tela não for construída, o certo é apagá-lo.
+
+### Fatias documentadas
+
+Cada fatia vertical maior tem uma spec curta em `Instruções/fatias/`, derivada
+da especificação principal, com escopo, o que fica de fora e critérios de
+aceite. Ao começar uma fatia nova, escreva a dela antes.
 
 Ao ligar um deles, troque os valores fixos por `useQuery` sobre `src/lib/api` e
 apague o aviso.
@@ -188,8 +194,12 @@ sobrenome do filho a partir dos pais, e deduz o do pai/mãe a partir do filho ao
 identificar um placeholder. É palpite editável, nunca imposição; partículas
 ("da Silva", "dos Santos") andam grudadas.
 
-**Ainda não:** ficha completa da pessoa (o botão "Detalhes" do card não abre
-nada), múltiplas árvores nomeadas da seção 5 (as tabelas `arvores` e
+**Ficha da pessoa** (fatia 01): o botão "Detalhes" abre o registro completo, e
+é onde os atributos de vida da seção 2.5 finalmente ganharam tela — apelidos,
+nacionalidades, religiões, escolaridade, profissões e idiomas, mais os eventos
+de vida. As taxonomias entram como `<datalist>`: sugerem sem travar.
+
+**Ainda não:** múltiplas árvores nomeadas da seção 5 (as tabelas `arvores` e
 `arvore_membros` existem, sem comando nem tela), documentos e fotos, locais com
 autocomplete, relatórios em PDF, estatísticas, GEDCOM, linhas do tempo.
 

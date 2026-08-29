@@ -260,11 +260,22 @@ export function PainelConexoes({
             {nomeDe(pessoa)}
           </h2>
         </div>
+        {/* Exclusão fica no cabeçalho, não no fim da coluna: lá embaixo ela
+            some abaixo da dobra assim que a pessoa tem duas ou três uniões. */}
+        <button
+          type="button"
+          onClick={() => setDialogo({ tipo: 'excluir-pessoa' })}
+          aria-label="Excluir esta pessoa"
+          title="Excluir esta pessoa"
+          className="text-tinta3 hover:text-fem p-1 rounded-raio-s hover:bg-card transition-colors flex-none"
+        >
+          <Trash2 className="w-4 h-4" />
+        </button>
         <button
           type="button"
           onClick={onFechar}
           aria-label="Fechar painel"
-          className="text-tinta3 hover:text-tinta p-1 rounded-raio-s hover:bg-card transition-colors"
+          className="text-tinta3 hover:text-tinta p-1 rounded-raio-s hover:bg-card transition-colors flex-none"
         >
           <X className="w-4 h-4" />
         </button>
@@ -449,17 +460,6 @@ export function PainelConexoes({
           )}
         </section>
 
-        {/* ---------------- Excluir ---------------- */}
-        <section className="flex flex-col gap-2 pt-2 mt-auto border-t border-borda">
-          <button
-            type="button"
-            onClick={() => setDialogo({ tipo: 'excluir-pessoa' })}
-            className="self-start text-xs text-tinta3 hover:text-fem transition-colors flex items-center gap-1.5 bg-transparent border-none cursor-pointer p-0"
-          >
-            <Trash2 className="w-3.5 h-3.5" />
-            Excluir esta pessoa
-          </button>
-        </section>
       </div>
 
       {/* ---------------- Diálogos ---------------- */}
