@@ -152,21 +152,11 @@ pub fn interpretar(texto: &str) -> DataInterpretada {
 
 /// Minúsculas, sem acento, espaços colapsados. Deixa a comparação de marcas
 /// simples e tolerante ao que a pessoa realmente digita.
+///
+/// A tabela de acentos mora em `texto.rs`, que é a mesma usada pela busca de
+/// municípios — duas cópias divergiriam na primeira alteração.
 fn normalizar(texto: &str) -> String {
-    let sem_acento: String = texto
-        .chars()
-        .map(|c| match c {
-            'á' | 'à' | 'â' | 'ã' | 'ä' | 'Á' | 'À' | 'Â' | 'Ã' | 'Ä' => 'a',
-            'é' | 'è' | 'ê' | 'ë' | 'É' | 'È' | 'Ê' | 'Ë' => 'e',
-            'í' | 'ì' | 'î' | 'ï' | 'Í' | 'Ì' | 'Î' | 'Ï' => 'i',
-            'ó' | 'ò' | 'ô' | 'õ' | 'ö' | 'Ó' | 'Ò' | 'Ô' | 'Õ' | 'Ö' => 'o',
-            'ú' | 'ù' | 'û' | 'ü' | 'Ú' | 'Ù' | 'Û' | 'Ü' => 'u',
-            'ç' | 'Ç' => 'c',
-            outro => outro.to_ascii_lowercase(),
-        })
-        .collect();
-
-    sem_acento.split_whitespace().collect::<Vec<_>>().join(" ")
+    crate::domain::texto::normalizar_busca(texto)
 }
 
 fn tem_marca(texto: &str, marcas: &[&str]) -> bool {

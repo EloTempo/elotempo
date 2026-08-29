@@ -19,6 +19,7 @@ use domain::eventos_cmds::{
 use domain::documentos_cmds::{
     anexar_documento, definir_foto_principal, listar_documentos_pessoa, remover_documento,
 };
+use domain::locais_cmds::{buscar_locais, obter_local, registrar_local_estrangeiro};
 use domain::nomes_cmds::{
     adicionar_nome, listar_nomes_pessoa, remover_nome, usar_nome_na_arvore,
 };
@@ -77,6 +78,10 @@ fn main() {
             remover_uniao,
             anexar_filho,
             desvincular_filho,
+            // Locais
+            buscar_locais,
+            obter_local,
+            registrar_local_estrangeiro,
             // Fotos e documentos
             anexar_documento,
             listar_documentos_pessoa,

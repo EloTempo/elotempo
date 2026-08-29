@@ -43,6 +43,9 @@ pub struct Evento {
     pub ano_inicio: Option<i64>,
     pub ano_fim: Option<i64>,
     pub local_id: Option<String>,
+    /// Nome do local resolvido ("Campos dos Goytacazes, RJ"), para a interface
+    /// não precisar de uma consulta por evento.
+    pub local_nome: Option<String>,
     pub rotulo_historico_livre: Option<String>,
     pub denominacao_religiosa: Option<String>,
     pub instituicao: Option<String>,
@@ -169,12 +172,21 @@ pub async fn listar_eventos_pessoa(
     db: State<'_, SqlitePool>,
 ) -> Resultado<Vec<Evento>> {
     let rows = sqlx::query(
-        "SELECT id, pessoa_id, uniao_id, tipo_evento, data_texto, data_qualificador,
-                ano_inicio, ano_fim, local_id, rotulo_historico_livre,
-                denominacao_religiosa, instituicao, nota
-         FROM eventos
-         WHERE pessoa_id = ?
-         ORDER BY (ano_inicio IS NULL), ano_inicio, tipo_evento",
+        "SELECT e.id, e.pessoa_id, e.uniao_id, e.tipo_evento, e.data_texto,
+                e.data_qualificador, e.ano_inicio, e.ano_fim, e.local_id,
+                -- Município traz a UF junto; cidade estrangeira traz o país.
+                CASE
+                  WHEN l.id IS NULL THEN NULL
+                  WHEN l.uf IS NOT NULL THEN l.nome || ', ' || l.uf
+                  ELSE l.nome || ', ' || p.nome
+                END AS local_nome,
+                e.rotulo_historico_livre, e.denominacao_religiosa,
+                e.instituicao, e.nota
+         FROM eventos e
+         LEFT JOIN locais l ON l.id = e.local_id
+         LEFT JOIN paises p ON p.id = l.pais_id
+         WHERE e.pessoa_id = ?
+         ORDER BY (e.ano_inicio IS NULL), e.ano_inicio, e.tipo_evento",
     )
     .bind(&pessoa_id)
     .fetch_all(&*db)
@@ -194,6 +206,7 @@ fn linha_para_evento(row: sqlx::sqlite::SqliteRow) -> Resultado<Evento> {
         ano_inicio: row.try_get("ano_inicio")?,
         ano_fim: row.try_get("ano_fim")?,
         local_id: row.try_get("local_id")?,
+        local_nome: row.try_get("local_nome")?,
         rotulo_historico_livre: row.try_get("rotulo_historico_livre")?,
         denominacao_religiosa: row.try_get("denominacao_religiosa")?,
         instituicao: row.try_get("instituicao")?,

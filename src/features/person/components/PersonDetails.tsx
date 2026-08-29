@@ -52,7 +52,8 @@ import {
   rotuloDoTipoDeNome,
 } from '../taxonomias';
 import { ErroDoAcervo } from '../../../lib/api';
-import type { NameType, Person, Sex } from '../../../types';
+import { SeletorDeLocal } from './SeletorDeLocal';
+import type { NameType, Person, Place, Sex } from '../../../types';
 
 interface PersonDetailsProps {
   pessoaId: string;
@@ -139,6 +140,7 @@ export function PersonDetails({ pessoaId, onFechar }: PersonDetailsProps) {
 
   // --- Formulários das listas ---
   const [novoEvento, setNovoEvento] = useState({ tipo: 'nascimento', data: '', local: '', nota: '' });
+  const [localDoEvento, setLocalDoEvento] = useState<Place | null>(null);
   const [novaReligiao, setNovaReligiao] = useState({ denominacao: '', periodo: '' });
   const [novaProfissao, setNovaProfissao] = useState({ ocupacao: '', empregador: '', periodo: '' });
   const [novoIdioma, setNovoIdioma] = useState('');
@@ -177,8 +179,13 @@ export function PersonDetails({ pessoaId, onFechar }: PersonDetailsProps) {
   const itensEventos: ItemDeLista[] = (eventos ?? []).map((e) => ({
     id: e.id,
     principal: rotuloDoTipo(e.tipo_evento),
-    // O texto original do usuário, nunca o ano derivado.
-    secundario: [e.data_texto, e.rotulo_historico_livre, e.nota].filter(Boolean).join(' · ') || 'sem data',
+    // O texto original do usuário, nunca o ano derivado. O rótulo histórico
+    // vem antes do município: se a pessoa se deu ao trabalho de escrever
+    // "Vila de São Salvador", é isso que ela quer ler.
+    secundario:
+      [e.data_texto, e.rotulo_historico_livre || e.local_nome, e.nota]
+        .filter(Boolean)
+        .join(' · ') || 'sem data',
   }));
 
   return (
@@ -462,12 +469,15 @@ export function PersonDetails({ pessoaId, onFechar }: PersonDetailsProps) {
                   pessoa_id: pessoaId,
                   tipo_evento: novoEvento.tipo,
                   data_texto: novoEvento.data.trim() || null,
+                  local_id: localDoEvento?.id ?? null,
                   rotulo_historico_livre: novoEvento.local.trim() || null,
                   nota: novoEvento.nota.trim() || null,
                 },
                 {
-                  onSuccess: () =>
-                    setNovoEvento({ tipo: 'nascimento', data: '', local: '', nota: '' }),
+                  onSuccess: () => {
+                    setNovoEvento({ tipo: 'nascimento', data: '', local: '', nota: '' });
+                    setLocalDoEvento(null);
+                  },
                 },
               )
             }
@@ -493,11 +503,11 @@ export function PersonDetails({ pessoaId, onFechar }: PersonDetailsProps) {
               aoMudar={(v) => setNovoEvento({ ...novoEvento, data: v })}
               placeholder="1890, cerca de 1890, antes de 1914, 1902-1904…"
             />
-            <CampoCurto
-              rotulo="Local"
-              valor={novoEvento.local}
-              aoMudar={(v) => setNovoEvento({ ...novoEvento, local: v })}
-              placeholder="Campos dos Goytacazes, RJ"
+            <SeletorDeLocal
+              local={localDoEvento}
+              onEscolher={setLocalDoEvento}
+              rotuloHistorico={novoEvento.local}
+              onMudarRotulo={(v) => setNovoEvento({ ...novoEvento, local: v })}
             />
             <CampoCurto
               rotulo="Nota"

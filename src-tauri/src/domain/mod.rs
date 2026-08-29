@@ -4,6 +4,8 @@ pub mod datas;
 pub mod documentos_cmds;
 pub mod erros;
 pub mod eventos_cmds;
+pub mod locais_cmds;
 pub mod models;
 pub mod nomes_cmds;
 pub mod regras;
+pub mod texto;

@@ -56,6 +56,27 @@ export interface Union {
   nota?: string | null;
 }
 
+/**
+ * Um lugar. Município brasileiro do seed do IBGE, ou cidade estrangeira criada
+ * no uso.
+ *
+ * `codigo_ibge` é a chave estável exigida pela seção 2.4 — nome de cidade muda
+ * com o tempo, o código não. Nulo no exterior, onde só o país é padronizado.
+ */
+export interface Place {
+  id: string;
+  nome: string;
+  uf?: string | null;
+  pais_id: string;
+  codigo_ibge?: string | null;
+  pais_nome: string;
+}
+
+/** "Campos dos Goytacazes, RJ" ou "Lisboa, Portugal". */
+export function rotuloDoLocal(local: Place): string {
+  return local.uf ? `${local.nome}, ${local.uf}` : `${local.nome}, ${local.pais_nome}`;
+}
+
 export interface Event {
   id: string;
   pessoa_id?: string | null;
@@ -66,6 +87,8 @@ export interface Event {
   ano_inicio?: number | null;
   ano_fim?: number | null;
   local_id?: string | null;
+  /** Nome do local já resolvido pelo backend. */
+  local_nome?: string | null;
   rotulo_historico_livre?: string | null;
   denominacao_religiosa?: string | null;
   instituicao?: string | null;

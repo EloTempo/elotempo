@@ -216,10 +216,16 @@ escopo limitado a `$APPDATA/midia/**`. A capability concede só
 `dialog:allow-open`: **nunca conceda `fs:`** — quem lê e escreve arquivo é o
 Rust, dentro da pasta do app.
 
-**Ainda não:** locais com autocomplete (o seed do IBGE já rodou — 5.571
-municípios na migration 009 —, falta a tela), múltiplas árvores nomeadas da
-seção 5 (tabelas existem, sem comando nem tela), relatórios em PDF,
-estatísticas, GEDCOM, linhas do tempo.
+**Locais** (fatia 04): autocomplete sobre os 5.571 municípios do IBGE, e cidade
+estrangeira com país da lista. A busca usa a coluna `locais.nome_busca`, sem
+acento — o `COLLATE NOCASE` do SQLite só entende ASCII, e sem ela "sao paulo"
+não acha "São Paulo". **A normalização existe em dois lugares** (a migration
+012, que preencheu os 5.571, e `domain::texto::sem_acento`, que grava as
+estrangeiras): se divergirem, a busca erra em silêncio, e é o teste
+`a_normalizacao_do_rust_bate_com_a_da_migration` que prende as duas pontas.
+
+**Ainda não:** múltiplas árvores nomeadas da seção 5 (tabelas existem, sem
+comando nem tela), relatórios em PDF, estatísticas, GEDCOM, linhas do tempo.
 
 **Fora de escopo por decisão de 29/08/2026:** prosopografia (relações não
 familiares, instituições, hierarquias) e a tela de fontes/citações. As tabelas

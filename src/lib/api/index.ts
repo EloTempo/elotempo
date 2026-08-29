@@ -44,6 +44,7 @@ export async function chamar<T>(comando: string, argumentos?: Record<string, unk
 export * from './person';
 export * from './nomes';
 export * from './documentos';
+export * from './locais';
 export * from './union';
 export * from './events';
 export * from './attributes';
