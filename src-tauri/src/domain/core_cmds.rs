@@ -124,22 +124,11 @@ pub async fn atualizar_uniao(
     Ok(())
 }
 
-/// Remove a união. Os vínculos de filho caem junto (ON DELETE CASCADE), mas as
-/// pessoas permanecem — inclusive os placeholders, que ficam órfãos de
-/// propósito: apagá-los aqui poderia levar embora um ancestral real que alguém
-/// tinha acabado de promover.
+/// Remove a união e varre os placeholders que ficarem sem serventia.
+/// Quem já foi promovido a pessoa real permanece — ver `regras::remover_uniao`.
 #[tauri::command]
 pub async fn remover_uniao(id: String, db: State<'_, SqlitePool>) -> Resultado<()> {
-    let afetadas = sqlx::query("DELETE FROM unioes WHERE id = ?")
-        .bind(&id)
-        .execute(&*db)
-        .await?
-        .rows_affected();
-
-    if afetadas == 0 {
-        return Err(ErroDominio::UniaoNaoEncontrada(id));
-    }
-    Ok(())
+    regras::remover_uniao(&db, &id).await
 }
 
 #[tauri::command]

@@ -20,6 +20,13 @@ interface EscolherPessoaProps {
   excluir?: string[];
   /** Texto do botão de confirmação, para o diálogo dizer o que vai acontecer. */
   rotuloConfirmar: string;
+  /**
+   * Sobrenome já preenchido no formulário, deduzido do parentesco. É palpite,
+   * não imposição: o campo continua livre.
+   */
+  sobrenomeSugerido?: string;
+  /** De onde veio o palpite, para explicar ao usuário em uma linha. */
+  explicacaoSugestao?: string;
   salvando?: boolean;
   erro?: unknown;
   onEscolher: (pessoa: PersonSummary) => void;
@@ -42,6 +49,8 @@ function mensagemDeErro(erro: unknown): string | null {
 export function EscolherPessoa({
   excluir = [],
   rotuloConfirmar,
+  sobrenomeSugerido = '',
+  explicacaoSugestao,
   salvando,
   erro,
   onEscolher,
@@ -49,9 +58,10 @@ export function EscolherPessoa({
 }: EscolherPessoaProps) {
   const [aba, setAba] = useState<'nova' | 'acervo'>('nova');
 
-  // Aba "nova"
+  // Aba "nova". O sobrenome já nasce com o palpite do parentesco; o usuário
+  // apaga ou troca sem cerimônia.
   const [nome, setNome] = useState('');
-  const [sobrenome, setSobrenome] = useState('');
+  const [sobrenome, setSobrenome] = useState(sobrenomeSugerido);
   const [sexo, setSexo] = useState<Sex>('U');
   const [nascimento, setNascimento] = useState('');
   const [erroLocal, setErroLocal] = useState<string | null>(null);
@@ -141,6 +151,12 @@ export function EscolherPessoa({
               placeholder="Ex: Ferreira"
             />
           </div>
+
+          {explicacaoSugestao && sobrenome === sobrenomeSugerido && sobrenomeSugerido !== '' && (
+            <p className="text-xs text-tinta2 m-0 -mt-2 leading-relaxed">
+              {explicacaoSugestao} Se não for o caso, é só escrever por cima.
+            </p>
+          )}
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <Select

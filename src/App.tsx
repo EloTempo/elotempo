@@ -237,6 +237,12 @@ export default function App() {
             pessoaId={selecionadaId}
             onSelecionarPessoa={setSelecionadaId}
             onFechar={() => setSelecionadaId(null)}
+            onPessoaRemovida={(id) => {
+              setSelecionadaId(null);
+              // Se a raiz foi apagada, solta a referência: o efeito acima
+              // escolhe outra pessoa e a árvore se remonta sozinha.
+              if (raizId === id) setRaizId(null);
+            }}
           />
         )}
       </div>

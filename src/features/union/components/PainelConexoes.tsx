@@ -16,7 +16,7 @@
  */
 
 import { useState } from 'react';
-import { Baby, HeartHandshake, Pencil, Unlink, UserRoundPlus, X } from 'lucide-react';
+import { Baby, HeartHandshake, Pencil, Trash2, Unlink, UserRoundPlus, X } from 'lucide-react';
 import { Button } from '../../../components/ui/Button';
 import { Input } from '../../../components/ui/Input';
 import { Modal } from '../../../components/ui/Modal';
@@ -29,14 +29,23 @@ import {
   useDesvincularFilho,
   useAtualizarUniao,
   usePromoverPlaceholder,
+  useRemoverPessoa,
+  useRemoverUniao,
 } from '../hooks/useConexoes';
 import { ErroDoAcervo } from '../../../lib/api';
+import {
+  sugerirSobrenomeDeFilho,
+  sugerirSobrenomeDoPai,
+  sugerirSobrenomeDaMae,
+} from '../../../lib/nomes';
 import { conjugeDe, type PersonSummary, type UnionStatus } from '../../../types';
 
 interface PainelConexoesProps {
   pessoaId: string;
   onSelecionarPessoa: (id: string) => void;
   onFechar: () => void;
+  /** Chamado depois que a pessoa é apagada, para a tela soltar a seleção. */
+  onPessoaRemovida?: (id: string) => void;
 }
 
 const ESTADOS: Array<{ id: UnionStatus; rotulo: string }> = [
@@ -94,7 +103,12 @@ function Ficha({
   );
 }
 
-export function PainelConexoes({ pessoaId, onSelecionarPessoa, onFechar }: PainelConexoesProps) {
+export function PainelConexoes({
+  pessoaId,
+  onSelecionarPessoa,
+  onFechar,
+  onPessoaRemovida,
+}: PainelConexoesProps) {
   const { data: conexoes, isLoading, error } = useConexoes(pessoaId);
 
   const adicionarPais = useAdicionarPais();
@@ -103,13 +117,17 @@ export function PainelConexoes({ pessoaId, onSelecionarPessoa, onFechar }: Paine
   const desvincular = useDesvincularFilho();
   const atualizarUniao = useAtualizarUniao();
   const promover = usePromoverPlaceholder();
+  const removerPessoa = useRemoverPessoa();
+  const removerUniao = useRemoverUniao();
 
-  // Qual diálogo está aberto: escolher cônjuge, escolher filho de qual união,
-  // ou identificar um placeholder.
+  // Qual diálogo está aberto. `sobrenomeSugerido` viaja junto porque depende
+  // do parentesco em jogo, que só se conhece na hora de abrir.
   const [dialogo, setDialogo] = useState<
     | { tipo: 'conjuge' }
-    | { tipo: 'filho'; uniaoId: string | null }
-    | { tipo: 'identificar'; pessoa: PersonSummary }
+    | { tipo: 'filho'; uniaoId: string | null; sobrenomeSugerido: string; explicacao: string }
+    | { tipo: 'identificar'; pessoa: PersonSummary; sobrenomeSugerido: string; explicacao: string }
+    | { tipo: 'excluir-pessoa' }
+    | { tipo: 'excluir-uniao'; uniaoId: string; comFilhos: number }
     | null
   >(null);
 
@@ -138,17 +156,97 @@ export function PainelConexoes({ pessoaId, onSelecionarPessoa, onFechar }: Paine
     mensagemDeErro(adicionarConjuge.error) ??
     mensagemDeErro(adicionarFilho.error) ??
     mensagemDeErro(desvincular.error) ??
-    mensagemDeErro(promover.error);
+    mensagemDeErro(promover.error) ??
+    mensagemDeErro(removerPessoa.error) ??
+    mensagemDeErro(removerUniao.error);
+
+  /**
+   * Palpite de sobrenome ao identificar um placeholder.
+   *
+   * O caminho é o inverso do usual: em vez de deduzir o filho a partir dos
+   * pais, deduz-se o pai a partir do filho. Pelo costume brasileiro o último
+   * sobrenome do filho veio do pai e o primeiro veio da mãe.
+   */
+  const palpiteParaPlaceholder = (p: PersonSummary): { sobrenome: string; explicacao: string } => {
+    // Placeholder que é pai/mãe da pessoa aberta: usa o sobrenome dela.
+    const ehProgenitor =
+      origem && (origem.masculino.id === p.id || origem.feminino.id === p.id);
+
+    if (ehProgenitor) {
+      const sobrenome =
+        p.sexo === 'F'
+          ? sugerirSobrenomeDaMae(pessoa.sobrenome)
+          : sugerirSobrenomeDoPai(pessoa.sobrenome);
+      return {
+        sobrenome,
+        explicacao: sobrenome
+          ? `Sugerido a partir de ${nomeDe(pessoa)}: pelo costume brasileiro o ${
+              p.sexo === 'F' ? 'primeiro' : 'último'
+            } sobrenome vem d${p.sexo === 'F' ? 'a mãe' : 'o pai'}.`
+          : '',
+      };
+    }
+
+    // Placeholder que é cônjuge: os filhos da união é que dão a pista.
+    const uniao = unioes.find((u) => u.masculino.id === p.id || u.feminino.id === p.id);
+    const primeiroFilho = uniao?.filhos[0];
+    if (primeiroFilho) {
+      const sobrenome =
+        p.sexo === 'F'
+          ? sugerirSobrenomeDaMae(primeiroFilho.sobrenome)
+          : sugerirSobrenomeDoPai(primeiroFilho.sobrenome);
+      return {
+        sobrenome,
+        explicacao: sobrenome ? `Sugerido a partir de ${nomeDe(primeiroFilho)}.` : '',
+      };
+    }
+
+    return { sobrenome: '', explicacao: '' };
+  };
 
   const abrirIdentificacao = (p: PersonSummary) => {
+    const palpite = palpiteParaPlaceholder(p);
     setNomeNovo('');
-    setSobrenomeNovo('');
-    setDialogo({ tipo: 'identificar', pessoa: p });
+    setSobrenomeNovo(palpite.sobrenome);
+    setDialogo({
+      tipo: 'identificar',
+      pessoa: p,
+      sobrenomeSugerido: palpite.sobrenome,
+      explicacao: palpite.explicacao,
+    });
   };
 
   const aoClicarEmRelacionado = (p: PersonSummary) => {
     if (p.is_placeholder) abrirIdentificacao(p);
     else onSelecionarPessoa(p.id);
+  };
+
+  /** Palpite de sobrenome para um filho novo: materno + paterno. */
+  const palpiteParaFilho = (uniaoId: string | null): { sobrenome: string; explicacao: string } => {
+    const uniao = uniaoId ? unioes.find((u) => u.id === uniaoId) : undefined;
+
+    if (uniao) {
+      const sobrenome = sugerirSobrenomeDeFilho(
+        uniao.masculino.sobrenome,
+        uniao.feminino.sobrenome,
+      );
+      return {
+        sobrenome,
+        explicacao: sobrenome
+          ? 'Composto a partir dos pais, na ordem brasileira: sobrenome da mãe, depois o do pai.'
+          : '',
+      };
+    }
+
+    // Sem união ainda: só se sabe o lado da pessoa aberta.
+    const sobrenome =
+      pessoa.sexo === 'F'
+        ? sugerirSobrenomeDeFilho(null, pessoa.sobrenome)
+        : sugerirSobrenomeDeFilho(pessoa.sobrenome, null);
+    return {
+      sobrenome,
+      explicacao: sobrenome ? `Herdado de ${nomeDe(pessoa)}.` : '',
+    };
   };
 
   return (
@@ -298,11 +396,30 @@ export function PainelConexoes({ pessoaId, onSelecionarPessoa, onFechar }: Paine
               <Button
                 size="sm"
                 variant="ghost"
-                onClick={() => setDialogo({ tipo: 'filho', uniaoId: u.id })}
+                onClick={() => {
+                  const palpite = palpiteParaFilho(u.id);
+                  setDialogo({
+                    tipo: 'filho',
+                    uniaoId: u.id,
+                    sobrenomeSugerido: palpite.sobrenome,
+                    explicacao: palpite.explicacao,
+                  });
+                }}
               >
                 <Baby className="w-4 h-4 mr-1" />
                 Adicionar filho
               </Button>
+
+              <button
+                type="button"
+                onClick={() =>
+                  setDialogo({ tipo: 'excluir-uniao', uniaoId: u.id, comFilhos: u.filhos.length })
+                }
+                className="self-start text-[11px] text-tinta3 hover:text-fem transition-colors flex items-center gap-1 bg-transparent border-none cursor-pointer p-0"
+              >
+                <Trash2 className="w-3 h-3" />
+                Excluir esta união
+              </button>
             </div>
             );
           })}
@@ -316,12 +433,32 @@ export function PainelConexoes({ pessoaId, onSelecionarPessoa, onFechar }: Paine
             <Button
               size="sm"
               variant="ghost"
-              onClick={() => setDialogo({ tipo: 'filho', uniaoId: null })}
+              onClick={() => {
+                const palpite = palpiteParaFilho(null);
+                setDialogo({
+                  tipo: 'filho',
+                  uniaoId: null,
+                  sobrenomeSugerido: palpite.sobrenome,
+                  explicacao: palpite.explicacao,
+                });
+              }}
             >
               <Baby className="w-4 h-4 mr-1" />
               Adicionar filho
             </Button>
           )}
+        </section>
+
+        {/* ---------------- Excluir ---------------- */}
+        <section className="flex flex-col gap-2 pt-2 mt-auto border-t border-borda">
+          <button
+            type="button"
+            onClick={() => setDialogo({ tipo: 'excluir-pessoa' })}
+            className="self-start text-xs text-tinta3 hover:text-fem transition-colors flex items-center gap-1.5 bg-transparent border-none cursor-pointer p-0"
+          >
+            <Trash2 className="w-3.5 h-3.5" />
+            Excluir esta pessoa
+          </button>
         </section>
       </div>
 
@@ -337,6 +474,8 @@ export function PainelConexoes({ pessoaId, onSelecionarPessoa, onFechar }: Paine
           <EscolherPessoa
             excluir={[pessoa.id]}
             rotuloConfirmar={dialogo.tipo === 'conjuge' ? 'Criar união' : 'Anexar como filho'}
+            sobrenomeSugerido={dialogo.tipo === 'filho' ? dialogo.sobrenomeSugerido : ''}
+            explicacaoSugestao={dialogo.tipo === 'filho' ? dialogo.explicacao : undefined}
             salvando={adicionarConjuge.isPending || adicionarFilho.isPending}
             erro={adicionarConjuge.error ?? adicionarFilho.error}
             onCancelar={() => setDialogo(null)}
@@ -402,6 +541,12 @@ export function PainelConexoes({ pessoaId, onSelecionarPessoa, onFechar }: Paine
               />
             </div>
 
+            {dialogo.explicacao && sobrenomeNovo === dialogo.sobrenomeSugerido && (
+              <p className="text-xs text-tinta2 m-0 -mt-1 leading-relaxed">
+                {dialogo.explicacao} Se não for o caso, é só escrever por cima.
+              </p>
+            )}
+
             <div className="flex justify-end gap-3 pt-3 border-t border-borda">
               <Button type="button" variant="ghost" onClick={() => setDialogo(null)}>
                 Cancelar
@@ -411,6 +556,100 @@ export function PainelConexoes({ pessoaId, onSelecionarPessoa, onFechar }: Paine
               </Button>
             </div>
           </form>
+        )}
+      </Modal>
+
+      {/* Exclusão de pessoa — confirmada, porque não há desfazer ainda. */}
+      <Modal
+        isOpen={dialogo?.tipo === 'excluir-pessoa'}
+        onClose={() => setDialogo(null)}
+        title="Excluir pessoa"
+      >
+        <div className="flex flex-col gap-4">
+          <p className="text-sm text-tinta m-0 leading-relaxed">
+            Excluir <strong>{nomeDe(pessoa)}</strong> do acervo? As datas, os atributos e os
+            documentos ligados a ela vão junto.
+          </p>
+
+          {unioes.length > 0 && (
+            <p className="text-sm text-tinta2 m-0 leading-relaxed bg-sup border border-borda rounded-raio-s p-3">
+              Esta pessoa ocupa um slot em {unioes.length}{' '}
+              {unioes.length === 1 ? 'união' : 'uniões'}. A união é sempre binária, então o
+              programa vai recusar enquanto ela estiver ali — exclua a união primeiro.
+            </p>
+          )}
+
+          <p className="text-xs text-tinta3 m-0">
+            Não há como desfazer. Se a ideia é só tirá-la de um lugar errado, use
+            “desvincular” em vez de excluir.
+          </p>
+
+          <div className="flex justify-end gap-3 pt-3 border-t border-borda">
+            <Button type="button" variant="ghost" onClick={() => setDialogo(null)}>
+              Cancelar
+            </Button>
+            <Button
+              type="button"
+              className="bg-fem text-white hover:opacity-90"
+              disabled={removerPessoa.isPending}
+              onClick={() =>
+                removerPessoa.mutate(pessoa.id, {
+                  onSuccess: () => {
+                    setDialogo(null);
+                    onPessoaRemovida?.(pessoa.id);
+                  },
+                })
+              }
+            >
+              {removerPessoa.isPending ? 'Excluindo…' : 'Excluir'}
+            </Button>
+          </div>
+        </div>
+      </Modal>
+
+      {/* Exclusão de união */}
+      <Modal
+        isOpen={dialogo?.tipo === 'excluir-uniao'}
+        onClose={() => setDialogo(null)}
+        title="Excluir união"
+      >
+        {dialogo?.tipo === 'excluir-uniao' && (
+          <div className="flex flex-col gap-4">
+            <p className="text-sm text-tinta m-0 leading-relaxed">
+              Desfazer esta união? As pessoas continuam no acervo — o que se apaga é a ligação
+              entre elas.
+            </p>
+
+            {dialogo.comFilhos > 0 && (
+              <p className="text-sm text-tinta2 m-0 leading-relaxed bg-sup border border-borda rounded-raio-s p-3">
+                {dialogo.comFilhos} {dialogo.comFilhos === 1 ? 'filho fica' : 'filhos ficam'} sem
+                pais registrados. {dialogo.comFilhos === 1 ? 'Ele continua' : 'Eles continuam'} no
+                acervo, mas solt{dialogo.comFilhos === 1 ? 'o' : 'os'} na árvore até você
+                {dialogo.comFilhos === 1 ? ' religá-lo' : ' religá-los'}.
+              </p>
+            )}
+
+            <p className="text-xs text-tinta3 m-0">
+              Pais “desconhecidos” que existirem só por causa desta união são removidos junto —
+              eles seguravam o slot e não têm mais função.
+            </p>
+
+            <div className="flex justify-end gap-3 pt-3 border-t border-borda">
+              <Button type="button" variant="ghost" onClick={() => setDialogo(null)}>
+                Cancelar
+              </Button>
+              <Button
+                type="button"
+                className="bg-fem text-white hover:opacity-90"
+                disabled={removerUniao.isPending}
+                onClick={() =>
+                  removerUniao.mutate(dialogo.uniaoId, { onSuccess: () => setDialogo(null) })
+                }
+              >
+                {removerUniao.isPending ? 'Excluindo…' : 'Excluir união'}
+              </Button>
+            </div>
+          </div>
         )}
       </Modal>
     </aside>

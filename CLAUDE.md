@@ -178,7 +178,15 @@ conexão, o layout da árvore, o zoom semântico da linha do tempo.
 montagem do grafo; layout vertical com pan/zoom; busca por nome; **construção
 da família pelo painel de conexões** — adicionar pais (que nascem como
 placeholders), cônjuge, filhos, identificar um placeholder, desvincular,
-trocar o estado do vínculo; e todas as invariantes com teste.
+trocar o estado do vínculo, **excluir pessoa e união**; **sugestão de sobrenome
+pela convenção brasileira**; e todas as invariantes com teste.
+
+Sobre a sugestão de sobrenome (`src/lib/nomes.ts`): no Brasil a ordem é
+**materno primeiro, paterno por último**, e o sobrenome que alguém transmite
+aos filhos é o **último** dele. A sugestão vale nos dois sentidos — compõe o
+sobrenome do filho a partir dos pais, e deduz o do pai/mãe a partir do filho ao
+identificar um placeholder. É palpite editável, nunca imposição; partículas
+("da Silva", "dos Santos") andam grudadas.
 
 **Ainda não:** ficha completa da pessoa (o botão "Detalhes" do card não abre
 nada), múltiplas árvores nomeadas da seção 5 (as tabelas `arvores` e

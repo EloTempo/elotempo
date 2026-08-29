@@ -538,6 +538,61 @@ pub async fn criar_uniao(
     Ok(id)
 }
 
+/// Remove a união e limpa os placeholders que ficarem sem serventia.
+///
+/// Os vínculos de filho caem junto (ON DELETE CASCADE). As pessoas ficam —
+/// **exceto** placeholders que, sem esta união, não estão mais ligados a nada.
+/// Eles só existiam para segurar o slot; mantê-los encheria o acervo de
+/// "Desconhecido" invisíveis a cada correção de engano.
+///
+/// Quem foi promovido a pessoa real não é tocado: promover zera o
+/// `is_placeholder`, e a checagem abaixo se apoia justamente nesse campo.
+pub async fn remover_uniao(pool: &SqlitePool, uniao_id: &str) -> Resultado<()> {
+    let linha = sqlx::query("SELECT slot_masculino_id, slot_feminino_id FROM unioes WHERE id = ?")
+        .bind(uniao_id)
+        .fetch_optional(pool)
+        .await?
+        .ok_or_else(|| ErroDominio::UniaoNaoEncontrada(uniao_id.to_string()))?;
+
+    let masculino: String = linha.try_get("slot_masculino_id")?;
+    let feminino: String = linha.try_get("slot_feminino_id")?;
+
+    sqlx::query("DELETE FROM unioes WHERE id = ?")
+        .bind(uniao_id)
+        .execute(pool)
+        .await?;
+
+    for ocupante in [&masculino, &feminino] {
+        remover_placeholder_orfao(pool, ocupante).await?;
+    }
+
+    Ok(())
+}
+
+/// Apaga a pessoa **apenas** se ela for um placeholder que não sobrou ligado a
+/// nada. Silenciosa nos demais casos: é faxina, não uma exclusão pedida.
+async fn remover_placeholder_orfao(pool: &SqlitePool, pessoa_id: &str) -> Resultado<()> {
+    let apagaveis: i64 = sqlx::query_scalar(
+        "SELECT COUNT(*) FROM pessoas p
+         WHERE p.id = ?1
+           AND p.is_placeholder = 1
+           AND NOT EXISTS (SELECT 1 FROM unioes u
+                            WHERE u.slot_masculino_id = ?1 OR u.slot_feminino_id = ?1)
+           AND NOT EXISTS (SELECT 1 FROM uniao_filhos f WHERE f.pessoa_id = ?1)",
+    )
+    .bind(pessoa_id)
+    .fetch_one(pool)
+    .await?;
+
+    if apagaveis > 0 {
+        sqlx::query("DELETE FROM pessoas WHERE id = ?")
+            .bind(pessoa_id)
+            .execute(pool)
+            .await?;
+    }
+    Ok(())
+}
+
 // =====================================================================
 // Filhos
 // =====================================================================
@@ -903,6 +958,131 @@ mod testes {
     }
 
     // ---------- Exclusão ----------
+
+    #[tokio::test]
+    async fn remover_uniao_leva_junto_o_placeholder_que_ficou_sem_serventia() {
+        // O cenário do engano: criou "adicionar pais" sem querer, e desfaz.
+        // Os dois desconhecidos não podem ficar boiando no acervo.
+        let pool = pool_de_teste().await;
+        let filho = pessoa(&pool, "Filho", "M").await;
+
+        let uniao = criar_uniao(&pool, None, None, "nao_informado").await.unwrap();
+        anexar_filho(&pool, &uniao, &filho, "biologico").await.unwrap();
+
+        let total_antes: i64 = sqlx::query_scalar("SELECT COUNT(*) FROM pessoas")
+            .fetch_one(&pool)
+            .await
+            .unwrap();
+        assert_eq!(total_antes, 3, "filho + dois placeholders");
+
+        remover_uniao(&pool, &uniao).await.unwrap();
+
+        let restantes: i64 = sqlx::query_scalar("SELECT COUNT(*) FROM pessoas")
+            .fetch_one(&pool)
+            .await
+            .unwrap();
+        assert_eq!(restantes, 1, "só o filho deveria sobrar");
+        assert!(buscar_pessoa(&pool, &filho).await.is_ok());
+    }
+
+    #[tokio::test]
+    async fn remover_uniao_preserva_quem_foi_promovido() {
+        // Se o placeholder virou uma pessoa real, ele deixou de ser descartável.
+        let pool = pool_de_teste().await;
+        let mae = pessoa(&pool, "Mãe", "F").await;
+        let uniao = criar_uniao(&pool, None, Some(&mae), "casamento").await.unwrap();
+
+        let pai_id: String = sqlx::query_scalar("SELECT slot_masculino_id FROM unioes WHERE id = ?")
+            .bind(&uniao)
+            .fetch_one(&pool)
+            .await
+            .unwrap();
+        promover_placeholder(&pool, &pai_id, "Joaquim", Some("Ferreira")).await.unwrap();
+
+        remover_uniao(&pool, &uniao).await.unwrap();
+
+        assert!(
+            buscar_pessoa(&pool, &pai_id).await.is_ok(),
+            "quem ganhou nome não pode ser varrido junto com a união"
+        );
+        assert!(buscar_pessoa(&pool, &mae).await.is_ok());
+    }
+
+    #[tokio::test]
+    async fn remover_uniao_preserva_placeholder_que_ainda_serve_a_outra() {
+        let pool = pool_de_teste().await;
+        let mae = pessoa(&pool, "Mãe", "F").await;
+
+        // Um placeholder masculino em duas uniões distintas.
+        let u1 = criar_uniao(&pool, None, Some(&mae), "casamento").await.unwrap();
+        let pai_id: String = sqlx::query_scalar("SELECT slot_masculino_id FROM unioes WHERE id = ?")
+            .bind(&u1)
+            .fetch_one(&pool)
+            .await
+            .unwrap();
+
+        let outra = pessoa(&pool, "Outra", "F").await;
+        criar_uniao(&pool, Some(&pai_id), Some(&outra), "estavel").await.unwrap();
+
+        remover_uniao(&pool, &u1).await.unwrap();
+
+        assert!(
+            buscar_pessoa(&pool, &pai_id).await.is_ok(),
+            "ele ainda ocupa o slot da outra união"
+        );
+    }
+
+    #[tokio::test]
+    async fn remover_uniao_inexistente_da_erro() {
+        let pool = pool_de_teste().await;
+        let erro = remover_uniao(&pool, "nao-existe").await.unwrap_err();
+        assert!(matches!(erro, ErroDominio::UniaoNaoEncontrada(_)), "{erro:?}");
+    }
+
+    #[tokio::test]
+    async fn apagar_pessoa_leva_junto_os_eventos_dela() {
+        let pool = pool_de_teste().await;
+        let p = pessoa(&pool, "Enganado", "M").await;
+
+        sqlx::query(
+            "INSERT INTO eventos (id,pessoa_id,tipo_evento,data_texto,data_qualificador)
+             VALUES ('e1',?,'nascimento','1900','exata')",
+        )
+        .bind(&p)
+        .execute(&pool)
+        .await
+        .unwrap();
+
+        remover_pessoa(&pool, &p).await.unwrap();
+
+        let eventos: i64 = sqlx::query_scalar("SELECT COUNT(*) FROM eventos WHERE pessoa_id = ?")
+            .bind(&p)
+            .fetch_one(&pool)
+            .await
+            .unwrap();
+        assert_eq!(eventos, 0, "o ON DELETE CASCADE deveria ter levado o evento");
+    }
+
+    #[tokio::test]
+    async fn apagar_filho_nao_derruba_a_uniao_dos_pais() {
+        let pool = pool_de_teste().await;
+        let pai = pessoa(&pool, "Pai", "M").await;
+        let mae = pessoa(&pool, "Mãe", "F").await;
+        let filho = pessoa(&pool, "Filho", "M").await;
+        let uniao = criar_uniao(&pool, Some(&pai), Some(&mae), "casamento").await.unwrap();
+        anexar_filho(&pool, &uniao, &filho, "biologico").await.unwrap();
+
+        remover_pessoa(&pool, &filho).await.unwrap();
+
+        assert!(buscar_pessoa(&pool, &pai).await.is_ok());
+        assert!(buscar_pessoa(&pool, &mae).await.is_ok());
+        let vinculos: i64 = sqlx::query_scalar("SELECT COUNT(*) FROM uniao_filhos WHERE uniao_id = ?")
+            .bind(&uniao)
+            .fetch_one(&pool)
+            .await
+            .unwrap();
+        assert_eq!(vinculos, 0);
+    }
 
     #[tokio::test]
     async fn nao_da_para_apagar_quem_ocupa_um_slot() {

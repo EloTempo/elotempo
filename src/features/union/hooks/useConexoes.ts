@@ -14,6 +14,8 @@ import {
   desvincularFilho,
   atualizarUniao,
   promoverPlaceholder,
+  removerPessoa,
+  removerUniao,
 } from '../../../lib/api';
 import { distribuirSlots } from '../slots';
 import type { ChildLinkType, PersonSummary, UnionStatus } from '../../../types';
@@ -115,6 +117,38 @@ export function useAtualizarUniao() {
   return useMutation({
     mutationFn: (args: { id: string; estado: UnionStatus }) =>
       atualizarUniao(args.id, args.estado),
+    onSuccess: () => invalidarAcervo(queryClient),
+  });
+}
+
+/**
+ * Apaga uma pessoa cadastrada por engano.
+ *
+ * O domínio recusa se ela ocupar um slot de união — apagar deixaria a união
+ * com um lado só, o que o modelo não admite. A mensagem que volta explica que
+ * é preciso desfazer a união primeiro.
+ *
+ * Os eventos e atributos dela caem junto (ON DELETE CASCADE nas migrations).
+ */
+export function useRemoverPessoa() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: removerPessoa,
+    onSuccess: () => invalidarAcervo(queryClient),
+  });
+}
+
+/**
+ * Desfaz uma união.
+ *
+ * Os vínculos de filho caem junto, e os placeholders que sobrarem sem nenhuma
+ * outra ligação são varridos pelo domínio — senão cada engano desfeito deixaria
+ * um "Desconhecido" solto no acervo.
+ */
+export function useRemoverUniao() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: removerUniao,
     onSuccess: () => invalidarAcervo(queryClient),
   });
 }
