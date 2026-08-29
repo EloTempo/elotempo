@@ -1,0 +1,21 @@
+# Normaliza fim de linha: LF no repositório, nativo no working copy.
+* text=auto eol=lf
+
+# Windows precisa de CRLF nestes
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Binários — nunca normalizar
+*.png binary
+*.jpg binary
+*.ico binary
+*.icns binary
+*.zip binary
+*.sqlite binary
+*.woff2 binary
+*.ttf binary
+
+# Arquivos gerados: fora do diff e das estatísticas de linguagem
+package-lock.json linguist-generated=true -diff
+src-tauri/Cargo.lock linguist-generated=true -diff
+src-tauri/gen/** linguist-generated=true -diff

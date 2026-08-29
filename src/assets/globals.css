@@ -1,0 +1,120 @@
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Tema Padrão: Clássico Claro */
+  :root {
+    --mesa: #e2d9c8; --bg: #efe9dd; --sup: #e8e1d3; --card: #f8f3e8; --card2: #efe7d6;
+    --borda: #d3c6ac; --borda2: #bfae8e; --tinta: #3a3125; --tinta2: #8b7f6a; --tinta3: #a89b83;
+    --linha: #b9a888; --masc: #3c5a78; --fem: #8f3f4e; --anel: #b9a074;
+    --acento: #7a5c34; --acento-tinta: #faf6ec; --chip: #e4dbc7;
+    
+    --raio: 14px; --raio-s: 9px;
+    --sombra: 0 1px 2px rgba(58,49,37,.10), 0 6px 18px rgba(58,49,37,.07);
+    
+    --f-tit: 'Libre Baskerville', Georgia, serif;
+    --f-corpo: 'Source Serif 4', Georgia, serif;
+    --f-num: 'Source Serif 4', Georgia, serif;
+    --peso-tit: 700;
+    --tracking: 0em;
+  }
+
+  /* Tema Clássico Escuro */
+  :root[data-tema="classico-escuro"] {
+    --mesa: #171410; --bg: #211d18; --sup: #26221c; --card: #2b261f; --card2: #332d25;
+    --borda: #463d31; --borda2: #5d5140; --tinta: #f0e5d1; --tinta2: #a99a86; --tinta3: #8b7d69;
+    --linha: #6f6046; --masc: #8fbcdc; --fem: #e07a94; --anel: #b9a074;
+    --acento: #d8c39a; --acento-tinta: #221e18; --chip: #332d25;
+    --sombra: 0 1px 2px rgba(0,0,0,.4), 0 8px 22px rgba(0,0,0,.35);
+  }
+
+  /* Tema Moderno Claro */
+  :root[data-tema="moderno-claro"] {
+    --mesa: #e6e9ef; --bg: #f4f5f7; --sup: #eceef2; --card: #ffffff; --card2: #f1f3f7;
+    --borda: #dfe3ea; --borda2: #c3cad6; --tinta: #0f1420; --tinta2: #6b7280; --tinta3: #98a1af;
+    --linha: #c8d0dc; --masc: #2563eb; --fem: #e11d63; --anel: #98a1af;
+    --acento: #2563eb; --acento-tinta: #ffffff; --chip: #e8ebf1;
+    
+    --raio: 12px; --raio-s: 8px;
+    --sombra: 0 1px 2px rgba(15,20,32,.06), 0 8px 20px rgba(15,20,32,.06);
+    
+    --f-tit: 'IBM Plex Sans', system-ui, sans-serif;
+    --f-corpo: 'IBM Plex Sans', system-ui, sans-serif;
+    --f-num: 'IBM Plex Mono', monospace;
+    --peso-tit: 600;
+    --tracking: -0.01em;
+  }
+
+  /* Tema Moderno Escuro */
+  :root[data-tema="moderno-escuro"] {
+    --mesa: #06080c; --bg: #0b0d12; --sup: #101319; --card: #161a22; --card2: #1c212b;
+    --borda: #242a35; --borda2: #333b49; --tinta: #eef2f7; --tinta2: #8b95a5; --tinta3: #6c7686;
+    --linha: #2e3542; --masc: #5b8bf9; --fem: #fb3b73; --anel: #5c6673;
+    --acento: #5b8bf9; --acento-tinta: #0b0d12; --chip: #1c212b;
+    
+    --raio: 12px; --raio-s: 8px;
+    --sombra: 0 1px 2px rgba(0,0,0,.5), 0 8px 22px rgba(0,0,0,.45);
+    
+    --f-tit: 'IBM Plex Sans', system-ui, sans-serif;
+    --f-corpo: 'IBM Plex Sans', system-ui, sans-serif;
+    --f-num: 'IBM Plex Mono', monospace;
+    --peso-tit: 600;
+    --tracking: -0.01em;
+  }
+
+  body {
+    @apply bg-mesa text-tinta font-corpo antialiased m-0;
+  }
+
+  a {
+    @apply text-acento no-underline border-b border-acento hover:text-tinta hover:border-tinta transition-colors;
+  }
+}
+
+@layer components {
+  /* Classes de Zoom Semântico (D3.js) */
+  .zoom-semantic-low .detail-text {
+    @apply hidden;
+  }
+  .zoom-semantic-low .node-content {
+    @apply p-1;
+  }
+  .zoom-semantic-high .node-content {
+    @apply h-auto; 
+  }
+}
+
+/* Regras Globais de Impressão */
+@media print {
+  @page { margin: 18mm; size: A4 portrait; }
+  
+  /* Remove a UI do aplicativo da página impressa */
+  body * {
+    visibility: hidden;
+  }
+  
+  /* Exibe apenas o contêiner de impressão */
+  #print-container, #print-container * {
+    visibility: visible;
+  }
+  #print-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+
+  /* Força a impressão das cores de fundo exatas (ignora modo noturno do SO) */
+  *, *::before, *::after {
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+  
+  /* Impede quebras de página no meio de um card de pessoa */
+  .node-card {
+    break-inside: avoid;
+  }
+}

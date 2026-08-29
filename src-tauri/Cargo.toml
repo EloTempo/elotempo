@@ -1,0 +1,32 @@
+[package]
+name = "arvore-genealogica"
+version = "0.1.0"
+description = "Software desktop offline para árvores genealógicas, compatível com GEDCOM 7.0"
+authors = ["Gabriel Nascimento"]
+license = "MIT"
+repository = "https://github.com/SEU-USUARIO/arvore-genealogica"
+edition = "2021"
+rust-version = "1.77"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["rt-multi-thread", "macros"] }
+sqlx = { version = "0.8", features = ["sqlite", "runtime-tokio", "macros", "migrate"] }
+uuid = { version = "1", features = ["v4"] }
+
+[features]
+# Feature usada pela suíte de testes de domínio para compilar sem a runtime do Tauri.
+default = []
+
+[profile.release]
+# Binário público: menor e sem símbolos de debug.
+codegen-units = 1
+lto = true
+opt-level = "s"
+panic = "abort"
+strip = true
