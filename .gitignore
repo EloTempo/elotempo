@@ -40,3 +40,6 @@ Design/*.zip
 # Logs
 *.log
 npm-debug.log*
+
+# Configuração local de ferramentas de agente
+.claude/

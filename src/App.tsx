@@ -29,15 +29,39 @@ const TEMAS: Array<{ id: Tema; rotulo: string }> = [
   { id: 'moderno-escuro', rotulo: 'Moderno escuro' },
 ];
 
+/** Lê o tema salvo. Falha em silêncio: tema é conforto, não dado do acervo. */
+function temaInicial(): Tema {
+  try {
+    const salvo = localStorage.getItem('tema');
+    if (salvo && TEMAS.some((t) => t.id === salvo)) return salvo as Tema;
+  } catch {
+    /* modo privado ou storage bloqueado */
+  }
+  return 'classico-claro';
+}
+
 export default function App() {
-  const [tema, setTema] = useState<Tema>('classico-claro');
+  const [tema, setTema] = useState<Tema>(temaInicial);
   const [termoBusca, setTermoBusca] = useState('');
   const [raizId, setRaizId] = useState<string | null>(null);
   const [selecionadaId, setSelecionadaId] = useState<string | null>(null);
   const [formAberto, setFormAberto] = useState(false);
 
-  const { data: pessoas, isLoading: carregandoPessoas } = usePessoas(termoBusca);
+  const { data: pessoas, isLoading: carregandoPessoas, error: erroPessoas } = usePessoas(termoBusca);
   const criar = useCriarPessoa();
+
+  // O tema tem de ir no <html>: as variáveis de cor são declaradas em
+  // `:root[data-tema="…"]` (globals.css). Posto numa div, o seletor nunca
+  // casava e o seletor de temas não mudava nada — os quatro temas existiam no
+  // CSS mas só o clássico claro chegava à tela.
+  useEffect(() => {
+    document.documentElement.dataset.tema = tema;
+    try {
+      localStorage.setItem('tema', tema);
+    } catch {
+      /* sem persistência é aceitável; o tema volta ao padrão na próxima abertura */
+    }
+  }, [tema]);
 
   // Sem raiz escolhida, adota a primeira pessoa do acervo — assim o programa
   // abre mostrando alguma coisa em vez de uma tela vazia.
@@ -57,10 +81,14 @@ export default function App() {
     enabled: !!raizId,
   });
 
-  const acervoVazio = !carregandoPessoas && (pessoas?.length ?? 0) === 0 && !termoBusca;
+  // Só é "vazio" quando a consulta deu certo e não achou ninguém. Sem o teste
+  // de erro, uma falha ao ler o acervo apareceria como a tela de boas-vindas —
+  // e o usuário concluiria que perdeu os dados.
+  const acervoVazio =
+    !carregandoPessoas && !erroPessoas && (pessoas?.length ?? 0) === 0 && !termoBusca;
 
   return (
-    <div data-tema={tema} className="h-screen flex flex-col bg-mesa text-tinta font-corpo">
+    <div className="h-screen flex flex-col bg-mesa text-tinta font-corpo">
       {/* Barra superior */}
       <header className="flex items-center gap-3 px-4 py-2.5 bg-sup border-b border-borda flex-none">
         <TreeDeciduous className="w-5 h-5 text-acento flex-none" />
@@ -110,7 +138,16 @@ export default function App() {
               <p className="p-3 text-sm text-tinta3">Lendo o acervo…</p>
             )}
 
-            {!carregandoPessoas && pessoas?.length === 0 && (
+            {erroPessoas && (
+              <div role="alert" className="m-3 p-3 rounded-raio-s bg-fem/10 border border-fem/20">
+                <p className="text-sm text-fem m-0 font-semibold">Não foi possível ler o acervo</p>
+                <p className="text-xs text-tinta2 mt-1 mb-0 leading-relaxed">
+                  {erroPessoas instanceof Error ? erroPessoas.message : String(erroPessoas)}
+                </p>
+              </div>
+            )}
+
+            {!carregandoPessoas && !erroPessoas && pessoas?.length === 0 && (
               <p className="p-3 text-sm text-tinta3">
                 {termoBusca ? 'Ninguém com esse nome.' : 'O acervo está vazio.'}
               </p>
