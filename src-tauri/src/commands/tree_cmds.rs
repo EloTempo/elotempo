@@ -32,6 +32,8 @@ pub struct PessoaNode {
     pub is_placeholder: bool,
     pub ano_nascimento: Option<i64>,
     pub ano_falecimento: Option<i64>,
+    /// Caminho relativo do retrato, para o card desenhar a foto (fatia 03).
+    pub foto_url: Option<String>,
     pub tem_foto: bool,
     pub tem_biografia: bool,
     /// Quantos documentos, religiões etc. existem — alimenta os "ícones de
@@ -158,6 +160,7 @@ pub async fn buscar_grafo_arvore(
             (SELECT e.ano_inicio FROM eventos e
               WHERE e.pessoa_id = p.id AND e.tipo_evento = '{falecimento}'
               ORDER BY e.ano_inicio LIMIT 1) AS ano_falecimento,
+            p.foto_url,
             (p.foto_url IS NOT NULL AND p.foto_url <> '') AS tem_foto,
             (p.minibiografia IS NOT NULL AND p.minibiografia <> '') AS tem_biografia,
             EXISTS(SELECT 1 FROM documento_vinculos dv WHERE dv.pessoa_id = p.id) AS tem_documentos,
@@ -312,6 +315,7 @@ pub async fn buscar_pessoas(
             (SELECT e.ano_inicio FROM eventos e
               WHERE e.pessoa_id = p.id AND e.tipo_evento = '{falecimento}'
               ORDER BY e.ano_inicio LIMIT 1) AS ano_falecimento,
+            p.foto_url,
             (p.foto_url IS NOT NULL AND p.foto_url <> '') AS tem_foto,
             (p.minibiografia IS NOT NULL AND p.minibiografia <> '') AS tem_biografia,
             EXISTS(SELECT 1 FROM documento_vinculos dv WHERE dv.pessoa_id = p.id) AS tem_documentos,

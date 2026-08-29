@@ -208,9 +208,24 @@ afetiva segue em `apelidos_pessoa`, e "D. João VI" é nome, não apelido.
 nacionalidades, religiões, escolaridade, profissões e idiomas, mais os eventos
 de vida. As taxonomias entram como `<datalist>`: sugerem sem travar.
 
-**Ainda não:** múltiplas árvores nomeadas da seção 5 (as tabelas `arvores` e
-`arvore_membros` existem, sem comando nem tela), documentos e fotos, locais com
-autocomplete, relatórios em PDF, estatísticas, GEDCOM, linhas do tempo.
+**Fotos e documentos** (fatia 03): anexar arquivo, marcar o retrato que aparece
+no card, remover. O arquivo é **copiado** para `<app_data>/midia/` com nome
+gerado, e o banco guarda só o caminho relativo — é o que faz o acervo
+sobreviver a uma cópia entre máquinas. Exibição pelo protocolo `asset:`, com
+escopo limitado a `$APPDATA/midia/**`. A capability concede só
+`dialog:allow-open`: **nunca conceda `fs:`** — quem lê e escreve arquivo é o
+Rust, dentro da pasta do app.
+
+**Ainda não:** locais com autocomplete (o seed do IBGE já rodou — 5.571
+municípios na migration 009 —, falta a tela), múltiplas árvores nomeadas da
+seção 5 (tabelas existem, sem comando nem tela), relatórios em PDF,
+estatísticas, GEDCOM, linhas do tempo.
+
+**Fora de escopo por decisão de 29/08/2026:** prosopografia (relações não
+familiares, instituições, hierarquias) e a tela de fontes/citações. As tabelas
+`fontes` e `citacoes` da migration 007 ficam preparadas e vazias, que é o que a
+seção 2.7 pede. O produto é **árvore genealógica familiar** — não reabrir sem o
+Gabriel pedir.
 
 Trabalhe em **fatias verticais**: cada feature ponta a ponta (dado → domínio →
 UI) antes de começar a próxima.

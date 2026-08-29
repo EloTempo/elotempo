@@ -6,9 +6,10 @@
  * mostram o que existe de informação sem obrigar a abrir os detalhes.
  */
 
-import { User, FileText, Image as ImageIcon, Book, Info } from 'lucide-react';
+import { User, FileText, Book, Info } from 'lucide-react';
 import type { PersonNode } from '../../types';
 import { cn } from '../ui/Button';
+import { ImagemDoAcervo } from '../ui/ImagemDoAcervo';
 
 interface NodeCardProps {
   person: PersonNode;
@@ -64,11 +65,12 @@ export function NodeCard({ person, selecionado, onClick, onDetalhes }: NodeCardP
 
       <div className="flex items-center gap-2.5 px-2.5 py-2 min-w-0 flex-1">
         <div className="w-10 h-10 rounded-raio-s bg-chip flex-none grid place-items-center overflow-hidden border border-borda2 detail-text">
-          {person.tem_foto ? (
-            <ImageIcon className="w-4 h-4 text-tinta3" />
-          ) : (
-            <User className="w-4 h-4 text-tinta3" />
-          )}
+          <ImagemDoAcervo
+            caminhoRelativo={person.foto_url}
+            alt=""
+            className="w-full h-full object-cover"
+            alternativo={<User className="w-4 h-4 text-tinta3" />}
+          />
         </div>
 
         <div className="flex flex-col min-w-0 flex-1 gap-0.5">

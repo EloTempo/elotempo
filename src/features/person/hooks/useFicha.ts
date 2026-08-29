@@ -37,8 +37,12 @@ import {
   adicionarNome,
   removerNome,
   usarNomeNaArvore,
+  listarDocumentosPessoa,
+  anexarDocumento,
+  removerDocumento,
+  definirFotoPrincipal,
 } from '../../../lib/api';
-import type { NewPersonName } from '../../../types';
+import type { NewDocument, NewPersonName } from '../../../types';
 
 // ---------------------------------------------------------------------------
 // Pessoa e eventos
@@ -242,6 +246,53 @@ export function useUsarNomeNaArvore(pessoaId: string) {
   return useMutation({
     mutationFn: usarNomeNaArvore,
     onSuccess: () => invalidarPessoa(queryClient, pessoaId),
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Fotos e documentos (fatia 03)
+// ---------------------------------------------------------------------------
+
+export function useDocumentos(pessoaId: string | null) {
+  return useQuery({
+    queryKey: ['documentos', pessoaId],
+    queryFn: () => listarDocumentosPessoa(pessoaId!),
+    enabled: !!pessoaId,
+  });
+}
+
+function invalidarDocumentos(
+  queryClient: ReturnType<typeof useQueryClient>,
+  pessoaId: string,
+) {
+  queryClient.invalidateQueries({ queryKey: ['documentos', pessoaId] });
+  // O card mostra o retrato e o ícone de "tem documentos".
+  queryClient.invalidateQueries({ queryKey: ['arvore'] });
+  queryClient.invalidateQueries({ queryKey: ['pessoa', pessoaId] });
+}
+
+export function useAnexarDocumento(pessoaId: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (novo: NewDocument) => anexarDocumento(novo),
+    onSuccess: () => invalidarDocumentos(queryClient, pessoaId),
+  });
+}
+
+export function useRemoverDocumento(pessoaId: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: removerDocumento,
+    onSuccess: () => invalidarDocumentos(queryClient, pessoaId),
+  });
+}
+
+/** Passar `null` limpa o retrato. */
+export function useDefinirFotoPrincipal(pessoaId: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (documentoId: string | null) => definirFotoPrincipal(pessoaId, documentoId),
+    onSuccess: () => invalidarDocumentos(queryClient, pessoaId),
   });
 }
 

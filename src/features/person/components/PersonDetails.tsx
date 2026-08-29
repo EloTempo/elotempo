@@ -13,10 +13,12 @@
  */
 
 import { useEffect, useState } from 'react';
-import { Pencil, Trash2, User, X } from 'lucide-react';
+import { FileText, ImagePlus, Pencil, Star, User, X } from 'lucide-react';
 import { Button } from '../../../components/ui/Button';
 import { Input } from '../../../components/ui/Input';
 import { Select } from '../../../components/ui/Select';
+import { ImagemDoAcervo } from '../../../components/ui/ImagemDoAcervo';
+import { escolherArquivo } from '../../../lib/api';
 import { SecaoAtributo, CampoCurto, type ItemDeLista } from './SecaoAtributo';
 import {
   usePessoa,
@@ -29,6 +31,10 @@ import {
   useAdicionarNome,
   useRemoverNome,
   useUsarNomeNaArvore,
+  useDocumentos,
+  useAnexarDocumento,
+  useRemoverDocumento,
+  useDefinirFotoPrincipal,
   religioes,
   profissoes,
   idiomas,
@@ -118,6 +124,11 @@ export function PersonDetails({ pessoaId, onFechar }: PersonDetailsProps) {
   const delNome = useRemoverNome(pessoaId);
   const usarNome = useUsarNomeNaArvore(pessoaId);
 
+  const listaDocumentos = useDocumentos(pessoaId);
+  const anexar = useAnexarDocumento(pessoaId);
+  const delDocumento = useRemoverDocumento(pessoaId);
+  const definirRetrato = useDefinirFotoPrincipal(pessoaId);
+
   // --- Edição dos campos básicos ---
   const [editando, setEditando] = useState(false);
   const [rascunho, setRascunho] = useState<Person | null>(null);
@@ -174,8 +185,13 @@ export function PersonDetails({ pessoaId, onFechar }: PersonDetailsProps) {
     <div className="flex flex-col max-h-[80vh]">
       {/* Cabeçalho */}
       <header className="flex items-start gap-4 p-4 border-b border-borda bg-card2 flex-none">
-        <div className="w-16 h-16 rounded-raio-s bg-sup border border-borda flex-none grid place-items-center text-tinta3">
-          <User className="w-7 h-7" />
+        <div className="w-16 h-16 rounded-raio-s bg-sup border border-borda flex-none grid place-items-center text-tinta3 overflow-hidden">
+          <ImagemDoAcervo
+            caminhoRelativo={pessoa.foto_url}
+            alt={`Retrato de ${nomeCompleto}`}
+            className="w-full h-full object-cover"
+            alternativo={<User className="w-7 h-7" />}
+          />
         </div>
 
         <div className="flex-1 min-w-0 flex flex-col gap-1">
@@ -709,11 +725,122 @@ export function PersonDetails({ pessoaId, onFechar }: PersonDetailsProps) {
           />
         </SecaoAtributo>
 
-        {/* Espaço reservado para o que ainda não existe, dito com honestidade. */}
-        <p className="md:col-span-2 text-xs text-tinta3 m-0 pt-2 border-t border-borda flex items-center gap-1.5">
-          <Trash2 className="w-3 h-3 opacity-0" aria-hidden />
-          Fotos, documentos e fontes ainda não têm tela — são as próximas fatias.
-        </p>
+        {/* ---------------- Fotos e documentos ---------------- */}
+        <section className="md:col-span-2 flex flex-col gap-2 pt-2 border-t border-borda">
+          <div className="flex items-center justify-between gap-2">
+            <h3 className="font-num text-[10.5px] uppercase tracking-wider text-tinta3 m-0">
+              Fotos e documentos
+            </h3>
+            <button
+              type="button"
+              disabled={anexar.isPending}
+              onClick={async () => {
+                const caminho = await escolherArquivo();
+                if (caminho) {
+                  anexar.mutate({ pessoa_id: pessoaId, caminho_origem: caminho });
+                }
+              }}
+              className="text-[11px] text-acento hover:text-tinta transition-colors flex items-center gap-1 bg-transparent border-none cursor-pointer p-0 disabled:opacity-50"
+            >
+              <ImagePlus className="w-3.5 h-3.5" />
+              {anexar.isPending ? 'Copiando…' : 'Anexar arquivo'}
+            </button>
+          </div>
+
+          {(mensagemDeErro(anexar.error) ??
+            mensagemDeErro(delDocumento.error) ??
+            mensagemDeErro(definirRetrato.error)) && (
+            <p role="alert" className="text-xs text-fem m-0">
+              {mensagemDeErro(anexar.error) ??
+                mensagemDeErro(delDocumento.error) ??
+                mensagemDeErro(definirRetrato.error)}
+            </p>
+          )}
+
+          {listaDocumentos.isLoading ? (
+            <p className="text-xs text-tinta3 m-0">Carregando…</p>
+          ) : (listaDocumentos.data ?? []).length === 0 ? (
+            <p className="text-xs text-tinta3 m-0 leading-relaxed">
+              Nenhum anexo. Uma foto do rosto vale mais que três campos de texto — é o
+              gatilho de memória mais forte que existe.
+            </p>
+          ) : (
+            <ul className="list-none m-0 p-0 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+              {(listaDocumentos.data ?? []).map((d) => {
+                const ehRetrato = pessoa.foto_url === d.caminho_relativo;
+                const rotulo = d.titulo || d.nome_original || 'Anexo';
+                return (
+                  <li
+                    key={d.id}
+                    className={`relative rounded-raio-s border overflow-hidden bg-card group ${
+                      ehRetrato ? 'border-acento ring-1 ring-acento/40' : 'border-borda'
+                    }`}
+                  >
+                    <div className="aspect-square bg-sup grid place-items-center text-tinta3 overflow-hidden">
+                      {d.tipo_midia === 'imagem' ? (
+                        <ImagemDoAcervo
+                          caminhoRelativo={d.caminho_relativo}
+                          alt={rotulo}
+                          className="w-full h-full object-cover"
+                          alternativo={<ImagePlus className="w-6 h-6" />}
+                        />
+                      ) : (
+                        <FileText className="w-7 h-7" />
+                      )}
+                    </div>
+
+                    <div className="px-2 py-1.5">
+                      <span className="block text-[11px] text-tinta truncate" title={rotulo}>
+                        {rotulo}
+                      </span>
+                      {d.data_documento && (
+                        <span className="block font-num text-[10px] text-tinta3 truncate">
+                          {d.data_documento}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Ações aparecem no hover para não poluir a grade. */}
+                    <div className="absolute top-1 right-1 flex gap-1 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity">
+                      {d.tipo_midia === 'imagem' && (
+                        <button
+                          type="button"
+                          title={ehRetrato ? 'Deixar de ser o retrato' : 'Usar como retrato'}
+                          aria-label={ehRetrato ? 'Deixar de ser o retrato' : 'Usar como retrato'}
+                          disabled={definirRetrato.isPending}
+                          onClick={() => definirRetrato.mutate(ehRetrato ? null : d.id)}
+                          className={`p-1 rounded-raio-s border cursor-pointer transition-colors ${
+                            ehRetrato
+                              ? 'bg-acento text-acento-tinta border-acento'
+                              : 'bg-card/90 text-tinta2 border-borda2 hover:text-acento'
+                          }`}
+                        >
+                          <Star className="w-3 h-3" />
+                        </button>
+                      )}
+                      <button
+                        type="button"
+                        title="Remover anexo"
+                        aria-label={`Remover ${rotulo}`}
+                        disabled={delDocumento.isPending}
+                        onClick={() => delDocumento.mutate(d.id)}
+                        className="p-1 rounded-raio-s border border-borda2 bg-card/90 text-tinta2 hover:text-fem cursor-pointer transition-colors"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+
+          <p className="text-[11px] text-tinta3 m-0 leading-relaxed">
+            O arquivo é copiado para a pasta do programa — o original em Downloads pode ser
+            movido ou apagado sem quebrar o acervo. A estrela marca o retrato que aparece na
+            árvore.
+          </p>
+        </section>
       </div>
     </div>
   );

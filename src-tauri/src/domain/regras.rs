@@ -444,9 +444,12 @@ pub async fn atualizar_pessoa(pool: &SqlitePool, pessoa: &Pessoa) -> Resultado<(
     Ok(())
 }
 
-/// Remove a pessoa. Recusa se ela ocupa um slot de união — apagar deixaria a
-/// união com um lado só, o que o modelo não admite.
-pub async fn remover_pessoa(pool: &SqlitePool, pessoa_id: &str) -> Resultado<()> {
+/// A pessoa pode ser removida?
+///
+/// Separado da remoção porque quem chama precisa saber **antes** de apagar os
+/// arquivos de mídia dela: perder as fotos por causa de uma tentativa que o
+/// domínio vai recusar em seguida seria um estrago irreversível.
+pub async fn verificar_se_pode_remover(pool: &SqlitePool, pessoa_id: &str) -> Resultado<()> {
     buscar_pessoa(pool, pessoa_id).await?;
 
     let em_uniao: i64 = sqlx::query_scalar(
@@ -465,6 +468,14 @@ pub async fn remover_pessoa(pool: &SqlitePool, pessoa_id: &str) -> Resultado<()>
             ),
         });
     }
+
+    Ok(())
+}
+
+/// Remove a pessoa. Recusa se ela ocupa um slot de união — apagar deixaria a
+/// união com um lado só, o que o modelo não admite.
+pub async fn remover_pessoa(pool: &SqlitePool, pessoa_id: &str) -> Resultado<()> {
+    verificar_se_pode_remover(pool, pessoa_id).await?;
 
     sqlx::query("DELETE FROM pessoas WHERE id = ?")
         .bind(pessoa_id)

@@ -1,6 +1,7 @@
 pub mod atributos_cmds;
 pub mod core_cmds;
 pub mod datas;
+pub mod documentos_cmds;
 pub mod erros;
 pub mod eventos_cmds;
 pub mod models;

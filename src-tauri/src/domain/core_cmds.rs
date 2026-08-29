@@ -63,8 +63,24 @@ pub async fn atualizar_pessoa(pessoa: Pessoa, db: State<'_, SqlitePool>) -> Resu
     regras::atualizar_pessoa(&db, &pessoa).await
 }
 
+/// Remove a pessoa e os arquivos de mídia dela.
+///
+/// A ordem importa: as linhas de `documentos` caem por `ON DELETE CASCADE`, e
+/// depois disso não haveria mais como saber quais arquivos apagar. Por isso a
+/// varredura da pasta de mídia vem **antes** — e só acontece se a exclusão for
+/// mesmo permitida, o que `regras::remover_pessoa` decide.
 #[tauri::command]
-pub async fn remover_pessoa(id: String, db: State<'_, SqlitePool>) -> Resultado<()> {
+pub async fn remover_pessoa(
+    id: String,
+    app: tauri::AppHandle,
+    db: State<'_, SqlitePool>,
+) -> Resultado<()> {
+    // Confere antes de apagar arquivo nenhum: quem ocupa slot de união não pode
+    // ser removido, e seria péssimo perder as fotos por causa de uma tentativa
+    // que o domínio vai recusar em seguida.
+    regras::verificar_se_pode_remover(&db, &id).await?;
+
+    crate::domain::documentos_cmds::apagar_midia_da_pessoa(&app, &db, &id).await?;
     regras::remover_pessoa(&db, &id).await
 }
 

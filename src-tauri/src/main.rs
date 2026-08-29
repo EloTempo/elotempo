@@ -16,6 +16,9 @@ use domain::core_cmds::*;
 use domain::eventos_cmds::{
     atualizar_evento, criar_evento, listar_eventos_pessoa, remover_evento,
 };
+use domain::documentos_cmds::{
+    anexar_documento, definir_foto_principal, listar_documentos_pessoa, remover_documento,
+};
 use domain::nomes_cmds::{
     adicionar_nome, listar_nomes_pessoa, remover_nome, usar_nome_na_arvore,
 };
@@ -25,6 +28,9 @@ const ARQUIVO_ACERVO: &str = "acervo.sqlite";
 
 fn main() {
     tauri::Builder::default()
+        // Só o seletor de arquivo. O frontend recebe um caminho e o entrega ao
+        // Rust; quem copia, lê e apaga é o backend, dentro da pasta do app.
+        .plugin(tauri_plugin_dialog::init())
         .setup(|app| {
             // ---------------------------------------------------------
             // Onde mora o acervo.
@@ -71,6 +77,11 @@ fn main() {
             remover_uniao,
             anexar_filho,
             desvincular_filho,
+            // Fotos e documentos
+            anexar_documento,
+            listar_documentos_pessoa,
+            remover_documento,
+            definir_foto_principal,
             // Nomes ao longo da vida
             listar_nomes_pessoa,
             adicionar_nome,

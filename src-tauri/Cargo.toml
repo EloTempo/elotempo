@@ -13,7 +13,12 @@ rust-version = "1.77"
 tauri-build = { version = "2", features = [] }
 
 [dependencies]
-tauri = { version = "2", features = [] }
+# `protocol-asset` serve as imagens da pasta de dados do app para o webview.
+# Sem ela, exibir uma foto exigiria trafegar os bytes pela IPC a cada render.
+tauri = { version = "2", features = ["protocol-asset"] }
+# Só para o seletor de arquivo. O frontend nunca toca o sistema de arquivos:
+# ele recebe um caminho e o entrega ao Rust, que faz a cópia.
+tauri-plugin-dialog = "2"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 tokio = { version = "1", features = ["rt-multi-thread", "macros"] }

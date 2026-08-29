@@ -189,6 +189,8 @@ export interface PersonNode {
   is_placeholder: boolean;
   ano_nascimento?: number | null;
   ano_falecimento?: number | null;
+  /** Caminho relativo do retrato, quando há um escolhido (fatia 03). */
+  foto_url?: string | null;
   /** Ícones de presença do card (seção 10). */
   tem_foto: boolean;
   tem_biografia: boolean;
@@ -216,6 +218,35 @@ export interface TreeGraph {
   nodes: PersonNode[];
   unions: UnionNode[];
   links: GraphLink[];
+}
+
+// ---------------------------------------------------------------------------
+// Fotos e documentos (fatia 03)
+// ---------------------------------------------------------------------------
+
+export interface Document {
+  id: string;
+  /**
+   * Caminho **relativo** à pasta de dados do app ("midia/<id>.jpg").
+   * Nunca absoluto: é o que faz o acervo sobreviver a uma cópia entre máquinas.
+   */
+  caminho_relativo: string;
+  /** "imagem" ou "documento" — decide se a ficha mostra miniatura. */
+  tipo_midia: 'imagem' | 'documento';
+  tamanho_bytes?: number | null;
+  data_documento?: string | null;
+  titulo?: string | null;
+  descricao?: string | null;
+  nome_original?: string | null;
+}
+
+export interface NewDocument {
+  pessoa_id: string;
+  /** Caminho absoluto do arquivo escolhido; o Rust copia a partir dele. */
+  caminho_origem: string;
+  titulo?: string | null;
+  data_documento?: string | null;
+  descricao?: string | null;
 }
 
 // ---------------------------------------------------------------------------
