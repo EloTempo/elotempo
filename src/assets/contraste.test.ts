@@ -32,7 +32,13 @@ const TEMAS = [
   { nome: 'moderno escuro', seletor: ':root[data-tema="moderno-escuro"] {' },
 ];
 
-const CORES_DA_LINHA = ['--lt-historia', '--lt-politica', '--lt-moeda', '--lt-tecnologia'];
+const CORES_DA_LINHA = [
+  '--lt-historia',
+  '--lt-politica',
+  '--lt-moeda',
+  '--lt-tecnologia',
+  '--lt-projeto',
+];
 
 /** Extrai os tokens declarados dentro de um bloco de tema. */
 function tokensDoTema(seletor: string): Record<string, string> {
@@ -62,7 +68,7 @@ function contraste(a: string, b: string): number {
 }
 
 describe('paleta das linhas do tempo', () => {
-  it('os quatro temas definem as quatro cores', () => {
+  it('os quatro temas definem todas as cores', () => {
     for (const tema of TEMAS) {
       const tokens = tokensDoTema(tema.seletor);
       for (const cor of CORES_DA_LINHA) {
@@ -87,7 +93,7 @@ describe('paleta das linhas do tempo', () => {
     }
   });
 
-  it('as quatro cores se distinguem entre si', () => {
+  it('as cores se distinguem entre si', () => {
     // Duas categorias com cores parecidas empilhadas no mesmo eixo seriam
     // indistinguíveis — o ponto de ter paleta é separar as camadas.
     for (const tema of TEMAS) {

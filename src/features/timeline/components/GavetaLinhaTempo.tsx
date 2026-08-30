@@ -64,7 +64,7 @@ const ANO_CORRENTE = new Date().getFullYear();
  *
  * Não reaproveita `--masc` nem `--fem`: no card da árvore essas cores
  * significam **sexo** (seção 10), e usá-las aqui faria uma barra rosa de
- * "tecnologia" sugerir gênero. Cada tema define as quatro em globals.css,
+ * "tecnologia" sugerir gênero. Cada tema define as cinco em globals.css,
  * ajustadas para contrastar com o fundo da gaveta.
  */
 const COR_DA_CATEGORIA: Record<string, string> = {
@@ -72,6 +72,7 @@ const COR_DA_CATEGORIA: Record<string, string> = {
   politica: 'var(--lt-politica)',
   moeda: 'var(--lt-moeda)',
   tecnologia: 'var(--lt-tecnologia)',
+  projeto: 'var(--lt-projeto)',
 };
 
 function corDa(categoria: string | undefined): string {

@@ -145,6 +145,11 @@ Cada fatia vertical maior tem uma spec curta em `Instruções/fatias/`, derivada
 da especificação principal, com escopo, o que fica de fora e critérios de
 aceite. Ao começar uma fatia nova, escreva a dela antes.
 
+**`Instruções/tarefas.md` é a lista de tarefas do projeto** — o que está
+entregue, o que vem a seguir, o que espera decisão do Gabriel. A especificação
+diz o que o produto é; esse arquivo diz onde o trabalho está. Ao fechar uma
+fatia, atualize-o.
+
 Ao ligar um deles, troque os valores fixos por `useQuery` sobre `src/lib/api` e
 apague o aviso.
 
@@ -286,6 +291,14 @@ Três coisas para não quebrar aqui:
 'media'` e **não sobem à gaveta**, que só mostra `'alta'`. É salvaguarda
 editorial, não detalhe de interface — melhor faltar um marco do que afirmar uma
 data errada com ar de referência.
+
+**A quinta linha é o próprio programa** (migration 016, categoria `projeto`).
+Vale a mesma regra: **marco novo é migration nova** — `0NN__linha_projeto_vX.sql`
+com um `INSERT`, que os gatilhos permitem —, nunca edição da 016. E nada entra
+antes de acontecer: não há marco da primeira versão pública porque ela ainda não
+saiu. Ao acrescentar uma categoria de linha, defina `--lt-<categoria>` nos
+**quatro** temas: `contraste.test.ts` mede a paleta real do `globals.css` e
+reprova cor ilegível ou repetida.
 
 ---
 
