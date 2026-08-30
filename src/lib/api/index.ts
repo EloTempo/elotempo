@@ -46,6 +46,7 @@ export * from './nomes';
 export * from './documentos';
 export * from './locais';
 export * from './relatorio';
+export * from './busca';
 export * from './union';
 export * from './events';
 export * from './attributes';

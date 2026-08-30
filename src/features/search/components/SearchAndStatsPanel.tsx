@@ -1,15 +1,18 @@
 /**
- * PROTÓTIPO VISUAL — não ligado ao banco.
+ * PROTÓTIPO VISUAL — só a metade das **estatísticas** continua sendo maquete.
  *
- * Pesquisa e estatísticas. Implementa o desenho da seção 7 — filtros combináveis e gráficos, com dados fixos
- * escritos no próprio componente. Nenhum dado real passa por aqui ainda: é a
- * maquete aprovada do layout, guardada no código para não se perder e para
- * continuar sendo verificada pelo TypeScript.
+ * A metade da **busca** foi construída de verdade na fatia 06 e vive em
+ * `PainelBusca.tsx`, ligada ao banco. O que sobra de útil aqui é o desenho dos
+ * gráficos de pizza e barras da seção 7, com os números fixos — inclusive a
+ * regra de mostrar contagem absoluta junto do percentual ("6 de 12 · 50%"),
+ * para o número não enganar em amostra pequena.
  *
- * Previsto para: MVP (item 9) e pós-MVP.
+ * Previsto para: pós-MVP, quando as estatísticas forem implementadas. A seção 7
+ * diz que "o filtro alimenta a estatística", e o filtro agora existe — os
+ * gráficos leem o mesmo `FiltrosBusca` quando chegar a hora.
  *
- * Ao ligar de verdade: trocar os valores fixos por `useQuery` sobre os
- * comandos de `src/lib/api`, e apagar este aviso.
+ * Ao ligar de verdade: trocar os valores fixos por agregações sobre o resultado
+ * de `buscar_pessoas_filtrado`, e apagar este aviso.
  */
 import { useState } from 'react';
 

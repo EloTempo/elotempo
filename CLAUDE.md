@@ -238,9 +238,25 @@ família pelo documento inteiro quando faltam datas, e num acervo real faltam
 muitas. Está justificado em `Instruções/fatias/05-relatorios.md`; se for para
 mudar, muda lá primeiro.
 
-**Ainda não:** múltiplas árvores nomeadas da seção 5 (tabelas existem, sem
-comando nem tela), busca multicritério (item 9 do MVP), estatísticas, GEDCOM,
-linhas do tempo.
+**Busca multicritério** (fatia 06): nome, sobrenome, cidade de nascimento,
+nacionalidade, década, religião, profissão, escolaridade, idioma e situação de
+vida, todos combináveis em `E`. Os seletores oferecem **só o que existe no
+acervo**, com contagem — oferecer a taxonomia inteira faria o usuário escolher
+um valor sem ninguém e receber lista vazia, o que parece defeito.
+A consulta é montada dinamicamente conforme os filtros ativos, mas **só a
+estrutura varia: todo valor vai por bind**. Há teste de injeção provando isso.
+
+---
+
+## O MVP está completo
+
+Os 9 itens da seção 9 estão entregues. O que vem agora é o "depois do MVP" da
+mesma seção: GEDCOM 7.0, estatísticas, linhas do tempo, múltiplas árvores
+nomeadas (seção 5 — as tabelas `arvores` e `arvore_membros` existem sem comando
+nem tela), undo/redo.
+
+**Fora de escopo por decisão:** prosopografia e a tela de fontes/citações
+(29/08/2026).
 
 **Fora de escopo por decisão de 29/08/2026:** prosopografia (relações não
 familiares, instituições, hierarquias) e a tela de fontes/citações. As tabelas

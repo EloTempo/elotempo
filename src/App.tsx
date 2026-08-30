@@ -11,14 +11,14 @@
 
 import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { FileText, Plus, Search, TreeDeciduous } from 'lucide-react';
+import { FileText, Plus, TreeDeciduous } from 'lucide-react';
 import { Button } from './components/ui/Button';
-import { Input } from './components/ui/Input';
 import { Modal } from './components/ui/Modal';
 import { TreeCanvas } from './components/tree/TreeCanvas';
 import { PersonForm } from './features/person/components/PersonForm';
 import { PersonDetails } from './features/person/components/PersonDetails';
 import { PainelConexoes } from './features/union/components/PainelConexoes';
+import { PainelBusca } from './features/search/components/PainelBusca';
 import { DialogoRelatorio } from './features/reports/components/DialogoRelatorio';
 import { useCriarPessoa, usePessoas } from './features/person/hooks/usePessoas';
 import { buscarGrafoArvore } from './lib/api';
@@ -45,7 +45,9 @@ function temaInicial(): Tema {
 
 export default function App() {
   const [tema, setTema] = useState<Tema>(temaInicial);
-  const [termoBusca, setTermoBusca] = useState('');
+  // Consulta sem filtro, só para decidir a raiz inicial e detectar acervo
+  // vazio. A busca de verdade mora no PainelBusca, com estado próprio.
+  const termoBusca = '';
   const [raizId, setRaizId] = useState<string | null>(null);
   const [selecionadaId, setSelecionadaId] = useState<string | null>(null);
   const [formAberto, setFormAberto] = useState(false);
@@ -128,69 +130,15 @@ export default function App() {
       </header>
 
       <div className="flex flex-1 min-h-0">
-        {/* Painel lateral: busca e escolha da raiz */}
+        {/* Busca multicritério: escolher aqui centraliza a pessoa na árvore. */}
         <aside className="w-72 flex-none border-r border-borda bg-sup flex flex-col min-h-0">
-          <div className="p-3 border-b border-borda">
-            <div className="relative">
-              <Search className="w-4 h-4 absolute left-2.5 top-1/2 -translate-y-1/2 text-tinta3 pointer-events-none" />
-              <Input
-                aria-label="Buscar pessoa"
-                placeholder="Buscar por nome ou sobrenome"
-                value={termoBusca}
-                onChange={(e) => setTermoBusca(e.target.value)}
-                className="pl-8"
-              />
-            </div>
-          </div>
-
-          <div className="flex-1 overflow-y-auto min-h-0">
-            {carregandoPessoas && (
-              <p className="p-3 text-sm text-tinta3">Lendo o acervo…</p>
-            )}
-
-            {erroPessoas && (
-              <div role="alert" className="m-3 p-3 rounded-raio-s bg-fem/10 border border-fem/20">
-                <p className="text-sm text-fem m-0 font-semibold">Não foi possível ler o acervo</p>
-                <p className="text-xs text-tinta2 mt-1 mb-0 leading-relaxed">
-                  {erroPessoas instanceof Error ? erroPessoas.message : String(erroPessoas)}
-                </p>
-              </div>
-            )}
-
-            {!carregandoPessoas && !erroPessoas && pessoas?.length === 0 && (
-              <p className="p-3 text-sm text-tinta3">
-                {termoBusca ? 'Ninguém com esse nome.' : 'O acervo está vazio.'}
-              </p>
-            )}
-
-            <ul className="list-none m-0 p-0">
-              {pessoas?.map((p) => (
-                <li key={p.id}>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setRaizId(p.id);
-                      setSelecionadaId(p.id);
-                    }}
-                    className={`w-full text-left px-3 py-2 border-b border-borda/60 hover:bg-card transition-colors ${
-                      raizId === p.id ? 'bg-card border-l-2 border-l-acento' : ''
-                    }`}
-                  >
-                    <span className="block text-sm text-tinta truncate">
-                      {[p.nome, p.sobrenome].filter(Boolean).join(' ')}
-                      {p.is_placeholder && (
-                        <span className="text-tinta3 italic"> · placeholder</span>
-                      )}
-                    </span>
-                    <span className="block font-num text-[11px] text-tinta3">
-                      {p.ano_nascimento ? `n. ${p.ano_nascimento}` : 'sem data'}
-                      {p.ano_falecimento ? ` · † ${p.ano_falecimento}` : ''}
-                    </span>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <PainelBusca
+            selecionadaId={raizId}
+            onEscolher={(id) => {
+              setRaizId(id);
+              setSelecionadaId(id);
+            }}
+          />
         </aside>
 
         {/* Palco da árvore */}
