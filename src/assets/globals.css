@@ -20,6 +20,19 @@
     --borda: #d3c6ac; --borda2: #bfae8e; --tinta: #3a3125; --tinta2: #8b7f6a; --tinta3: #a89b83;
     --linha: #b9a888; --masc: #3c5a78; --fem: #8f3f4e; --anel: #b9a074;
     --acento: #7a5c34; --acento-tinta: #faf6ec; --chip: #e4dbc7;
+    /* Linhas do tempo — paleta PRÓPRIA, de propósito.
+     *
+     * A primeira versão reaproveitava `--masc` e `--fem` para as categorias, e
+     * isso criava associação falsa: no card da árvore, azul é masculino e
+     * rosa é feminino (seção 10). Uma barra rosa na linha do tempo passava a
+     * sugerir sexo onde só havia "tecnologia".
+     *
+     * Cada tema define as quatro, ajustadas para contrastar com o fundo da
+     * gaveta (`--sup`) daquele tema. Não são usadas como fundo de texto — o
+     * seletor de camada usa a cor na borda e no texto sobre `--card`, o que
+     * dispensa cálculo de contraste e sobrevive aos quatro temas. */
+    --lt-historia: #3c5a78; --lt-politica: #8a5a2b;
+    --lt-moeda: #5f6f38; --lt-tecnologia: #6b5b95;
     
     --raio: 14px; --raio-s: 9px;
     --sombra: 0 1px 2px rgba(58,49,37,.10), 0 6px 18px rgba(58,49,37,.07);
@@ -37,6 +50,8 @@
     --borda: #463d31; --borda2: #5d5140; --tinta: #f0e5d1; --tinta2: #a99a86; --tinta3: #8b7d69;
     --linha: #6f6046; --masc: #8fbcdc; --fem: #e07a94; --anel: #b9a074;
     --acento: #d8c39a; --acento-tinta: #221e18; --chip: #332d25;
+    --lt-historia: #8fbcdc; --lt-politica: #d9a566;
+    --lt-moeda: #a8bd7a; --lt-tecnologia: #b0a0d8;
     --sombra: 0 1px 2px rgba(0,0,0,.4), 0 8px 22px rgba(0,0,0,.35);
   }
 
@@ -46,6 +61,8 @@
     --borda: #dfe3ea; --borda2: #c3cad6; --tinta: #0f1420; --tinta2: #6b7280; --tinta3: #98a1af;
     --linha: #c8d0dc; --masc: #2563eb; --fem: #e11d63; --anel: #98a1af;
     --acento: #2563eb; --acento-tinta: #ffffff; --chip: #e8ebf1;
+    --lt-historia: #1d4ed8; --lt-politica: #b45309;
+    --lt-moeda: #15803d; --lt-tecnologia: #7c3aed;
     
     --raio: 12px; --raio-s: 8px;
     --sombra: 0 1px 2px rgba(15,20,32,.06), 0 8px 20px rgba(15,20,32,.06);
@@ -63,6 +80,8 @@
     --borda: #242a35; --borda2: #333b49; --tinta: #eef2f7; --tinta2: #8b95a5; --tinta3: #6c7686;
     --linha: #2e3542; --masc: #5b8bf9; --fem: #fb3b73; --anel: #5c6673;
     --acento: #5b8bf9; --acento-tinta: #0b0d12; --chip: #1c212b;
+    --lt-historia: #7aa2ff; --lt-politica: #f0a83c;
+    --lt-moeda: #5fd18a; --lt-tecnologia: #b39bfb;
     
     --raio: 12px; --raio-s: 8px;
     --sombra: 0 1px 2px rgba(0,0,0,.5), 0 8px 22px rgba(0,0,0,.45);

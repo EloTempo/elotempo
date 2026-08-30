@@ -26,6 +26,7 @@ import {
   ChevronUp,
   Clock,
   Info,
+  Lock,
   Maximize2,
   X,
   ZoomIn,
@@ -47,7 +48,7 @@ interface GavetaLinhaTempoProps {
   onDestacar: (ids: string[] | null) => void;
 }
 
-const ALTURA_MINIMA = 190;
+const ALTURA_MINIMA = 180;
 const ALTURA_INICIAL = 320;
 const ALTURA_DA_FAIXA = 52;
 const ALTURA_DA_VIDA = 60;
@@ -58,12 +59,24 @@ const ESPACO_ENTRE_ROTULOS = 96;
 /** Ano de referência para "até hoje" nas barras de quem está vivo. */
 const ANO_CORRENTE = new Date().getFullYear();
 
+/**
+ * Paleta própria das linhas do tempo.
+ *
+ * Não reaproveita `--masc` nem `--fem`: no card da árvore essas cores
+ * significam **sexo** (seção 10), e usá-las aqui faria uma barra rosa de
+ * "tecnologia" sugerir gênero. Cada tema define as quatro em globals.css,
+ * ajustadas para contrastar com o fundo da gaveta.
+ */
 const COR_DA_CATEGORIA: Record<string, string> = {
-  historia: 'var(--masc)',
-  politica: 'var(--acento)',
-  moeda: 'var(--anel)',
-  tecnologia: 'var(--fem)',
+  historia: 'var(--lt-historia)',
+  politica: 'var(--lt-politica)',
+  moeda: 'var(--lt-moeda)',
+  tecnologia: 'var(--lt-tecnologia)',
 };
+
+function corDa(categoria: string | undefined): string {
+  return COR_DA_CATEGORIA[categoria ?? ''] ?? 'var(--acento)';
+}
 
 /**
  * Quais marcos ganham rótulo.
@@ -354,21 +367,38 @@ export function GavetaLinhaTempo({
         <div className="flex flex-wrap gap-1.5 flex-1 min-w-0">
           {linhas?.map((l) => {
             const ligada = ativas.includes(l.id);
+            const cor = corDa(l.categoria);
             return (
               <button
                 key={l.id}
                 type="button"
                 onClick={() => alternarLinha(l.id)}
-                title={l.fonte_referencia ?? undefined}
-                className={`text-[11px] px-2 py-1 rounded-raio-s border transition-colors cursor-pointer ${
-                  ligada
-                    ? 'border-transparent text-white'
-                    : 'border-borda2 bg-card text-tinta2 hover:text-tinta'
+                title={
+                  l.fonte_referencia
+                    ? `${l.fonte_referencia}\n\nLinha de referência: somente leitura.`
+                    : 'Linha de referência: somente leitura.'
+                }
+                // A cor vai na borda e no texto sobre `--card`, nunca como
+                // fundo de texto branco: assim o contraste é o do próprio
+                // tema e não depende de cada cor da paleta ser escura o
+                // bastante — o que não era verdade nos temas noturnos.
+                className={`text-[11px] px-2 py-1 rounded-raio-s border-2 bg-card transition-colors cursor-pointer flex items-center gap-1.5 ${
+                  ligada ? 'font-semibold' : 'border-borda2 text-tinta2 hover:text-tinta'
                 }`}
-                style={ligada ? { background: COR_DA_CATEGORIA[l.categoria] ?? 'var(--acento)' } : undefined}
+                style={ligada ? { borderColor: cor, color: cor } : undefined}
               >
+                <span
+                  className="w-2 h-2 rounded-full flex-none border"
+                  style={{
+                    background: ligada ? cor : 'transparent',
+                    borderColor: cor,
+                  }}
+                  aria-hidden
+                />
+                {/* Somente leitura, marcado à vista — exigência da seção 10. */}
+                <Lock className="w-2.5 h-2.5 opacity-50 flex-none" aria-hidden />
                 {l.titulo}
-                <span className="opacity-70"> · {l.marcos_alta}</span>
+                <span className="opacity-60">{l.marcos_alta}</span>
               </button>
             );
           })}
@@ -457,7 +487,7 @@ export function GavetaLinhaTempo({
         {/* Faixas de contexto */}
         {ativas.map((linhaId) => {
           const linha = linhas?.find((l) => l.id === linhaId);
-          const cor = COR_DA_CATEGORIA[linha?.categoria ?? ''] ?? 'var(--acento)';
+          const cor = corDa(linha?.categoria);
           const daLinha = marcosPorLinha.get(linhaId) ?? [];
           const rotulados = marcosComRotulo(daLinha, posicaoDoAno);
 
@@ -467,7 +497,8 @@ export function GavetaLinhaTempo({
               className="relative border-b border-borda/50"
               style={{ height: ALTURA_DA_FAIXA }}
             >
-              <span className="absolute left-1 top-0.5 font-num text-[9.5px] text-tinta3 z-10 pointer-events-none bg-sup/85 px-1 rounded">
+              <span className="absolute left-1 top-0.5 font-num text-[9.5px] text-tinta3 z-10 pointer-events-none bg-sup/85 px-1 rounded flex items-center gap-1">
+                <Lock className="w-2.5 h-2.5 opacity-60" aria-hidden />
                 {linha?.titulo}
               </span>
 
