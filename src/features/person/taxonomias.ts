@@ -73,53 +73,60 @@ export const IDIOMAS = [
 ] as const;
 
 /**
- * Tipos de nome (fatia 02), com uma frase que diz quando cada um se aplica.
+ * Motivos pelos quais alguém passou a usar outro nome (fatia 02).
  *
- * A explicação existe porque a distinção entre "público" e "apelido" não é
- * óbvia — e errá-la é justamente o problema que a fatia veio resolver.
+ * A primeira versão desta lista tinha nove tipos e expunha o modelo de dados
+ * em vez do modelo mental de quem usa. Ninguém pensa "vou cadastrar um nome do
+ * tipo público"; pensa "ela virou freira e mudou de nome", "ele virou papa",
+ * "esse é o nome de palco". Por isso cada opção traz um exemplo real: o
+ * exemplo ensina mais rápido do que a definição.
+ *
+ * `nascimento` fica de fora: não é uma *mudança*, é o nome completo de
+ * registro, e tem campo próprio na interface.
  */
-export const TIPOS_DE_NOME = [
-  {
-    valor: 'nascimento',
-    rotulo: 'De nascimento',
-    ajuda: 'O nome completo de registro, como está na certidão.',
-  },
-  {
-    valor: 'publico',
-    rotulo: 'Público',
-    ajuda: 'O nome pelo qual a pessoa é conhecida. Ex.: D. João VI, Pelé.',
-  },
+export const MOTIVOS_DE_NOME = [
   {
     valor: 'religioso',
-    rotulo: 'Religioso',
-    ajuda: 'Adotado em ordem, ministério ou pontificado. Ex.: Papa Francisco.',
-  },
-  {
-    valor: 'casada',
-    rotulo: 'De casada',
-    ajuda: 'Assumido na união.',
-  },
-  {
-    valor: 'solteira',
-    rotulo: 'De solteira',
-    ajuda: 'O de antes da união.',
+    rotulo: 'Nome religioso',
+    exemplo: 'Jorge Mario Bergoglio passou a ser Francisco ao virar papa; Edith Stein virou Teresa Benedita da Cruz no Carmelo.',
   },
   {
     valor: 'artistico',
-    rotulo: 'Artístico',
-    ajuda: 'Usado em palco, obra ou publicação.',
+    rotulo: 'Nome artístico ou de palco',
+    exemplo: 'Maria da Graça Meneghel é conhecida como Xuxa.',
   },
   {
-    valor: 'profissional',
-    rotulo: 'Profissional',
-    ajuda: 'Usado no exercício de um ofício ou cargo.',
+    valor: 'publico',
+    rotulo: 'Título ou nome de tratamento',
+    exemplo: 'Um príncipe que vira rei passa a ser tratado por outro nome — D. João VI.',
+  },
+  {
+    valor: 'casada',
+    rotulo: 'Passou a usar o sobrenome do cônjuge',
+    exemplo: 'Maria Aparecida Souza virou Maria Aparecida Souza Lima ao casar.',
+  },
+  {
+    valor: 'solteira',
+    rotulo: 'Voltou ao nome de solteira',
+    exemplo: 'Retomado após viuvez ou separação.',
   },
   {
     valor: 'imigracao',
-    rotulo: 'De imigração',
-    ajuda: 'Aportuguesado ou alterado na chegada. Ex.: Giovanni → João.',
+    rotulo: 'Nome aportuguesado na imigração',
+    exemplo: 'Giovanni Battista Rossi passou a assinar João Batista Rosa.',
   },
-  { valor: 'outro', rotulo: 'Outro', ajuda: '' },
+  {
+    valor: 'profissional',
+    rotulo: 'Nome de ofício',
+    exemplo: 'Usado no exercício de um cargo ou profissão.',
+  },
+  { valor: 'outro', rotulo: 'Outro motivo', exemplo: '' },
+] as const;
+
+/** Todos os tipos que a tabela aceita, incluindo o de nascimento. */
+export const TIPOS_DE_NOME = [
+  { valor: 'nascimento', rotulo: 'Nome completo de registro' },
+  ...MOTIVOS_DE_NOME.map((m) => ({ valor: m.valor, rotulo: m.rotulo })),
 ] as const;
 
 export function rotuloDoTipoDeNome(tipo: string): string {
