@@ -48,6 +48,7 @@ export * from './locais';
 export * from './relatorio';
 export * from './busca';
 export * from './linhasTempo';
+export * from './gedcom';
 export * from './union';
 export * from './events';
 export * from './attributes';

@@ -22,6 +22,7 @@ use domain::documentos_cmds::{
 use domain::linhas_tempo_cmds::{
     buscar_marcos, listar_linhas_de_contexto, montar_linha_pessoal, quem_estava_vivo,
 };
+use domain::gedcom::{exportar_gedcom, extensao_de_exportacao};
 use domain::locais_cmds::{buscar_locais, obter_local, registrar_local_estrangeiro};
 use domain::busca_cmds::{buscar_pessoas_filtrado, opcoes_de_filtro};
 use domain::relatorio_cmds::montar_relatorio;
@@ -91,6 +92,9 @@ fn main() {
             // Busca multicritério
             buscar_pessoas_filtrado,
             opcoes_de_filtro,
+            // GEDCOM
+            exportar_gedcom,
+            extensao_de_exportacao,
             // Relatórios
             montar_relatorio,
             // Locais

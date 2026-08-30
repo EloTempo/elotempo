@@ -132,7 +132,7 @@ perder e para continuarem passando pelo TypeScript. Cada um traz um aviso no
 topo. **Não são features** — não os cite como prontos:
 
 `UnionEditor` · `TimelineDrawer` · `ReportGenerator` ·
-`SearchAndStatsPanel` · `GedcomImportWizard` · `ExportGedzipDialog`
+`SearchAndStatsPanel` · `GedcomImportWizard`
 
 O `UnionEditor` foi superado na prática pelo `PainelConexoes`, que é a tela de
 conexões que realmente funciona. Ele segue guardado porque desenha uma tela
@@ -289,12 +289,40 @@ data errada com ar de referência.
 
 ---
 
+**Exportar GEDCOM** (fatia 08): `domain::gedcom` escreve GEDCOM 7.0 do acervo
+inteiro ou do recorte de uma raiz, com opção de ocultar vivas e de empacotar as
+mídias num GEDZip. É o que cumpre a promessa da seção 1 — "o usuário é dono do
+arquivo" —, porque um SQLite que só este programa lê deixa isso pela metade.
+
+Quatro coisas que decidem a correção do arquivo gerado:
+
+- **Placeholder não vira `INDI`.** Ele é invenção nossa para não deixar slot
+  vazio; exportá-lo encheria a árvore de quem recebe com "desconhecidos" que
+  não existem. A `FAM` simplesmente sai sem o `HUSB` ou sem o `WIFE`, que é
+  GEDCOM válido.
+- **Ocultar vivas não as apaga.** Sai `INDI` com `NAME` "Vivo"/"Viva", `SEX` e
+  os `FAMC`/`FAMS` — sem isso o parentesco de quem recebe se parte em duas
+  árvores soltas.
+- **O texto original da data nunca se perde.** O `DATE` leva o que o GEDCOM
+  sabe representar; quando a linha emitida não reproduz o que o usuário
+  escreveu, o resto vai para `2 NOTE Data como registrada: …`. É a mesma regra
+  de sempre: os campos derivados existem para ordenar, não para substituir.
+- **`escritor.rs` escapa e limpa em um lugar só.** `@` inicial dobrado,
+  controle removido, quebra de linha virando `CONT`. Nome de pessoa é dado do
+  usuário e vai passar a vir de GEDCOM de terceiros — não monte linha à mão.
+
+O `escolher onde salvar` é do frontend (`dialog:allow-save`); quem escreve o
+arquivo é o Rust. **Continua valendo: nada de `fs:` na capability.**
+
+---
+
 ## O MVP está completo
 
-Os 9 itens da seção 9 estão entregues. O que vem agora é o "depois do MVP" da
-mesma seção: GEDCOM 7.0, estatísticas, o estúdio de linhas do tempo e o zoom
-semântico, múltiplas árvores nomeadas (seção 5 — as tabelas `arvores` e
-`arvore_membros` existem sem comando nem tela), undo/redo.
+Os 9 itens da seção 9 estão entregues, e o primeiro item do "depois do MVP"
+— exportar GEDCOM — também. Falta do mesmo item: **importar** GEDCOM (5.5.1 e
+7.0), estatísticas, o estúdio de linhas do tempo e o zoom semântico, múltiplas
+árvores nomeadas (seção 5 — as tabelas `arvores` e `arvore_membros` existem sem
+comando nem tela), undo/redo.
 
 **Fora de escopo por decisão:** prosopografia e a tela de fontes/citações
 (29/08/2026).

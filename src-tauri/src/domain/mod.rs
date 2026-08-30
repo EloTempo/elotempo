@@ -5,6 +5,7 @@ pub mod datas;
 pub mod documentos_cmds;
 pub mod erros;
 pub mod eventos_cmds;
+pub mod gedcom;
 pub mod linhas_tempo_cmds;
 pub mod locais_cmds;
 pub mod models;

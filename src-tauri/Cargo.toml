@@ -24,6 +24,10 @@ serde_json = "1"
 tokio = { version = "1", features = ["rt-multi-thread", "macros"] }
 sqlx = { version = "0.8", features = ["sqlite", "runtime-tokio", "macros", "migrate"] }
 uuid = { version = "1", features = ["v4"] }
+# GEDZip: o zip com o .ged e a pasta de mídia, exigido pela seção 4.
+# Sem `default-features`, para não arrastar codecs que não usamos — o formato
+# pede deflate, e só.
+zip = { version = "2", default-features = false, features = ["deflate"] }
 
 [features]
 default = []
