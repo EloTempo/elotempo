@@ -14,7 +14,8 @@ import { Input } from '../../../components/ui/Input';
 import { Select } from '../../../components/ui/Select';
 import { Button } from '../../../components/ui/Button';
 import { ErroDoAcervo } from '../../../lib/api';
-import type { Person, Sex } from '../../../types';
+import { CampoDeData } from '../../../components/ui/CampoDeData';
+import { DATA_VAZIA, type DataEscolhida, type Person, type Sex } from '../../../types';
 
 export interface DadosPessoaForm {
   nome: string;
@@ -22,12 +23,15 @@ export interface DadosPessoaForm {
   sexo: Sex;
   is_vivo: boolean;
   minibiografia: string;
-  nascimento: string;
-  falecimento: string;
+  nascimento: DataEscolhida;
+  falecimento: DataEscolhida;
 }
 
 interface PersonFormProps {
-  inicial?: Partial<Person> & { nascimento?: string; falecimento?: string };
+  inicial?: Partial<Person> & {
+    nascimento?: DataEscolhida;
+    falecimento?: DataEscolhida;
+  };
   salvando?: boolean;
   erro?: unknown;
   onSalvar: (dados: DadosPessoaForm) => void;
@@ -55,8 +59,8 @@ export function PersonForm({ inicial, salvando, erro, onSalvar, onCancelar }: Pe
     sexo: 'U',
     is_vivo: true,
     minibiografia: '',
-    nascimento: '',
-    falecimento: '',
+    nascimento: { ...DATA_VAZIA },
+    falecimento: { ...DATA_VAZIA },
   });
   const [erroLocal, setErroLocal] = useState<string | null>(null);
 
@@ -68,8 +72,8 @@ export function PersonForm({ inicial, salvando, erro, onSalvar, onCancelar }: Pe
       sexo: (inicial.sexo as Sex) ?? 'U',
       is_vivo: inicial.is_vivo ?? true,
       minibiografia: inicial.minibiografia ?? '',
-      nascimento: inicial.nascimento ?? '',
-      falecimento: inicial.falecimento ?? '',
+      nascimento: inicial.nascimento ?? { ...DATA_VAZIA },
+      falecimento: inicial.falecimento ?? { ...DATA_VAZIA },
     });
   }, [inicial]);
 
@@ -141,24 +145,21 @@ export function PersonForm({ inicial, salvando, erro, onSalvar, onCancelar }: Pe
         <legend className="px-2 text-sm font-semibold text-tinta2">Datas</legend>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Input
-            label="Nascimento"
-            placeholder="1890, cerca de 1890, 12/03/1945…"
-            value={dados.nascimento}
-            onChange={(e) => alterar('nascimento', e.target.value)}
+          <CampoDeData
+            rotulo="Nascimento"
+            valor={dados.nascimento}
+            aoMudar={(v) => alterar('nascimento', v)}
           />
-          <Input
-            label="Falecimento"
-            placeholder="antes de 1960, 1972…"
-            value={dados.falecimento}
-            onChange={(e) => alterar('falecimento', e.target.value)}
+          <CampoDeData
+            rotulo="Falecimento"
+            valor={dados.falecimento}
+            aoMudar={(v) => alterar('falecimento', v)}
           />
         </div>
 
         <p className="text-xs text-tinta3 leading-relaxed">
-          Escreva do jeito que souber. O programa entende “cerca de”, “antes de”, “após” e
-          intervalos como “1902-1904”, e guarda o texto exatamente como você digitou. Deixar em
-          branco nunca impede de salvar.
+          Escolha só o que souber: ano sozinho basta, e “Sem data” também é uma resposta.
+          Para o que não cabe em lista — “na época da guerra” — use “Só sei descrever”.
         </p>
       </fieldset>
 

@@ -18,6 +18,52 @@ export type DateQualifier =
   | 'intervalo'
   | 'desconhecida';
 
+/** Meses por extenso, na ordem. Espelha `datas::MESES` no Rust. */
+export const MESES = [
+  'janeiro',
+  'fevereiro',
+  'março',
+  'abril',
+  'maio',
+  'junho',
+  'julho',
+  'agosto',
+  'setembro',
+  'outubro',
+  'novembro',
+  'dezembro',
+] as const;
+
+/**
+ * Uma data escolhida nas listas suspensas.
+ *
+ * Chega estruturada em vez de digitada: com isso o programa **sabe** o dia e o
+ * mês, em vez de tentar deduzi-los de texto livre — que era o que fazia a
+ * exportação GEDCOM perder fidelidade.
+ *
+ * `qualificador` aceita `'livre'` além dos valores do banco: é a saída para o
+ * que a estrutura não comporta ("na época da guerra"), e ao salvar vira
+ * `desconhecida` com o texto preservado.
+ */
+export interface DataEscolhida {
+  qualificador: DateQualifier | 'livre' | null;
+  dia: number | null;
+  mes: number | null;
+  ano: number | null;
+  /** Só no qualificador `intervalo`. */
+  ano_fim: number | null;
+  texto_livre: string | null;
+}
+
+export const DATA_VAZIA: DataEscolhida = {
+  qualificador: null,
+  dia: null,
+  mes: null,
+  ano: null,
+  ano_fim: null,
+  texto_livre: null,
+};
+
 /** Tipos canônicos de evento — sempre minúsculos, como o Rust normaliza. */
 export const TIPOS_EVENTO = {
   nascimento: 'nascimento',
@@ -99,7 +145,10 @@ export interface NewEvent {
   pessoa_id?: string | null;
   uniao_id?: string | null;
   tipo_evento: string;
+  /** Caminho antigo, ainda usado pela importação. */
   data_texto?: string | null;
+  /** Caminho novo: quando vem preenchido, manda. */
+  data?: DataEscolhida | null;
   local_id?: string | null;
   rotulo_historico_livre?: string | null;
   denominacao_religiosa?: string | null;

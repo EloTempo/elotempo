@@ -1,6 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { criarPessoa, atualizarPessoa, criarEvento, buscarPessoas } from '../../../lib/api';
-import { TIPOS_EVENTO } from '../../../types';
+import { TIPOS_EVENTO, type DataEscolhida } from '../../../types';
+
+/** Houve alguma escolha de data? Ano ou descrição bastam. */
+function temData(d: DataEscolhida): boolean {
+  return d.ano != null || !!d.texto_livre?.trim();
+}
 import type { DadosPessoaForm } from '../components/PersonForm';
 
 /** Tudo que depende do acervo é invalidado junto — a árvore, a busca, as estatísticas. */
@@ -32,19 +37,21 @@ export function useCriarPessoa() {
         foto_url: null,
       });
 
-      if (dados.nascimento.trim()) {
+      // Só cria o evento quando há alguma data escolhida — um evento de
+      // nascimento sem data nenhuma não acrescenta nada à ficha.
+      if (temData(dados.nascimento)) {
         await criarEvento({
           pessoa_id: id,
           tipo_evento: TIPOS_EVENTO.nascimento,
-          data_texto: dados.nascimento.trim(),
+          data: dados.nascimento,
         });
       }
 
-      if (dados.falecimento.trim()) {
+      if (temData(dados.falecimento)) {
         await criarEvento({
           pessoa_id: id,
           tipo_evento: TIPOS_EVENTO.falecimento,
-          data_texto: dados.falecimento.trim(),
+          data: dados.falecimento,
         });
       }
 

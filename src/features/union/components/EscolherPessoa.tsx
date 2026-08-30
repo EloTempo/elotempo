@@ -13,7 +13,8 @@ import { Input } from '../../../components/ui/Input';
 import { Select } from '../../../components/ui/Select';
 import { usePessoas, useCriarPessoa } from '../../person/hooks/usePessoas';
 import { ErroDoAcervo } from '../../../lib/api';
-import type { PersonSummary, Sex } from '../../../types';
+import { CampoDeData } from '../../../components/ui/CampoDeData';
+import { DATA_VAZIA, type DataEscolhida, type PersonSummary, type Sex } from '../../../types';
 
 interface EscolherPessoaProps {
   /** Ids que não podem ser escolhidos — normalmente a própria pessoa. */
@@ -63,7 +64,7 @@ export function EscolherPessoa({
   const [nome, setNome] = useState('');
   const [sobrenome, setSobrenome] = useState(sobrenomeSugerido);
   const [sexo, setSexo] = useState<Sex>('U');
-  const [nascimento, setNascimento] = useState('');
+  const [nascimento, setNascimento] = useState<DataEscolhida>({ ...DATA_VAZIA });
   const [erroLocal, setErroLocal] = useState<string | null>(null);
   const criar = useCriarPessoa();
 
@@ -86,8 +87,8 @@ export function EscolherPessoa({
       sexo,
       is_vivo: false,
       minibiografia: '',
-      nascimento: nascimento.trim(),
-      falecimento: '',
+      nascimento,
+      falecimento: { ...DATA_VAZIA },
     });
 
     onEscolher({
@@ -165,11 +166,10 @@ export function EscolherPessoa({
               onChange={(e) => setSexo(e.target.value as Sex)}
               options={OPCOES_SEXO}
             />
-            <Input
-              label="Nascimento"
-              value={nascimento}
-              onChange={(e) => setNascimento(e.target.value)}
-              placeholder="1890, cerca de 1890…"
+            <CampoDeData
+              rotulo="Nascimento"
+              valor={nascimento}
+              aoMudar={setNascimento}
             />
           </div>
 

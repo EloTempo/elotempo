@@ -42,6 +42,8 @@ pub struct Evento {
     pub data_qualificador: String,
     pub ano_inicio: Option<i64>,
     pub ano_fim: Option<i64>,
+    pub dia_inicio: Option<i64>,
+    pub mes_inicio: Option<i64>,
     pub local_id: Option<String>,
     /// Nome do local resolvido ("Campos dos Goytacazes, RJ"), para a interface
     /// não precisar de uma consulta por evento.
@@ -57,7 +59,14 @@ pub struct NovoEvento {
     pub pessoa_id: Option<String>,
     pub uniao_id: Option<String>,
     pub tipo_evento: String,
+    /// Caminho antigo: texto livre, interpretado pelo `datas.rs`. Continua
+    /// existindo para a importação de GEDCOM e para o acervo anterior às
+    /// listas suspensas.
     pub data_texto: Option<String>,
+    /// Caminho novo: a data escolhida nas listas da interface. Quando vem
+    /// preenchida, manda — o programa **sabe** o dia e o mês em vez de
+    /// deduzi-los.
+    pub data: Option<datas::DataEscolhida>,
     pub local_id: Option<String>,
     pub rotulo_historico_livre: Option<String>,
     pub denominacao_religiosa: Option<String>,
@@ -87,24 +96,41 @@ pub async fn criar_evento(novo: NovoEvento, db: State<'_, SqlitePool>) -> Result
     }
 
     let tipo = normalizar_tipo(&novo.tipo_evento)?;
-    let data = datas::interpretar(novo.data_texto.as_deref().unwrap_or(""));
+
+    // Quando a data vem das listas, ela manda: o programa sabe o dia e o mês.
+    // Sem ela, cai no caminho antigo de interpretar texto livre, que continua
+    // servindo à importação de GEDCOM e ao acervo anterior.
+    let (texto, data) = match &novo.data {
+        Some(escolha) => {
+            let texto = datas::compor_texto(escolha);
+            let texto = if texto.is_empty() { None } else { Some(texto) };
+            (texto, datas::a_partir_da_escolha(escolha))
+        }
+        None => (
+            novo.data_texto.clone(),
+            datas::interpretar(novo.data_texto.as_deref().unwrap_or("")),
+        ),
+    };
+
     let id = Uuid::new_v4().to_string();
 
     sqlx::query(
         "INSERT INTO eventos
            (id, pessoa_id, uniao_id, tipo_evento, data_texto, data_qualificador,
-            ano_inicio, ano_fim, local_id, rotulo_historico_livre,
-            denominacao_religiosa, instituicao, nota)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            ano_inicio, ano_fim, dia_inicio, mes_inicio, local_id,
+            rotulo_historico_livre, denominacao_religiosa, instituicao, nota)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
     )
     .bind(&id)
     .bind(&novo.pessoa_id)
     .bind(&novo.uniao_id)
     .bind(&tipo)
-    .bind(&novo.data_texto)
+    .bind(&texto)
     .bind(data.qualificador.como_str())
     .bind(data.ano_inicio)
     .bind(data.ano_fim)
+    .bind(data.dia_inicio)
+    .bind(data.mes_inicio)
     .bind(&novo.local_id)
     .bind(&novo.rotulo_historico_livre)
     .bind(&novo.denominacao_religiosa)
@@ -125,7 +151,8 @@ pub async fn atualizar_evento(evento: Evento, db: State<'_, SqlitePool>) -> Resu
     let afetadas = sqlx::query(
         "UPDATE eventos SET
             tipo_evento = ?, data_texto = ?, data_qualificador = ?,
-            ano_inicio = ?, ano_fim = ?, local_id = ?, rotulo_historico_livre = ?,
+            ano_inicio = ?, ano_fim = ?, dia_inicio = ?, mes_inicio = ?,
+            local_id = ?, rotulo_historico_livre = ?,
             denominacao_religiosa = ?, instituicao = ?, nota = ?
          WHERE id = ?",
     )
@@ -134,6 +161,8 @@ pub async fn atualizar_evento(evento: Evento, db: State<'_, SqlitePool>) -> Resu
     .bind(data.qualificador.como_str())
     .bind(data.ano_inicio)
     .bind(data.ano_fim)
+    .bind(data.dia_inicio)
+    .bind(data.mes_inicio)
     .bind(&evento.local_id)
     .bind(&evento.rotulo_historico_livre)
     .bind(&evento.denominacao_religiosa)
@@ -173,7 +202,8 @@ pub async fn listar_eventos_pessoa(
 ) -> Resultado<Vec<Evento>> {
     let rows = sqlx::query(
         "SELECT e.id, e.pessoa_id, e.uniao_id, e.tipo_evento, e.data_texto,
-                e.data_qualificador, e.ano_inicio, e.ano_fim, e.local_id,
+                e.data_qualificador, e.ano_inicio, e.ano_fim,
+                e.dia_inicio, e.mes_inicio, e.local_id,
                 -- Município traz a UF junto; cidade estrangeira traz o país.
                 CASE
                   WHEN l.id IS NULL THEN NULL
@@ -205,6 +235,8 @@ fn linha_para_evento(row: sqlx::sqlite::SqliteRow) -> Resultado<Evento> {
         data_qualificador: row.try_get("data_qualificador")?,
         ano_inicio: row.try_get("ano_inicio")?,
         ano_fim: row.try_get("ano_fim")?,
+        dia_inicio: row.try_get("dia_inicio")?,
+        mes_inicio: row.try_get("mes_inicio")?,
         local_id: row.try_get("local_id")?,
         local_nome: row.try_get("local_nome")?,
         rotulo_historico_livre: row.try_get("rotulo_historico_livre")?,

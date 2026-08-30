@@ -18,6 +18,7 @@ import { Button } from '../../../components/ui/Button';
 import { Input } from '../../../components/ui/Input';
 import { Select } from '../../../components/ui/Select';
 import { ImagemDoAcervo } from '../../../components/ui/ImagemDoAcervo';
+import { CampoDeData } from '../../../components/ui/CampoDeData';
 import { escolherArquivo } from '../../../lib/api';
 import { SecaoAtributo, CampoCurto, type ItemDeLista } from './SecaoAtributo';
 import { SecaoNomes } from './SecaoNomes';
@@ -53,7 +54,7 @@ import {
 } from '../taxonomias';
 import { ErroDoAcervo } from '../../../lib/api';
 import { SeletorDeLocal } from './SeletorDeLocal';
-import type { Person, Place, Sex } from '../../../types';
+import { DATA_VAZIA, type DataEscolhida, type Person, type Place, type Sex } from '../../../types';
 
 interface PersonDetailsProps {
   pessoaId: string;
@@ -139,7 +140,8 @@ export function PersonDetails({ pessoaId, onFechar }: PersonDetailsProps) {
   }, [pessoa]);
 
   // --- Formulários das listas ---
-  const [novoEvento, setNovoEvento] = useState({ tipo: 'nascimento', data: '', local: '', nota: '' });
+  const [novoEvento, setNovoEvento] = useState({ tipo: 'nascimento', local: '', nota: '' });
+  const [dataDoEvento, setDataDoEvento] = useState<DataEscolhida>({ ...DATA_VAZIA });
   const [localDoEvento, setLocalDoEvento] = useState<Place | null>(null);
   const [novaReligiao, setNovaReligiao] = useState({ denominacao: '', periodo: '' });
   const [novaProfissao, setNovaProfissao] = useState({ ocupacao: '', empregador: '', periodo: '' });
@@ -386,14 +388,15 @@ export function PersonDetails({ pessoaId, onFechar }: PersonDetailsProps) {
                 {
                   pessoa_id: pessoaId,
                   tipo_evento: novoEvento.tipo,
-                  data_texto: novoEvento.data.trim() || null,
+                  data: dataDoEvento,
                   local_id: localDoEvento?.id ?? null,
                   rotulo_historico_livre: novoEvento.local.trim() || null,
                   nota: novoEvento.nota.trim() || null,
                 },
                 {
                   onSuccess: () => {
-                    setNovoEvento({ tipo: 'nascimento', data: '', local: '', nota: '' });
+                    setNovoEvento({ tipo: 'nascimento', local: '', nota: '' });
+                    setDataDoEvento({ ...DATA_VAZIA });
                     setLocalDoEvento(null);
                   },
                 },
@@ -415,11 +418,10 @@ export function PersonDetails({ pessoaId, onFechar }: PersonDetailsProps) {
               </select>
             </label>
 
-            <CampoCurto
+            <CampoDeData
               rotulo="Data"
-              valor={novoEvento.data}
-              aoMudar={(v) => setNovoEvento({ ...novoEvento, data: v })}
-              placeholder="1890, cerca de 1890, antes de 1914, 1902-1904…"
+              valor={dataDoEvento}
+              aoMudar={setDataDoEvento}
             />
             <SeletorDeLocal
               local={localDoEvento}
