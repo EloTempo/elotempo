@@ -11,7 +11,7 @@
 
 import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Plus, Search, TreeDeciduous } from 'lucide-react';
+import { FileText, Plus, Search, TreeDeciduous } from 'lucide-react';
 import { Button } from './components/ui/Button';
 import { Input } from './components/ui/Input';
 import { Modal } from './components/ui/Modal';
@@ -19,6 +19,7 @@ import { TreeCanvas } from './components/tree/TreeCanvas';
 import { PersonForm } from './features/person/components/PersonForm';
 import { PersonDetails } from './features/person/components/PersonDetails';
 import { PainelConexoes } from './features/union/components/PainelConexoes';
+import { DialogoRelatorio } from './features/reports/components/DialogoRelatorio';
 import { useCriarPessoa, usePessoas } from './features/person/hooks/usePessoas';
 import { buscarGrafoArvore } from './lib/api';
 
@@ -49,6 +50,7 @@ export default function App() {
   const [selecionadaId, setSelecionadaId] = useState<string | null>(null);
   const [formAberto, setFormAberto] = useState(false);
   const [fichaAberta, setFichaAberta] = useState<string | null>(null);
+  const [relatorioAberto, setRelatorioAberto] = useState(false);
 
   const { data: pessoas, isLoading: carregandoPessoas, error: erroPessoas } = usePessoas(termoBusca);
   const criar = useCriarPessoa();
@@ -113,6 +115,11 @@ export default function App() {
             </option>
           ))}
         </select>
+
+        <Button size="sm" variant="secondary" onClick={() => setRelatorioAberto(true)}>
+          <FileText className="w-4 h-4 mr-1" />
+          Relatório
+        </Button>
 
         <Button size="sm" onClick={() => setFormAberto(true)}>
           <Plus className="w-4 h-4 mr-1" />
@@ -249,6 +256,10 @@ export default function App() {
           />
         )}
       </div>
+
+      {relatorioAberto && (
+        <DialogoRelatorio raizId={raizId} onFechar={() => setRelatorioAberto(false)} />
+      )}
 
       {/* Ficha completa — o que o botão "Detalhes" do card abre. */}
       {fichaAberta && (

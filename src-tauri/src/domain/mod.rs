@@ -8,4 +8,5 @@ pub mod locais_cmds;
 pub mod models;
 pub mod nomes_cmds;
 pub mod regras;
+pub mod relatorio_cmds;
 pub mod texto;

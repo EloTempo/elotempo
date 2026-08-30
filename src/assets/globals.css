@@ -126,4 +126,37 @@
   .node-card {
     break-inside: avoid;
   }
+
+  /* O documento impresso é sempre em papel branco com tinta escura, mesmo
+     que o usuário esteja com um tema noturno na tela. */
+  #print-container {
+    color: #2f2a22;
+    background: #fff;
+    font-family: 'Source Serif 4', Georgia, serif;
+  }
+
+  /* Uma ficha não se parte entre páginas: ler metade de um antepassado no pé
+     de uma folha e a outra metade no topo da seguinte é pior do que gastar o
+     espaço em branco. */
+  .ficha-relatorio {
+    break-inside: avoid;
+  }
+
+  /* Cada geração começa numa página nova, quando a opção estiver ligada. */
+  .geracao-relatorio {
+    break-before: page;
+  }
+  .geracao-relatorio:first-of-type {
+    break-before: auto;
+  }
+
+  /* Nunca deixar um título de geração sozinho no fim da página. */
+  #print-container h2 {
+    break-after: avoid;
+  }
+
+  /* O diagrama é uma peça só. */
+  #print-container svg {
+    break-inside: avoid;
+  }
 }

@@ -224,8 +224,23 @@ não acha "São Paulo". **A normalização existe em dois lugares** (a migration
 estrangeiras): se divergirem, a busca erra em silêncio, e é o teste
 `a_normalizacao_do_rust_bate_com_a_da_migration` que prende as duas pontas.
 
+**Relatórios** (fatia 05): os três modos da seção 6 — só hierarquia, só texto,
+combinado —, com escopo, ocultar vivas, miniaturas e quebra por geração. O PDF
+sai por `window.print()`; **não há geração de PDF em Rust**, e não deve haver:
+o motor de layout da webview já faz isso, e uma biblioteca duplicaria peso.
+A superfície impressa é `#print-container`, que o `@media print` do
+globals.css revela enquanto esconde o resto.
+
+**Ordenação do relatório** — geração, depois ano de nascimento, depois nome.
+É uma *leitura declarada* da seção 6, que pede "data de nascimento ascendente"
+mas também "do mais antigo ao mais recente": ordenar só por ano espalha uma
+família pelo documento inteiro quando faltam datas, e num acervo real faltam
+muitas. Está justificado em `Instruções/fatias/05-relatorios.md`; se for para
+mudar, muda lá primeiro.
+
 **Ainda não:** múltiplas árvores nomeadas da seção 5 (tabelas existem, sem
-comando nem tela), relatórios em PDF, estatísticas, GEDCOM, linhas do tempo.
+comando nem tela), busca multicritério (item 9 do MVP), estatísticas, GEDCOM,
+linhas do tempo.
 
 **Fora de escopo por decisão de 29/08/2026:** prosopografia (relações não
 familiares, instituições, hierarquias) e a tela de fontes/citações. As tabelas
