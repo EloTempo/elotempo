@@ -248,12 +248,40 @@ estrutura varia: todo valor vai por bind**. Há teste de injeção provando isso
 
 ---
 
+**Linhas do tempo — a gaveta** (fatia 07): quatro linhas de contexto semeadas
+nas migrations 013–014 (história do Brasil, presidentes, moeda, tecnologias),
+mais a linha pessoal da pessoa selecionada. Split arrastável, não overlay.
+Clicar num marco mostra o detalhe e **destaca na árvore quem estava vivo**.
+
+Três coisas para não quebrar aqui:
+
+- **Linha de contexto é imutável, e o banco garante.** Não existe comando que
+  altere, e os gatilhos da migration 013 recusam `UPDATE`/`DELETE` em linha com
+  `is_bloqueada = 1`. `INSERT` fica aberto de propósito: é por ele que as
+  migrations semeiam, e corrigir um marco é escrever migration nova — que
+  deixa rastro, o que se quer de uma referência.
+- **A regra de "quem estava vivo" tem três ramos**, não dois. Além de "morreu
+  depois" e "está viva", há o caso de quem não tem data de morte: presume-se
+  viva dentro de `IDADE_MAXIMA_PRESUMIDA` (105) anos do nascimento. Sem isso,
+  quem nasceu em 1930 sumia da tela ao clicar num marco de 1930 — absurdo que
+  os testes pegaram.
+- **Quem não tem data de nascimento fica fora do destaque, mas é contado.** A
+  gaveta diz quantos ficaram de fora. Sumir em silêncio faria o usuário
+  concluir que o antepassado não viveu naquela época.
+
+**Curadoria**: marcos de que não se tem certeza entram com `relevancia =
+'media'` e **não sobem à gaveta**, que só mostra `'alta'`. É salvaguarda
+editorial, não detalhe de interface — melhor faltar um marco do que afirmar uma
+data errada com ar de referência.
+
+---
+
 ## O MVP está completo
 
 Os 9 itens da seção 9 estão entregues. O que vem agora é o "depois do MVP" da
-mesma seção: GEDCOM 7.0, estatísticas, linhas do tempo, múltiplas árvores
-nomeadas (seção 5 — as tabelas `arvores` e `arvore_membros` existem sem comando
-nem tela), undo/redo.
+mesma seção: GEDCOM 7.0, estatísticas, o estúdio de linhas do tempo e o zoom
+semântico, múltiplas árvores nomeadas (seção 5 — as tabelas `arvores` e
+`arvore_membros` existem sem comando nem tela), undo/redo.
 
 **Fora de escopo por decisão:** prosopografia e a tela de fontes/citações
 (29/08/2026).

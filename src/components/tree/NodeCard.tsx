@@ -14,6 +14,8 @@ import { ImagemDoAcervo } from '../ui/ImagemDoAcervo';
 interface NodeCardProps {
   person: PersonNode;
   selecionado?: boolean;
+  /** Estava vivo no marco clicado na linha do tempo (fatia 07). */
+  destacado?: boolean;
   onClick?: () => void;
   onDetalhes?: () => void;
 }
@@ -25,7 +27,13 @@ function faixaDeSexo(sexo: string): string {
   return 'bg-tinta3';
 }
 
-export function NodeCard({ person, selecionado, onClick, onDetalhes }: NodeCardProps) {
+export function NodeCard({
+  person,
+  selecionado,
+  destacado,
+  onClick,
+  onDetalhes,
+}: NodeCardProps) {
   const nomeCompleto = [person.nome, person.sobrenome].filter(Boolean).join(' ');
 
   // Placeholder: borda tracejada e identidade em aberto. Continua clicável —
@@ -58,6 +66,7 @@ export function NodeCard({ person, selecionado, onClick, onDetalhes }: NodeCardP
         'w-full h-full bg-card rounded-raio border border-borda shadow-sombra',
         'flex items-stretch overflow-hidden cursor-pointer node-card node-content',
         'hover:border-borda2 transition-colors',
+        destacado && 'border-anel ring-2 ring-anel/50',
         selecionado && 'border-acento ring-2 ring-acento/40',
       )}
     >

@@ -22,6 +22,13 @@ import { NodeCard } from './NodeCard';
 interface TreeCanvasProps {
   grafo: TreeGraph;
   pessoaSelecionadaId?: string | null;
+  /**
+   * Quem destacar — vem da linha do tempo, ao clicar num marco de contexto
+   * ("quem estava vivo em 1930"). `null` significa sem destaque ativo, que é
+   * diferente de uma lista vazia: vazia quer dizer "ninguém estava vivo", e
+   * nesse caso todos os cards ficam apagados, que é a resposta certa.
+   */
+  destacadosIds?: string[] | null;
   onSelecionarPessoa?: (id: string) => void;
   onAbrirDetalhes?: (id: string) => void;
 }
@@ -43,9 +50,15 @@ function estiloAnel(estado: string): { preenchido: boolean; tracejado: boolean }
 export function TreeCanvas({
   grafo,
   pessoaSelecionadaId,
+  destacadosIds,
   onSelecionarPessoa,
   onAbrirDetalhes,
 }: TreeCanvasProps) {
+  const destaqueAtivo = destacadosIds != null;
+  const destacados = useMemo(
+    () => new Set(destacadosIds ?? []),
+    [destacadosIds],
+  );
   const svgRef = useRef<SVGSVGElement>(null);
   const palcoRef = useRef<SVGGElement>(null);
 
@@ -158,10 +171,15 @@ export function TreeCanvas({
                 width={METRICAS.larguraNo}
                 height={METRICAS.alturaNo}
                 overflow="visible"
+                // Com um destaque ativo, quem está fora dele desbota em vez de
+                // sumir: o parentesco continua legível, e o contraste é que
+                // conta a história de quem viveu naquela época.
+                opacity={destaqueAtivo && !destacados.has(p.id) ? 0.28 : 1}
               >
                 <NodeCard
                   person={p}
                   selecionado={p.id === pessoaSelecionadaId}
+                  destacado={destaqueAtivo && destacados.has(p.id)}
                   onClick={() => onSelecionarPessoa?.(p.id)}
                   onDetalhes={() => onAbrirDetalhes?.(p.id)}
                 />

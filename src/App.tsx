@@ -20,6 +20,7 @@ import { PersonDetails } from './features/person/components/PersonDetails';
 import { PainelConexoes } from './features/union/components/PainelConexoes';
 import { PainelBusca } from './features/search/components/PainelBusca';
 import { DialogoRelatorio } from './features/reports/components/DialogoRelatorio';
+import { GavetaLinhaTempo } from './features/timeline/components/GavetaLinhaTempo';
 import { useCriarPessoa, usePessoas } from './features/person/hooks/usePessoas';
 import { buscarGrafoArvore } from './lib/api';
 
@@ -53,6 +54,9 @@ export default function App() {
   const [formAberto, setFormAberto] = useState(false);
   const [fichaAberta, setFichaAberta] = useState<string | null>(null);
   const [relatorioAberto, setRelatorioAberto] = useState(false);
+  // Vem da linha do tempo: quem estava vivo no marco clicado. `null` = sem
+  // destaque ativo, que é diferente de lista vazia.
+  const [destacadosIds, setDestacadosIds] = useState<string[] | null>(null);
 
   const { data: pessoas, isLoading: carregandoPessoas, error: erroPessoas } = usePessoas(termoBusca);
   const criar = useCriarPessoa();
@@ -182,6 +186,7 @@ export default function App() {
             <TreeCanvas
               grafo={grafo}
               pessoaSelecionadaId={selecionadaId}
+              destacadosIds={destacadosIds}
               onSelecionarPessoa={setSelecionadaId}
               onAbrirDetalhes={setFichaAberta}
             />
@@ -204,6 +209,14 @@ export default function App() {
           />
         )}
       </div>
+
+      {/* A gaveta divide a tela com a árvore — split, não overlay (seção 8). */}
+      {!acervoVazio && (
+        <GavetaLinhaTempo
+          pessoaSelecionadaId={selecionadaId}
+          onDestacar={setDestacadosIds}
+        />
+      )}
 
       {relatorioAberto && (
         <DialogoRelatorio raizId={raizId} onFechar={() => setRelatorioAberto(false)} />

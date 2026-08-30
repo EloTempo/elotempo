@@ -19,6 +19,9 @@ use domain::eventos_cmds::{
 use domain::documentos_cmds::{
     anexar_documento, definir_foto_principal, listar_documentos_pessoa, remover_documento,
 };
+use domain::linhas_tempo_cmds::{
+    buscar_marcos, listar_linhas_de_contexto, montar_linha_pessoal, quem_estava_vivo,
+};
 use domain::locais_cmds::{buscar_locais, obter_local, registrar_local_estrangeiro};
 use domain::busca_cmds::{buscar_pessoas_filtrado, opcoes_de_filtro};
 use domain::relatorio_cmds::montar_relatorio;
@@ -80,6 +83,11 @@ fn main() {
             remover_uniao,
             anexar_filho,
             desvincular_filho,
+            // Linhas do tempo
+            listar_linhas_de_contexto,
+            buscar_marcos,
+            montar_linha_pessoal,
+            quem_estava_vivo,
             // Busca multicritério
             buscar_pessoas_filtrado,
             opcoes_de_filtro,
