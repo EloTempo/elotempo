@@ -26,8 +26,20 @@ sqlx = { version = "0.8", features = ["sqlite", "runtime-tokio", "macros", "migr
 uuid = { version = "1", features = ["v4"] }
 
 [features]
-# Feature usada pela suíte de testes de domínio para compilar sem a runtime do Tauri.
 default = []
+
+# Embute o frontend no binário em vez de buscá-lo no servidor de
+# desenvolvimento.
+#
+# O Tauri decide dev vs. produção por ESTA feature, não pelo perfil de
+# compilação: em `tauri-2.x/build.rs`, `dev = !custom_protocol`. Sem ela, o
+# binário aponta para `devUrl` (localhost:1420) e abre em branco com
+# ERR_CONNECTION_REFUSED quando o Vite não está no ar.
+#
+# O `tauri build` passa `--features custom-protocol` por conta própria — sem
+# esta linha, o comando do instalador falha. E é o que permite compilar um
+# binário autônomo no perfil debug, rápido, para testar sem servidor.
+custom-protocol = ["tauri/custom-protocol"]
 
 [profile.release]
 # Binário público: menor e sem símbolos de debug.

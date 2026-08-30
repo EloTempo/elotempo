@@ -59,8 +59,19 @@ echo   [1/3] Frontend...
 call npm run build --silent
 if errorlevel 1 goto :falhou
 
+rem ---------------------------------------------------------------------
+rem O --features custom-protocol NAO e opcional.
+rem
+rem O Tauri decide dev vs. producao por essa feature, nao pelo perfil: em
+rem tauri-2.x/build.rs, `dev = !custom_protocol`. Sem ela, o binario aponta
+rem para o devUrl (localhost:1420) e abre com ERR_CONNECTION_REFUSED, porque
+rem nao ha servidor de desenvolvimento no ar.
+rem
+rem Com ela, o frontend fica embutido e o perfil segue sendo debug, que
+rem compila rapido. E o melhor dos dois para testar.
+rem ---------------------------------------------------------------------
 echo   [2/3] Rust... ^(a primeira vez demora; depois e rapido^)
-"%CARGO%" build --manifest-path src-tauri/Cargo.toml --quiet
+"%CARGO%" build --manifest-path src-tauri/Cargo.toml --features custom-protocol --quiet
 if errorlevel 1 goto :falhou
 
 if not exist "%EXE%" (

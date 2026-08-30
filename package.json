@@ -15,7 +15,7 @@
     "test:rust": "cargo test --manifest-path src-tauri/Cargo.toml",
     "typecheck": "tsc --noEmit",
     "verificar": "npm run typecheck && npm run test && npm run test:rust",
-    "abrir": "npm run build && cargo build --manifest-path src-tauri/Cargo.toml && \"src-tauri/target/debug/arvore-genealogica\"",
+    "abrir": "npm run build && cargo build --manifest-path src-tauri/Cargo.toml --features custom-protocol && \"src-tauri/target/debug/arvore-genealogica\"",
     "instalador": "tauri build",
     "seed:ibge": "node scripts/gerar-seed-ibge.mjs"
   },
