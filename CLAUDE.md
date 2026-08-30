@@ -239,6 +239,18 @@ família pelo documento inteiro quando faltam datas, e num acervo real faltam
 muitas. Está justificado em `Instruções/fatias/05-relatorios.md`; se for para
 mudar, muda lá primeiro.
 
+**Busca por nome alcança quatro lugares**: o nome de exibição
+(`pessoas.nome`/`sobrenome`), qualquer nome de `nomes_pessoa`, e os apelidos.
+E **ignora acento dos dois lados** — `domain::texto::sem_acento_sql` gera a
+expressão que normaliza a coluna, e `normalizar_busca` normaliza o termo. As
+duas saem da mesma tabela `SUBSTITUICOES`, então não têm como divergir.
+
+Cuidado ao mexer: o `COLLATE NOCASE` do SQLite **só conhece ASCII**, e o
+`lower()` embutido não mexe em letra acentuada — `lower('JOSÉ')` devolve
+`josÉ`. Por isso as maiúsculas acentuadas estão na tabela. Sem isso, "jose" não
+acha "José" e "goncalves" não acha "Gonçalves", que num acervo brasileiro é
+quase toda busca.
+
 **Busca multicritério** (fatia 06): nome, sobrenome, cidade de nascimento,
 nacionalidade, década, religião, profissão, escolaridade, idioma e situação de
 vida, todos combináveis em `E`. Os seletores oferecem **só o que existe no

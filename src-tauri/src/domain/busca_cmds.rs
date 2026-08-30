@@ -11,7 +11,7 @@ use tauri::State;
 use crate::commands::tree_cmds::PessoaNode;
 use crate::domain::erros::Resultado;
 use crate::domain::eventos_cmds::tipos;
-use crate::domain::texto::normalizar_busca;
+use crate::domain::texto::{normalizar_busca, sem_acento_sql};
 
 #[derive(Debug, Default, Deserialize)]
 pub struct FiltrosBusca {
@@ -105,26 +105,40 @@ pub async fn buscar(
         condicoes.push("p.is_placeholder = 0".into());
     }
 
-    // Texto: nome de exibição, sobrenome, ou qualquer nome que a pessoa teve.
+    // Texto: alcança tudo que serve para achar uma pessoa pelo nome — o de
+    // exibição, o sobrenome, qualquer nome que ela carregou na vida, e os
+    // apelidos. Quem procura "Tia Chica" não sabe (nem deveria saber) que
+    // aquilo está guardado como apelido e não como nome.
+    //
+    // A comparação é feita sobre a forma sem acento dos dois lados: ninguém
+    // digita acento procurando, e "jose" precisa achar "José".
     if let Some(t) = texto_util(&filtros.texto) {
-        condicoes.push(
-            "(p.nome LIKE ? COLLATE NOCASE
-              OR COALESCE(p.sobrenome,'') LIKE ? COLLATE NOCASE
+        condicoes.push(format!(
+            "({nome} LIKE ?
+              OR {sobrenome} LIKE ?
               OR EXISTS (SELECT 1 FROM nomes_pessoa n
                           WHERE n.pessoa_id = p.id
-                            AND (n.nome LIKE ? COLLATE NOCASE
-                                 OR COALESCE(n.sobrenome,'') LIKE ? COLLATE NOCASE)))"
-                .into(),
-        );
-        let padrao = format!("%{t}%");
-        for _ in 0..4 {
+                            AND ({n_nome} LIKE ? OR {n_sobrenome} LIKE ?))
+              OR EXISTS (SELECT 1 FROM apelidos_pessoa a
+                          WHERE a.pessoa_id = p.id AND {apelido} LIKE ?))",
+            nome = sem_acento_sql("p.nome"),
+            sobrenome = sem_acento_sql("COALESCE(p.sobrenome,'')"),
+            n_nome = sem_acento_sql("n.nome"),
+            n_sobrenome = sem_acento_sql("COALESCE(n.sobrenome,'')"),
+            apelido = sem_acento_sql("a.apelido"),
+        ));
+        let padrao = format!("%{}%", normalizar_busca(&t));
+        for _ in 0..5 {
             valores.push(Valor::Texto(padrao.clone()));
         }
     }
 
     if let Some(s) = texto_util(&filtros.sobrenome) {
-        condicoes.push("COALESCE(p.sobrenome,'') LIKE ? COLLATE NOCASE".into());
-        valores.push(Valor::Texto(format!("%{s}%")));
+        condicoes.push(format!(
+            "{} LIKE ?",
+            sem_acento_sql("COALESCE(p.sobrenome,'')")
+        ));
+        valores.push(Valor::Texto(format!("%{}%", normalizar_busca(&s))));
     }
 
     // Cidade = local do nascimento. Ver a decisão declarada na spec da fatia.
@@ -514,6 +528,133 @@ mod testes {
         .unwrap();
         assert_eq!(falecidas.len(), 1);
         assert_eq!(falecidas[0].nome, "Falecida");
+    }
+
+    /// Num acervo brasileiro quase todo nome tem acento, e ninguém digita
+    /// acento quando está procurando.
+    #[tokio::test]
+    async fn a_busca_ignora_acento_dos_dois_lados() {
+        let pool = pool_de_teste().await;
+        pessoa(&pool, "José", "Gonçalves", false).await;
+        pessoa(&pool, "Antônio", "Conceição", false).await;
+
+        for (digitado, esperado) in [
+            ("jose", "José"),
+            ("José", "José"),
+            ("JOSE", "José"),
+            ("goncalves", "José"),
+            ("Gonçalves", "José"),
+            ("antonio", "Antônio"),
+            ("conceicao", "Antônio"),
+        ] {
+            let r = buscar(
+                &pool,
+                &FiltrosBusca { texto: Some(digitado.into()), ..Default::default() },
+                100,
+            )
+            .await
+            .unwrap();
+            assert_eq!(r.len(), 1, "digitando '{digitado}' não achei nada");
+            assert_eq!(r[0].nome, esperado, "digitando '{digitado}'");
+        }
+    }
+
+    #[tokio::test]
+    async fn o_filtro_de_sobrenome_tambem_ignora_acento() {
+        let pool = pool_de_teste().await;
+        pessoa(&pool, "Ana", "Gonçalves", false).await;
+        pessoa(&pool, "Bruno", "Silva", false).await;
+
+        let r = buscar(
+            &pool,
+            &FiltrosBusca { sobrenome: Some("goncalves".into()), ..Default::default() },
+            100,
+        )
+        .await
+        .unwrap();
+        assert_eq!(r.len(), 1);
+        assert_eq!(r[0].nome, "Ana");
+    }
+
+    /// Quem procura "Tia Chica" não sabe que aquilo está guardado como apelido
+    /// e não como nome — nem deveria precisar saber.
+    #[tokio::test]
+    async fn a_busca_alcanca_os_apelidos() {
+        let pool = pool_de_teste().await;
+        let p = pessoa(&pool, "Maria Aparecida", "Souza", false).await;
+        sqlx::query("INSERT INTO apelidos_pessoa (id,pessoa_id,apelido) VALUES (?,?,'Tia Chica')")
+            .bind(uuid::Uuid::new_v4().to_string())
+            .bind(&p)
+            .execute(&pool)
+            .await
+            .unwrap();
+
+        for termo in ["Tia Chica", "chica", "TIA"] {
+            let r = buscar(
+                &pool,
+                &FiltrosBusca { texto: Some(termo.into()), ..Default::default() },
+                100,
+            )
+            .await
+            .unwrap();
+            assert_eq!(r.len(), 1, "procurando '{termo}'");
+            assert_eq!(r[0].nome, "Maria Aparecida");
+        }
+    }
+
+    #[tokio::test]
+    async fn apelido_com_acento_tambem_e_alcancado() {
+        let pool = pool_de_teste().await;
+        let p = pessoa(&pool, "Sebastião", "Lima", false).await;
+        sqlx::query("INSERT INTO apelidos_pessoa (id,pessoa_id,apelido) VALUES (?,?,'Tião')")
+            .bind(uuid::Uuid::new_v4().to_string())
+            .bind(&p)
+            .execute(&pool)
+            .await
+            .unwrap();
+
+        let r = buscar(
+            &pool,
+            &FiltrosBusca { texto: Some("tiao".into()), ..Default::default() },
+            100,
+        )
+        .await
+        .unwrap();
+        assert_eq!(r.len(), 1, "'tiao' deveria achar o apelido 'Tião'");
+    }
+
+    /// Os quatro lugares onde um nome pode estar, numa pessoa só.
+    #[tokio::test]
+    async fn os_quatro_caminhos_ate_a_mesma_pessoa() {
+        let pool = pool_de_teste().await;
+        let p = pessoa(&pool, "Francisco", "", false).await;
+
+        sqlx::query(
+            "INSERT INTO nomes_pessoa (id,pessoa_id,tipo,nome,sobrenome,ordem)
+             VALUES ('n1',?,'nascimento','Jorge Mario','Bergoglio',1)",
+        )
+        .bind(&p)
+        .execute(&pool)
+        .await
+        .unwrap();
+
+        sqlx::query("INSERT INTO apelidos_pessoa (id,pessoa_id,apelido) VALUES ('a1',?,'Chiquinho')")
+            .bind(&p)
+            .execute(&pool)
+            .await
+            .unwrap();
+
+        // nome de exibição, nome de registro, sobrenome de registro, apelido
+        for termo in ["francisco", "jorge", "bergoglio", "chiquinho"] {
+            let r = buscar(
+                &pool,
+                &FiltrosBusca { texto: Some(termo.into()), ..Default::default() },
+                100,
+            )
+            .await
+            .unwrap();
+            assert_eq!(r.len(), 1, "procurando '{termo}'");
+        }
     }
 
     #[tokio::test]

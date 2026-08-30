@@ -303,7 +303,12 @@ pub async fn buscar_pessoas(
     db: State<'_, SqlitePool>,
 ) -> Resultado<Vec<PessoaNode>> {
     let limite = limite.unwrap_or(50).clamp(1, 500);
-    let padrao = format!("%{}%", termo.unwrap_or_default().trim());
+    // O termo digitado também vai normalizado — os dois lados da comparação
+    // precisam estar na mesma forma.
+    let padrao = format!(
+        "%{}%",
+        crate::domain::texto::normalizar_busca(&termo.unwrap_or_default())
+    );
 
     let sql = format!(
         r#"
@@ -321,22 +326,34 @@ pub async fn buscar_pessoas(
             EXISTS(SELECT 1 FROM documento_vinculos dv WHERE dv.pessoa_id = p.id) AS tem_documentos,
             EXISTS(SELECT 1 FROM religioes_pessoa r WHERE r.pessoa_id = p.id) AS tem_religiao
         FROM pessoas p
-        WHERE p.nome LIKE ?1 COLLATE NOCASE
-           OR COALESCE(p.sobrenome,'') LIKE ?1 COLLATE NOCASE
-           -- Também pelos outros nomes que a pessoa carregou (fatia 02):
-           -- é o que permite procurar "Bergoglio" e chegar em "Francisco",
-           -- ou o nome de solteira de uma bisavó cadastrada como casada.
+        -- Sem acento dos dois lados: "jose" precisa achar "José", porque
+        -- ninguém digita acento procurando.
+        WHERE {nome} LIKE ?1
+           OR {sobrenome} LIKE ?1
+           -- Pelos outros nomes que a pessoa carregou (fatia 02): é o que
+           -- permite procurar "Bergoglio" e chegar em "Francisco", ou o nome
+           -- de solteira de uma bisavó cadastrada como casada.
            OR EXISTS (
                 SELECT 1 FROM nomes_pessoa n
                  WHERE n.pessoa_id = p.id
-                   AND (n.nome LIKE ?1 COLLATE NOCASE
-                        OR COALESCE(n.sobrenome,'') LIKE ?1 COLLATE NOCASE)
+                   AND ({n_nome} LIKE ?1 OR {n_sobrenome} LIKE ?1)
+              )
+           -- E pelos apelidos: quem procura "Tia Chica" não sabe que aquilo
+           -- está guardado como apelido e não como nome.
+           OR EXISTS (
+                SELECT 1 FROM apelidos_pessoa a
+                 WHERE a.pessoa_id = p.id AND {apelido} LIKE ?1
               )
         ORDER BY p.is_placeholder, p.sobrenome COLLATE NOCASE, p.nome COLLATE NOCASE
         LIMIT ?2
         "#,
         nascimento = tipos::NASCIMENTO,
         falecimento = tipos::FALECIMENTO,
+        nome = crate::domain::texto::sem_acento_sql("p.nome"),
+        sobrenome = crate::domain::texto::sem_acento_sql("COALESCE(p.sobrenome,'')"),
+        n_nome = crate::domain::texto::sem_acento_sql("n.nome"),
+        n_sobrenome = crate::domain::texto::sem_acento_sql("COALESCE(n.sobrenome,'')"),
+        apelido = crate::domain::texto::sem_acento_sql("a.apelido"),
     );
 
     Ok(sqlx::query_as::<_, PessoaNode>(&sql)
