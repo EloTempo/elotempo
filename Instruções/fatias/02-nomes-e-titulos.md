@@ -108,12 +108,42 @@ bloqueio para esta fatia.
 3. **Nenhuma invariante da seção 3 é tocada.** Nome não participa das regras de
    conexão.
 
+## Emenda de 30/08/2026 — a interface foi redesenhada
+
+A primeira tela desta fatia expunha o **modelo de dados**: uma lista genérica
+com nove tipos e quatro campos de nome (prefixo, nome, sobrenome, sufixo). Ao
+usar, o autor do projeto não achou onde escrever o nome público — e a pergunta
+prova o defeito, porque a tela pedia que ele traduzisse a própria intenção para
+o vocabulário da tabela.
+
+A tela agora segue o modelo mental, em três degraus:
+
+1. **Nome público** — o do card, editado na Identidade.
+2. **Nome completo de registro** — bloco próprio; só há um por pessoa.
+3. **Mudanças de nome** — cada uma com o motivo e a partir de quando.
+
+**Prefixo e sufixo saíram da interface.** "D. João VI" se escreve inteiro no
+nome público; separar em três caixas era pedir ao usuário que fizesse o
+trabalho do banco. As colunas continuam no schema, ainda populadas por dados
+antigos e exibidas corretamente, e seguem disponíveis para a exportação GEDCOM
+(`NPFX`/`NSFX`).
+
+Os motivos passaram a trazer **exemplos reais** no lugar de definições —
+Bergoglio virando Francisco, Edith Stein virando Teresa Benedita da Cruz, Maria
+da Graça conhecida como Xuxa —, porque o exemplo ensina mais rápido.
+
 ## Critérios de aceite
 
-- [ ] Dá para registrar, na mesma pessoa, um nome de nascimento e um nome
-      público, e os dois aparecem na ficha com o tipo indicado.
-- [ ] "Usar este na árvore" muda o nome do card sem apagar os demais registros.
-- [ ] Registro de nome com período em branco é aceito.
-- [ ] Prefixo e sufixo compõem a exibição na ordem certa: `D.` + `João` + `VI`.
+- [ ] Dá para registrar, na mesma pessoa, o nome completo de registro e uma
+      mudança de nome, e os dois aparecem na ficha.
+- [ ] Os outros nomes aparecem no cabeçalho da ficha, com o tipo ao lado.
+- [ ] "Usar no card" muda o nome de exibição sem apagar registro nenhum.
+- [ ] Registro de nome sem período é aceito.
 - [ ] Remover um nome não afeta o nome de exibição da pessoa.
+- [ ] Cada motivo mostra um exemplo concreto ao ser escolhido.
+- [ ] A busca por nome alcança o nome completo, as mudanças e os apelidos,
+      ignorando acento.
 - [ ] `npm run verificar` passa.
+
+> Substituído na emenda: *"Prefixo e sufixo compõem a exibição na ordem certa"*.
+> Deixou de ser alcançável pela interface quando os campos saíram dela.
