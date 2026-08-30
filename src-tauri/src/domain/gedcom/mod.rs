@@ -82,14 +82,10 @@ fn empacotar_gedzip(
 
     let erro = |e: zip::result::ZipError| ErroDominio::Persistencia(format!("falha no pacote: {e}"));
 
-    // O nome do .ged dentro do pacote acompanha o nome do arquivo escolhido.
-    let nome_ged = destino
-        .file_stem()
-        .and_then(|s| s.to_str())
-        .unwrap_or("acervo");
-
-    zip.start_file(format!("{nome_ged}.ged"), opcoes_zip)
-        .map_err(erro)?;
+    // O nome interno é fixo: o GEDZip do 7.0 exige `gedcom.ged` na raiz do
+    // pacote. Batizá-lo com o nome do arquivo escolhido dá um zip que o outro
+    // programa abre e declara vazio, sem dizer por quê.
+    zip.start_file("gedcom.ged", opcoes_zip).map_err(erro)?;
     zip.write_all(exportacao.texto.as_bytes())
         .map_err(|e| ErroDominio::Persistencia(format!("falha ao escrever no pacote: {e}")))?;
 
@@ -110,7 +106,7 @@ fn empacotar_gedzip(
             Err(_) => continue,
         };
 
-        zip.start_file(relativo.replace('\\', "/"), opcoes_zip)
+        zip.start_file(exportador::caminho_de_pacote(relativo), opcoes_zip)
             .map_err(erro)?;
         zip.write_all(&bytes)
             .map_err(|e| ErroDominio::Persistencia(format!("falha ao empacotar mídia: {e}")))?;
@@ -371,7 +367,49 @@ mod testes {
         assert!(r.texto.contains("1 RELI Católica"));
         assert!(r.texto.contains("1 OCCU Costureira"));
         assert!(r.texto.contains("1 _LANG Italiano"), "idioma não tem tag padrão");
-        assert!(r.texto.contains("1 NICK Dona Chica"));
+        // `NICK` é peça de nome: mora sob `NAME`, no nível 2. Já saiu no 1.
+        assert!(r.texto.contains("2 NICK Dona Chica"));
+        assert!(!r.texto.contains("1 NICK"));
+    }
+
+    /// As tags de extensão precisam estar declaradas no `SCHMA`, senão o 7.0
+    /// considera o arquivo inválido — não apenas ininteligível.
+    #[tokio::test]
+    async fn toda_extensao_usada_esta_declarada_no_schma() {
+        let pool = pool_de_teste().await;
+        let r = montar(&pool, &opcoes()).await.unwrap();
+
+        assert!(r.texto.contains("1 SCHMA"));
+        for linha in r.texto.lines() {
+            if let Some(resto) = linha.split_once(' ').map(|(_, r)| r) {
+                let tag = resto.split(' ').next().unwrap_or("");
+                if tag.starts_with('_') {
+                    assert!(
+                        r.texto.contains(&format!("2 TAG {tag} urn:")),
+                        "extensão {tag} usada sem declaração no SCHMA"
+                    );
+                }
+            }
+        }
+    }
+
+    /// `STEP` não existe no enumerado de `PEDI`. Enteado cai em `OTHER`, e a
+    /// palavra sobrevive na `PHRASE`.
+    #[tokio::test]
+    async fn enteado_sai_como_other_com_frase() {
+        let pool = pool_de_teste().await;
+        let pai = pessoa(&pool, "Pai", "Silva", "M", false).await;
+        let mae = pessoa(&pool, "Mae", "Silva", "F", false).await;
+        let filho = pessoa(&pool, "Filho", "Souza", "M", false).await;
+        let u = regras::criar_uniao(&pool, Some(&pai), Some(&mae), "casamento")
+            .await
+            .unwrap();
+        regras::anexar_filho(&pool, &u, &filho, "enteado").await.unwrap();
+
+        let r = montar(&pool, &opcoes()).await.unwrap();
+        assert!(r.texto.contains("2 PEDI OTHER"));
+        assert!(r.texto.contains("3 PHRASE enteado"));
+        assert!(!r.texto.contains("PEDI STEP"));
     }
 
     #[tokio::test]
@@ -427,10 +465,46 @@ mod testes {
             .unwrap();
 
         let r = montar(&pool, &opcoes()).await.unwrap();
-        assert!(r.texto.contains("1 OBJE"));
-        assert!(r.texto.contains("2 FILE midia/d1.jpg"));
-        assert!(r.texto.contains("3 TITL Retrato"));
+
+        // No 7.0 a mídia é registro próprio; o INDI só aponta para ele. A
+        // forma embutida do 5.5.1 (`1 OBJE` / `2 FILE`) foi removida.
+        assert!(r.texto.contains("0 @O1@ OBJE"));
+        assert!(r.texto.contains("1 OBJE @O1@"));
+        assert!(r.texto.contains("1 FILE midia/d1.jpg"));
+        assert!(r.texto.contains("2 FORM image/jpeg"), "FORM é obrigatório");
+        assert!(r.texto.contains("2 TITL Retrato"));
         assert_eq!(r.midia, vec!["midia/d1.jpg".to_string()]);
+    }
+
+    /// A mesma foto em duas pessoas é um registro só, apontado duas vezes —
+    /// e um arquivo só dentro do pacote.
+    #[tokio::test]
+    async fn foto_compartilhada_vira_um_registro_so() {
+        let pool = pool_de_teste().await;
+        let a = pessoa(&pool, "A", "Silva", "M", false).await;
+        let b = pessoa(&pool, "B", "Silva", "F", false).await;
+        sqlx::query(
+            "INSERT INTO documentos (id,caminho_relativo,tipo_midia,titulo)
+             VALUES ('d1','midia/d1.jpg','imagem','Retrato')",
+        )
+        .execute(&pool)
+        .await
+        .unwrap();
+        for (v, pessoa_id) in [("v1", &a), ("v2", &b)] {
+            sqlx::query(
+                "INSERT INTO documento_vinculos (id,documento_id,pessoa_id) VALUES (?,'d1',?)",
+            )
+            .bind(v)
+            .bind(pessoa_id)
+            .execute(&pool)
+            .await
+            .unwrap();
+        }
+
+        let r = montar(&pool, &opcoes()).await.unwrap();
+        assert_eq!(r.texto.matches("0 @O1@ OBJE").count(), 1);
+        assert_eq!(r.texto.matches("1 OBJE @O1@").count(), 2);
+        assert_eq!(r.midia.len(), 1);
     }
 
     #[tokio::test]

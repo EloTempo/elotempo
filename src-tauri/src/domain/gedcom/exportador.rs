@@ -45,16 +45,40 @@ struct Referencias {
     unioes: HashMap<String, String>,
 }
 
+/// Onde o evento vai sair. As tags válidas são diferentes nos dois:
+/// `BIRT` não existe dentro de `FAM`, e `MARR` não existe dentro de `INDI`.
+#[derive(Clone, Copy, PartialEq)]
+enum Contexto {
+    Pessoa,
+    Familia,
+}
+
 /// Tag GEDCOM de cada tipo de evento nosso. Tipo desconhecido vira `EVEN`
 /// genérico com `TYPE`, que é como o padrão comporta o que não previu.
-fn tag_do_evento(tipo: &str) -> (&'static str, bool) {
-    match tipo {
+///
+/// O contexto decide: um evento de pessoa pendurado numa união (ou o
+/// contrário) sairia com tag que o padrão não admite ali. Em vez de emitir
+/// linha inválida, ele desce para `EVEN` com `TYPE`, que existe nos dois lados
+/// e não perde a informação.
+fn tag_do_evento(tipo: &str, contexto: Contexto) -> (&'static str, bool) {
+    let (tag, generico) = match tipo {
         t if t == tipos::NASCIMENTO => ("BIRT", false),
         t if t == tipos::BATISMO => ("BAPM", false),
         t if t == tipos::FALECIMENTO => ("DEAT", false),
         t if t == tipos::SEPULTAMENTO => ("BURI", false),
         t if t == tipos::CASAMENTO => ("MARR", false),
         _ => ("EVEN", true),
+    };
+
+    let cabe = match contexto {
+        Contexto::Familia => tag == "MARR" || tag == "EVEN",
+        Contexto::Pessoa => tag != "MARR",
+    };
+
+    if cabe {
+        (tag, generico)
+    } else {
+        ("EVEN", true)
     }
 }
 
@@ -272,6 +296,7 @@ pub async fn montar(pool: &SqlitePool, opcoes: &OpcoesExportacao) -> Resultado<E
     // ------------------------------------------------------------------
     let mut vivas_ocultadas = 0usize;
     let mut midia_usada: Vec<String> = Vec::new();
+    let mut registros_midia: Vec<MidiaRegistro> = Vec::new();
 
     for p in &pessoas {
         let xref = refs.pessoas.get(&p.id).unwrap().clone();
@@ -288,20 +313,22 @@ pub async fn montar(pool: &SqlitePool, opcoes: &OpcoesExportacao) -> Resultado<E
         } else {
             escritor.campo(1, "NAME", &nome_gedcom(&p.nome, p.sobrenome.as_deref()));
 
+            // `NICK` é peça de nome (`NAME.NICK`), não filho de `INDI`. Emitido
+            // um nível acima, o arquivo é recusado por leitor estrito.
+            for apelido in atributos.apelidos.get(&p.id).into_iter().flatten() {
+                escritor.campo(2, "NICK", apelido);
+            }
+
             for n in nomes.get(&p.id).into_iter().flatten() {
                 escritor.campo(1, "NAME", &nome_gedcom(&n.nome, n.sobrenome.as_deref()));
                 escritor.campo(2, "TYPE", tipo_de_nome(&n.tipo));
                 escritor.campo_opcional(2, "NOTE", n.periodo.as_deref());
             }
 
-            for apelido in atributos.apelidos.get(&p.id).into_iter().flatten() {
-                escritor.campo(1, "NICK", apelido);
-            }
-
             escritor.campo(1, "SEX", &p.sexo);
 
             for e in eventos.get(&p.id).into_iter().flatten() {
-                escrever_evento(&mut escritor, e);
+                escrever_evento(&mut escritor, e, Contexto::Pessoa);
             }
 
             for (tag, valores) in [
@@ -320,13 +347,25 @@ pub async fn montar(pool: &SqlitePool, opcoes: &OpcoesExportacao) -> Resultado<E
 
             escritor.campo_opcional(1, "NOTE", p.minibiografia.as_deref());
 
+            // No 5.5.1 a mídia podia vir embutida no INDI; o 7.0 tirou isso —
+            // aqui `OBJE` é ponteiro para um registro `0 @O#@ OBJE`. Os
+            // registros saem depois, na seção 7.
             for doc in midia_por_pessoa.get(&p.id).into_iter().flatten() {
-                escritor.tag(1, "OBJE");
-                escritor.campo(2, "FILE", &doc.caminho);
-                escritor.campo_opcional(3, "TITL", doc.titulo.as_deref());
-                if !midia_usada.contains(&doc.caminho) {
-                    midia_usada.push(doc.caminho.clone());
-                }
+                let xref_obje = match registros_midia.iter().position(|m| m.caminho == doc.caminho)
+                {
+                    Some(i) => registros_midia[i].xref.clone(),
+                    None => {
+                        let x = format!("O{}", registros_midia.len() + 1);
+                        registros_midia.push(MidiaRegistro {
+                            xref: x.clone(),
+                            caminho: doc.caminho.clone(),
+                            titulo: doc.titulo.clone(),
+                        });
+                        midia_usada.push(doc.caminho.clone());
+                        x
+                    }
+                };
+                escritor.referencia(1, "OBJE", &xref_obje);
             }
         }
 
@@ -336,7 +375,11 @@ pub async fn montar(pool: &SqlitePool, opcoes: &OpcoesExportacao) -> Resultado<E
             if let Some(fam) = refs.unioes.get(uniao_id) {
                 escritor.referencia(1, "FAMC", fam);
                 if vinculo != "biologico" {
-                    escritor.campo(2, "PEDI", pedigree(vinculo));
+                    let (valor, frase) = pedigree(vinculo);
+                    escritor.campo(2, "PEDI", valor);
+                    // `OTHER` sem `PHRASE` perde a informação: é o padrão
+                    // dizendo "não tenho enumerado para isto, escreva".
+                    escritor.campo_opcional(3, "PHRASE", frase);
                 }
             }
         }
@@ -369,8 +412,21 @@ pub async fn montar(pool: &SqlitePool, opcoes: &OpcoesExportacao) -> Resultado<E
         }
 
         for e in eventos_uniao.get(&u.id).into_iter().flatten() {
-            escrever_evento(&mut escritor, e);
+            escrever_evento(&mut escritor, e, Contexto::Familia);
         }
+    }
+
+    // ------------------------------------------------------------------
+    // 7. Os OBJE
+    // ------------------------------------------------------------------
+    for m in &registros_midia {
+        escritor.registro(&m.xref, "OBJE");
+        // Caminho de mídia é o mesmo dentro do GEDZip, sempre com barra normal:
+        // a contrabarra do Windows não é separador válido nem no zip nem aqui.
+        escritor.campo(1, "FILE", &caminho_de_pacote(&m.caminho));
+        // `FORM` é obrigatório no 7.0 e carrega tipo de mídia, não extensão.
+        escritor.campo(2, "FORM", tipo_de_midia(&m.caminho));
+        escritor.campo_opcional(2, "TITL", m.titulo.as_deref());
     }
 
     Ok(Exportacao {
@@ -382,28 +438,78 @@ pub async fn montar(pool: &SqlitePool, opcoes: &OpcoesExportacao) -> Resultado<E
     })
 }
 
-fn pedigree(vinculo: &str) -> &'static str {
+/// Vínculo nosso → `PEDI`, mais a frase quando o enumerado não alcança.
+///
+/// O enumerado do 7.0 é fechado: `ADOPTED`, `BIRTH`, `FOSTER`, `SEALING`,
+/// `OTHER`. Não há `STEP` — enteado cai em `OTHER` com `PHRASE`.
+fn pedigree(vinculo: &str) -> (&'static str, Option<&'static str>) {
     match vinculo {
-        "adotado" => "ADOPTED",
-        "enteado" => "STEP",
-        "tutelado" => "FOSTER",
-        _ => "BIRTH",
+        "adotado" => ("ADOPTED", None),
+        "tutelado" => ("FOSTER", None),
+        "enteado" => ("OTHER", Some("enteado")),
+        _ => ("BIRTH", None),
     }
 }
 
 /// Cabeçalho do arquivo.
 ///
-/// A VERIFICAR antes de considerar o exportador fechado (spec da fatia 08,
-/// seção 10): a estrutura exata que o 7.0 exige aqui. O que sai abaixo é o que
-/// tenho confiança de ser válido; `CHAR` não é emitido porque o 7.0 é UTF-8 por
-/// definição.
+/// `CHAR` não é emitido porque o 7.0 é UTF-8 por definição — no 5.5.1 era
+/// obrigatório, e é uma das linhas que separam as duas versões.
+///
+/// O `SCHMA` não é enfeite: no 7.0, **toda tag de extensão precisa estar
+/// declarada aqui**, com um URI que a identifique. Sem isso, `_LANG` e `_IBGE`
+/// tornam o arquivo inválido em vez de apenas ininteligível. O URI é `urn:` de
+/// propósito: é identificador, não endereço, e este programa não busca nada na
+/// rede (nem quem o lê deveria precisar).
 fn cabecalho(e: &mut Escritor) {
     e.tag(0, "HEAD");
     e.tag(1, "GEDC");
     e.campo(2, "VERS", "7.0");
+    e.tag(1, "SCHMA");
+    e.campo(2, "TAG", "_LANG urn:arvore-genealogica:idioma-falado");
+    e.campo(2, "TAG", "_IBGE urn:arvore-genealogica:codigo-ibge");
     e.campo(1, "SOUR", "ARVORE_GENEALOGICA");
     e.campo(2, "NAME", "Árvore Genealógica");
     e.campo(2, "VERS", env!("CARGO_PKG_VERSION"));
+}
+
+/// Caminho como ele aparece no GEDCOM e dentro do GEDZip.
+///
+/// A contrabarra do Windows não é separador válido em nenhum dos dois; sem
+/// esta troca, o arquivo referencia mídia que o outro programa não acha.
+pub fn caminho_de_pacote(relativo: &str) -> String {
+    relativo.replace('\\', "/")
+}
+
+/// Registro de mídia — no 7.0 a mídia é registro próprio, referenciado.
+struct MidiaRegistro {
+    xref: String,
+    caminho: String,
+    titulo: Option<String>,
+}
+
+/// Tipo de mídia do `FORM`, deduzido da extensão.
+///
+/// O acervo guarda "imagem" ou "documento", que não serve aqui: o 7.0 quer o
+/// tipo de mídia da IANA. O genérico cobre o que não reconhecemos, que é
+/// preferível a omitir um campo obrigatório.
+fn tipo_de_midia(caminho: &str) -> &'static str {
+    let ext = caminho
+        .rsplit('.')
+        .next()
+        .unwrap_or("")
+        .to_ascii_lowercase();
+    match ext.as_str() {
+        "jpg" | "jpeg" => "image/jpeg",
+        "png" => "image/png",
+        "gif" => "image/gif",
+        "webp" => "image/webp",
+        "bmp" => "image/bmp",
+        "tif" | "tiff" => "image/tiff",
+        "pdf" => "application/pdf",
+        "txt" => "text/plain",
+        _ => "application/octet-stream",
+    }
 }
 
 struct EventoExportavel {
@@ -420,8 +526,8 @@ struct EventoExportavel {
 }
 
 /// Emite um evento, preservando o texto da data quando o `DATE` não o alcança.
-fn escrever_evento(e: &mut Escritor, ev: &EventoExportavel) {
-    let (tag, generico) = tag_do_evento(&ev.tipo);
+fn escrever_evento(e: &mut Escritor, ev: &EventoExportavel, contexto: Contexto) {
+    let (tag, generico) = tag_do_evento(&ev.tipo, contexto);
     e.tag(1, tag);
     if generico {
         e.campo(2, "TYPE", &ev.tipo);

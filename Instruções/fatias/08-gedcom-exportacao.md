@@ -44,7 +44,7 @@ mídia, como a seção 4 determina. É o que faz as fotos viajarem junto.
 | `pessoas` | `INDI` |
 | nome de exibição | `NAME Dado /Sobrenome/` |
 | `nomes_pessoa` | `NAME` com `TYPE` (`BIRTH`, `MARRIED`, `AKA`…) |
-| `apelidos_pessoa` | `NICK` |
+| `apelidos_pessoa` | `NICK` **dentro do `NAME`** — é peça de nome, não filho de `INDI` |
 | `sexo` | `SEX` (M · F · X · U) |
 | nascimento, batismo, falecimento, sepultamento | `BIRT` · `BAPM` · `DEAT` · `BURI` |
 | casamento (da união) | `MARR` dentro do `FAM` |
@@ -56,7 +56,7 @@ mídia, como a seção 4 determina. É o que faz as fotos viajarem junto.
 | `nacionalidades_pessoa` | `NATI` |
 | `idiomas_pessoa` | `_LANG` (extensão — não há tag padrão, conforme a seção 2.5) |
 | `minibiografia` | `NOTE` |
-| `documentos` | `OBJE` com `FILE` e `TITL` |
+| `documentos` | registro `OBJE` próprio, com `FILE`, `FORM` e `TITL`; o `INDI` aponta |
 | `unioes` | `FAM` com `HUSB` e `WIFE` |
 | `uniao_filhos` | `CHIL` no `FAM`, `FAMC` no `INDI`, com `PEDI` |
 
@@ -153,37 +153,54 @@ emitidos. A estrutura de parentesco fica intacta e nada privado sai.
 
 ---
 
-## 10. A verificar antes de fechar o exportador
+## 10. Diferenças entre 5.5.1 e 7.0 que custaram correção
 
-Pontos em que não tenho certeza suficiente e que precisam ser conferidos contra
-a especificação oficial (link na seção 12), não deduzidos:
+A primeira versão do exportador declarava 7.0 no `HEAD` mas emitia estruturas
+que só o 5.5.1 aceitava. Um leitor tolerante abriria assim mesmo; um estrito
+recusaria o arquivo. Cinco pontos, todos corrigidos e todos com teste:
 
-- A estrutura exata exigida no `HEAD` do 7.0 — o que é obrigatório além de
-  `GEDC.VERS`, e se `CHAR` foi removido por o formato ser UTF-8 sempre.
-- Se `DATE` é permitido dentro de `NAME` (já anotado na fatia 02). Se não for,
-  o período de um nome sai como `NOTE`.
-- A forma canônica de extensões (`_LANG`, `_IBGE`) e se exigem declaração no
-  cabeçalho em 7.0.
+- **`NICK` é peça de nome.** Mora em `NAME.NICK`, nível 2. Emitido como filho
+  direto de `INDI`, é linha inválida.
+- **Mídia embutida saiu do 7.0.** `1 OBJE` / `2 FILE` era 5.5.1. No 7.0 a
+  mídia é registro `0 @O1@ OBJE`, com `FILE` e `FORM` (tipo de mídia da IANA,
+  obrigatório), e o `INDI` guarda só o ponteiro. Foto usada por duas pessoas é
+  um registro apontado duas vezes.
+- **Extensão exige declaração.** `_LANG` e `_IBGE` precisam sair no
+  `HEAD.SCHMA`, cada uma com um URI. Sem isso o arquivo é inválido, não apenas
+  ininteligível. Usamos `urn:` — identificador, não endereço; nada aqui busca
+  na rede.
+- **Não existe `PEDI STEP`.** O enumerado é `ADOPTED`, `BIRTH`, `FOSTER`,
+  `SEALING`, `OTHER`. Enteado sai como `OTHER` com `PHRASE enteado`.
+- **O GEDZip exige `gedcom.ged` na raiz do pacote.** Com outro nome, o
+  programa que recebe abre o zip e declara o acervo vazio, sem dizer por quê.
 
-**Nenhum desses é bloqueio para começar** — todos afetam detalhes de emissão,
-não o desenho.
+Resolvido também o que a versão anterior desta seção deixava em aberto: `CHAR`
+não é emitido (o 7.0 é UTF-8 por definição) e o período de um nome sai como
+`NOTE` sob o `NAME`, não como `DATE`.
+
+**Ainda não verificado contra o documento oficial:** a ordem exigida entre as
+substruturas do `HEAD`. O que emitimos segue a ordem em que a especificação as
+lista, o que é o palpite seguro, mas não é o mesmo que ter conferido.
 
 ---
 
 ## 11. Critérios de aceite
 
-- [ ] Exportar o acervo produz um `.ged` que abre em outro programa de
-      genealogia sem erro de leitura.
-- [ ] Uma pessoa com nome, sexo, nascimento, falecimento e união volta completa.
-- [ ] Um evento "12/03/1945" sai como `12 MAR 1945`, não como `1945`.
-- [ ] Um evento "na época da guerra" sai sem `DATE` e com o texto numa `NOTE`.
-- [ ] Um `FAM` cujo pai é placeholder sai sem `HUSB`, e não há `INDI` do
+- [x] Uma pessoa com nome, sexo, nascimento, falecimento e união volta completa.
+- [x] Um evento "12/03/1945" sai como `12 MAR 1945`, não como `1945`.
+- [x] Um evento "na época da guerra" sai sem `DATE` e com o texto numa `NOTE`.
+- [x] Um `FAM` cujo pai é placeholder sai sem `HUSB`, e não há `INDI` do
       placeholder no arquivo.
-- [ ] Com "ocultar vivas", nenhuma data ou local de pessoa viva aparece no
+- [x] Com "ocultar vivas", nenhuma data ou local de pessoa viva aparece no
       arquivo, e os filhos dela continuam ligados.
-- [ ] Com mídia anexada, o `.gdz` contém o `.ged` e os arquivos.
-- [ ] Acervo vazio gera arquivo válido, com `HEAD` e `TRLR`.
-- [ ] `npm run verificar` passa.
+- [x] Com mídia anexada, o `.gdz` contém o `.ged` e os arquivos.
+- [x] Acervo vazio gera arquivo válido, com `HEAD` e `TRLR`.
+- [x] `npm run verificar` passa.
+- [ ] **Exportar o acervo produz um `.ged` que abre em outro programa de
+      genealogia sem erro de leitura.** Este é o único que os testes não
+      fecham: depende de abrir o arquivo no Gramps ou no Ancestris. As
+      correções da seção 10 tiram os erros que eu sabia identificar; a prova
+      é o teste em programa de terceiro.
 
 ---
 

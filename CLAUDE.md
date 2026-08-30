@@ -311,6 +311,15 @@ Quatro coisas que decidem a correção do arquivo gerado:
   controle removido, quebra de linha virando `CONT`. Nome de pessoa é dado do
   usuário e vai passar a vir de GEDCOM de terceiros — não monte linha à mão.
 
+**Não confie na memória do 5.5.1 ao escrever 7.0.** O cabeçalho declara 7.0, e
+quatro estruturas mudaram de forma entre as versões: `NICK` é peça de `NAME`
+(nível 2, não 1); mídia é registro `0 @O1@ OBJE` com `FORM` obrigatório, e não
+mais `OBJE`/`FILE` embutido; toda tag de extensão (`_LANG`, `_IBGE`) precisa
+estar declarada em `HEAD.SCHMA`; e não existe `PEDI STEP` — enteado é `OTHER`
+com `PHRASE`. O GEDZip, por sua vez, exige que o arquivo interno se chame
+`gedcom.ged`. Cada um desses está preso por teste; a seção 10 da spec da fatia
+08 explica por quê.
+
 O `escolher onde salvar` é do frontend (`dialog:allow-save`); quem escreve o
 arquivo é o Rust. **Continua valendo: nada de `fs:` na capability.**
 
