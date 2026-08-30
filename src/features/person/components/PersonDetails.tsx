@@ -208,6 +208,24 @@ export function PersonDetails({ pessoaId, onFechar }: PersonDetailsProps) {
               {nomeCompleto}
             </h2>
           </div>
+          {/* Os outros nomes ficam à vista no cabeçalho.
+              A seção que os edita fica logo abaixo da identidade, mas some da
+              vista quando o formulário de edição está aberto — e o ponto da
+              fatia 02 é justamente que o nome de exibição não é o único. */}
+          {listaNomes.data && listaNomes.data.length > 0 && (
+            <p className="text-sm text-tinta2 m-0 leading-snug">
+              {listaNomes.data.map((n, i) => (
+                <span key={n.id}>
+                  {i > 0 && ' · '}
+                  <span className="text-tinta">
+                    {[n.prefixo, n.nome, n.sufixo, n.sobrenome].filter(Boolean).join(' ')}
+                  </span>
+                  <span className="text-tinta3"> ({rotuloDoTipoDeNome(n.tipo)})</span>
+                </span>
+              ))}
+            </p>
+          )}
+
           {listaApelidos.data && listaApelidos.data.length > 0 && (
             <p className="text-sm text-tinta2 m-0 truncate">
               conhecido como {listaApelidos.data.map((a) => a.apelido).join(', ')}
@@ -274,6 +292,14 @@ export function PersonDetails({ pessoaId, onFechar }: PersonDetailsProps) {
                   onChange={(e) => setRascunho({ ...rascunho, sobrenome: e.target.value })}
                 />
               </div>
+
+              <p className="text-xs text-tinta3 m-0 -mt-1 leading-relaxed">
+                Este é o <strong className="text-tinta2 font-semibold">nome de exibição</strong> —
+                o que aparece no card da árvore e na busca. O nome completo de nascimento, o
+                religioso, o de casada e outros ficam em{' '}
+                <strong className="text-tinta2 font-semibold">“Nomes ao longo da vida”</strong>,
+                logo abaixo.
+              </p>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <Select

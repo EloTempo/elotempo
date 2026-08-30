@@ -99,7 +99,20 @@
 /* Regras Globais de Impressão */
 @media print {
   @page { margin: 18mm; size: A4 portrait; }
-  
+
+  /* Papel é branco.
+   *
+   * O `body` usa `bg-mesa`, que nos temas claros é um bege (#e2d9c8) e nos
+   * escuros é quase preto. O `print-color-adjust: exact` abaixo — que existe
+   * para as cores do documento saírem fiéis — obrigava esse fundo a ser
+   * impresso também, e ele aparecia como um bloco bege no rodapé de toda
+   * página. `visibility: hidden` esconde os filhos, mas não o fundo do
+   * próprio body. */
+  html, body {
+    background: #fff !important;
+    background-image: none !important;
+  }
+
   /* Remove a UI do aplicativo da página impressa */
   body * {
     visibility: hidden;
@@ -114,6 +127,22 @@
     left: 0;
     top: 0;
     width: 100%;
+  }
+
+  /* A casca do app usa `h-screen`. Em papel, isso esticaria o documento até
+   * uma tela inteira mesmo quando o relatório é curto, deixando um vão em
+   * branco (ou colorido) depois do conteúdo. */
+  #root,
+  #root > div {
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    background: transparent !important;
+  }
+
+  /* Sobreposições fixas (modais, gaveta) não pertencem ao papel. */
+  .fixed {
+    display: none !important;
   }
 
   /* Força a impressão das cores de fundo exatas (ignora modo noturno do SO) */
