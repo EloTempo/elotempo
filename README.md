@@ -65,6 +65,28 @@ npm run tauri dev
 Na primeira execução o Rust compila do zero e demora vários minutos. Depois é
 rápido.
 
+### Abrindo rápido para testar
+
+Depois da primeira compilação, há um atalho que deixa tudo em dia e abre o
+programa sem terminal: dê **duplo clique em `abrir-arvore.cmd`** (Windows), ou
+rode:
+
+```bash
+npm run abrir
+```
+
+As duas compilações são incrementais — sem mudanças, leva poucos segundos. O
+atalho avisa se o programa já estiver aberto: uma janela em execução trava o
+próprio executável, e a compilação falharia no fim, depois de já ter gasto o
+tempo.
+
+Para gerar o **instalador** de verdade (MSI e NSIS no Windows), que é build de
+release e demora bem mais:
+
+```bash
+npm run instalador
+```
+
 ### Onde ficam os seus dados
 
 O acervo é um arquivo SQLite criado na pasta de dados do seu usuário:

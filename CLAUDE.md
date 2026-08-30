@@ -37,7 +37,8 @@ npm run verificar      # typecheck + testes TS + testes Rust  ← rode antes de 
 npm test               # só os testes do frontend
 npm run test:rust      # só os testes do domínio
 npm run build          # build do frontend
-npm run tauri build    # instalador
+npm run abrir          # compila o que mudou e abre o app (ou abrir-arvore.cmd)
+npm run instalador     # instalador MSI/NSIS (build de release, demorado)
 npm run seed:ibge      # regera o seed de municípios (única coisa que usa a internet)
 ```
 
