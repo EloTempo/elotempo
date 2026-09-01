@@ -297,6 +297,22 @@ Três coisas para não quebrar aqui:
 - **Quem não tem data de nascimento fica fora do destaque, mas é contado.** A
   gaveta diz quantos ficaram de fora. Sumir em silêncio faria o usuário
   concluir que o antepassado não viveu naquela época.
+- **Padrão de primeira abertura roda uma vez, e ponto.** O efeito que liga
+  "História do Brasil" reagia a `ativas.length === 0` e religava a linha no
+  instante em que o usuário desligava a última — era impossível deixar a gaveta
+  sem contexto nenhum. Hoje é guardado por `useRef`. Padrão que se reimpõe não
+  é padrão, é teimosia.
+- **A faixa de uma vida usa `--masc`/`--fem`, a mesma cor do card na árvore.**
+  Não contradiz a paleta própria das categorias: lá a cor classifica um
+  assunto, e sugerir gênero seria erro; aqui ela identifica um indivíduo, e ver
+  o mesmo azul nas duas telas é o que as costura. Antes a barra saía em
+  `--acento`, igual para todo mundo.
+- **O texto da gaveta é medido em `em`**, e a raiz dela define o `font-size`
+  (12px × escala). Um valor só governa o módulo inteiro, e o usuário escolhe
+  pelo `A−`/`A+`, com o valor em `localStorage`. Ao acrescentar texto aqui,
+  **use `em`, nunca `px` nem `text-xs`** — senão ele não acompanha. As alturas
+  das faixas e o espaçamento de rótulos multiplicam pela escala pelo mesmo
+  motivo: fonte maior sem mais espaço traz de volta o borrão.
 
 **Curadoria**: marcos de que não se tem certeza entram com `relevancia =
 'media'` e **não sobem à gaveta**, que só mostra `'alta'`. É salvaguarda

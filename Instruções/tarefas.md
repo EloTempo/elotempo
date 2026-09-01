@@ -94,6 +94,12 @@ Isto se cruza com o **zoom semântico**: escala larga pede poucos marcos, escala
 estreita pede muitos, e é exatamente o que a `relevancia` serve para decidir. As
 duas coisas provavelmente se fazem juntas.
 
+### Tamanho de fonte por módulo
+A gaveta das linhas do tempo já tem o seu (`A−`/`A+`, guardado no navegador), e
+o mecanismo generaliza: medir o texto do módulo em `em` e pôr o `font-size` na
+raiz dele. Falta aplicar o mesmo à árvore, à ficha e ao painel de busca — o que
+exige converter os tamanhos fixos (`text-xs`, `text-[11px]`) de cada um.
+
 ### Detalhe do evento na linha pessoal
 Um evento da vida da pessoa mostra o `data_texto` só no *tooltip*. Faltou o
 painel de detalhe que os marcos de contexto têm.

@@ -86,3 +86,35 @@ describe('marcosComRotulo', () => {
     expect(marcosComRotulo([], umPixelPorAno).size).toBe(0);
   });
 });
+
+describe('marcosComRotulo com o texto ampliado', () => {
+  /**
+   * O usuário pode aumentar a fonte da gaveta. Texto maior ocupa mais largura,
+   * e a regra de espaçamento tem de acompanhar — senão aumentar a fonte para
+   * conseguir ler traz de volta exatamente o borrão que esta função existe
+   * para evitar.
+   */
+  it('rotula menos marcos quando o texto cresce', () => {
+    const marcos = [marco('a', 1500), marco('b', 1600), marco('c', 1700)];
+
+    const normal = marcosComRotulo(marcos, umPixelPorAno, 1);
+    const grande = marcosComRotulo(marcos, umPixelPorAno, 1.5);
+
+    expect(normal.size).toBe(3);
+    expect(grande.size).toBeLessThan(normal.size);
+  });
+
+  it('o primeiro marco sempre ganha rótulo, em qualquer escala', () => {
+    const marcos = [marco('a', 1500), marco('b', 1510)];
+    for (const escala of [0.85, 1, 1.5]) {
+      expect(marcosComRotulo(marcos, umPixelPorAno, escala).has('a')).toBe(true);
+    }
+  });
+
+  it('sem escala informada, comporta-se como antes', () => {
+    const marcos = [marco('a', 1500), marco('b', 1600), marco('c', 1700)];
+    expect(marcosComRotulo(marcos, umPixelPorAno)).toEqual(
+      marcosComRotulo(marcos, umPixelPorAno, 1),
+    );
+  });
+});

@@ -82,6 +82,10 @@ pub struct MarcoPessoal {
 pub struct LinhaPessoal {
     pub pessoa_id: String,
     pub nome: String,
+    /// Para a faixa da vida usar a mesma cor do card na árvore. Sem isto a
+    /// barra saía na cor de destaque do tema, igual para todo mundo — e uma
+    /// vida desenhada sem cor não se liga à pessoa que ela representa.
+    pub sexo: String,
     pub ano_nascimento: Option<i64>,
     pub ano_falecimento: Option<i64>,
     pub is_vivo: bool,
@@ -191,7 +195,7 @@ pub async fn montar_linha_pessoal(
 /// medir uma consulta que não é a que roda.
 pub async fn linha_pessoal(db: &SqlitePool, pessoa_id: &str) -> Resultado<LinhaPessoal> {
     let pessoa_id = pessoa_id.to_string();
-    let pessoa = sqlx::query("SELECT nome, sobrenome, is_vivo FROM pessoas WHERE id = ?")
+    let pessoa = sqlx::query("SELECT nome, sobrenome, sexo, is_vivo FROM pessoas WHERE id = ?")
         .bind(&pessoa_id)
         .fetch_optional(db)
         .await?
@@ -201,6 +205,7 @@ pub async fn linha_pessoal(db: &SqlitePool, pessoa_id: &str) -> Resultado<LinhaP
 
     let nome: String = pessoa.try_get("nome")?;
     let sobrenome: Option<String> = pessoa.try_get("sobrenome")?;
+    let sexo: String = pessoa.try_get("sexo")?;
     let is_vivo: bool = pessoa.try_get("is_vivo")?;
 
     // Os eventos da própria pessoa.
@@ -299,6 +304,7 @@ pub async fn linha_pessoal(db: &SqlitePool, pessoa_id: &str) -> Resultado<LinhaP
             Some(s) if !s.trim().is_empty() => format!("{nome} {s}"),
             _ => nome,
         },
+        sexo,
         ano_nascimento,
         ano_falecimento,
         is_vivo,

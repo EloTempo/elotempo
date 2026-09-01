@@ -48,6 +48,8 @@ export interface MarcoPessoal {
 export interface LinhaPessoal {
   pessoa_id: string;
   nome: string;
+  /** Mesma cor do card na árvore — é o que liga as duas telas. */
+  sexo: string;
   ano_nascimento?: number | null;
   ano_falecimento?: number | null;
   is_vivo: boolean;

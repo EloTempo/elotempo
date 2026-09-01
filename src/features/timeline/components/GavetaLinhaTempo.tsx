@@ -60,6 +60,31 @@ const ESPACO_ENTRE_ROTULOS = 96;
 const ANO_CORRENTE = new Date().getFullYear();
 
 /**
+ * Escala do texto da gaveta.
+ *
+ * A gaveta é o módulo mais apertado do programa — muita informação num eixo
+ * estreito —, e foi calibrada num tamanho que se mostrou pequeno demais para
+ * ler com conforto. Em vez de escolher outro número fixo, o tamanho passa a ser
+ * do usuário.
+ *
+ * O mecanismo: todo texto daqui é medido em `em`, e esta escala vira o
+ * `font-size` da raiz da gaveta. Um valor só governa tudo o que está dentro, e
+ * o mesmo padrão serve para dar controle próprio a outro módulo depois.
+ */
+const ESCALAS: number[] = [0.85, 1, 1.15, 1.3, 1.5];
+const ESCALA_PADRAO = 1;
+
+function escalaInicial(): number {
+  try {
+    const salva = Number(localStorage.getItem('escala-linha-tempo'));
+    if (ESCALAS.includes(salva)) return salva;
+  } catch {
+    /* modo privado ou storage bloqueado */
+  }
+  return ESCALA_PADRAO;
+}
+
+/**
  * Paleta própria das linhas do tempo.
  *
  * Não reaproveita `--masc` nem `--fem`: no card da árvore essas cores
@@ -80,13 +105,34 @@ function corDa(categoria: string | undefined): string {
 }
 
 /**
+ * A cor da faixa de uma vida: a mesma do card daquela pessoa na árvore.
+ *
+ * Antes a barra saía em `--acento`, igual para todo mundo — uma vida desenhada
+ * sem cor, que não se ligava a ninguém. Aqui a regra da seção 10 joga a favor:
+ * `--masc` e `--fem` significam **sexo**, e uma faixa de vida É uma pessoa. Ver
+ * o mesmo azul no card e na barra é o que costura as duas telas.
+ *
+ * Isso não contradiz a paleta própria das categorias: lá a cor classifica um
+ * assunto, e sugerir gênero seria erro; aqui ela identifica um indivíduo.
+ */
+function corDaPessoa(sexo: string | undefined): string {
+  if (sexo === 'M') return 'var(--masc)';
+  if (sexo === 'F') return 'var(--fem)';
+  return 'var(--anel)';
+}
+
+/**
  * Quais marcos ganham rótulo.
  *
  * Percorre da esquerda para a direita e só rotula quem começa depois do espaço
  * reservado pelo rótulo anterior. Sem isto, quarenta marcos de história do
  * Brasil viram um borrão — que foi exatamente o que aconteceu.
  */
-export function marcosComRotulo(marcos: Marco[], x: (ano: number) => number): Set<string> {
+export function marcosComRotulo(
+  marcos: Marco[],
+  x: (ano: number) => number,
+  escala = 1,
+): Set<string> {
   const ordenados = [...marcos].sort(
     (a, b) => (a.ano_inicio ?? 0) - (b.ano_inicio ?? 0),
   );
@@ -98,7 +144,8 @@ export function marcosComRotulo(marcos: Marco[], x: (ano: number) => number): Se
     const posicao = x(m.ano_inicio);
     if (posicao >= proximoLivre) {
       comRotulo.add(m.id);
-      proximoLivre = posicao + ESPACO_ENTRE_ROTULOS;
+      // Texto maior precisa de mais espaço, senão volta o borrão.
+      proximoLivre = posicao + ESPACO_ENTRE_ROTULOS * escala;
     }
   }
   return comRotulo;
@@ -113,6 +160,7 @@ export function GavetaLinhaTempo({
   const [ativas, setAtivas] = useState<string[]>([]);
   const [marcoAberto, setMarcoAberto] = useState<Marco | null>(null);
   const [avisoLimite, setAvisoLimite] = useState<string | null>(null);
+  const [escala, setEscala] = useState<number>(escalaInicial);
   const [vivosInfo, setVivosInfo] = useState<{
     ids: string[];
     sem_data_de_nascimento: number;
@@ -130,12 +178,27 @@ export function GavetaLinhaTempo({
     enabled: !!pessoaSelecionadaId && aberta,
   });
 
+  // Escolher uma linha inicial é cortesia de primeira abertura, **uma vez só**.
+  //
+  // A versão anterior reagia a `ativas.length === 0`, e com isso religava
+  // "História do Brasil" no instante em que o usuário desligava a última
+  // camada: na prática, era impossível deixar a gaveta sem nenhuma linha de
+  // contexto. Um padrão que se reimpõe deixa de ser padrão e vira teimosia.
+  const jaEscolheuPadrao = useRef(false);
   useEffect(() => {
-    if (linhas && linhas.length > 0 && ativas.length === 0) {
-      const brasil = linhas.find((l) => l.categoria === 'historia');
-      if (brasil) setAtivas([brasil.id]);
+    if (jaEscolheuPadrao.current || !linhas || linhas.length === 0) return;
+    jaEscolheuPadrao.current = true;
+    const brasil = linhas.find((l) => l.categoria === 'historia');
+    if (brasil) setAtivas([brasil.id]);
+  }, [linhas]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('escala-linha-tempo', String(escala));
+    } catch {
+      /* sem persistência é aceitável; volta ao padrão na próxima abertura */
     }
-  }, [linhas, ativas.length]);
+  }, [escala]);
 
   // ---------------------------------------------------------------
   // Janela de anos
@@ -343,7 +406,9 @@ export function GavetaLinhaTempo({
   return (
     <div
       className="flex-none border-t border-borda bg-sup flex flex-col print:hidden"
-      style={{ height: altura }}
+      // 12px é o tamanho base desta gaveta; a escala multiplica, e todo texto
+      // aqui dentro é medido em `em`, então um valor só governa o módulo.
+      style={{ height: altura, fontSize: `calc(12px * ${escala})` }}
     >
       {/* Alça */}
       <div
@@ -383,7 +448,7 @@ export function GavetaLinhaTempo({
                 // fundo de texto branco: assim o contraste é o do próprio
                 // tema e não depende de cada cor da paleta ser escura o
                 // bastante — o que não era verdade nos temas noturnos.
-                className={`text-[11px] px-2 py-1 rounded-raio-s border-2 bg-card transition-colors cursor-pointer flex items-center gap-1.5 ${
+                className={`text-[0.92em] px-2 py-1 rounded-raio-s border-2 bg-card transition-colors cursor-pointer flex items-center gap-1.5 ${
                   ligada ? 'font-semibold' : 'border-borda2 text-tinta2 hover:text-tinta'
                 }`}
                 style={ligada ? { borderColor: cor, color: cor } : undefined}
@@ -407,6 +472,35 @@ export function GavetaLinhaTempo({
 
         {/* Controles visíveis: gesto escondido não conta como recurso. */}
         <div className="flex items-center gap-0.5 flex-none">
+          {/* Tamanho do texto **desta** gaveta. O zoom ao lado percorre o
+              tempo; este percorre a legibilidade, e são coisas diferentes. */}
+          <button
+            type="button"
+            onClick={() =>
+              setEscala((e) => ESCALAS[Math.max(0, ESCALAS.indexOf(e) - 1)] ?? e)
+            }
+            disabled={escala <= ESCALAS[0]}
+            title="Diminuir o texto da linha do tempo"
+            aria-label="Diminuir o texto"
+            className="px-1.5 py-1 rounded-raio-s text-tinta2 hover:text-tinta hover:bg-card transition-colors disabled:opacity-30 font-num text-[11px]"
+          >
+            A−
+          </button>
+          <button
+            type="button"
+            onClick={() =>
+              setEscala((e) => ESCALAS[Math.min(ESCALAS.length - 1, ESCALAS.indexOf(e) + 1)] ?? e)
+            }
+            disabled={escala >= ESCALAS[ESCALAS.length - 1]}
+            title="Aumentar o texto da linha do tempo"
+            aria-label="Aumentar o texto"
+            className="px-1.5 py-1 rounded-raio-s text-tinta2 hover:text-tinta hover:bg-card transition-colors disabled:opacity-30 font-num text-[14px]"
+          >
+            A+
+          </button>
+
+          <span className="w-px h-4 bg-borda mx-1" aria-hidden />
+
           <button
             type="button"
             onClick={() => aplicarZoom(1.3)}
@@ -448,7 +542,7 @@ export function GavetaLinhaTempo({
       </div>
 
       {avisoLimite && (
-        <p className="px-4 py-1.5 text-[11px] text-tinta2 bg-card2 border-b border-borda m-0">
+        <p className="px-4 py-1.5 text-[0.92em] text-tinta2 bg-card2 border-b border-borda m-0">
           {avisoLimite}
         </p>
       )}
@@ -490,15 +584,15 @@ export function GavetaLinhaTempo({
           const linha = linhas?.find((l) => l.id === linhaId);
           const cor = corDa(linha?.categoria);
           const daLinha = marcosPorLinha.get(linhaId) ?? [];
-          const rotulados = marcosComRotulo(daLinha, posicaoDoAno);
+          const rotulados = marcosComRotulo(daLinha, posicaoDoAno, escala);
 
           return (
             <div
               key={linhaId}
               className="relative border-b border-borda/50"
-              style={{ height: ALTURA_DA_FAIXA }}
+              style={{ height: ALTURA_DA_FAIXA * escala }}
             >
-              <span className="absolute left-1 top-0.5 font-num text-[9.5px] text-tinta3 z-10 pointer-events-none bg-sup/85 px-1 rounded flex items-center gap-1">
+              <span className="absolute left-1 top-0.5 font-num text-[0.79em] text-tinta3 z-10 pointer-events-none bg-sup/85 px-1 rounded flex items-center gap-1">
                 <Lock className="w-2.5 h-2.5 opacity-60" aria-hidden />
                 {linha?.titulo}
               </span>
@@ -535,7 +629,7 @@ export function GavetaLinhaTempo({
 
                     {/* Só rotula quem tem espaço; o resto fica no hover. */}
                     {temRotulo && (
-                      <span className="block font-num text-[9.5px] text-tinta2 whitespace-nowrap truncate w-[90px] group-hover:text-tinta">
+                      <span className="block font-num text-[0.79em] text-tinta2 whitespace-nowrap truncate w-[90px] group-hover:text-tinta">
                         {m.titulo}
                       </span>
                     )}
@@ -554,11 +648,12 @@ export function GavetaLinhaTempo({
           <FaixaDaVida
             linha={linhaPessoal}
             posicaoDoAno={posicaoDoAno}
+            escala={escala}
           />
         )}
 
         {ativas.length === 0 && (
-          <p className="p-4 text-sm text-tinta3 m-0">
+          <p className="p-4 text-[1.17em] text-tinta3 m-0">
             Nenhuma linha ligada. Escolha uma acima.
           </p>
         )}
@@ -569,20 +664,20 @@ export function GavetaLinhaTempo({
         <div className="flex-none border-t border-borda bg-card px-4 py-2.5 flex items-start gap-3">
           <Info className="w-4 h-4 text-acento flex-none mt-0.5" />
           <div className="flex-1 min-w-0">
-            <p className="m-0 text-sm text-tinta">
+            <p className="m-0 text-[1.17em] text-tinta">
               <strong>{marcoAberto.titulo}</strong>
               <span className="font-num text-tinta2"> · {marcoAberto.data_periodo_texto}</span>
             </p>
             {marcoAberto.descricao && (
-              <p className="m-0 text-xs text-tinta2 leading-relaxed">{marcoAberto.descricao}</p>
+              <p className="m-0 text-[1em] text-tinta2 leading-relaxed">{marcoAberto.descricao}</p>
             )}
             {marcoAberto.fonte_especifica && (
-              <p className="m-0 text-[11px] text-tinta3 italic">
+              <p className="m-0 text-[0.92em] text-tinta3 italic">
                 Fonte: {marcoAberto.fonte_especifica}
               </p>
             )}
             {vivosInfo && (
-              <p className="m-0 mt-1 text-[11px] text-acento">
+              <p className="m-0 mt-1 text-[0.92em] text-acento">
                 {vivosInfo.ids.length}{' '}
                 {vivosInfo.ids.length === 1 ? 'pessoa destacada' : 'pessoas destacadas'} na árvore
                 {vivosInfo.sem_data_de_nascimento > 0 &&
@@ -614,9 +709,11 @@ export function GavetaLinhaTempo({
 function FaixaDaVida({
   linha,
   posicaoDoAno,
+  escala,
 }: {
   linha: {
     nome: string;
+    sexo: string;
     ano_nascimento?: number | null;
     ano_falecimento?: number | null;
     is_vivo: boolean;
@@ -629,9 +726,11 @@ function FaixaDaVida({
     }>;
   };
   posicaoDoAno: (ano: number) => number;
+  escala: number;
 }) {
   const nasceu = linha.ano_nascimento!;
   const terminou = linha.ano_falecimento ?? (linha.is_vivo ? ANO_CORRENTE : null);
+  const cor = corDaPessoa(linha.sexo);
 
   const x0 = posicaoDoAno(nasceu);
   // Sem ano de fim conhecido, a barra vira um toco: mostra que a vida começou
@@ -639,19 +738,36 @@ function FaixaDaVida({
   const x1 = terminou != null ? posicaoDoAno(terminou) : x0 + 14;
   const larguraBarra = Math.max(6, x1 - x0);
 
+  // As alturas acompanham o texto: com fonte maior, rótulo em posição fixa
+  // encavalaria na barra.
+  const alturaBarra = 14 * escala;
+  const baseBarra = 22 * escala;
+  const baseAnos = 38 * escala;
+  const alturaTraco = 26 * escala;
+
   return (
     <div
-      className="relative border-t-2 border-acento/40 bg-card/50"
-      style={{ height: ALTURA_DA_VIDA }}
+      className="relative border-t-2 bg-card/50"
+      style={{ height: ALTURA_DA_VIDA * escala, borderTopColor: cor }}
     >
-      <span className="absolute left-1 top-0.5 font-num text-[9.5px] text-acento z-10 pointer-events-none bg-sup/85 px-1 rounded">
+      <span
+        className="absolute left-1 top-0.5 font-num text-[0.79em] z-10 pointer-events-none bg-sup/85 px-1 rounded"
+        style={{ color: cor }}
+      >
         {linha.nome}
       </span>
 
-      {/* A barra da vida */}
+      {/* A barra da vida, na cor da pessoa — a mesma do card na árvore. */}
       <span
-        className="absolute rounded-full bg-acento/70 border border-acento"
-        style={{ left: x0, width: larguraBarra, height: 14, bottom: 22 }}
+        className="absolute rounded-full"
+        style={{
+          left: x0,
+          width: larguraBarra,
+          height: alturaBarra,
+          bottom: baseBarra,
+          background: cor,
+          opacity: 0.8,
+        }}
         title={`${nasceu} – ${
           linha.ano_falecimento ?? (linha.is_vivo ? 'hoje' : 'sem data de falecimento')
         }`}
@@ -659,21 +775,22 @@ function FaixaDaVida({
 
       {/* Anos nas pontas, para não precisar cruzar com a régua */}
       <span
-        className="absolute font-num text-[9.5px] text-acento pointer-events-none"
-        style={{ left: x0, bottom: 38 }}
+        className="absolute font-num text-[0.79em] pointer-events-none"
+        style={{ left: x0, bottom: baseAnos, color: cor }}
       >
         {nasceu}
       </span>
-      {terminou != null && larguraBarra > 46 && (
+      {terminou != null && larguraBarra > 46 * escala && (
         <span
-          className="absolute font-num text-[9.5px] text-acento pointer-events-none"
-          style={{ left: x1 - 30, bottom: 38 }}
+          className="absolute font-num text-[0.79em] pointer-events-none"
+          style={{ left: x1 - 30 * escala, bottom: baseAnos, color: cor }}
         >
           {linha.ano_falecimento ?? 'hoje'}
         </span>
       )}
 
-      {/* Eventos como traços sobre a barra */}
+      {/* Eventos como traços sobre a barra, na mesma cor da vida a que
+          pertencem — antes saíam em cinza, soltos do que representavam. */}
       {linha.marcos
         .filter((m) => m.ano != null)
         .map((m, i) => (
@@ -689,8 +806,13 @@ function FaixaDaVida({
               .filter(Boolean)
               .join(' · ')}
           >
-            <span className="w-[2px] h-[26px] bg-tinta2/70" />
-            <span className="font-num text-[9px] text-tinta2 whitespace-nowrap">{m.tipo}</span>
+            <span
+              className="w-[3px] rounded-sm"
+              style={{ height: alturaTraco, background: cor }}
+            />
+            <span className="font-num text-[0.75em] text-tinta2 whitespace-nowrap">
+              {m.tipo}
+            </span>
           </span>
         ))}
     </div>
