@@ -55,40 +55,20 @@ aparecem os de menor relevância. Hoje a gaveta mostra só `relevancia = 'alta'`
 impressão — ver abaixo.
 
 ### Abas, com um "+" — o estúdio de linhas do tempo
-**Desenho proposto pelo Gabriel em 30/08/2026.** A fileira de camadas deixa de
-ser uma lista de interruptores e passa a se comportar como abas de navegador:
-abre-se uma linha, fecha-se outra, e um **`+`** no fim da fileira oferece duas
-coisas — abrir uma linha já salva no acervo, ou **criar uma nova**.
+**Spec escrita:** `fatias/10-estudio-linhas-do-tempo.md`. Recomenda partir em
+duas — **10a** (criar linha e marcos, abas com `+`) e **10b** (participação,
+visibilidade e a linha pessoal com duas origens).
 
-Criar uma linha significa poder acrescentar marcos a ela, e a cada marco anotar
-as **pessoas envolvidas**. Essas participações voltam na linha pessoal de quem
-foi marcado: é o que permite estudar a vida de alguém contra os acontecimentos
-de que participou, e não só contra a época em que viveu.
+Decisões já tomadas ali: a linha do usuário nasce `is_bloqueada = 0` e não
+afrouxa gatilho nenhum; a participação é sempre gravada e a visibilidade é só
+uma chave, com padrão visível e o interruptor no marco; a chave não existe para
+os eventos da própria vida; e a fronteira com a prosopografia fica em pessoa →
+marco, nunca pessoa → pessoa, sem rede de coocorrência.
 
-O esquema já aguenta a parte difícil, e por acidente feliz: `is_contexto` e
-`is_bloqueada` são **colunas separadas** desde a migration 005, e os gatilhos da
-013 disparam por `is_bloqueada`, não por `is_contexto`. Uma linha do usuário
-nasce `is_contexto = 1, is_bloqueada = 0` — editável, sem tocar em gatilho
-nenhum e sem risco para as cinco semeadas, que continuam imutáveis. O que falta
-no banco é só o vínculo marco↔pessoa, que hoje não existe.
-
-O que precisa ser decidido antes de escrever a spec:
-
-- **O que "pessoa envolvida" afirma.** "Esteve neste acontecimento" é um dado
-  novo sobre a pessoa, e vai querer aparecer na ficha, no relatório e na
-  exportação. É também a porta pela qual a prosopografia — fora de escopo por
-  decisão de 29/08/2026 — pode voltar sem que ninguém perceba. A fronteira
-  precisa estar escrita antes da primeira linha de código.
-- **O limite de camadas.** `LIMITE_DE_CAMADAS = 3` foi calibrado para
-  interruptores, onde o usuário liga sem pensar. Com abas ele escolhe uma por
-  uma, o que é diferente — mas o eixo continua tendo altura finita. Provável
-  saída: abas sem limite e a gaveta rolando na vertical.
-- **Onde a participação aparece na linha pessoal.** Um marco de que a pessoa
-  participou não é um evento da vida dela; misturar os dois sem distinção
-  visual faria a linha pessoal mentir.
-- **O que acontece na exportação.** O GEDCOM não tem lugar para "participou de
-  um marco histórico". Ou vira `NOTE`, ou fica de fora — e as duas escolhas
-  precisam ser ditas em voz alta.
+**Defeito que a spec revelou, e que vale corrigir antes de tudo:** um casamento
+gravado na união **não aparece na linha pessoal de nenhum dos dois cônjuges** —
+`montar_linha_pessoal` consulta só `WHERE e.pessoa_id = ?`. O dado está
+gravado; a tela não o mostra.
 
 ### Imprimir as linhas do tempo
 Hoje só o relatório imprime — a superfície é `#print-container`, revelada pelo
