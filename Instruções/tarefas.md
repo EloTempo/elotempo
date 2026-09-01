@@ -65,10 +65,10 @@ uma chave, com padrão visível e o interruptor no marco; a chave não existe pa
 os eventos da própria vida; e a fronteira com a prosopografia fica em pessoa →
 marco, nunca pessoa → pessoa, sem rede de coocorrência.
 
-**Defeito que a spec revelou, e que vale corrigir antes de tudo:** um casamento
-gravado na união **não aparece na linha pessoal de nenhum dos dois cônjuges** —
-`montar_linha_pessoal` consulta só `WHERE e.pessoa_id = ?`. O dado está
-gravado; a tela não o mostra.
+**Passo zero — feito em 01/09/2026.** O casamento agora é gravado na união, pelo
+painel de conexões, e aparece na linha do tempo dos dois cônjuges, com o nome do
+outro. Antes só existia "Casamento" na ficha da pessoa, onde o evento saía preso
+a um `pessoa_id` — o casamento era do marido *ou* da esposa.
 
 ### Imprimir as linhas do tempo
 Hoje só o relatório imprime — a superfície é `#print-container`, revelada pelo

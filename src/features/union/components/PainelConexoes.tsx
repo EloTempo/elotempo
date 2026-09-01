@@ -21,6 +21,7 @@ import { Button } from '../../../components/ui/Button';
 import { Input } from '../../../components/ui/Input';
 import { Modal } from '../../../components/ui/Modal';
 import { EscolherPessoa } from './EscolherPessoa';
+import { CasamentoDaUniao } from './CasamentoDaUniao';
 import {
   useConexoes,
   useAdicionarPais,
@@ -386,6 +387,10 @@ export function PainelConexoes({
                   </option>
                 ))}
               </select>
+
+              {/* Data e local do casamento — gravados na união, para valerem
+                  na linha do tempo dos dois. */}
+              <CasamentoDaUniao uniaoId={u.id} conjuge={nomeDe(conjuge)} />
 
               {u.filhos.length > 0 && (
                 <ul className="list-none m-0 p-0 flex flex-col gap-1">

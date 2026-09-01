@@ -225,6 +225,42 @@ pub async fn listar_eventos_pessoa(
     rows.into_iter().map(linha_para_evento).collect()
 }
 
+/// Os eventos de uma união — o casamento, tipicamente.
+///
+/// Existe porque um casamento **não é** evento de um dos cônjuges: pertence à
+/// união, e por isso vale para os dois. Sem este comando o painel de conexões
+/// não teria como mostrar nem gravar a data, e a única forma de registrar um
+/// casamento seria pendurá-lo numa das pessoas — que é como o programa deixava
+/// a linha do outro cônjuge muda.
+#[tauri::command]
+pub async fn listar_eventos_uniao(
+    uniao_id: String,
+    db: State<'_, SqlitePool>,
+) -> Resultado<Vec<Evento>> {
+    let rows = sqlx::query(
+        "SELECT e.id, e.pessoa_id, e.uniao_id, e.tipo_evento, e.data_texto,
+                e.data_qualificador, e.ano_inicio, e.ano_fim,
+                e.dia_inicio, e.mes_inicio, e.local_id,
+                CASE
+                  WHEN l.id IS NULL THEN NULL
+                  WHEN l.uf IS NOT NULL THEN l.nome || ', ' || l.uf
+                  ELSE l.nome || ', ' || p.nome
+                END AS local_nome,
+                e.rotulo_historico_livre, e.denominacao_religiosa,
+                e.instituicao, e.nota
+         FROM eventos e
+         LEFT JOIN locais l ON l.id = e.local_id
+         LEFT JOIN paises p ON p.id = l.pais_id
+         WHERE e.uniao_id = ?
+         ORDER BY (e.ano_inicio IS NULL), e.ano_inicio, e.tipo_evento",
+    )
+    .bind(&uniao_id)
+    .fetch_all(&*db)
+    .await?;
+
+    rows.into_iter().map(linha_para_evento).collect()
+}
+
 fn linha_para_evento(row: sqlx::sqlite::SqliteRow) -> Resultado<Evento> {
     Ok(Evento {
         id: row.try_get("id")?,

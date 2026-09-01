@@ -21,3 +21,13 @@ export const removerEvento = (id: string): Promise<void> =>
 /** Eventos da pessoa, já em ordem cronológica (sem data vai para o fim). */
 export const listarEventosPessoa = (pessoaId: string): Promise<Event[]> =>
   chamar<Event[]>('listar_eventos_pessoa', { pessoaId });
+
+/**
+ * Eventos da união — o casamento.
+ *
+ * Um casamento não pertence a nenhum dos dois cônjuges: pertence à união, e é
+ * o que o faz valer para os dois. Gravá-lo numa das pessoas deixaria a linha do
+ * tempo da outra muda sobre o próprio casamento.
+ */
+export const listarEventosUniao = (uniaoId: string): Promise<Event[]> =>
+  chamar<Event[]>('listar_eventos_uniao', { uniaoId });

@@ -620,7 +620,13 @@ function FaixaDaVida({
     ano_nascimento?: number | null;
     ano_falecimento?: number | null;
     is_vivo: boolean;
-    marcos: Array<{ tipo: string; data_texto?: string | null; local?: string | null; ano?: number | null }>;
+    marcos: Array<{
+      tipo: string;
+      data_texto?: string | null;
+      local?: string | null;
+      ano?: number | null;
+      com?: string | null;
+    }>;
   };
   posicaoDoAno: (ano: number) => number;
 }) {
@@ -675,7 +681,13 @@ function FaixaDaVida({
             key={`${m.tipo}-${i}`}
             className="absolute flex flex-col items-center"
             style={{ left: posicaoDoAno(m.ano!) - 1, bottom: 4 }}
-            title={`${m.tipo}: ${m.data_texto ?? ''}${m.local ? ' · ' + m.local : ''}`}
+            title={[
+              `${m.tipo}: ${m.data_texto ?? 'sem data'}`,
+              m.com ? `com ${m.com}` : null,
+              m.local,
+            ]
+              .filter(Boolean)
+              .join(' · ')}
           >
             <span className="w-[2px] h-[26px] bg-tinta2/70" />
             <span className="font-num text-[9px] text-tinta2 whitespace-nowrap">{m.tipo}</span>

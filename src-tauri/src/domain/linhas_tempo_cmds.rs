@@ -70,6 +70,12 @@ pub struct MarcoPessoal {
     pub data_texto: Option<String>,
     pub local: Option<String>,
     pub ano: Option<i64>,
+    /// Com quem, nos eventos que pertencem a uma união.
+    ///
+    /// Um casamento é evento de duas vidas, e sem isto a linha de quem teve
+    /// dois casamentos mostraria duas marcas idênticas. Fica vazio quando o
+    /// cônjuge é placeholder: "casou com [desconhecido]" não informa nada.
+    pub com: Option<String>,
 }
 
 #[derive(Debug, Serialize)]
@@ -174,9 +180,20 @@ pub async fn montar_linha_pessoal(
     pessoa_id: String,
     db: State<'_, SqlitePool>,
 ) -> Resultado<LinhaPessoal> {
+    linha_pessoal(&db, &pessoa_id).await
+}
+
+/// O miolo de [`montar_linha_pessoal`], sem o Tauri.
+///
+/// Separado pela mesma razão que `regras.rs`: recebendo `&SqlitePool` em vez de
+/// `State`, dá para testá-lo inteiro contra um banco em memória. Duplicar estas
+/// consultas dentro do teste seria pior do que não testar — o teste passaria a
+/// medir uma consulta que não é a que roda.
+pub async fn linha_pessoal(db: &SqlitePool, pessoa_id: &str) -> Resultado<LinhaPessoal> {
+    let pessoa_id = pessoa_id.to_string();
     let pessoa = sqlx::query("SELECT nome, sobrenome, is_vivo FROM pessoas WHERE id = ?")
         .bind(&pessoa_id)
-        .fetch_optional(&*db)
+        .fetch_optional(db)
         .await?
         .ok_or_else(|| {
             crate::domain::erros::ErroDominio::PessoaNaoEncontrada(pessoa_id.clone())
@@ -186,7 +203,8 @@ pub async fn montar_linha_pessoal(
     let sobrenome: Option<String> = pessoa.try_get("sobrenome")?;
     let is_vivo: bool = pessoa.try_get("is_vivo")?;
 
-    let sql = format!(
+    // Os eventos da própria pessoa.
+    let proprios = sqlx::query(
         "SELECT e.tipo_evento, e.data_texto, e.ano_inicio,
                 COALESCE(e.rotulo_historico_livre,
                          CASE WHEN l.id IS NULL THEN NULL
@@ -195,23 +213,23 @@ pub async fn montar_linha_pessoal(
          FROM eventos e
          LEFT JOIN locais l ON l.id = e.local_id
          LEFT JOIN paises p ON p.id = l.pais_id
-         WHERE e.pessoa_id = ?
-         ORDER BY (e.ano_inicio IS NULL), e.ano_inicio"
-    );
+         WHERE e.pessoa_id = ?",
+    )
+    .bind(&pessoa_id)
+    .fetch_all(db)
+    .await?;
 
-    let linhas = sqlx::query(&sql)
-        .bind(&pessoa_id)
-        .fetch_all(&*db)
-        .await?;
-
-    let mut marcos = Vec::with_capacity(linhas.len());
+    let mut marcos = Vec::with_capacity(proprios.len());
     let mut ano_nascimento = None;
     let mut ano_falecimento = None;
 
-    for l in linhas {
+    for l in proprios {
         let tipo: String = l.try_get("tipo_evento")?;
         let ano: Option<i64> = l.try_get("ano_inicio")?;
 
+        // A faixa da vida sai só dos eventos próprios: nascer e morrer não são
+        // eventos de união, e derivá-los de lá abriria caminho para uma barra
+        // de vida montada a partir de um casamento.
         if tipo == tipos::NASCIMENTO && ano_nascimento.is_none() {
             ano_nascimento = ano;
         }
@@ -224,8 +242,56 @@ pub async fn montar_linha_pessoal(
             data_texto: l.try_get("data_texto")?,
             local: l.try_get("local")?,
             ano,
+            com: None,
         });
     }
+
+    // Os eventos das uniões de que a pessoa participa.
+    //
+    // Um casamento é evento da união — `eventos` tem `pessoa_id` E `uniao_id`,
+    // com CHECK exigindo um dos dois. Consultando só por `pessoa_id`, esta
+    // função deixava o casamento fora da linha dos **dois** cônjuges: o dado
+    // gravado e a tela calada.
+    //
+    // `OR` entre os slots, nunca `AND` — o mesmo engano já fez uma união
+    // inteira sumir da busca quando um dos cônjuges ficava fora do recorte.
+    let de_uniao = sqlx::query(
+        "SELECT e.tipo_evento, e.data_texto, e.ano_inicio,
+                COALESCE(e.rotulo_historico_livre,
+                         CASE WHEN l.id IS NULL THEN NULL
+                              WHEN l.uf IS NOT NULL THEN l.nome || ', ' || l.uf
+                              ELSE l.nome || ', ' || pa.nome END) AS local,
+                CASE
+                  WHEN outro.is_placeholder = 1 THEN NULL
+                  ELSE TRIM(outro.nome || ' ' || COALESCE(outro.sobrenome, ''))
+                END AS com
+         FROM eventos e
+         JOIN unioes u ON u.id = e.uniao_id
+         LEFT JOIN pessoas outro
+                ON outro.id = CASE WHEN u.slot_masculino_id = ?1
+                                   THEN u.slot_feminino_id
+                                   ELSE u.slot_masculino_id END
+         LEFT JOIN locais l ON l.id = e.local_id
+         LEFT JOIN paises pa ON pa.id = l.pais_id
+         WHERE u.slot_masculino_id = ?1 OR u.slot_feminino_id = ?1",
+    )
+    .bind(&pessoa_id)
+    .fetch_all(db)
+    .await?;
+
+    for l in de_uniao {
+        marcos.push(MarcoPessoal {
+            tipo: l.try_get("tipo_evento")?,
+            data_texto: l.try_get("data_texto")?,
+            local: l.try_get("local")?,
+            ano: l.try_get("ano_inicio")?,
+            com: l.try_get("com")?,
+        });
+    }
+
+    // Ordenar depois de juntar as duas origens. Quem não tem ano vai para o
+    // fim: no eixo não tem onde ficar, mas continua existindo na lista.
+    marcos.sort_by(|a, b| (a.ano.is_none(), a.ano).cmp(&(b.ano.is_none(), b.ano)));
 
     Ok(LinhaPessoal {
         pessoa_id,
@@ -364,7 +430,7 @@ mod testes {
     // ---------- Conteúdo semeado ----------
 
     #[tokio::test]
-    async fn as_quatro_linhas_de_contexto_estao_semeadas() {
+    async fn as_linhas_de_contexto_semeadas_sao_exatamente_estas() {
         let pool = pool_de_teste().await;
         let linhas: Vec<String> =
             sqlx::query_scalar("SELECT titulo FROM linhas_tempo WHERE is_contexto = 1 ORDER BY id")
@@ -372,11 +438,20 @@ mod testes {
                 .await
                 .unwrap();
 
-        assert_eq!(linhas.len(), 4, "{linhas:?}");
-        assert!(linhas.contains(&"História do Brasil".to_string()));
-        assert!(linhas.contains(&"Presidentes da República".to_string()));
-        assert!(linhas.contains(&"A moeda de cada época".to_string()));
-        assert!(linhas.contains(&"Tecnologias de acesso público".to_string()));
+        const ESPERADAS: [&str; 5] = [
+            "História do Brasil",
+            "Presidentes da República",
+            "A moeda de cada época",
+            "Tecnologias de acesso público",
+            "Este programa",
+        ];
+
+        for titulo in ESPERADAS {
+            assert!(linhas.contains(&titulo.to_string()), "falta {titulo}: {linhas:?}");
+        }
+        // A contagem exata é o que pega migration semeando linha a mais sem
+        // querer — e, quando a próxima entrar, obriga a atualizar esta lista.
+        assert_eq!(linhas.len(), ESPERADAS.len(), "{linhas:?}");
     }
 
     #[tokio::test]
@@ -647,5 +722,140 @@ mod testes {
 
         let texto: String = linhas[0].try_get("data_texto").unwrap();
         assert_eq!(texto, "cerca de 1912", "o eixo usa o ano, a tela usa o texto");
+    }
+
+    // ---------- Eventos de união na linha pessoal ----------
+    //
+    // Um casamento pertence à união, não a um dos cônjuges. Antes destes
+    // testes, `montar_linha_pessoal` consultava só por `pessoa_id` e o
+    // casamento não aparecia na linha de **nenhum** dos dois.
+
+    async fn casal(pool: &SqlitePool) -> (String, String, String) {
+        let ele = regras::criar_pessoa(
+            pool,
+            NovaPessoa {
+                nome: "Antônio".into(),
+                sobrenome: Some("Silva".into()),
+                sexo: "M".into(),
+                minibiografia: None,
+                is_vivo: false,
+                foto_url: None,
+            },
+        )
+        .await
+        .unwrap();
+        let ela = regras::criar_pessoa(
+            pool,
+            NovaPessoa {
+                nome: "Maria".into(),
+                sobrenome: Some("Souza".into()),
+                sexo: "F".into(),
+                minibiografia: None,
+                is_vivo: false,
+                foto_url: None,
+            },
+        )
+        .await
+        .unwrap();
+        let u = regras::criar_uniao(pool, Some(&ele), Some(&ela), "casamento")
+            .await
+            .unwrap();
+        (ele, ela, u)
+    }
+
+    async fn casamento(pool: &SqlitePool, uniao_id: &str, texto: &str, ano: i64) {
+        sqlx::query(
+            "INSERT INTO eventos (id,uniao_id,tipo_evento,data_texto,data_qualificador,ano_inicio)
+             VALUES (?,?,?,?,'exata',?)",
+        )
+        .bind(uuid::Uuid::new_v4().to_string())
+        .bind(uniao_id)
+        .bind(tipos::CASAMENTO)
+        .bind(texto)
+        .bind(ano)
+        .execute(pool)
+        .await
+        .unwrap();
+    }
+
+    #[tokio::test]
+    async fn o_casamento_aparece_na_linha_dos_dois_conjuges() {
+        let pool = pool_de_teste().await;
+        let (ele, ela, u) = casal(&pool).await;
+        casamento(&pool, &u, "12 de março de 1945", 1945).await;
+
+        for pessoa_id in [&ele, &ela] {
+            let linha = linha_pessoal(&pool, pessoa_id).await.unwrap();
+            let m = linha
+                .marcos
+                .iter()
+                .find(|m| m.tipo == tipos::CASAMENTO)
+                .unwrap_or_else(|| panic!("casamento faltou na linha de {pessoa_id}"));
+            assert_eq!(m.data_texto.as_deref(), Some("12 de março de 1945"));
+            assert_eq!(m.ano, Some(1945));
+        }
+    }
+
+    #[tokio::test]
+    async fn cada_conjuge_ve_o_nome_do_outro() {
+        let pool = pool_de_teste().await;
+        let (ele, ela, u) = casal(&pool).await;
+        casamento(&pool, &u, "1945", 1945).await;
+
+        let dele = linha_pessoal(&pool, &ele).await.unwrap();
+        let dela = linha_pessoal(&pool, &ela).await.unwrap();
+
+        assert_eq!(dele.marcos[0].com.as_deref(), Some("Maria Souza"));
+        assert_eq!(dela.marcos[0].com.as_deref(), Some("Antônio Silva"));
+    }
+
+    #[tokio::test]
+    async fn conjuge_placeholder_nao_vira_nome() {
+        // Slot sem nome recebe placeholder (invariante 2). "Casou com
+        // desconhecido" não informa nada — melhor não dizer com quem.
+        let pool = pool_de_teste().await;
+        let ele = pessoa(&pool, "Antônio", false).await;
+        sqlx::query("UPDATE pessoas SET sexo = 'M' WHERE id = ?")
+            .bind(&ele)
+            .execute(&pool)
+            .await
+            .unwrap();
+        let u = regras::criar_uniao(&pool, Some(&ele), None, "casamento")
+            .await
+            .unwrap();
+        casamento(&pool, &u, "1945", 1945).await;
+
+        let linha = linha_pessoal(&pool, &ele).await.unwrap();
+        assert_eq!(linha.marcos[0].tipo, tipos::CASAMENTO);
+        assert_eq!(linha.marcos[0].com, None);
+    }
+
+    #[tokio::test]
+    async fn o_casamento_nao_inventa_faixa_de_vida() {
+        // A barra da vida sai de nascimento e falecimento. Se o casamento
+        // pudesse alimentá-la, quem só tem casamento registrado ganharia uma
+        // vida que começa no dia do casório.
+        let pool = pool_de_teste().await;
+        let (ele, _ela, u) = casal(&pool).await;
+        casamento(&pool, &u, "1945", 1945).await;
+
+        let linha = linha_pessoal(&pool, &ele).await.unwrap();
+        assert_eq!(linha.ano_nascimento, None);
+        assert_eq!(linha.ano_falecimento, None);
+        assert_eq!(linha.marcos.len(), 1);
+    }
+
+    #[tokio::test]
+    async fn as_duas_origens_saem_em_ordem_cronologica() {
+        let pool = pool_de_teste().await;
+        let (ele, _ela, u) = casal(&pool).await;
+        evento(&pool, &ele, tipos::NASCIMENTO, "1920", 1920).await;
+        evento(&pool, &ele, tipos::FALECIMENTO, "1990", 1990).await;
+        casamento(&pool, &u, "1945", 1945).await;
+
+        let linha = linha_pessoal(&pool, &ele).await.unwrap();
+        let anos: Vec<Option<i64>> = linha.marcos.iter().map(|m| m.ano).collect();
+        assert_eq!(anos, vec![Some(1920), Some(1945), Some(1990)]);
+        assert_eq!(linha.marcos[1].tipo, tipos::CASAMENTO);
     }
 }

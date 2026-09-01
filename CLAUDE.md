@@ -170,6 +170,17 @@ apague o aviso.
   com React justamente por isso.
 - **`AND` entre os dois slots** na busca de uniões fazia a união inteira sumir
   quando um cônjuge ficava fora do recorte. É `OR`.
+- **Casamento é evento da união, não de um cônjuge.** `eventos` tem
+  `pessoa_id` **e** `uniao_id`, com `CHECK` exigindo um dos dois. Consulta que
+  filtra só por `pessoa_id` deixa o casamento fora da linha do tempo dos
+  **dois** — foi o que aconteceu em `montar_linha_pessoal`. Ao ler eventos de
+  uma pessoa, pergunte-se se o fato pertence a ela ou à união.
+- **Migration nova não recompila sozinha.** `sqlx::migrate!` embute as
+  migrations em tempo de compilação, e o cargo não invalida a build quando um
+  arquivo *novo* aparece em `migrations/`: os testes rodam com o conjunto
+  antigo e passam sem exercitar o que mudou. Já aconteceu — a 016 semeou uma
+  quinta linha de contexto e o teste que afirmava haver quatro continuou verde.
+  O `build.rs` agora emite `cargo:rerun-if-changed=migrations`.
 
 ---
 

@@ -14,7 +14,8 @@ use commands::tree_cmds::{buscar_grafo_arvore, buscar_pessoas};
 use domain::atributos_cmds::*;
 use domain::core_cmds::*;
 use domain::eventos_cmds::{
-    atualizar_evento, criar_evento, listar_eventos_pessoa, remover_evento,
+    atualizar_evento, criar_evento, listar_eventos_pessoa, listar_eventos_uniao,
+    remover_evento,
 };
 use domain::documentos_cmds::{
     anexar_documento, definir_foto_principal, listar_documentos_pessoa, remover_documento,
@@ -116,6 +117,7 @@ fn main() {
             atualizar_evento,
             remover_evento,
             listar_eventos_pessoa,
+            listar_eventos_uniao,
             // Atributos de vida em lista
             adicionar_religiao,
             remover_religiao,

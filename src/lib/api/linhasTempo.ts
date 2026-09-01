@@ -41,6 +41,8 @@ export interface MarcoPessoal {
   data_texto?: string | null;
   local?: string | null;
   ano?: number | null;
+  /** Com quem, nos eventos que pertencem a uma união (o casamento). */
+  com?: string | null;
 }
 
 export interface LinhaPessoal {
