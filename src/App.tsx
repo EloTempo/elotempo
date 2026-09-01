@@ -11,7 +11,7 @@
 
 import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { FileDown, FileText, Plus, TreeDeciduous } from 'lucide-react';
+import { FileDown, FileText, FileUp, Plus, TreeDeciduous } from 'lucide-react';
 import { Button } from './components/ui/Button';
 import { Modal } from './components/ui/Modal';
 import { TreeCanvas } from './components/tree/TreeCanvas';
@@ -21,6 +21,7 @@ import { PainelConexoes } from './features/union/components/PainelConexoes';
 import { PainelBusca } from './features/search/components/PainelBusca';
 import { DialogoRelatorio } from './features/reports/components/DialogoRelatorio';
 import { DialogoExportar } from './features/export/components/DialogoExportar';
+import { DialogoImportar } from './features/import/components/DialogoImportar';
 import { GavetaLinhaTempo } from './features/timeline/components/GavetaLinhaTempo';
 import { useCriarPessoa, usePessoas } from './features/person/hooks/usePessoas';
 import { buscarGrafoArvore } from './lib/api';
@@ -56,6 +57,7 @@ export default function App() {
   const [fichaAberta, setFichaAberta] = useState<string | null>(null);
   const [relatorioAberto, setRelatorioAberto] = useState(false);
   const [exportarAberto, setExportarAberto] = useState(false);
+  const [importarAberto, setImportarAberto] = useState(false);
   // Vem da linha do tempo: quem estava vivo no marco clicado. `null` = sem
   // destaque ativo, que é diferente de lista vazia.
   const [destacadosIds, setDestacadosIds] = useState<string[] | null>(null);
@@ -127,6 +129,11 @@ export default function App() {
         <Button size="sm" variant="secondary" onClick={() => setRelatorioAberto(true)}>
           <FileText className="w-4 h-4 mr-1" />
           Relatório
+        </Button>
+
+        <Button size="sm" variant="secondary" onClick={() => setImportarAberto(true)}>
+          <FileUp className="w-4 h-4 mr-1" />
+          Importar
         </Button>
 
         <Button size="sm" variant="secondary" onClick={() => setExportarAberto(true)}>
@@ -222,6 +229,18 @@ export default function App() {
         <GavetaLinhaTempo
           pessoaSelecionadaId={selecionadaId}
           onDestacar={setDestacadosIds}
+        />
+      )}
+
+      {importarAberto && (
+        <DialogoImportar
+          onFechar={() => setImportarAberto(false)}
+          onImportado={() => {
+            // A raiz pode ter deixado de fazer sentido: soltando-a, o efeito
+            // que escolhe a primeira pessoa remonta a árvore sozinho.
+            setSelecionadaId(null);
+            setRaizId(null);
+          }}
         />
       )}
 

@@ -9,7 +9,7 @@
  * o Rust. A capability concede `dialog:allow-save`, nunca `fs:`.
  */
 
-import { save } from '@tauri-apps/plugin-dialog';
+import { open, save } from '@tauri-apps/plugin-dialog';
 import { chamar } from './index';
 
 export interface OpcoesExportacao {
@@ -55,4 +55,64 @@ export async function escolherOndeSalvar(extensao: string): Promise<string | nul
     ],
   });
   return escolhido ?? null;
+}
+
+// ---------------------------------------------------------------------------
+// Importação (fatia 09)
+// ---------------------------------------------------------------------------
+
+export interface OpcaoConflito {
+  valor: string;
+  rotulo: string;
+}
+
+export interface Conflito {
+  /** Chave estável dentro do arquivo — é por ela que a decisão volta. */
+  id: string;
+  tipo: 'varios_famc' | 'slot_incompativel' | 'uniao_vazia' | 'ciclo' | string;
+  titulo: string;
+  explicacao: string;
+  opcoes: OpcaoConflito[];
+  padrao: string;
+}
+
+export interface AnalisePrevia {
+  codificacao: string;
+  versao: string;
+  pessoas: number;
+  unioes: number;
+  conflitos: Conflito[];
+  avisos: string[];
+}
+
+export interface ResumoImportacao {
+  pessoas: number;
+  unioes: number;
+  filhos: number;
+  placeholders: number;
+  eventos: number;
+  nomes: number;
+  atributos: number;
+  descartados: string[];
+}
+
+/** Lê o arquivo e devolve o que será perguntado. Não grava nada. */
+export const analisarGedcom = (caminho: string): Promise<AnalisePrevia> =>
+  chamar<AnalisePrevia>('analisar_gedcom', { caminho });
+
+/** Aplica com as decisões tomadas. Tudo ou nada. */
+export const importarGedcom = (
+  caminho: string,
+  decisoes: Record<string, string>,
+): Promise<ResumoImportacao> =>
+  chamar<ResumoImportacao>('importar_gedcom', { caminho, decisoes });
+
+/** Abre o diálogo de escolher arquivo. `null` se a pessoa cancelar. */
+export async function escolherGedcom(): Promise<string | null> {
+  const escolhido = await open({
+    multiple: false,
+    directory: false,
+    filters: [{ name: 'GEDCOM ou GEDZip', extensions: ['ged', 'gdz', 'zip'] }],
+  });
+  return typeof escolhido === 'string' ? escolhido : null;
 }

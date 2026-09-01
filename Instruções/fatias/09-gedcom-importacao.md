@@ -1,9 +1,8 @@
 # Fatia 09 — Importar GEDCOM
 
-> **Plano, não spec fechada.** As políticas abaixo foram decididas com o autor
-> em 30/08/2026 e não devem ser reabertas. O detalhamento de emissão e telas
-> se completa quando a fatia 08 (exportar) estiver pronta — porque o exportador
-> produz os arquivos de teste que vão calibrar este trabalho.
+> **Entregue em 01/09/2026.** As políticas abaixo foram decididas com o autor
+> em 30/08/2026 e valeram todas. O que a implementação acrescentou está na
+> seção 8.
 
 ---
 
@@ -129,3 +128,43 @@ Exportar o acervo, importar o arquivo num acervo vazio e comparar: **as duas
 
 É o teste mais forte possível para os dois lados, e só existe porque a
 exportação vem primeiro.
+
+
+---
+
+## 8. O que a implementação acrescentou
+
+- **`.gdz` também entra.** Simetria com a exportação: o que este programa
+  empacota, ele desempacota. A detecção é pela assinatura do zip, não pela
+  extensão — arquivo renomeado é comum, e o conteúdo não mente.
+- **A aciclia é verificada em memória**, sobre o grafo do arquivo, antes de
+  qualquer gravação. É onde o grafo é conhecido inteiro, o que torna a checagem
+  exata e barata — melhor do que consultar o banco a cada `INSERT`.
+- **`SEX` ausente virou `U`, e isso não é conflito.** `U` cabe nos dois slots
+  (`sexo_cabe_no_slot`), então não trava união nenhuma. A tabela da seção 2 o
+  listava como pergunta; na prática é só um padrão.
+- **Lados invertidos são trocados, não descartados.** `HUSB` mulher e `WIFE`
+  homem é engano comum de arquivo antigo; trocar resolve sem inventar
+  desconhecido, e é a opção sugerida quando os dois cabem invertidos.
+- **`NATI` não cria país.** `nacionalidades_pessoa` aponta para `paises`. O que
+  não casar com a lista vira aviso — inventar encheria a tabela de referência
+  com "Brasil", "BRASIL" e "Brazil" como três países.
+- **O importador não chama `regras.rs`.** As funções de escrita de lá recebem
+  `&SqlitePool` e gravariam por fora da transação, quebrando o "falhou, nada
+  entra". Reusadas são as funções puras; duplicado é só o `INSERT`, e o índice
+  único de `uniao_filhos` segue como última linha de defesa.
+
+## 9. Critérios de aceite
+
+- [x] Arquivo 5.5.1 em ANSEL importa "José" e "Conceição" sem estragar.
+- [x] `CONC`/`CONT` não viram campos falsos.
+- [x] `FAMC` múltiplo vira pergunta, e só uma filiação entra.
+- [x] `FAM` de mesmo sexo vira pergunta, com a saída de descartar.
+- [x] Ciclo no arquivo não entra no acervo.
+- [x] União sem pais nomeados ganha dois desconhecidos, ou é descartada.
+- [x] Falha no meio não deixa acervo pela metade (teste com gatilho).
+- [x] Exportar e reimportar devolve a mesma árvore.
+- [x] `npm run verificar` passa.
+- [ ] Importar um arquivo real, gerado por outro programa. Os testes usam
+      arquivos que este projeto escreve ou que eu escrevi à mão; arquivo de
+      verdade só se prova com arquivo de verdade.

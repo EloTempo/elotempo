@@ -132,7 +132,7 @@ perder e para continuarem passando pelo TypeScript. Cada um traz um aviso no
 topo. **Não são features** — não os cite como prontos:
 
 `UnionEditor` · `TimelineDrawer` · `ReportGenerator` ·
-`SearchAndStatsPanel` · `GedcomImportWizard`
+`SearchAndStatsPanel`
 
 O `UnionEditor` foi superado na prática pelo `PainelConexoes`, que é a tela de
 conexões que realmente funciona. Ele segue guardado porque desenha uma tela
@@ -346,6 +346,35 @@ com `PHRASE`. O GEDZip, por sua vez, exige que o arquivo interno se chame
 
 O `escolher onde salvar` é do frontend (`dialog:allow-save`); quem escreve o
 arquivo é o Rust. **Continua valendo: nada de `fs:` na capability.**
+
+**Importar GEDCOM** (fatia 09): `gedcom::lexico` decodifica e quebra em linhas;
+`gedcom::importador` monta a árvore de registros, analisa e aplica. Aceita
+5.5.1 e 7.0, `.ged` solto ou `.gdz`.
+
+- **Ler é tolerante, escrever é estrito.** O exportador nunca emite `1 NICK`,
+  mas o importador aceita — arquivo de terceiro usa. A regra vale em geral.
+- **Duas fases.** `analisar_gedcom` não grava nada e devolve as perguntas;
+  `importar_gedcom` recebe as respostas e grava **em transação**. Falhou, nada
+  entra: meio acervo é pior do que nenhum, e há teste com gatilho provando.
+- **As invariantes não se afrouxam para caber um arquivo.** `FAMC` múltiplo,
+  `FAM` de mesmo sexo, união sem pais e ciclo viram *pergunta*, com nomes na
+  frase. A aciclia é verificada **em memória, sobre o grafo do arquivo**, onde
+  ele é conhecido inteiro — não a cada `INSERT`.
+- **O importador não chama `regras.rs`**, e é de propósito: as funções de lá
+  recebem `&SqlitePool` e gravariam por fora da transação. O que se reusa são
+  as funções puras (`sexo_cabe_no_slot`, `validar_tipo_vinculo`); duplicado é
+  só o `INSERT`, e o índice único de `uniao_filhos` continua sendo a rede.
+- **Codificação é onde nome brasileiro morre em silêncio.** ANSEL põe o acento
+  **antes** da letra; BOM manda mais do que o `1 CHAR` declarado; e o último
+  recurso é Windows-1252, que nunca falha. Tem teste com "José" e "Conceição"
+  em cada codificação.
+- **`PLAC` entra como `rotulo_historico_livre`, nunca como município.** Casar
+  o texto do outro programa com o IBGE é mesclagem, fora do escopo da fatia.
+  Já `NATI` aponta para `paises`: o que não casar vira aviso, nunca país novo.
+
+O teste que segura tudo é `exportar_e_reimportar_devolve_a_mesma_arvore` —
+exportar, reimportar num acervo vazio e comparar. **Se você mexer num dos dois
+lados, é ele que vai avisar.**
 
 ---
 

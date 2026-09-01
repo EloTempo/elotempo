@@ -5,7 +5,7 @@ especificação diz *o que* o produto é; este arquivo diz *onde o trabalho est�
 
 Cada fatia vertical entregue tem uma spec própria em `Instruções/fatias/`.
 
-Última revisão: **30/08/2026**.
+Última revisão: **01/09/2026**.
 
 ---
 
@@ -23,6 +23,7 @@ Cada fatia vertical entregue tem uma spec própria em `Instruções/fatias/`.
 | 06 | Busca multicritério | `fatias/06-busca-multicriterio.md` |
 | 07 | Linhas do tempo — a gaveta | `fatias/07-linhas-do-tempo-gaveta.md` |
 | 08 | Exportar GEDCOM 7.0 | `fatias/08-gedcom-exportacao.md` |
+| 09 | Importar GEDCOM 5.5.1 e 7.0 | `fatias/09-gedcom-importacao.md` |
 
 Os nove itens do MVP (seção 9) estão fechados.
 
@@ -30,10 +31,10 @@ Os nove itens do MVP (seção 9) estão fechados.
 
 ## A seguir
 
-### Fatia 09 — Importar GEDCOM
-Spec escrita em `fatias/09-gedcom-importacao.md`. Aceita 5.5.1 e 7.0; conflitos
-resolvidos caso a caso pelo usuário. O exportador já entrega o melhor teste que
-o importador pode ter: exportar, reimportar, conferir se o acervo volta igual.
+### Fatia 10 — O estúdio de linhas do tempo
+Spec escrita em `fatias/10-estudio-linhas-do-tempo.md`, com a recomendação de
+partir em **10a** (criar linha e marcos, abas com `+`) e **10b** (participação,
+visibilidade, linha pessoal com duas origens).
 
 ---
 

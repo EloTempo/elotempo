@@ -43,14 +43,14 @@ impl Slot {
     }
 
     /// Sexo dado a um placeholder criado para preencher este slot.
-    fn sexo_padrao(&self) -> &'static str {
+    pub fn sexo_padrao(&self) -> &'static str {
         match self {
             Slot::Masculino => "M",
             Slot::Feminino => "F",
         }
     }
 
-    fn nome_placeholder(&self) -> &'static str {
+    pub fn nome_placeholder(&self) -> &'static str {
         match self {
             Slot::Masculino => "Desconhecido",
             Slot::Feminino => "Desconhecida",

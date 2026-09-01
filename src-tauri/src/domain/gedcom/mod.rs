@@ -6,6 +6,10 @@
 
 pub mod escritor;
 pub mod exportador;
+pub mod importador;
+#[cfg(test)]
+mod testes_importacao;
+pub mod lexico;
 
 use std::io::Write;
 use std::path::Path;
@@ -135,6 +139,70 @@ pub async fn extensao_de_exportacao(
 /// do pacote são relativos a ela.
 #[allow(dead_code)]
 const _PASTA: &str = PASTA_MIDIA;
+
+// ---------------------------------------------------------------------------
+// Importação (fatia 09)
+// ---------------------------------------------------------------------------
+
+/// Lê os bytes do arquivo escolhido, aceitando `.ged` solto ou `.gdz`.
+///
+/// Simetria com a exportação: o que este programa empacota, ele desempacota.
+/// Dentro do GEDZip o arquivo se chama `gedcom.ged` — é o que o 7.0 exige.
+fn bytes_do_arquivo(caminho: &Path) -> Resultado<Vec<u8>> {
+    let bruto = std::fs::read(caminho)
+        .map_err(|e| ErroDominio::Persistencia(format!("não consegui ler o arquivo: {e}")))?;
+
+    // Assinatura de zip. Confiar na extensão seria pior: arquivo renomeado é
+    // comum, e o conteúdo não mente.
+    if !bruto.starts_with(b"PK\x03\x04") {
+        return Ok(bruto);
+    }
+
+    let cursor = std::io::Cursor::new(&bruto);
+    let mut zip = zip::ZipArchive::new(cursor)
+        .map_err(|e| ErroDominio::Persistencia(format!("pacote ilegível: {e}")))?;
+
+    // `gedcom.ged` é o nome canônico; se não houver, o primeiro `.ged` serve —
+    // pacote gerado por outro programa pode ter batizado diferente.
+    let nomes: Vec<String> = zip.file_names().map(str::to_string).collect();
+    let escolhido = nomes
+        .iter()
+        .find(|n| n.eq_ignore_ascii_case("gedcom.ged"))
+        .or_else(|| nomes.iter().find(|n| n.to_ascii_lowercase().ends_with(".ged")))
+        .cloned()
+        .ok_or_else(|| ErroDominio::ValorInvalido {
+            campo: "arquivo".into(),
+            valor: "o pacote não contém nenhum .ged".into(),
+        })?;
+
+    let mut entrada = zip
+        .by_name(&escolhido)
+        .map_err(|e| ErroDominio::Persistencia(format!("falha ao abrir {escolhido}: {e}")))?;
+    let mut bytes = Vec::new();
+    std::io::Read::read_to_end(&mut entrada, &mut bytes)
+        .map_err(|e| ErroDominio::Persistencia(format!("falha ao ler {escolhido}: {e}")))?;
+    Ok(bytes)
+}
+
+/// Lê o arquivo e devolve o que será perguntado. **Não grava nada.**
+#[tauri::command]
+pub async fn analisar_gedcom(caminho: String) -> Resultado<importador::AnalisePrevia> {
+    let bytes = bytes_do_arquivo(Path::new(&caminho))?;
+    let lido = importador::ler(&bytes)?;
+    Ok(importador::analisar(&lido))
+}
+
+/// Aplica a importação com as decisões tomadas. Tudo ou nada.
+#[tauri::command]
+pub async fn importar_gedcom(
+    caminho: String,
+    decisoes: importador::Decisoes,
+    db: State<'_, SqlitePool>,
+) -> Resultado<importador::ResumoImportacao> {
+    let bytes = bytes_do_arquivo(Path::new(&caminho))?;
+    let lido = importador::ler(&bytes)?;
+    importador::aplicar(&db, &lido, &decisoes).await
+}
 
 #[cfg(test)]
 mod testes {
