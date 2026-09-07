@@ -1,0 +1,298 @@
+# TEMA: Independência do Brasil (1822) — figuras centrais
+# CONFIABILIDADE geral: documentada
+# FONTES: Museu Imperial; Arquivo Nacional; Biblioteca Nacional Digital; Museu
+#         Paulista/USP; IHGB; Câmara dos Deputados; Academia Brasileira de Letras;
+#         Wikipedia; eBiografia; Revista de História (USP)
+# FORMATO: um bloco por pessoa (ver _MODELO-PESSOA.txt)
+#
+# NOTAS METODOLÓGICAS (importantes para o app):
+#  1. NÃO EXISTEM FOTOS de 1822 — a fotografia só chega ao Brasil em 1840. O que
+#     há são PINTURAS, LITOGRAFIAS e GRAVURAS. Sugere-se um campo
+#     `tipo_de_imagem` (retrato pintado / gravura / fotografia).
+#  2. MAÇONARIA NÃO É RELIGIÃO. Todos eram católicos (religião oficial do
+#     Império). A maçonaria é sociedade iniciática e vai em campo próprio
+#     (`maconaria`), nunca em `religioes`.
+#  3. Em 1822 a maçonaria brasileira dividiu-se em duas facções:
+#     "AZUL"     = monarquista/moderada, liderada por José Bonifácio (sede SP)
+#     "VERMELHA" = liberal-republicana, liderada por Gonçalves Ledo (Rio)
+#  4. Datas e filiações divergentes estão sinalizadas com [divergente].
+# ---
+
+# ============================================================
+# FAMÍLIA IMPERIAL
+# ============================================================
+
+== Dom Pedro I ==
+identidade: Príncipe regente que proclamou a Independência às margens do Ipiranga e tornou-se o primeiro Imperador do Brasil.
+nome_publico: Dom Pedro I
+nome_registro: Pedro de Alcântara Francisco António João Carlos Xavier de Paula Miguel Rafael Joaquim José Gonzaga Pascoal Cipriano Serafim de Bragança e Bourbon
+mudanca_nome: Pedro IV como rei de Portugal (1826); depois Duque de Bragança
+nascimento: 1798   # Queluz, Portugal, 12 de outubro
+falecimento: 1834  # Queluz, Portugal, 24 de setembro
+escolaridade: educação principesca por tutores (frei Antônio de Arrábida); sem formação universitária
+idiomas: português; francês; latim; algum inglês
+profissoes: príncipe regente; imperador do Brasil; rei de Portugal (Pedro IV); militar; compositor (Hino da Independência)
+nacionalidades: Portugal (nascimento); Brasil (naturalizado de fato)
+religioes: católico
+maconaria: aclamado Grão-Mestre e "Defensor Perpétuo" em 1822; ROMPEU com a maçonaria em 25/10/1822 e tentou dissolvê-la
+foto: fotos/dom-pedro-i.webp   # retrato pintado, 1824, Museu Imperial (não é fotografia)
+PAIS: Dom João VI e Carlota Joaquina de Bourbon
+FILHOS: com Maria Leopoldina — Maria da Glória (Maria II de Portugal), Miguel (morreu bebê), João Carlos (morreu bebê), Januária, Paula, Francisca, Pedro (Pedro II) | com Amélia de Leuchtenberg — Maria Amélia | com Domitila de Castro — Isabel Maria de Alcântara (Duquesa de Goiás), Pedro de Alcântara e outros
+documentos: Arquivo da Casa Imperial; Arquivo Nacional; retrato de 1824 no Museu Imperial (a tela tem anacronismo célebre: ganhou depois a placa da Ordem de Pedro I, criada só em 1826, removida na restauração)
+relacoes: filho de [[dom-joao-vi]]; casado com [[maria-leopoldina]]; elo com [[bourbon]] pela mãe Carlota Joaquina   # -> Parentesco
+fonte: Museu Imperial; Wikipedia
+confiabilidade: documentada
+
+== Maria Leopoldina ==
+identidade: Imperatriz; presidiu o Conselho de Estado que decidiu pela ruptura e assinou o decreto de independência na ausência de Pedro.
+nome_publico: Maria Leopoldina
+nome_registro: Caroline Josepha Leopoldine Franziska Ferdinanda von Habsburg-Lothringen
+nascimento: 1797   # Hofburg, Viena, 22 de janeiro
+falecimento: 1826  # Palácio de São Cristóvão, Rio de Janeiro, 11 de dezembro
+escolaridade: educação científica esmerada na corte austríaca — mineralogia, botânica e zoologia
+idiomas: alemão (nativo); português; francês; inglês; italiano; latim
+profissoes: arquiduquesa da Áustria; imperatriz consorte do Brasil; rainha consorte de Portugal; naturalista
+nacionalidades: Áustria
+religioes: católica devota
+maconaria: não (a maçonaria da época não admitia mulheres)
+foto: fotos/maria-leopoldina.webp   # retrato pintado por Joseph Kreutzinger, c. 1815
+PAIS: Francisco I da Áustria (Francisco II, Sacro Imperador) e Maria Teresa de Nápoles e Sicília
+FILHOS: Maria da Glória (Maria II de Portugal), Miguel, João Carlos (Príncipe da Beira), Januária, Paula, Francisca (Princesa de Joinville), Pedro (Pedro II)
+documentos: correspondência pessoal (fonte histórica de primeira ordem); acervos do Museu Imperial e do Arquivo Nacional; patrocinou a Missão Científica Austríaca ao Brasil
+relacoes: filha de Francisco I da Áustria (elo com [[habsburgo]]); casada com [[dom-pedro-i]]   # -> Parentesco
+fonte: Wikipedia; Museu Imperial   # biógrafo Paulo Rezzutti sustenta que a nação deve muito a ela
+confiabilidade: documentada
+
+== Dom João VI ==
+identidade: Rei sob quem o Brasil foi elevado a Reino Unido; ao voltar a Portugal em 1821, deixou Pedro como regente.
+nome_publico: Dom João VI
+apelidos: o Clemente
+nascimento: 1767
+falecimento: 1826
+escolaridade: educação principesca por tutores
+idiomas: português; francês; latim
+profissoes: príncipe regente; rei de Portugal, Brasil e Algarves
+nacionalidades: Portugal
+religioes: católico
+PAIS: Dom Pedro III e Dona Maria I de Portugal — que eram TIO E SOBRINHA [CONSANGUINIDADE]
+FILHOS: Pedro (Pedro I do Brasil), Miguel (Miguel I de Portugal), Maria Teresa, Isabel Maria, Maria Francisca, entre outros
+documentos: Arquivo Nacional; Arquivo da Casa Imperial
+relacoes: pai de [[dom-pedro-i]]; casado com Carlota Joaquina de Bourbon (elo com [[bourbon]])   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Domitila de Castro ==
+identidade: Marquesa de Santos; favorita de Dom Pedro I, com grande influência na corte.
+nome_publico: Marquesa de Santos
+nome_registro: Domitila de Castro do Canto e Melo
+mudanca_nome: recebeu o título de Marquesa de Santos (1826)
+nascimento: 1797
+falecimento: 1867
+escolaridade: educação doméstica da elite paulista
+idiomas: português
+profissoes: aristocrata; dama da corte
+nacionalidades: Brasil
+religioes: católica
+PAIS: brigadeiro João de Castro do Canto e Melo e Escolástica Bonifácia de Oliveira Toledo Ribas
+FILHOS: com Pedro I — Isabel Maria de Alcântara (Duquesa de Goiás), Pedro de Alcântara e outros | teve ainda filhos de seus casamentos
+documentos: correspondência com Pedro I; acervo do Museu Paulista e da Casa da Marquesa dos Santos (SP)
+relacoes: companheira de [[dom-pedro-i]]   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+# ============================================================
+# OS ANDRADAS — a articulação política
+# Filhos do coronel Bonifácio José Ribeiro de Andrada e de Maria Bárbara da
+# Silva, que eram PRIMOS entre si [CONSANGUINIDADE]. Outros irmãos: Patrício
+# Manuel, Carlota, Gabriela Frederica, Narcisa Cândida, Bonifácio José Júnior,
+# Maria Flora, Bárbara Joaquina, Francisco Eugênio, Anna Marcelina.
+# ============================================================
+
+== José Bonifácio de Andrada e Silva ==
+identidade: O "Patriarca da Independência"; cientista de renome europeu, ministro e principal articulador político da emancipação.
+nome_publico: José Bonifácio
+nome_registro: José Bonifácio de Andrada e Silva
+mudanca_nome: batizado José Antônio de Andrada e Silva   # [divergente entre fontes]
+nascimento: 1763   # Santos, 13 de junho
+falecimento: 1838  # Niterói, 6 de abril
+escolaridade: Universidade de Coimbra (Direito, 1783), com filosofia natural, química e matemática; estágios científicos na Alemanha, Itália, França, Dinamarca e Suécia
+idiomas: português; francês; grego; latim; alemão; inglês
+profissoes: mineralogista (descobriu 4 minerais novos); catedrático de mineralogia e 1º professor de metalurgia da Universidade de Coimbra; secretário da Academia de Ciências de Lisboa; tenente-coronel na resistência a Napoleão; deputado; vice-presidente da Província de SP; ministro do Império; poeta; tutor de Pedro II
+nacionalidades: Brasil (viveu 36 anos em Portugal)
+religioes: católico
+maconaria: iniciado ainda em Coimbra; GRÃO-MESTRE do Grande Oriente (1822); facção "AZUL" (monarquista); fundou o APOSTOLADO (Nobre Ordem dos Cavaleiros de Santa Cruz), sociedade secreta pró-independência
+foto: fotos/jose-bonifacio.webp   # retrato pintado (não é fotografia)
+PAIS: coronel Bonifácio José Ribeiro de Andrada e Maria Bárbara da Silva (primos entre si)
+FILHOS: com Narcisa Emília O'Leary — Gabriela, Carlota e Narcisa Cândida; além de uma filha ilegítima reconhecida por ele
+documentos: biblioteca pessoal com mais de 6.000 volumes; Cartas Andradinas (Anais da Biblioteca Nacional); papéis no IHGB e no Arquivo Nacional
+relacoes: irmão de [[antonio-carlos-andrada]] e [[martim-francisco-andrada]]; sua filha Gabriela casou-se com o próprio tio Martim Francisco [CONSANGUINIDADE]; rival de [[goncalves-ledo]]   # -> Parentesco
+fonte: IHGS; Revista de História (USP); eBiografia
+confiabilidade: documentada
+
+== Antônio Carlos Ribeiro de Andrada ==
+identidade: Orador e magistrado; líder da Assembleia Constituinte de 1823.
+nome_publico: Antônio Carlos de Andrada
+nome_registro: Antônio Carlos Ribeiro de Andrada Machado e Silva
+nascimento: 1773
+falecimento: 1845
+escolaridade: Universidade de Coimbra
+idiomas: português; latim; francês
+profissoes: magistrado; deputado (Cortes de Lisboa e Constituinte de 1823); orador; jornalista
+nacionalidades: Brasil
+religioes: católico
+maconaria: ligado ao círculo maçônico do irmão José Bonifácio
+PAIS: coronel Bonifácio José Ribeiro de Andrada e Maria Bárbara da Silva
+FILHOS: dele descende o RAMO MINEIRO dos Andradas, do qual se destaca o deputado José Bonifácio Lafayette de Andrada (1904–1986)
+documentos: Cartas Andradinas; anais da Câmara dos Deputados; Parlamentares do Império (Senado Federal)
+relacoes: irmão de [[jose-bonifacio]]; preso e exilado na França em 1823 junto com os irmãos   # -> Parentesco
+fonte: Câmara dos Deputados; Wikipedia
+confiabilidade: documentada
+
+== Martim Francisco Ribeiro de Andrada ==
+identidade: Ministro da Fazenda do primeiro governo imperial.
+nome_publico: Martim Francisco de Andrada
+nascimento: 1775   # Santos, 9 de abril
+falecimento: 1844  # Santos, 23 de fevereiro
+escolaridade: Universidade de Coimbra — filosofia (1797) e matemática (1798)
+idiomas: português; latim; francês
+profissoes: ministro da Fazenda; secretário e vice-presidente do governo provisório de São Paulo; deputado; naturalista (expedições minerais com o irmão)
+nacionalidades: Brasil
+religioes: católico
+maconaria: ligado ao círculo maçônico do irmão José Bonifácio
+PAIS: coronel Bonifácio José Ribeiro de Andrada e Maria Bárbara da Silva
+FILHOS: com a sobrinha Gabriela — José Bonifácio "o Moço" (1827–1886, poeta e senador), Martim Francisco (o 2º), Narcisa, Maria Flora
+documentos: Cartas Andradinas; Memória sobre a estatística (manuscrito, IHGB); anais da Câmara
+relacoes: irmão de [[jose-bonifacio]]; casou-se com a SOBRINHA Gabriela, filha de José Bonifácio [CONSANGUINIDADE]; exilado na França em 1823   # -> Parentesco
+fonte: Câmara dos Deputados; Wikipedia
+confiabilidade: documentada
+
+# ============================================================
+# ARTICULADORES CIVIS — a facção "Vermelha"
+# ============================================================
+
+== Joaquim Gonçalves Ledo ==
+identidade: Jornalista e maçom; um dos promotores do "Dia do Fico" e líder da ala liberal-republicana.
+nome_publico: Joaquim Gonçalves Ledo
+apelidos: Diderot (nome maçônico)
+nascimento: 1781   # Cachoeiras de Macacu (RJ), 11 de dezembro
+falecimento: 1847  # Sumidouro (RJ), 9 de maio
+escolaridade: Universidade de Coimbra — CURSO INCOMPLETO (voltou ao Brasil em 1808 com a morte do pai)   # [divergente: Direito ou Medicina]
+idiomas: português; francês
+profissoes: jornalista (Revérbero Constitucional Fluminense); advogado; funcionário do arsenal do Exército; deputado provincial do RJ até 1835; fazendeiro
+nacionalidades: Brasil
+religioes: católico
+maconaria: central em sua trajetória — líder da facção "VERMELHA" (liberal-republicana); participou da fundação da Loja Comércio e Artes (1815); influiu para entregar o Grão-Mestrado a D. Pedro; abandonou a maçonaria em 1835
+PAIS: Antonio Gonçalves Ledo (português) e Maria dos Reis (brasileira)
+FILHOS: não documentados nas fontes consultadas   # a verificar
+documentos: Revérbero Constitucional Fluminense (1821–22), digitalizado na Biblioteca Nacional. ATENÇÃO: há relatos de que INCINEROU o próprio arquivo pessoal sobre a Independência — daí a escassez de fontes diretas
+relacoes: parceiro de [[januario-da-cunha-barbosa]]; rival declarado de [[jose-bonifacio]]   # -> Parentesco
+fonte: Rio Memórias; Gazeta do Povo; Wikipedia
+confiabilidade: documentada
+
+== Januário da Cunha Barbosa ==
+identidade: Cônego da Capela Real; co-editor do Revérbero e, depois, cofundador do IHGB.
+nome_publico: Cônego Januário da Cunha Barbosa
+nascimento: 1780
+falecimento: 1846
+escolaridade: formação eclesiástica (seminário); cônego da Capela Real
+idiomas: português; latim; francês
+profissoes: padre; jornalista; orador; professor; cofundador do Instituto Histórico e Geográfico Brasileiro (1838)
+nacionalidades: Brasil
+religioes: católico — clero secular (cônego)
+maconaria: facção "VERMELHA", ao lado de Gonçalves Ledo e José Clemente Pereira
+PAIS: não documentados nas fontes consultadas   # a verificar
+FILHOS: nenhum — sacerdote católico
+documentos: acervo do IHGB; Revérbero Constitucional Fluminense (Biblioteca Nacional)
+relacoes: parceiro de [[goncalves-ledo]] no Revérbero   # -> Parentesco
+fonte: Rio Memórias; Revista de História (USP)
+confiabilidade: documentada
+
+# ============================================================
+# A GUERRA DE INDEPENDÊNCIA NA BAHIA E NO NORDESTE
+# ============================================================
+
+== Maria Quitéria de Jesus ==
+identidade: Heroína da Guerra da Independência na Bahia; primeira mulher a assentar praça numa unidade militar brasileira.
+nome_publico: Maria Quitéria
+apelidos: soldado Medeiros; a "Joana d'Arc brasileira"
+mudanca_nome: alistou-se como "soldado Medeiros", usando o nome do cunhado José Cordeiro de Medeiros
+nascimento: 1792   # Sítio do Licurizeiro, São José das Itapororocas (hoje Feira de Santana, BA), 27 de julho
+falecimento: 1853  # Salvador, 21 de agosto
+escolaridade: NENHUMA educação formal (era analfabeta); aprendeu montaria, caça e manejo de armas de fogo
+idiomas: português
+profissoes: lavradora; militar (1ª cadete no Regimento de Artilharia, sob o general Pierre Labatut)
+nacionalidades: Brasil
+religioes: católica
+PAIS: Gonçalo Alves de Almeida (lavrador e proprietário de terras) e Quitéria Maria de Jesus — foi a filha primogênita de três   # [divergente: algumas fontes grafam a mãe como "Joana Maria de Jesus"; e há divergência se o pai era brasileiro ou português]
+FILHOS: com Gabriel Pereira de Brito (lavrador) — uma única filha, Luísa Maria da Conceição
+documentos: condecoração de cavaleiro da Imperial Ordem do Cruzeiro (concedida por D. Pedro I em 20/08/1823) e soldo vitalício de alferes; processos no Juízo de Órfãos de Feira de Santana (1823–1843, disputa de herança); decreto presidencial de 28/06/1996 (patrona do Quadro Complementar de Oficiais do Exército); Livro dos Heróis e Heroínas da Pátria (2018)
+foto: fotos/maria-quiteria.webp   # ATENÇÃO: retrato de Domenico Failutti (1920), Museu Paulista — pintado ~100 anos depois; é reconstrução idealizada, não registro de época
+relacoes: madrasta Maria Rosa de Brito (3ª esposa do pai), com quem tinha conflitos; combateu ao lado de [[maria-felipa-de-oliveira]]   # -> Parentesco
+fonte: Biblioteca Nacional Digital; Impressões Rebeldes (UFF); eBiografia
+confiabilidade: documentada
+
+== Frei Caneca ==
+identidade: Frade carmelita, professor e jornalista revolucionário; líder da Confederação do Equador, fuzilado em 1825.
+nome_publico: Frei Caneca
+nome_registro: Joaquim da Silva Rabelo
+mudanca_nome: tornou-se Frei Joaquim do Amor Divino Rabelo ao entrar na Ordem do Carmo
+apelidos: Caneca (do ofício do pai, tanoeiro)
+nascimento: 1779   # Recife, 20 de agosto
+falecimento: 1825  # Recife, 13 de janeiro (fuzilado)
+escolaridade: seminário; foi professor de retórica, filosofia e geometria
+idiomas: português; latim
+profissoes: frade carmelita; professor; jornalista (fundou e editou o Typhis Pernambucano); líder revolucionário
+nacionalidades: Brasil
+religioes: católico — Ordem do Carmo (frade)
+maconaria: ligado aos círculos revolucionários pernambucanos   # grau de envolvimento maçônico a verificar
+PAIS: filho de tanoeiro (o apelido "Caneca" vem do ofício paterno)   # nomes a verificar
+FILHOS: nenhum — religioso da Ordem do Carmo
+documentos: Obras Políticas e Literárias de Frei Joaquim do Amor Divino Caneca, digitalizadas na Biblioteca Digital do Senado; coleção do Typhis Pernambucano
+relacoes: participou da Revolução Pernambucana (1817) e liderou a Confederação do Equador (1824)   # -> Parentesco
+fonte: Wikipedia; Biblioteca Digital do Senado
+confiabilidade: documentada
+
+== Sóror Joana Angélica ==
+identidade: Abadessa morta ao defender seu convento contra tropas portuguesas — primeira mártir da Independência na Bahia.
+nome_publico: Sóror Joana Angélica
+falecimento: 1822   # Salvador, 19 de fevereiro
+escolaridade: formação conventual
+idiomas: português; latim
+profissoes: religiosa; abadessa do Convento da Lapa
+nacionalidades: Brasil
+religioes: católica — freira conceicionista
+PAIS: não documentados nas fontes consultadas   # a verificar
+FILHOS: nenhum — religiosa
+documentos: registros do Convento da Lapa (Salvador); Livro dos Heróis e Heroínas da Pátria
+relacoes: morta na insurreição de 19/02/1822, no início da guerra na Bahia   # -> Parentesco
+fonte: Wikipedia (1822 in Brazil)
+confiabilidade: documentada
+
+== Maria Felipa de Oliveira ==
+identidade: Líder popular negra da resistência na Ilha de Itaparica; comandou a queima de embarcações portuguesas.
+nome_publico: Maria Felipa de Oliveira
+escolaridade: sem educação formal
+idiomas: português
+profissoes: marisqueira; líder popular da resistência
+nacionalidades: Brasil
+religioes: não documentado   # a verificar
+PAIS: não documentados nas fontes consultadas   # a verificar
+FILHOS: não documentados nas fontes consultadas   # a verificar
+documentos: tradição oral e registros da resistência em Itaparica; figura de documentação escassa — típico das personagens populares e negras do período
+relacoes: combateu na mesma guerra que [[maria-quiteria]]   # -> Parentesco
+fonte: Fleurity; historiografia baiana
+confiabilidade: reconstruida-tradicional   # documentação primária escassa
+
+# ============================================================
+# ONDE BUSCAR IMAGENS E DOCUMENTOS
+# ============================================================
+# - Museu Imperial (Petrópolis) — acervo digital: dami.museuimperial.museus.gov.br
+# - Arquivo Nacional — Arquivo da Casa Imperial do Brasil e Arquivo Grão Pará
+# - Biblioteca Nacional Digital — periódicos (Revérbero, Typhis) e artigos
+# - Museu Paulista/USP — pinturas do centenário (Failutti etc.)
+# - IHGB — papéis dos Andradas e de Januário da Cunha Barbosa
+# - Biblioteca Digital do Senado — obras de Frei Caneca
+#
+# DIREITOS: obras de 1822 estão em domínio público. ATENÇÃO às pinturas do
+# CENTENÁRIO (1920–22): verificar a data de morte do artista (regra brasileira:
+# 70 anos após a morte do autor). Failutti morreu em 1927 — já em domínio público.

@@ -125,6 +125,32 @@ src/
   features/            protótipos visuais ainda não ligados (ver abaixo)
 ```
 
+### Ícones autorais
+
+`src/components/icons/` guarda os ícones derivados do logo Elotempo. A gramática
+está presa numa casca só (`Base`), e o cabeçalho do arquivo lista as seis regras
+— leia antes de acrescentar um.
+
+Duas que mais importam:
+
+- **Grade do Lucide, não do logo.** 87 ícones Lucide continuam no aplicativo, e
+  um autoral fora da grade de 24 fica gordo ao lado de um `Plus`. A razão
+  nó/traço do símbolo (≈2,4) entra como `traço 2 · nó r 2`; reduzir o SVG do
+  logo direto daria traço 0,84.
+- **`currentColor` sempre**, exceto em `IconeAplicativo`. As três cores da marca
+  significam *tempo*; dentro da árvore o azul já significa *masculino*. Ícone de
+  domínio monocromático não cria essa colisão, e o mesmo arquivo serve aos
+  quatro temas.
+
+**O ícone do executável sai de `src-tauri/icone-mestre.svg`** — mexeu nele,
+rode `npx tauri icon src-tauri/icone-mestre.svg` (aceita SVG, não precisa
+rasterizador) e apague as pastas `ios/` e `android/` que ele cria: o app é
+desktop.
+
+Nem todo genérico vira autoral. `Clock` no histórico de ações é **horário**, não
+linha do tempo; `Users` significa **pessoas** nos oito lugares em que aparece,
+não rede de relações. Trocar por trocar destrói significado.
+
 ### Protótipos não ligados
 
 Estes componentes são maquetes com dados fixos, guardadas no código para não se

@@ -1,0 +1,171 @@
+# FAMILIA: Prado / Silva Prado (café paulista)
+# CONFIABILIDADE geral: documentada (séc. XIX–XX); ascendência colonial via Silva Leme
+# FONTES: Darrell E. Levi, "The Prados of São Paulo" (1987) / ed. bras. "A família
+#         Prado" (Cultura 70); Silva Leme, Genealogia Paulistana (1903–05);
+#         Acervo Histórico ALESP; CPDOC-FGV; Wikipedia; Geneall; parentesco.com.br
+# FORMATO: um bloco por pessoa (ver _MODELO-PESSOA.txt). "== Nome =="
+# NOTA: forte consanguinidade (casamento tio/sobrinha) — ver rodapé.
+# ---
+
+== Antônio da Silva Prado (Barão de Iguape) ==
+identidade: Fundador da dinastia Prado; cafeicultor e comerciante, vice-presidente da Província de São Paulo.
+nome_publico: Barão de Iguape
+nome_registro: Antônio da Silva Prado
+nascimento: cerca de 1778   # divergente: 1778 (Geneall/Wikipedia) x 1788 (USP/ALESP)
+falecimento: 1875
+profissoes: cafeicultor; comerciante; político
+nacionalidades: Brasil (Império)
+foto: fotos/barao-de-iguape.webp
+relacoes: casado com Maria Cândida de Moura Vaz; pai de Veridiana   # -> Parentesco
+fonte: Wikipedia; USP-Pioneiros; Geneall
+confiabilidade: documentada
+
+== Maria Cândida de Moura Vaz ==
+nome_publico: Baronesa de Iguape
+falecimento: 1868
+relacoes: esposa do Barão de Iguape; mãe de Veridiana   # -> Parentesco
+fonte: Wikipedia; parentesco.com.br   # nome divergente em fontes: "Maria de Moura Leite"
+confiabilidade: documentada
+
+== Martinho da Silva Prado (1811) ==
+identidade: Meio-irmão do Barão de Iguape; deputado provincial de São Paulo.
+nome_publico: Martinho da Silva Prado
+nascimento: 1811
+falecimento: 1891
+profissoes: cafeicultor; político (deputado provincial SP, 1854–59)
+nacionalidades: Brasil (Império)
+relacoes: meio-irmão do Barão; casado com a sobrinha Veridiana   # -> Parentesco
+fonte: ALESP; parentesco.com.br
+confiabilidade: documentada
+
+== Veridiana Valéria da Silva Prado ==
+identidade: Matriarca dos Prado; manteve um dos salões culturais mais importantes de São Paulo no séc. XIX.
+nome_publico: Dona Veridiana
+nascimento: 1825
+falecimento: 1910
+nacionalidades: Brasil (Império)
+foto: fotos/veridiana-prado.webp
+relacoes: filha do Barão de Iguape; casada com seu meio-tio Martinho (1811)   # -> Parentesco [CONSANGUINIDADE]
+fonte: Wikipedia; ALESP
+confiabilidade: documentada
+
+== Antônio da Silva Prado (Conselheiro) ==
+identidade: Primeiro prefeito de São Paulo; ministro do Império e grande empreendedor do café.
+nome_publico: Conselheiro Antônio Prado
+apelidos: Antonico
+nascimento: 1840
+falecimento: 1929
+escolaridade: Faculdade de Direito de São Paulo (1861)
+profissoes: advogado; político (prefeito de SP, 1899–1911; ministro); empresário
+nacionalidades: Brasil
+foto: fotos/conselheiro-antonio-prado.webp
+relacoes: filho de Martinho (1811) e Veridiana; casado com Maria Catarina; 8 filhos   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Maria Catarina da Silva Prado ==
+nome_publico: Maria Catarina da Silva Prado
+relacoes: esposa do Conselheiro Antônio Prado; 8 filhos   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Martinho da Silva Prado Júnior ==
+identidade: Cafeicultor, abolicionista e propagandista republicano; pioneiro da imigração no Oeste paulista.
+nome_publico: Martinico Prado
+apelidos: Martinico
+nascimento: 1843
+falecimento: 1906
+profissoes: cafeicultor; político
+nacionalidades: Brasil (Império/República)
+relacoes: filho de Martinho (1811) e Veridiana; casado com Albertina; 12 filhos   # -> Parentesco
+fonte: CPDOC-FGV
+confiabilidade: documentada
+
+== Albertina de Morais Pinto ==
+nome_publico: Albertina de Morais Pinto
+nascimento: 1852
+falecimento: 1912
+relacoes: esposa de Martinico; 12 filhos   # -> Parentesco
+fonte: CPDOC-FGV
+confiabilidade: documentada
+
+== Eduardo Paulo da Silva Prado ==
+identidade: Escritor e jornalista monarquista; membro fundador da Academia Brasileira de Letras.
+nome_publico: Eduardo Prado
+nascimento: 1860
+falecimento: 1901
+escolaridade: Faculdade de Direito de São Paulo
+profissoes: escritor; jornalista; advogado
+nacionalidades: Brasil
+relacoes: filho de Martinho (1811) e Veridiana   # -> Parentesco
+fonte: Wikipedia   # obra: "A Ilusão Americana" (1893); faleceu de febre amarela
+confiabilidade: documentada
+
+== Caio da Silva Prado (tio) ==
+nome_publico: Caio da Silva Prado
+relacoes: irmão do Conselheiro, Martinico e Eduardo (tio de Paulo Prado)   # -> Parentesco
+fonte: scielo; Levi   # NÃO confundir com o homônimo (1872–1947)
+confiabilidade: documentada
+
+== Paulo da Silva Prado ==
+identidade: Cafeicultor, mecenas e escritor; principal patrono da Semana de Arte Moderna de 1922.
+nome_publico: Paulo Prado
+nascimento: 1869
+falecimento: 1943
+escolaridade: Faculdade de Direito de São Paulo (1899)
+profissoes: cafeicultor; investidor; escritor; mecenas
+nacionalidades: Brasil
+foto: fotos/paulo-prado.webp
+relacoes: filho primogênito do Conselheiro Antônio Prado; casado com Marinette   # -> Parentesco
+fonte: Wikipedia; Encyclopedia.com   # obras: "Paulística" (1925), "Retrato do Brasil" (1928)
+confiabilidade: documentada
+
+== Marinette Prado ==
+nome_publico: Marinette Prado
+relacoes: esposa de Paulo Prado   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Fábio da Silva Prado ==
+identidade: Prefeito de São Paulo (1934–1938).
+nome_publico: Fábio Prado
+profissoes: político (prefeito de SP)
+nacionalidades: Brasil
+relacoes: filho de Martinico   # -> Parentesco
+fonte: CPDOC-FGV
+confiabilidade: documentada
+
+== Martinho da Silva Prado Neto ==
+nome_publico: Martinho Prado Neto
+profissoes: político (deputado federal, 1935–37)
+relacoes: filho de Martinico   # -> Parentesco
+fonte: CPDOC-FGV
+confiabilidade: documentada
+
+== Caio da Silva Prado (1872) ==
+nome_publico: Caio da Silva Prado
+nascimento: 1872
+falecimento: 1947
+relacoes: filho de Martinico; pai de Caio Prado Júnior   # -> Parentesco
+fonte: ALESP
+confiabilidade: documentada
+
+== Caio Prado Júnior ==
+identidade: Historiador marxista e editor; um dos grandes intérpretes do Brasil.
+nome_publico: Caio Prado Júnior
+nascimento: 1907
+falecimento: 1990
+profissoes: historiador; editor; político (constituinte/dep. estadual SP, 1947–48)
+nacionalidades: Brasil
+foto: fotos/caio-prado-junior.webp
+relacoes: filho de Caio da Silva Prado (1872)   # -> Parentesco
+fonte: ALESP; scielo   # obras: "Formação do Brasil Contemporâneo" (1942); fundou a Editora Brasiliense
+confiabilidade: documentada
+
+# ================= NOTAS DE PESQUISA =================
+# 1. DATAS DO BARÃO: 1778 (Geneall/Wikipedia) x 1788 (USP/ALESP). Verificar registro paroquial.
+# 2. ESPOSA DO BARÃO: "Maria Cândida de Moura Vaz" x "Maria de Moura Leite". Confirmar.
+# 3. CONSANGUINIDADE: Veridiana (filha do Barão) casou com Martinho (1811), meio-tio.
+# 4. DOIS "CAIO DA SILVA PRADO": o tio (ger. 3) e o sobrinho (1872–1947).
+# 5. REFERÊNCIA: Darrell E. Levi, "The Prados of São Paulo" (1987); ed. bras. "A família Prado" (Cultura 70).
+# 6. ASCENDÊNCIA COLONIAL: aprofundar no Título "Prados" de Silva Leme.

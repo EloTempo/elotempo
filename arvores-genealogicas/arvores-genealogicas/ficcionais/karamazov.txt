@@ -1,0 +1,54 @@
+# FAMILIA: Karamázov (Os Irmãos Karamázov) — FICÇÃO (literatura russa)
+# CONFIABILIDADE geral: ficcao (NÃO misturar com dados reais)
+# FONTES: cânon "Os Irmãos Karamázov", de Dostoiévski; trad. Paulo Bezerra (Ed. 34, do russo)
+# FORMATO: um bloco por pessoa (ver _MODELO-PESSOA.txt)
+# NOTA: sem foto (direito autoral). O enredo gira em torno de um parricídio; o
+#       quarto filho, Smerdiákov, é ilegítimo — bom teste de filiação fora do casamento.
+# ---
+
+== Fiódor Karamázov ==
+identidade: Pai dissoluto e avarento cuja morte move a trama.
+nome_publico: Fiódor Pávlovitch Karamázov
+relacoes: pai de Dmitri, Ivan, Aliócha e (ilegítimo) Smerdiákov   # -> Parentesco
+fonte: cânon Os Irmãos Karamázov
+confiabilidade: ficcao
+
+== Adelaida Ivánovna ==
+nome_publico: Adelaida Ivánovna
+relacoes: 1ª esposa de Fiódor; mãe de Dmitri   # -> Parentesco
+fonte: cânon Os Irmãos Karamázov
+confiabilidade: ficcao
+
+== Sofia Ivánovna ==
+nome_publico: Sofia Ivánovna
+relacoes: 2ª esposa de Fiódor; mãe de Ivan e Aliócha   # -> Parentesco
+fonte: cânon Os Irmãos Karamázov
+confiabilidade: ficcao
+
+== Dmitri Karamázov ==
+identidade: O irmão passional; acusado do assassinato do pai.
+nome_publico: Dmitri "Mítia" Karamázov
+relacoes: filho de Fiódor e Adelaida   # -> Parentesco
+fonte: cânon Os Irmãos Karamázov
+confiabilidade: ficcao
+
+== Ivan Karamázov ==
+identidade: O irmão intelectual e cético ("se Deus não existe, tudo é permitido").
+nome_publico: Ivan Karamázov
+relacoes: filho de Fiódor e Sofia   # -> Parentesco
+fonte: cânon Os Irmãos Karamázov
+confiabilidade: ficcao
+
+== Aliócha Karamázov ==
+identidade: O irmão mais novo, noviço e espiritual; centro moral do romance.
+nome_publico: Alexei "Aliócha" Karamázov
+relacoes: filho de Fiódor e Sofia   # -> Parentesco
+fonte: cânon Os Irmãos Karamázov
+confiabilidade: ficcao
+
+== Pável Smerdiákov ==
+identidade: Criado da casa; peça-chave do crime.
+nome_publico: Pável Smerdiákov
+relacoes: filho ilegítimo atribuído a Fiódor (com Lizaveta)   # -> Parentesco
+fonte: cânon Os Irmãos Karamázov
+confiabilidade: ficcao

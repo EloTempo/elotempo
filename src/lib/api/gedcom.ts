@@ -33,7 +33,13 @@ export interface ResumoExportacao {
 export const exportarGedcom = (
   caminho: string,
   opcoes: OpcoesExportacao,
-): Promise<ResumoExportacao> => chamar<ResumoExportacao>('exportar_gedcom', { caminho, opcoes });
+  ticketAutorizacao?: string | null,
+): Promise<ResumoExportacao> =>
+  chamar<ResumoExportacao>('exportar_gedcom', {
+    caminho,
+    opcoes,
+    ticketAutorizacao: ticketAutorizacao ?? null,
+  });
 
 /** `gdz` quando há mídia a levar junto; `ged` caso contrário. */
 export const extensaoDeExportacao = (incluirMidia: boolean): Promise<string> =>

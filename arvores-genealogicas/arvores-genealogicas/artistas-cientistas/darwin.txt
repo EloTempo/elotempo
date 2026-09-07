@@ -1,0 +1,178 @@
+# FAMILIA: Darwin–Wedgwood (ciência) — Inglaterra
+# CONFIABILIDADE geral: documentada
+# FONTES: Wikipedia; Darwin Correspondence Project; biografias (Desmond & Moore)
+# FORMATO: um bloco por pessoa (ver _MODELO-PESSOA.txt)
+# NOTA: família com ~10 membros da Royal Society e casamentos entre primos em
+#       série (Charles casou com a prima Emma; Caroline casou com o primo Josiah III).
+# ---
+
+# --- GERAÇÃO FUNDADORA ---
+== Erasmus Darwin ==
+identidade: Médico, poeta e filósofo natural; avô de Charles Darwin e precursor de ideias evolutivas.
+nome_publico: Erasmus Darwin
+nascimento: 1731
+falecimento: 1802
+profissoes: médico; poeta; naturalista
+nacionalidades: Inglaterra
+foto: fotos/erasmus-darwin.webp
+relacoes: pai de Robert e de Violetta (avô de Francis Galton); avô de Charles Darwin   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Josiah Wedgwood I ==
+identidade: Ceramista; fundador da fábrica Wedgwood e amigo de Erasmus Darwin.
+nome_publico: Josiah Wedgwood
+nascimento: 1730
+falecimento: 1795
+profissoes: ceramista; empresário
+nacionalidades: Inglaterra
+relacoes: casado com Sarah Wedgwood; pai de Susannah (mãe de Charles) e avô de Emma   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Sarah Wedgwood ==
+nome_publico: Sarah Wedgwood
+nascimento: 1734
+falecimento: 1815
+relacoes: esposa de Josiah Wedgwood I   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+# --- GERAÇÃO DOS PAIS ---
+== Robert Waring Darwin ==
+nome_publico: Robert Darwin
+nascimento: 1766
+falecimento: 1848
+escolaridade: Universidade de Leiden
+profissoes: médico
+nacionalidades: Inglaterra
+relacoes: filho de Erasmus; casado (1796) com Susannah Wedgwood; pai de Charles   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Susannah Darwin ==
+nome_publico: Susannah Wedgwood Darwin
+nascimento: 1765
+falecimento: 1817
+nacionalidades: Inglaterra
+relacoes: filha de Josiah Wedgwood I; esposa de Robert; mãe de Charles   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Josiah Wedgwood II ==
+nome_publico: Josiah Wedgwood II
+nascimento: 1769
+falecimento: 1843
+profissoes: empresário (Wedgwood); político
+nacionalidades: Inglaterra
+relacoes: filho de Josiah I; pai de Emma (sogro de Charles)   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+# --- GERAÇÃO DE CHARLES ---
+== Charles Darwin ==
+identidade: Naturalista; formulou a teoria da evolução por seleção natural.
+nome_publico: Charles Darwin
+nome_registro: Charles Robert Darwin
+nascimento: 1809   # Shrewsbury, 12 de fevereiro
+falecimento: 1882
+escolaridade: Universidade de Edimburgo; Christ's College, Cambridge
+profissoes: naturalista; geólogo
+nacionalidades: Inglaterra
+foto: fotos/charles-darwin.webp
+relacoes: filho de Robert e Susannah; casou (1839) com a prima em 1º grau Emma Wedgwood; 10 filhos   # -> Parentesco [CONSANGUINIDADE]
+fonte: Wikipedia   # obras: "A Origem das Espécies" (1859); "A Descendência do Homem" (1871)
+confiabilidade: documentada
+
+== Emma Darwin ==
+nome_publico: Emma Darwin
+nome_registro: Emma Wedgwood
+nascimento: 1808
+falecimento: 1896
+nacionalidades: Inglaterra
+relacoes: filha de Josiah Wedgwood II; prima e esposa de Charles Darwin; mãe de 10 filhos   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Francis Galton ==
+identidade: Polímata e estatístico; "pai da eugenia"; primo de Charles Darwin.
+nome_publico: Francis Galton
+nascimento: 1822
+falecimento: 1911
+profissoes: estatístico; explorador; polímata
+nacionalidades: Inglaterra
+foto: fotos/francis-galton.webp
+relacoes: neto de Erasmus Darwin (por Violetta Darwin); meio-primo de Charles   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+# --- FILHOS DE CHARLES E EMMA (7 sobreviveram) ---
+== William Erasmus Darwin ==
+nome_publico: William Erasmus Darwin
+nascimento: 1839
+falecimento: 1914
+profissoes: banqueiro
+relacoes: primogênito de Charles e Emma   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Anne Darwin ==
+nome_publico: Anne "Annie" Darwin
+nascimento: 1841
+falecimento: 1851   # morreu na infância; abalou profundamente Charles
+relacoes: filha de Charles e Emma   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Henrietta Litchfield ==
+nome_publico: Henrietta "Etty" Litchfield
+nome_registro: Henrietta Emma Darwin
+nascimento: 1843
+falecimento: 1927
+profissoes: editora (revisou obras do pai)
+relacoes: filha de Charles e Emma   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== George Howard Darwin ==
+identidade: Astrônomo e matemático; membro da Royal Society.
+nome_publico: George Howard Darwin
+nascimento: 1845
+falecimento: 1912
+profissoes: astrônomo; matemático
+relacoes: filho de Charles e Emma; pai do físico Charles Galton Darwin   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Francis Darwin ==
+identidade: Botânico; membro da Royal Society; editou a correspondência do pai.
+nome_publico: Francis Darwin
+nascimento: 1848
+falecimento: 1925
+profissoes: botânico
+relacoes: filho de Charles e Emma   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Leonard Darwin ==
+nome_publico: Leonard Darwin
+nascimento: 1850
+falecimento: 1943
+profissoes: militar; economista; eugenista
+relacoes: filho de Charles e Emma   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Horace Darwin ==
+identidade: Engenheiro; fundou a Cambridge Scientific Instrument Company; Royal Society.
+nome_publico: Horace Darwin
+nascimento: 1851
+falecimento: 1928
+profissoes: engenheiro
+relacoes: filho caçula de Charles e Emma   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+# Descendentes notáveis (expandir): Charles Galton Darwin (1887–1962, físico, neto
+# via George); Gwen Raverat (1885–1957, artista); o compositor Ralph Vaughan Williams
+# (1872–1958) também é aparentado ao ramo Wedgwood.

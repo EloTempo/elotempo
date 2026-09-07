@@ -1,0 +1,1496 @@
+# FAMILIA: Jesus — As Duas Genealogias Bíblicas Paralelas (Mateus e Lucas)
+# CONFIABILIDADE geral: reconstruida-tradicional
+# FONTES PRIMÁRIAS: Mateus 1:1-17; Lucas 3:23-38; Lucas 1:5-36; João 19:25; Marcos 6:3; 15:40; Mateus 13:55; 27:56; Gálatas 1:19
+# FONTES EXEGÉTICAS E HISTÓRICAS:
+#   - Júlio Africano (c. 200 d.C., Carta a Aristides, preservada por Eusébio em Hist. Ecl. 1.7)
+#   - Agostinho de Hipona ("De Consensu Evangelistarum", Livro II, c. 400 d.C.)
+#   - Annio de Viterbo (c. 1490)
+#   - Concílio Vaticano II (Constituição Dogmática "Dei Verbum", 1965, n. 12)
+#   - Pontifícia Comissão Bíblica ("A Interpretação da Bíblia na Igreja", 1993)
+#   - Raymond E. Brown ("The Birth of the Messiah", 1977/1993)
+#   - Bíblia de Jerusalém (notas a Mt 1 e Lc 3)
+# FORMATO: YAML — um bloco por pessoa, campos alinhados ao card do app. Blocos separados por "== Nome ==".
+#
+# ==============================================================================
+# 1. REGRA CENTRAL E AVISO METODOLÓGICO — NÃO FUNDIR AS DUAS LISTAS
+# ==============================================================================
+# Existem DUAS genealogias de Jesus no Novo Testamento, e elas DIVERGEM quase
+# inteiramente entre o Rei Davi e José:
+#
+#   1. MATEUS 1:1-17:
+#      - Ordem: descendente ("A gerou B").
+#      - Início: Abraão.
+#      - Linhagem régia: desce de Davi pelo rei SALOMÃO e pelos reis de Judá.
+#      - Pai de José: JACÓ.
+#      - Propósito: apresentar Jesus como Herdeiro Messiânico e Rei dos Judeus.
+#
+#   2. LUCAS 3:23-38:
+#      - Ordem: ascendente ("Jesus, filho [como se cuidava] de José, de Heli...").
+#      - Extensão: retrocede até Davi, Abraão, Adão e Deus.
+#      - Linhagem não régia: desce de Davi por NATÃ (filho privado, não dinástico).
+#      - Pai de José: HELI.
+#      - Propósito: apresentar Jesus como Salvador Universal de toda a humanidade.
+#
+# ENTRE DAVI E JESUS, OS ÚNICOS NOMES COMUNS SÃO SALATIEL E ZOROBABEL.
+# Nenhuma outra coincidência existe. Fundir as duas listas em uma só inventaria
+# uma linhagem artificial que nenhum texto antigo atesta.
+#
+# Cada pessoa neste arquivo possui o metadado:
+#   `linhagem: mateus | lucas | ambas`
+# permitindo que a interface do aplicativo exiba uma árvore OU outra, ou as duas
+# dispostas em paralelo.
+#
+# ==============================================================================
+# 2. GRAUS DE CERTEZA POR VÍNCULO (ARESTA)
+# ==============================================================================
+# [EXPLÍCITO]  — Afirmado diretamente pelo texto bíblico (ex.: Salomão filho de Davi).
+# [INFERIDO]   — Depende de harmonização ou identificação de personagens entre si (debatido).
+# [TRADIÇÃO]   — Proveniente da hagiografia posterior (apócrifos/Legenda Áurea), sem base no cânon.
+# [DIVERGENTE] — Fontes bíblicas se contradizem frontalmente; ambas registradas lado a lado.
+#
+# ==============================================================================
+# 3. AS QUATRO HIPÓTESES HISTÓRICAS DE HARMONIZAÇÃO (Hipóteses, jamais fatos)
+# ==============================================================================
+# 1. Hipótese "Linha Legal de José x Linha Biológica de Maria":
+#    Formulada expressamente por Annio de Viterbo (c. 1490) e popularizada após a
+#    Reforma Protestante. Sustenta que Mateus dá a linha sucessória de José e Lucas
+#    a linhagem biológica de Maria (sendo Heli o pai de Maria e sogro de José).
+#    RESSALVA CRÍTICA: Lucas NÃO afirma isso. O texto grego diz "José, filho de Heli".
+#    A atribuição a Maria é inferência piedosa tradicional, não fato documental.
+#
+# 2. Hipótese do Levirato (Júlio Africano, c. 200 d.C., em Eusébio, Hist. Ecl. 1.7):
+#    Matã (linha de Salomão) e Melqui (linha de Natã) teriam casado sucessivamente
+#    com a mesma mulher (chamada Está pela tradição). Jacó e Heli eram, assim,
+#    meios-irmãos uterinos. Heli morreu sem filhos; Jacó desposou a viúva pelo
+#    dever de levirato (Dt 25:5-10) e gerou José. Assim, José era filho natural
+#    de Jacó (Mateus), mas legalmente filho de Heli (Lucas).
+#
+# 3. Hipótese da Linha Real x Linha Natural / Adoção (Santo Agostinho, c. 400 d.C.):
+#    Em "De Consensu Evangelistarum", Agostinho propôs que um dos evangelistas
+#    registrou o pai biológico e o outro um pai adotivo, distinguindo a realeza
+#    legal da geração natural.
+#
+# 4. Leitura Acadêmica e Histórico-Crítica Moderna (Raymond Brown, Fitzmyer, PCB 1993):
+#    Ambas as listas são construções teológicas autônomas do século I. Não eram
+#    pesquisas de cartório, mas peças catequéticas para atestar a descendência
+#    davídica requerida para o Messias no judaísmo do Segundo Templo.
+#
+# ==============================================================================
+# 4. MOLDURA HERMENÊUTICA DA IGREJA CATÓLICA
+# ==============================================================================
+# - A Igreja NÃO define lista genealógica oficial e nunca canonizou uma harmonização.
+# - Dogma / Doutrina firme: o VÍNCULO de que Jesus é verdadeiramente descendente
+#   de Davi segundo a carne e filho de Abraão (Mt 1:1; Rm 1:3).
+# - Diretriz Metodológica (Dei Verbum 12; Pontifícia Comissão Bíblica, 1993):
+#   O texto sagrado deve ser lido considerando os gêneros literários de sua época.
+# - Mateus estrutura sua genealogia em 3 séries de 14 gerações (Mt 1:17).
+#   Para obter a simetria de 14 (duas vezes sete, perfeição), Mateus OMITIU reis
+#   históricos documentados no Antigo Testamento (Acazias, Joás, Amazias e Joaquim).
+#   14 é também o valor gemátrico do nome DAVI em hebraico (D-W-D = 4 + 6 + 4 = 14).
+# - A inclusão de 4 mulheres por Mateus (Tamar, Raabe, Rute e a mulher de Urias)
+#   é deliberada: estrangeiras e uniões irregulares que antecipam a graça universal.
+#
+# ==============================================================================
+# 5. DESAMBIGUAÇÃO DE HOMÔNIMOS CRÍTICOS
+# ==============================================================================
+# - DOIS Jacós:
+#     1. Jacó ben Isaac (Israel), patriarca do Antigo Testamento.
+#     2. Jacó ben Matã, pai de José em Mateus 1:16.
+# - TRÊS Tiagos no Novo Testamento:
+#     1. Tiago Maior (filho de Zebedeu e Salomé; irmão do apóstolo João).
+#     2. Tiago Menor (filho de Alfeu e Maria de Clopas; apóstolo).
+#     3. Tiago, o Justo ("irmão do Senhor"; líder da Igreja de Jerusalém; Gl 1:19).
+# - DOIS Judas:
+#     1. Judas Tadeu (filho/irmão de Tiago; apóstolo).
+#     2. Judas Iscariotes (o traidor).
+# - QUATRO Josés principais:
+#     1. José, esposo de Maria e pai legal de Jesus.
+#     2. José, citado como "irmão do Senhor" (Mt 13:55).
+#     3. José de Arimateia (membro do Sinédrio).
+#     4. José/José ben Alfeu (irmão de Tiago Menor, Mt 27:56).
+# - DOIS Simões:
+#     1. Simão Pedro (Cefas, filho de Jonas).
+#     2. Simão, o Zelote/Cananeu (apóstolo) / Simão "irmão do Senhor".
+# - QUATRO Marias nos Evangelhos:
+#     1. Maria, mãe de Jesus de Nazaré.
+#     2. Maria de Clopas (presente na crucificação; Jo 19:25).
+#     3. Maria Madalena (de Magdala).
+#     4. Maria de Betânia (irmã de Marta e Lázaro).
+#
+# ==============================================================================
+
+
+# ==============================================================================
+# BLOCO 1: TRONCO COMUM (Abraão → Jessé → Davi)
+# As duas listas concordam plenamente nos 14 patriarcas.
+# ==============================================================================
+
+== Abraão ==
+identidade: Patriarca bíblico; pai do povo hebreu e depositário da promessa messiânica.
+nome_publico: Abraão
+nome_registro: Avraham ben Terah
+nascimento: cerca de 1813 a.C.
+falecimento: cerca de 1638 a.C.
+profissoes: patriarca; criador de gado
+nacionalidades: Ur dos Caldeus / Canaã
+religioes: monoteísmo abraâmico
+idiomas: semítico arcaico
+linhagem: ambas
+relacoes: filho de Terah; casado com Sara; pai de Isaac   # -> Parentesco [EXPLÍCITO]
+fonte: Mateus 1:2; Lucas 3:34; Gênesis 12-25
+confiabilidade: reconstruida-tradicional
+
+== Isaac ==
+identidade: Segundo patriarca de Israel; filho da promessa de Abraão e Sara.
+nome_publico: Isaac
+nome_registro: Yitzhak ben Avraham
+nascimento: cerca de 1713 a.C.
+falecimento: cerca de 1533 a.C.
+profissoes: patriarca; agricultor
+nacionalidades: Canaã
+religioes: monoteísmo abraâmico
+idiomas: semítico arcaico
+linhagem: ambas
+relacoes: filho de Abraão e Sara; casado com Rebeca; pai de Jacó e Esaú   # -> Parentesco [EXPLÍCITO]
+fonte: Mateus 1:2; Lucas 3:34; Gênesis 21-35
+confiabilidade: reconstruida-tradicional
+
+== Jacó (patriarca) ==
+identidade: Terceiro patriarca de Israel; pai dos doze fundadores das tribos. Não confundir com Jacó, pai de José.
+nome_publico: Jacó (Israel)
+nome_registro: Yaakov ben Yitzhak (Israel)
+mudanca_nome: Recebeu de Deus o nome Israel (Gn 32:28)
+nascimento: cerca de 1653 a.C.
+falecimento: cerca de 1506 a.C.
+profissoes: patriarca; pastor
+nacionalidades: Canaã / Egito
+religioes: monoteísmo abraâmico
+idiomas: semítico arcaico
+linhagem: ambas
+relacoes: filho de Isaac e Rebeca; pai de Judá e outros 11 filhos   # -> Parentesco [EXPLÍCITO] [DESAMBIGUAÇÃO: patriarca]
+fonte: Mateus 1:2; Lucas 3:34; Gênesis 25-49
+confiabilidade: reconstruida-tradicional
+
+== Judá ==
+identidade: Quarto filho de Jacó; líder tribal de onde provém a dinastia de Davi.
+nome_publico: Judá
+nome_registro: Yehudah ben Yaakov
+nascimento: cerca de 1566 a.C.
+falecimento: cerca de 1437 a.C.
+profissoes: líder tribal; pastor
+nacionalidades: Canaã / Egito
+religioes: religião dos patriarcas
+idiomas: hebraico arcaico
+linhagem: ambas
+relacoes: filho de Jacó e Lia; com Tamar gerou Perez e Zerá   # -> Parentesco [EXPLÍCITO]
+fonte: Mateus 1:2-3; Lucas 3:33; Gênesis 29; 38
+confiabilidade: reconstruida-tradicional
+
+== Perez ==
+identidade: Filho de Judá e Tamar; ancestral dos clãs principais da tribo de Judá.
+nome_publico: Perez (Farés)
+nome_registro: Peretz ben Yehudah
+nascimento: cerca de 1500 a.C.
+profissoes: líder de clã
+nacionalidades: Canaã / Egito
+religioes: religião dos patriarcas
+linhagem: ambas
+relacoes: filho de Judá e Tamar; pai de Esrom   # -> Parentesco [EXPLÍCITO]
+fonte: Mateus 1:3; Lucas 3:33; Gênesis 38:29; Rute 4:18
+confiabilidade: reconstruida-tradicional
+
+== Esrom ==
+identidade: Neto de Judá; líder dos israelitas durante o período de migração para o Egito.
+nome_publico: Esrom (Hezrom)
+nome_registro: Hetzron ben Peretz
+nascimento: cerca de 1450 a.C.
+profissoes: líder patriarcal
+nacionalidades: Egito
+religioes: religião dos patriarcas
+linhagem: ambas
+relacoes: filho de Perez; pai de Arão (Ram)   # -> Parentesco [EXPLÍCITO]
+fonte: Mateus 1:3; Lucas 3:33; Rute 4:19
+confiabilidade: reconstruida-tradicional
+
+== Arão (Ram) ==
+identidade: Descendente de Perez; elo genealógico no período da permanência em Gosén. Não confundir com Aarão, irmão de Moisés.
+nome_publico: Arão (Ram)
+nome_registro: Ram ben Hetzron
+nascimento: cerca de 1400 a.C.
+profissoes: líder de clã
+nacionalidades: Egito
+religioes: religião dos patriarcas
+linhagem: ambas
+relacoes: filho de Esrom; pai de Aminadabe   # -> Parentesco [EXPLÍCITO]
+fonte: Mateus 1:3-4; Lucas 3:33; Rute 4:19
+confiabilidade: reconstruida-tradicional
+
+== Aminadabe ==
+identidade: Líder da tribo de Judá no período do Êxodo; sogro do sumo sacerdote Aarão.
+nome_publico: Aminadabe
+nome_registro: Amminadav ben Ram
+nascimento: cerca de 1350 a.C.
+profissoes: chefe de clã
+nacionalidades: Egito / Deserto do Sinai
+religioes: judaísmo mosaico
+linhagem: ambas
+relacoes: filho de Arão (Ram); pai de Naassom   # -> Parentesco [EXPLÍCITO]
+fonte: Mateus 1:4; Lucas 3:33; Êxodo 6:23; Rute 4:19-20
+confiabilidade: reconstruida-tradicional
+
+== Naassom ==
+identidade: Príncipe da tribo de Judá durante a travessia do deserto com Moisés.
+nome_publico: Naassom
+nome_registro: Nahshon ben Amminadav
+nascimento: cerca de 1300 a.C.
+profissoes: príncipe e comandante de Judá
+nacionalidades: Deserto do Sinai / Canaã
+religioes: judaísmo mosaico
+linhagem: ambas
+relacoes: filho de Aminadabe; pai de Salmom   # -> Parentesco [EXPLÍCITO]
+fonte: Mateus 1:4; Lucas 3:32; Números 1:7; Rute 4:20
+confiabilidade: reconstruida-tradicional
+
+== Salmom ==
+identidade: Conquistador israelita da época de Josué; associado na tradição ao casamento com Raabe de Jericó.
+nome_publico: Salmom (Salma)
+nome_registro: Salmon ben Nahshon
+nascimento: cerca de 1250 a.C.
+profissoes: guerreiro; líder tribal
+nacionalidades: Canaã / Reino de Israel
+religioes: judaísmo
+linhagem: ambas
+relacoes: filho de Naassom; casado com Raabe; pai de Boaz   # -> Parentesco [EXPLÍCITO]
+fonte: Mateus 1:4-5; Lucas 3:32; Rute 4:20-21
+confiabilidade: reconstruida-tradicional
+
+== Boaz ==
+identidade: Fazendeiro de Belém; protagonista do Livro de Rute e resgatador da linhagem davídica.
+nome_publico: Boaz
+nome_registro: Boaz ben Salmon
+nascimento: cerca de 1180 a.C.
+profissoes: proprietário de terras; juiz local
+nacionalidades: Belém de Judá
+religioes: judaísmo
+idiomas: hebraico bíblico
+linhagem: ambas
+relacoes: filho de Salmom e Raabe; casado com a moabita Rute; pai de Obede   # -> Parentesco [EXPLÍCITO]
+fonte: Mateus 1:5; Lucas 3:32; Livro de Rute
+confiabilidade: reconstruida-tradicional
+
+== Obede ==
+identidade: Filho de Boaz e Rute; avô do Rei Davi em Belém de Judá.
+nome_publico: Obede
+nome_registro: Oved ben Boaz
+nascimento: cerca de 1130 a.C.
+profissoes: agricultor
+nacionalidades: Belém de Judá
+religioes: judaísmo
+idiomas: hebraico bíblico
+linhagem: ambas
+relacoes: filho de Boaz e Rute; pai de Jessé   # -> Parentesco [EXPLÍCITO]
+fonte: Mateus 1:5; Lucas 3:32; Rute 4:21-22
+confiabilidade: reconstruida-tradicional
+
+== Jessé ==
+identidade: Ancião de Belém; pai do Rei Davi; origem do conceito profético da "Árvore de Jessé" (Is 11:1).
+nome_publico: Jessé
+nome_registro: Yishai ben Oved
+nascimento: cerca de 1090 a.C.
+profissoes: criador de ovelhas; patriarca local
+nacionalidades: Belém de Judá
+religioes: judaísmo
+idiomas: hebraico bíblico
+linhagem: ambas
+relacoes: filho de Obede; pai do Rei Davi e de outros sete filhos   # -> Parentesco [EXPLÍCITO]
+fonte: Mateus 1:5-6; Lucas 3:32; 1 Samuel 16
+confiabilidade: reconstruida-tradicional
+
+
+# ==============================================================================
+# BLOCO 2: O PONTO DE BIFURCAÇÃO (Rei Davi)
+# As duas linhagens partem de Davi e não mais se cruzam até Salatiel.
+# ==============================================================================
+
+== Rei David de Israel ==
+identidade: Segundo rei de Israel e Judá; unificador nacional e autor tradicional dos Salmos; ponto de ancoragem de todas as profecias messiânicas.
+nome_publico: Rei David de Israel
+nome_registro: David ben Yishai
+nascimento: cerca de 1040 a.C.
+falecimento: cerca de 970 a.C.
+profissoes: rei de Israel; guerreiro; poeta e músico
+nacionalidades: Reino Unido de Israel e Judá
+religioes: judaísmo
+idiomas: hebraico bíblico
+foto: fotos/rei-david.webp
+linhagem: ambas
+relacoes: filho de Jessé; BIFURCAÇÃO CENTRAL: gerou Salomão (Mt 1:6, linha de Mateus) e Natã (Lc 3:31, linha de Lucas)   # -> Parentesco [BIFURCAÇÃO MAT/LUC]
+fonte: Mateus 1:6; Lucas 3:31; 1 Samuel 16 — 1 Reis 2
+confiabilidade: reconstruida-tradicional
+
+
+# ==============================================================================
+# BLOCO 3: AS DUAS LINHAGENS PARALELAS (De Davi ao Cativeiro da Babilônia)
+# Ramo A (Mateus 1:6-11 — por Salomão) x Ramo B (Lucas 3:27-31 — por Natã)
+# ==============================================================================
+
+# --- RAMO A: MATEUS (Linhagem Régia de Judá por Salomão) ---
+
+== Salomão ==
+identidade: Terceiro rei de Israel; construtor do Primeiro Templo de Jerusalém; filho de Davi com Bate-Seba.
+nome_publico: Salomão
+nome_registro: Shlomo ben David
+nascimento: cerca de 990 a.C.
+falecimento: cerca de 931 a.C.
+profissoes: rei de Israel; sábio
+nacionalidades: Reino Unido de Israel e Judá
+religioes: judaísmo
+idiomas: hebraico bíblico
+linhagem: mateus
+relacoes: filho de Davi e Bate-Seba; pai de Roboão; início da linhagem régia de Mateus   # -> Parentesco [EXPLÍCITO]
+fonte: Mateus 1:6; 1 Reis 1-11
+confiabilidade: reconstruida-tradicional
+
+== Roboão ==
+identidade: Quarto rei da dinastia davídica; sob seu reinado ocorreu o cisma que dividiu o reino em Judá e Israel.
+nome_publico: Roboão
+nome_registro: Rehavam ben Shlomo
+nascimento: cerca de 971 a.C.
+falecimento: cerca de 913 a.C.
+profissoes: rei de Judá
+nacionalidades: Reino de Judá
+religioes: judaísmo
+linhagem: mateus
+relacoes: filho de Salomão com a amonita Naamá; pai de Abias   # -> Parentesco [EXPLÍCITO]
+fonte: Mateus 1:7; 1 Reis 14
+confiabilidade: reconstruida-tradicional
+
+== Abias ==
+identidade: Rei de Judá; manteve guerras contra Jeroboão de Israel.
+nome_publico: Abias (Abião)
+nome_registro: Aviyam ben Rehavam
+nascimento: cerca de 935 a.C.
+falecimento: cerca de 911 a.C.
+profissoes: rei de Judá
+nacionalidades: Reino de Judá
+religioes: judaísmo
+linhagem: mateus
+relacoes: filho de Roboão; pai de Asa   # -> Parentesco [EXPLÍCITO]
+fonte: Mateus 1:7; 1 Reis 15:1-8
+confiabilidade: reconstruida-tradicional
+
+== Asa ==
+identidade: Rei reformador de Judá; combateu a idolatria e reforçou a fidelidade ao Templo.
+nome_publico: Asa
+nome_registro: Asa ben Aviyam
+nascimento: cerca de 930 a.C.
+falecimento: cerca de 870 a.C.
+profissoes: rei de Judá
+nacionalidades: Reino de Judá
+religioes: judaísmo
+linhagem: mateus
+relacoes: filho de Abias; pai de Josafá   # -> Parentesco [EXPLÍCITO]
+fonte: Mateus 1:7-8; 1 Reis 15:9-24
+confiabilidade: reconstruida-tradicional
+
+== Josafá ==
+identidade: Rei de Judá notável por sua piedade e por alianças militares com o Reino do Norte.
+nome_publico: Josafá
+nome_registro: Yehoshafat ben Asa
+nascimento: cerca de 905 a.C.
+falecimento: cerca de 848 a.C.
+profissoes: rei de Judá
+nacionalidades: Reino de Judá
+religioes: judaísmo
+linhagem: mateus
+relacoes: filho de Asa; pai de Jorão   # -> Parentesco [EXPLÍCITO]
+fonte: Mateus 1:8; 1 Reis 22
+confiabilidade: reconstruida-tradicional
+
+== Jorão ==
+identidade: Rei de Judá que casou com Atalia, filha de Acabe de Israel.
+nome_publico: Jorão
+nome_registro: Yehoram ben Yehoshafat
+nascimento: cerca de 880 a.C.
+falecimento: cerca de 841 a.C.
+profissoes: rei de Judá
+nacionalidades: Reino de Judá
+religioes: judaísmo
+linhagem: mateus
+relacoes: filho de Josafá; casado com Atalia; pai de Ozias (Azarias)   # -> Parentesco [EXPLÍCITO em Mt, com omissão de 3 reis]
+fonte: Mateus 1:8; 2 Reis 8
+confiabilidade: reconstruida-tradicional
+
+== Ozias ==
+identidade: Rei de Judá cujo longo e próspero reinado coincidiu com o início do ministério de Isaías.
+nome_publico: Ozias (Azarias)
+nome_registro: Uzziyahu ben Amatzyahu
+nascimento: cerca de 808 a.C.
+falecimento: cerca de 758 a.C.
+profissoes: rei de Judá
+nacionalidades: Reino de Judá
+religioes: judaísmo
+linhagem: mateus
+relacoes: bisneto biológico de Jorão (Mateus omitiu Acazias, Joás e Amazias para manter a métrica de 14); pai de Jotão   # -> Parentesco [OMISSÃO DELIBERADA EM MATEUS]
+fonte: Mateus 1:8-9; 2 Reis 15; 2 Crônicas 26
+confiabilidade: reconstruida-tradicional
+
+== Jotão ==
+identidade: Rei de Judá conhecido por reconstruir as portas superiores do Templo.
+nome_publico: Jotão
+nome_registro: Yotam ben Uzziyahu
+nascimento: cerca de 770 a.C.
+falecimento: cerca de 735 a.C.
+profissoes: rei de Judá
+nacionalidades: Reino de Judá
+religioes: judaísmo
+linhagem: mateus
+relacoes: filho de Ozias; pai de Acaz   # -> Parentesco [EXPLÍCITO]
+fonte: Mateus 1:9; 2 Reis 15:32-38
+confiabilidade: reconstruida-tradicional
+
+== Acaz ==
+identidade: Rei de Judá que subjugou o reino aos assírios; destinatário da profecia do Emanuel (Is 7:14).
+nome_publico: Acaz
+nome_registro: Ahaz ben Yotam
+nascimento: cerca de 753 a.C.
+falecimento: cerca de 715 a.C.
+profissoes: rei de Judá
+nacionalidades: Reino de Judá
+religioes: judaísmo
+linhagem: mateus
+relacoes: filho de Jotão; pai de Ezequias   # -> Parentesco [EXPLÍCITO]
+fonte: Mateus 1:9; 2 Reis 16; Isaías 7
+confiabilidade: reconstruida-tradicional
+
+== Ezequias ==
+identidade: Grande rei reformador de Judá; resistiu ao cerco de Senaqueribe e purificou o culto de Jerusalém.
+nome_publico: Ezequias
+nome_registro: Hizkiyahu ben Ahaz
+nascimento: cerca de 739 a.C.
+falecimento: cerca de 687 a.C.
+profissoes: rei de Judá
+nacionalidades: Reino de Judá
+religioes: judaísmo
+linhagem: mateus
+relacoes: filho de Acaz; pai de Manassés   # -> Parentesco [EXPLÍCITO]
+fonte: Mateus 1:9-10; 2 Reis 18-20; Isaías 36-39
+confiabilidade: reconstruida-tradicional
+
+== Manassés ==
+identidade: Rei de Judá de mais longo reinado (55 anos); célebre pela introdução de cultos pagãos.
+nome_publico: Manassés
+nome_registro: Menasheh ben Hizkiyahu
+nascimento: cerca de 709 a.C.
+falecimento: cerca de 643 a.C.
+profissoes: rei de Judá
+nacionalidades: Reino de Judá
+religioes: judaísmo / cultos sincretistas
+linhagem: mateus
+relacoes: filho de Ezequias; pai de Amom   # -> Parentesco [EXPLÍCITO]
+fonte: Mateus 1:10; 2 Reis 21; 2 Crônicas 33
+confiabilidade: reconstruida-tradicional
+
+== Amom ==
+identidade: Rei idólatra de Judá, assassinado após curto governo de dois anos.
+nome_publico: Amom
+nome_registro: Amon ben Menasheh
+nascimento: cerca de 664 a.C.
+falecimento: cerca de 641 a.C.
+profissoes: rei de Judá
+nacionalidades: Reino de Judá
+religioes: judaísmo
+linhagem: mateus
+relacoes: filho de Manassés; pai de Josias   # -> Parentesco [EXPLÍCITO]
+fonte: Mateus 1:10; 2 Reis 21:19-26
+confiabilidade: reconstruida-tradicional
+
+== Josias ==
+identidade: Último grande rei justo de Judá; promoveu a Reforma Deuteronômica após o achado do Livro da Lei.
+nome_publico: Josias
+nome_registro: Yoshiyahu ben Amon
+nascimento: cerca de 648 a.C.
+falecimento: cerca de 609 a.C.
+profissoes: rei de Judá
+nacionalidades: Reino de Judá
+religioes: judaísmo
+linhagem: mateus
+relacoes: filho de Amom; avô biológico de Jeconias (Mateus omitiu o intermediário Joaquim); pai de Jeconias na contagem mateana   # -> Parentesco [EXPLÍCITO em Mt, com omissão de Joaquim]
+fonte: Mateus 1:10-11; 2 Reis 22-23
+confiabilidade: reconstruida-tradicional
+
+== Jeconias ==
+identidade: Jovem rei de Judá deposto e deportado para a Babilônia por Nabucodonosor II em 597 a.C.
+nome_publico: Jeconias (Jocanias)
+nome_registro: Yehoyakhin ben Yehoyaqim
+nascimento: cerca de 616 a.C.
+falecimento: cerca de 561 a.C.
+profissoes: rei de Judá; cativo na Babilônia
+nacionalidades: Reino de Judá / Babilônia
+religioes: judaísmo
+linhagem: mateus
+relacoes: filho de Joaquim (neto de Josias); pai de Salatiel segundo Mateus   # -> Parentesco [EXPLÍCITO em Mateus; em Lucas o pai de Salatiel é Neri]
+fonte: Mateus 1:11-12; 2 Reis 24; 2 Crônicas 36
+confiabilidade: reconstruida-tradicional
+
+
+# --- RAMO B: LUCAS (Linhagem Privada por Natã) ---
+
+== Natã ==
+identidade: Terceiro filho de Davi com Bate-Seba em Jerusalém; ancestral da linhagem alternativa de Lucas. Não confundir com o profeta Natã.
+nome_publico: Natã
+nome_registro: Natan ben David
+nascimento: cerca de 995 a.C.
+profissoes: príncipe real de Judá
+nacionalidades: Reino Unido de Israel e Judá
+religioes: judaísmo
+linhagem: lucas
+relacoes: filho de Davi e Bate-Seba; irmão de Salomão; pai de Matatá   # -> Parentesco [EXPLÍCITO em Lc 3:31; 1 Cr 3:5]
+fonte: Lucas 3:31; 2 Samuel 5:14; 1 Crônicas 3:5
+confiabilidade: reconstruida-tradicional
+
+== Matatá ==
+identidade: Filho de Natã; ancestral na linhagem descendente de Davi registrada exclusivamente por Lucas.
+nome_publico: Matatá
+nome_registro: Mattatah ben Natan
+nascimento: cerca de 960 a.C.
+nacionalidades: Judá
+religioes: judaísmo
+linhagem: lucas
+relacoes: filho de Natã; pai de Mená   # -> Parentesco [EXPLÍCITO]
+fonte: Lucas 3:31
+confiabilidade: reconstruida-tradicional
+
+== Mená ==
+identidade: Antepassado davídico pertencente à linha não dinástica de Lucas.
+nome_publico: Mená
+nome_registro: Menna ben Mattatah
+nascimento: cerca de 930 a.C.
+nacionalidades: Judá
+religioes: judaísmo
+linhagem: lucas
+relacoes: filho de Matatá; pai de Meleia   # -> Parentesco [EXPLÍCITO]
+fonte: Lucas 3:31
+confiabilidade: reconstruida-tradicional
+
+== Meleia ==
+identidade: Descendente de Davi no ramo privado preservado no Evangelho de Lucas.
+nome_publico: Meleia
+nome_registro: Melea ben Menna
+nascimento: cerca de 900 a.C.
+nacionalidades: Judá
+religioes: judaísmo
+linhagem: lucas
+relacoes: filho de Mená; pai de Eliaquim   # -> Parentesco [EXPLÍCITO]
+fonte: Lucas 3:31
+confiabilidade: reconstruida-tradicional
+
+== Eliaquim (filho de Meleia) ==
+identidade: Antepassado na linhagem de Natã. Não confundir com Eliaquim, filho de Abiúde (linha de Mateus).
+nome_publico: Eliaquim (filho de Meleia)
+nome_registro: Elyakim ben Melea
+nascimento: cerca de 870 a.C.
+nacionalidades: Judá
+religioes: judaísmo
+linhagem: lucas
+relacoes: filho de Meleia; pai de Jonã   # -> Parentesco [EXPLÍCITO] [DESAMBIGUAÇÃO: ramo de Lucas]
+fonte: Lucas 3:30-31
+confiabilidade: reconstruida-tradicional
+
+== Jonã ==
+identidade: Descendente de Davi por Natã na tradição genealógica lucana.
+nome_publico: Jonã
+nome_registro: Yonam ben Elyakim
+nascimento: cerca de 840 a.C.
+nacionalidades: Judá
+religioes: judaísmo
+linhagem: lucas
+relacoes: filho de Eliaquim; pai de José   # -> Parentesco [EXPLÍCITO]
+fonte: Lucas 3:30
+confiabilidade: reconstruida-tradicional
+
+== José (filho de Jonã) ==
+identidade: Antepassado pré-exílico de Jesus na genealogia de Lucas. Homônimo de outros Josés bíblicos.
+nome_publico: José (filho de Jonã)
+nome_registro: Yosef ben Yonam
+nascimento: cerca de 810 a.C.
+nacionalidades: Judá
+religioes: judaísmo
+linhagem: lucas
+relacoes: filho de Jonã; pai de Judá   # -> Parentesco [EXPLÍCITO] [DESAMBIGUAÇÃO: filho de Jonã]
+fonte: Lucas 3:30
+confiabilidade: reconstruida-tradicional
+
+== Judá (filho de José) ==
+identidade: Antepassado davídico da linhagem de Lucas. Não confundir com o patriarca Judá.
+nome_publico: Judá (filho de José)
+nome_registro: Yehudah ben Yosef
+nascimento: cerca de 780 a.C.
+nacionalidades: Judá
+religioes: judaísmo
+linhagem: lucas
+relacoes: filho de José; pai de Simeão   # -> Parentesco [EXPLÍCITO] [DESAMBIGUAÇÃO: filho de José]
+fonte: Lucas 3:30
+confiabilidade: reconstruida-tradicional
+
+== Simeão (filho de Judá) ==
+identidade: Antepassado davídico em Lucas. Não confundir com o patriarca Simeão nem com Simão Pedro.
+nome_publico: Simeão (filho de Judá)
+nome_registro: Shimon ben Yehudah
+nascimento: cerca de 750 a.C.
+nacionalidades: Judá
+religioes: judaísmo
+linhagem: lucas
+relacoes: filho de Judá; pai de Levi   # -> Parentesco [EXPLÍCITO] [DESAMBIGUAÇÃO: filho de Judá]
+fonte: Lucas 3:30
+confiabilidade: reconstruida-tradicional
+
+== Levi (filho de Simeão) ==
+identidade: Antepassado na genealogia de Natã. Não confundir com o patriarca Levi nem com o apóstolo Mateus (Levi).
+nome_publico: Levi (filho de Simeão)
+nome_registro: Levi ben Shimon
+nascimento: cerca de 720 a.C.
+nacionalidades: Judá
+religioes: judaísmo
+linhagem: lucas
+relacoes: filho de Simeão; pai de Matat   # -> Parentesco [EXPLÍCITO] [DESAMBIGUAÇÃO: filho de Simeão]
+fonte: Lucas 3:29-30
+confiabilidade: reconstruida-tradicional
+
+== Matat (filho de Levi) ==
+identidade: Antepassado da linhagem de Natã. Homônimo do avô de José em Lucas 3:24.
+nome_publico: Matat (filho de Levi)
+nome_registro: Mattat ben Levi
+nascimento: cerca de 690 a.C.
+nacionalidades: Judá
+religioes: judaísmo
+linhagem: lucas
+relacoes: filho de Levi; pai de Jorim   # -> Parentesco [EXPLÍCITO] [DESAMBIGUAÇÃO: filho de Levi]
+fonte: Lucas 3:29
+confiabilidade: reconstruida-tradicional
+
+== Jorim ==
+identidade: Antepassado pré-exílico de Jesus na lista de Lucas.
+nome_publico: Jorim
+nome_registro: Yorim ben Mattat
+nascimento: cerca de 665 a.C.
+nacionalidades: Judá
+religioes: judaísmo
+linhagem: lucas
+relacoes: filho de Matat; pai de Eliezer   # -> Parentesco [EXPLÍCITO]
+fonte: Lucas 3:29
+confiabilidade: reconstruida-tradicional
+
+== Eliezer ==
+identidade: Antepassado na linhagem lucana de Natã.
+nome_publico: Eliezer
+nome_registro: Eliezer ben Yorim
+nascimento: cerca de 640 a.C.
+nacionalidades: Judá
+religioes: judaísmo
+linhagem: lucas
+relacoes: filho de Jorim; pai de Jesus (Josué)   # -> Parentesco [EXPLÍCITO]
+fonte: Lucas 3:29
+confiabilidade: reconstruida-tradicional
+
+== Jesus (Josué ben Eliezer) ==
+identidade: Antepassado homônimo pré-exílico de Jesus de Nazaré, registrado na linhagem de Natã por Lucas.
+nome_publico: Jesus (filho de Eliezer)
+nome_registro: Yehoshua ben Eliezer
+nascimento: cerca de 620 a.C.
+nacionalidades: Judá
+religioes: judaísmo
+linhagem: lucas
+relacoes: filho de Eliezer; pai de Er   # -> Parentesco [EXPLÍCITO] [DESAMBIGUAÇÃO: antepassado de Lucas 3:29]
+fonte: Lucas 3:29
+confiabilidade: reconstruida-tradicional
+
+== Er ==
+identidade: Antepassado na linhagem de Natã.
+nome_publico: Er
+nome_registro: Er ben Yehoshua
+nascimento: cerca de 600 a.C.
+nacionalidades: Judá
+religioes: judaísmo
+linhagem: lucas
+relacoes: filho de Jesus (Josué); pai de Elmadã   # -> Parentesco [EXPLÍCITO]
+fonte: Lucas 3:28
+confiabilidade: reconstruida-tradicional
+
+== Elmadã ==
+identidade: Antepassado da linhagem lucana no limiar do Exílio Babilônico.
+nome_publico: Elmadã
+nome_registro: Elmadam ben Er
+nascimento: cerca de 585 a.C.
+nacionalidades: Judá / Babilônia
+religioes: judaísmo
+linhagem: lucas
+relacoes: filho de Er; pai de Cosã   # -> Parentesco [EXPLÍCITO]
+fonte: Lucas 3:28
+confiabilidade: reconstruida-tradicional
+
+== Cosã ==
+identidade: Descendente davídico na Babilônia segundo Lucas.
+nome_publico: Cosã
+nome_registro: Kosam ben Elmadam
+nascimento: cerca de 565 a.C.
+nacionalidades: Babilônia
+religioes: judaísmo
+linhagem: lucas
+relacoes: filho de Elmadã; pai de Adi   # -> Parentesco [EXPLÍCITO]
+fonte: Lucas 3:28
+confiabilidade: reconstruida-tradicional
+
+== Adi ==
+identidade: Antepassado davídico durante o Cativeiro Babilônico.
+nome_publico: Adi
+nome_registro: Addi ben Kosam
+nascimento: cerca de 545 a.C.
+nacionalidades: Babilônia
+religioes: judaísmo
+linhagem: lucas
+relacoes: filho de Cosã; pai de Melqui   # -> Parentesco [EXPLÍCITO]
+fonte: Lucas 3:28
+confiabilidade: reconstruida-tradicional
+
+== Melqui (filho de Adi) ==
+identidade: Antepassado babilônico na linha de Natã. Não confundir com Melqui ben Janai (Lc 3:24).
+nome_publico: Melqui (filho de Adi)
+nome_registro: Malki ben Addi
+nascimento: cerca de 525 a.C.
+nacionalidades: Babilônia
+religioes: judaísmo
+linhagem: lucas
+relacoes: filho de Adi; pai de Neri   # -> Parentesco [EXPLÍCITO] [DESAMBIGUAÇÃO: filho de Adi]
+fonte: Lucas 3:28
+confiabilidade: reconstruida-tradicional
+
+== Neri ==
+identidade: Último elo da linhagem de Natã antes do cruzamento com a dinastia principal; pai de Salatiel segundo Lucas.
+nome_publico: Neri
+nome_registro: Neri ben Malki
+nascimento: cerca de 505 a.C.
+nacionalidades: Babilônia
+religioes: judaísmo
+linhagem: lucas
+relacoes: filho de Melqui; pai de Salatiel segundo Lucas (pela hipótese tradicional de Júlio Africano/Agostinho, sogro de Jeconias ou ligado por levirato)   # -> Parentesco [DIVERGENTE com Mateus]
+fonte: Lucas 3:27-28
+confiabilidade: reconstruida-tradicional
+
+
+# ==============================================================================
+# BLOCO 4: PONTO DE REENCONTRO (Salatiel e Zorobabel) E NOVA SEPARAÇÃO
+# Os únicos nomes compartilhados entre Davi e Jesus.
+# Após Zorobabel, Mateus segue por Abiúde e Lucas por Resa.
+# ==============================================================================
+
+== Salatiel ==
+identidade: Príncipe da Casa de Davi durante o Exílio Babilônico; líder dos deportados judeus. Ponto de convergência das duas listas com filiações divergentes.
+nome_publico: Salatiel (Sealtiel)
+nome_registro: Shealtiel ben Yehoyakhin / ben Neri
+nascimento: cerca de 580 a.C.
+falecimento: cerca de 520 a.C.
+profissoes: príncipe de Judá no exílio
+nacionalidades: Babilônia / Judeia
+religioes: judaísmo
+idiomas: hebraico; aramaico
+linhagem: ambas
+relacoes: filho de Jeconias (segundo Mateus 1:12) OU filho de Neri (segundo Lucas 3:27); pai de Zorobabel   # -> Parentesco [DIVERGENTE: pai Jeconias x pai Neri]
+fonte: Mateus 1:12; Lucas 3:27; Esdras 3:2; 1 Crônicas 3:17
+confiabilidade: reconstruida-tradicional
+
+== Zorobabel ==
+identidade: Governador da Judeia persa (Yehud); líder do retorno do Cativeiro Babilônico e construtor do Segundo Templo de Jerusalém.
+nome_publico: Zorobabel
+nome_registro: Zerubavel ben Shealtiel
+nascimento: cerca de 550 a.C.
+falecimento: cerca de 490 a.C.
+profissoes: governador de Yehud (Judeia); líder do Segundo Templo
+nacionalidades: Babilônia / Província Persa da Judeia
+religioes: judaísmo
+idiomas: hebraico bíblico tardio; aramaico imperial persa
+linhagem: ambas
+relacoes: filho de Salatiel; SEGUNDA BIFURCAÇÃO: gerou Abiúde (Mt 1:13, linha de Mateus) e Resa (Lc 3:27, linha de Lucas)   # -> Parentesco [BIFURCAÇÃO PÓS-EXÍLICA]
+fonte: Mateus 1:12-13; Lucas 3:27; Esdras 3-5; Ageu 1-2; Zacarias 4
+confiabilidade: reconstruida-tradicional
+
+
+# --- PÓS-ZOROBABEL EM MATEUS (Por Abiúde até Jacó) ---
+
+== Abiúde ==
+identidade: Filho de Zorobabel; primeiro elo pós-exílico na linha régia preservada por Mateus.
+nome_publico: Abiúde
+nome_registro: Avihud ben Zerubavel
+nascimento: cerca de 510 a.C.
+nacionalidades: Judeia persa
+religioes: judaísmo
+linhagem: mateus
+relacoes: filho de Zorobabel segundo Mateus; pai de Eliaquim   # -> Parentesco [EXPLÍCITO]
+fonte: Mateus 1:13
+confiabilidade: reconstruida-tradicional
+
+== Eliaquim (filho de Abiúde) ==
+identidade: Descendente de Zorobabel na dinastia pós-exílica de Mateus.
+nome_publico: Eliaquim (filho de Abiúde)
+nome_registro: Elyakim ben Avihud
+nascimento: cerca de 470 a.C.
+nacionalidades: Judeia persa
+religioes: judaísmo
+linhagem: mateus
+relacoes: filho de Abiúde; pai de Azor   # -> Parentesco [EXPLÍCITO] [DESAMBIGUAÇÃO: filho de Abiúde]
+fonte: Mateus 1:13
+confiabilidade: reconstruida-tradicional
+
+== Azor ==
+identidade: Elo genealógico pós-exílico de Judá na linha mateana.
+nome_publico: Azor
+nome_registro: Azur ben Elyakim
+nascimento: cerca de 430 a.C.
+nacionalidades: Judeia persa
+religioes: judaísmo
+linhagem: mateus
+relacoes: filho de Eliaquim; pai de Sadoque   # -> Parentesco [EXPLÍCITO]
+fonte: Mateus 1:13-14
+confiabilidade: reconstruida-tradicional
+
+== Sadoque (descendente de Davi) ==
+identidade: Ancestral de José no período helenístico. Não confundir com Sadoque, o sumo sacerdote de Davi e Salomão.
+nome_publico: Sadoque (antepassado de José)
+nome_registro: Tzadok ben Azur
+nascimento: cerca de 390 a.C.
+nacionalidades: Judeia (sob domínio persa/ptolomaico)
+religioes: judaísmo
+linhagem: mateus
+relacoes: filho de Azor; pai de Aquim   # -> Parentesco [EXPLÍCITO] [DESAMBIGUAÇÃO: antepassado davídico]
+fonte: Mateus 1:14
+confiabilidade: reconstruida-tradicional
+
+== Aquim ==
+identidade: Descendente davídico da época ptolomaica na linha de Mateus.
+nome_publico: Aquim
+nome_registro: Yakhin ben Tzadok
+nascimento: cerca de 350 a.C.
+nacionalidades: Judeia (sob domínio ptolomaico)
+religioes: judaísmo
+linhagem: mateus
+relacoes: filho de Sadoque; pai de Eliúde   # -> Parentesco [EXPLÍCITO]
+fonte: Mateus 1:14
+confiabilidade: reconstruida-tradicional
+
+== Eliúde ==
+identidade: Antepassado na linhagem messiânica mateana na Judeia pré-macabeia.
+nome_publico: Eliúde
+nome_registro: Elihud ben Yakhin
+nascimento: cerca de 310 a.C.
+nacionalidades: Judeia (sob domínio selêucida)
+religioes: judaísmo
+linhagem: mateus
+relacoes: filho de Aquim; pai de Eleazar   # -> Parentesco [EXPLÍCITO]
+fonte: Mateus 1:14-15
+confiabilidade: reconstruida-tradicional
+
+== Eleazar ==
+identidade: Bisavô de José de Nazaré segundo a genealogia de Mateus.
+nome_publico: Eleazar (bisavô de José)
+nome_registro: Elazar ben Elihud
+nascimento: cerca de 270 a.C.
+nacionalidades: Judeia
+religioes: judaísmo
+linhagem: mateus
+relacoes: filho de Eliúde; pai de Matã   # -> Parentesco [EXPLÍCITO]
+fonte: Mateus 1:15
+confiabilidade: reconstruida-tradicional
+
+== Matã ==
+identidade: Avô paterno de José de Nazaré segundo o Evangelho de Mateus. Na tradição patrística (Júlio Africano), casou-se com Está.
+nome_publico: Matã
+nome_registro: Mattan ben Elazar
+nascimento: cerca de 230 a.C.
+nacionalidades: Judeia
+religioes: judaísmo
+linhagem: mateus
+relacoes: filho de Eleazar; pai de Jacó segundo Mateus   # -> Parentesco [EXPLÍCITO]
+fonte: Mateus 1:15
+confiabilidade: reconstruida-tradicional
+
+
+# --- PÓS-ZOROBABEL EM LUCAS (Por Resa até Heli) ---
+
+== Resa ==
+identidade: Filho de Zorobabel segundo a linhagem de Lucas; ancestral da vertente privada pós-exílica.
+nome_publico: Resa
+nome_registro: Rhesa ben Zerubavel
+nascimento: cerca de 515 a.C.
+nacionalidades: Judeia persa
+religioes: judaísmo
+linhagem: lucas
+relacoes: filho de Zorobabel segundo Lucas; pai de Joanã   # -> Parentesco [EXPLÍCITO]
+fonte: Lucas 3:27
+confiabilidade: reconstruida-tradicional
+
+== Joanã ==
+identidade: Filho de Resa na genealogia de Lucas.
+nome_publico: Joanã
+nome_registro: Yochanan ben Rhesa
+nascimento: cerca de 485 a.C.
+nacionalidades: Judeia persa
+religioes: judaísmo
+linhagem: lucas
+relacoes: filho de Resa; pai de Jodá   # -> Parentesco [EXPLÍCITO]
+fonte: Lucas 3:27
+confiabilidade: reconstruida-tradicional
+
+== Jodá ==
+identidade: Antepassado na linha de Lucas. Identificado em alguns manuscritos como Judá.
+nome_publico: Jodá
+nome_registro: Yodah ben Yochanan
+nascimento: cerca de 455 a.C.
+nacionalidades: Judeia persa
+religioes: judaísmo
+linhagem: lucas
+relacoes: filho de Joanã; pai de José   # -> Parentesco [EXPLÍCITO]
+fonte: Lucas 3:26
+confiabilidade: reconstruida-tradicional
+
+== José (filho de Jodá) ==
+identidade: Antepassado davídico pós-exílico de Lucas. Homônimo de outros Josés bíblicos.
+nome_publico: José (filho de Jodá)
+nome_registro: Yosef ben Yodah
+nascimento: cerca de 425 a.C.
+nacionalidades: Judeia persa
+religioes: judaísmo
+linhagem: lucas
+relacoes: filho de Jodá; pai de Semei   # -> Parentesco [EXPLÍCITO] [DESAMBIGUAÇÃO: filho de Jodá]
+fonte: Lucas 3:26
+confiabilidade: reconstruida-tradicional
+
+== Semei ==
+identidade: Descendente na linha de Natã segundo Lucas.
+nome_publico: Semei
+nome_registro: Shimei ben Yosef
+nascimento: cerca de 395 a.C.
+nacionalidades: Judeia
+religioes: judaísmo
+linhagem: lucas
+relacoes: filho de José; pai de Matatias   # -> Parentesco [EXPLÍCITO]
+fonte: Lucas 3:26
+confiabilidade: reconstruida-tradicional
+
+== Matatias (filho de Semei) ==
+identidade: Antepassado pós-exílico de Jesus em Lucas. Não confundir com Matatias o Macabeu.
+nome_publico: Matatias (filho de Semei)
+nome_registro: Mattityahu ben Shimei
+nascimento: cerca de 365 a.C.
+nacionalidades: Judeia
+religioes: judaísmo
+linhagem: lucas
+relacoes: filho de Semei; pai de Maate   # -> Parentesco [EXPLÍCITO]
+fonte: Lucas 3:26
+confiabilidade: reconstruida-tradicional
+
+== Maate ==
+identidade: Descendente de Davi na Judeia ptolomaica segundo Lucas.
+nome_publico: Maate
+nome_registro: Mahath ben Mattityahu
+nascimento: cerca de 335 a.C.
+nacionalidades: Judeia
+religioes: judaísmo
+linhagem: lucas
+relacoes: filho de Matatias; pai de Nagai   # -> Parentesco [EXPLÍCITO]
+fonte: Lucas 3:26
+confiabilidade: reconstruida-tradicional
+
+== Nagai ==
+identidade: Antepassado na lista lucana.
+nome_publico: Nagai
+nome_registro: Naggai ben Mahath
+nascimento: cerca de 305 a.C.
+nacionalidades: Judeia
+religioes: judaísmo
+linhagem: lucas
+relacoes: filho de Maate; pai de Esli   # -> Parentesco [EXPLÍCITO]
+fonte: Lucas 3:25
+confiabilidade: reconstruida-tradicional
+
+== Esli ==
+identidade: Descendente davídico na lista de Lucas.
+nome_publico: Esli
+nome_registro: Hesli ben Naggai
+nascimento: cerca de 275 a.C.
+nacionalidades: Judeia
+religioes: judaísmo
+linhagem: lucas
+relacoes: filho de Nagai; pai de Naum   # -> Parentesco [EXPLÍCITO]
+fonte: Lucas 3:25
+confiabilidade: reconstruida-tradicional
+
+== Naum (antepassado de José) ==
+identidade: Antepassado de José na linha de Lucas. Não confundir com o profeta Naum de Elcos.
+nome_publico: Naum (antepassado de José)
+nome_registro: Nahum ben Hesli
+nascimento: cerca de 245 a.C.
+nacionalidades: Judeia
+religioes: judaísmo
+linhagem: lucas
+relacoes: filho de Esli; pai de Amós   # -> Parentesco [EXPLÍCITO] [DESAMBIGUAÇÃO: antepassado lucano]
+fonte: Lucas 3:25
+confiabilidade: reconstruida-tradicional
+
+== Amós (antepassado de José) ==
+identidade: Antepassado helenístico de José na linha de Lucas. Não confundir com o profeta Amós de Tecoa.
+nome_publico: Amós (antepassado de José)
+nome_registro: Amos ben Nahum
+nascimento: cerca de 215 a.C.
+nacionalidades: Judeia
+religioes: judaísmo
+linhagem: lucas
+relacoes: filho de Naum; pai de Matatias   # -> Parentesco [EXPLÍCITO] [DESAMBIGUAÇÃO: antepassado lucano]
+fonte: Lucas 3:25
+confiabilidade: reconstruida-tradicional
+
+== Matatias (filho de Amós) ==
+identidade: Antepassado na linhagem lucana da época da revolta macabeia.
+nome_publico: Matatias (filho de Amós)
+nome_registro: Mattityahu ben Amos
+nascimento: cerca de 185 a.C.
+nacionalidades: Judeia
+religioes: judaísmo
+linhagem: lucas
+relacoes: filho de Amós; pai de José   # -> Parentesco [EXPLÍCITO]
+fonte: Lucas 3:25
+confiabilidade: reconstruida-tradicional
+
+== José (filho de Matatias) ==
+identidade: Antepassado da Casa de Davi no período asmoneu segundo Lucas.
+nome_publico: José (filho de Matatias)
+nome_registro: Yosef ben Mattityahu
+nascimento: cerca de 155 a.C.
+nacionalidades: Judeia (Reino Asmoneu)
+religioes: judaísmo
+linhagem: lucas
+relacoes: filho de Matatias; pai de Janai   # -> Parentesco [EXPLÍCITO] [DESAMBIGUAÇÃO: filho de Matatias]
+fonte: Lucas 3:24-25
+confiabilidade: reconstruida-tradicional
+
+== Janai ==
+identidade: Descendente davídico no período asmoneu.
+nome_publico: Janai
+nome_registro: Yannai ben Yosef
+nascimento: cerca de 125 a.C.
+nacionalidades: Judeia (Reino Asmoneu)
+religioes: judaísmo
+linhagem: lucas
+relacoes: filho de José; pai de Melqui   # -> Parentesco [EXPLÍCITO]
+fonte: Lucas 3:24
+confiabilidade: reconstruida-tradicional
+
+== Melqui (filho de Janai) ==
+identidade: Bisavô de José de Nazaré segundo o Evangelho de Lucas.
+nome_publico: Melqui (filho de Janai)
+nome_registro: Malki ben Yannai
+nascimento: cerca de 95 a.C.
+nacionalidades: Judeia
+religioes: judaísmo
+linhagem: lucas
+relacoes: filho de Janai; pai de Levi   # -> Parentesco [EXPLÍCITO] [DESAMBIGUAÇÃO: filho de Janai]
+fonte: Lucas 3:24
+confiabilidade: reconstruida-tradicional
+
+== Levi (filho de Melqui) ==
+identidade: Antepassado de José na linhagem de Lucas.
+nome_publico: Levi (filho de Melqui)
+nome_registro: Levi ben Malki
+nascimento: cerca de 70 a.C.
+nacionalidades: Judeia
+religioes: judaísmo
+linhagem: lucas
+relacoes: filho de Melqui; pai de Matat   # -> Parentesco [EXPLÍCITO] [DESAMBIGUAÇÃO: filho de Melqui]
+fonte: Lucas 3:24
+confiabilidade: reconstruida-tradicional
+
+== Matat (filho de Levi) ==
+identidade: Avô materno/legal de José segundo Lucas. Na tese de Júlio Africano, casou-se com Está após a viuvez de Matã.
+nome_publico: Matat (filho de Levi)
+nome_registro: Mattat ben Levi
+nascimento: cerca de 50 a.C.
+nacionalidades: Judeia / Galileia
+religioes: judaísmo
+linhagem: lucas
+relacoes: filho de Levi; pai de Heli segundo Lucas   # -> Parentesco [EXPLÍCITO]
+fonte: Lucas 3:24
+confiabilidade: reconstruida-tradicional
+
+
+# ==============================================================================
+# BLOCO 5: A GERAÇÃO FINAL (Jacó x Heli como Pai de José; José, Maria, Jesus)
+# Onde a contradição culmina e as hipóteses teológicas e exegéticas operam.
+# ==============================================================================
+
+== Jacó (pai de José) ==
+identidade: Pai de José de Nazaré de acordo com a genealogia de Mateus 1:16.
+nome_publico: Jacó (pai de José)
+nome_registro: Yaakov ben Mattan
+nascimento: cerca de 50 a.C.
+nacionalidades: Judeia / Galileia (Império Romano)
+religioes: judaísmo
+idiomas: aramaico; hebraico
+linhagem: mateus
+relacoes: filho de Matã; pai de José de Nazaré segundo Mateus; em oposição a Heli de Lucas   # -> Parentesco [DIVERGENTE COM LUCAS]
+fonte: Mateus 1:15-16
+confiabilidade: reconstruida-tradicional
+
+== Heli ==
+identidade: Pai de José segundo Lucas 3:23 ("filho de José, como se cuidava, filho de Heli"). Pela hipótese tradicional (c. 1490), pai biológico de Maria (sogro de José).
+nome_publico: Heli (Eli)
+nome_registro: Eli ben Mattat
+nascimento: cerca de 55 a.C.
+nacionalidades: Judeia / Galileia (Império Romano)
+religioes: judaísmo
+idiomas: aramaico; hebraico
+linhagem: lucas
+relacoes: filho de Matat; pai de José segundo Lucas 3:23; pela hipótese de Annio de Viterbo (c. 1490), pai biológico de Maria (sogro de José)   # -> Parentesco [DIVERGENTE COM MATEUS]
+fonte: Lucas 3:23
+confiabilidade: reconstruida-tradicional
+
+== José (esposo de Maria) ==
+identidade: Carpinteiro de Nazaré; esposo da Virgem Maria; pai legal (adotivo) de Jesus, por quem se transmite a herança régia davídica perante a Lei judaica.
+nome_publico: São José de Nazaré
+nome_registro: Yosef ben Yaakov / ben Eli
+nascimento: cerca de 30 a.C.
+falecimento: cerca de 18 d.C.   # ausente nos relatos da vida pública de Jesus
+profissoes: carpinteiro; artesão construtor (grego: tekton)
+nacionalidades: Galileia / Judeia (Império Romano)
+religioes: judaísmo
+idiomas: aramaico galileu; hebraico
+linhagem: ambas
+relacoes: filho de Jacó (Mateus 1:16) [DIVERGENTE] OU filho de Heli (Lucas 3:23) [DIVERGENTE]; esposo de Maria; pai LEGAL e messiânico de Jesus (sem filiação biológica)   # -> Parentesco [PATERNIDADE LEGAL / ADOÇÃO]
+fonte: Mateus 1:16-25; Lucas 2:4; 3:23
+confiabilidade: reconstruida-tradicional
+
+== Maria (mãe de Jesus) ==
+identidade: Mãe de Jesus de Nazaré; figura venerada no cristianismo; segundo a tradição de Lucas e a hipótese exegética de 1490, veículo da descendência davídica biológica.
+nome_publico: Virgem Maria de Nazaré
+nome_registro: Miryam bat Eli / bat Yoakim (segundo o Protoevangelho de Tiago)
+nascimento: cerca de 18 a.C.
+falecimento: cerca de 48 d.C.
+profissoes: mãe de família; dona de casa
+nacionalidades: Galileia (Império Romano)
+religioes: judaísmo
+idiomas: aramaico galileu; hebraico litúrgico
+linhagem: ambas
+relacoes: esposa de José; mãe de Jesus; parenta de Isabel (Lc 1:36) [EXPLÍCITO]; pela tradição extrabíblica (Protoevangelho), filha de Joaquim e Ana [TRADIÇÃO]; pela hipótese de Viterbo, filha de Heli [INFERIDO]   # -> Parentesco [MÃE DE JESUS]
+fonte: Mateus 1:18; Lucas 1:26-38; João 19:25-27; Protoevangelho de Tiago
+confiabilidade: reconstruida-tradicional
+
+== Jesus de Nazaré ==
+identidade: Figura central do cristianismo; pregador itinerante galileu, reconhecido pela fé cristã como o Messias davídico, Filho de Deus e Salvador.
+nome_publico: Jesus de Nazaré
+nome_registro: Yeshua ben Yosef (Yeshua bar Yosef)
+apelidos: Cristo (título grego: Khristós, ungido); Messias (Mashiach); Nazareno
+nascimento: cerca de 4 a.C.   # [divergente: estimado entre 6 e 4 a.C., antes da morte de Herodes, o Grande]
+falecimento: cerca de 30 d.C.   # [divergente: estimado em 30 ou 33 d.C. sob Pôncio Pilatos]
+profissoes: artesão/carpinteiro (tekton); mestre (rabi); pregador itinerante
+nacionalidades: Galileia / Judeia (Império Romano)
+religioes: judaísmo
+idiomas: aramaico galileu; hebraico (leitura litúrgica); grego coiné funcional
+linhagem: ambas
+relacoes: filho biológico de Maria; filho LEGAL de José (transmissor da herança davídica); parente de João Batista pelo lado materno (Lc 1:36)   # -> Parentesco [FILHO]
+fonte: Mateus 1:1-16; Lucas 3:23-38; Marcos 1-16; João 1-21
+confiabilidade: reconstruida-tradicional
+
+
+# ==============================================================================
+# BLOCO 6: AS RAMIFICAÇÕES DE PARENTESCO NO NOVO TESTAMENTO
+# Cada uma com seu nível estrito de certeza bíblica e histórica.
+# ==============================================================================
+
+# --- RAMIFICAÇÃO A: JOÃO BATISTA [EXPLÍCITO no texto bíblico] ---
+
+== Zacarias ==
+identidade: Sacerdote judeu do turno de Abias no Templo de Jerusalém; pai de João Batista.
+nome_publico: Zacarias
+nome_registro: Zekaryah
+nascimento: cerca de 50 a.C.
+falecimento: cerca de 10 d.C.
+profissoes: sacerdote no Templo de Jerusalém (ordem de Abias)
+nacionalidades: Judeia (Império Romano)
+religioes: judaísmo — casta sacerdotal aarônica
+idiomas: aramaico; hebraico
+linhagem: ambas
+relacoes: casado com Isabel; pai de João Batista   # -> Parentesco [EXPLÍCITO]
+fonte: Lucas 1:5-25
+confiabilidade: reconstruida-tradicional
+
+== Isabel ==
+identidade: Esposa do sacerdote Zacarias e mãe de João Batista; parenta de Maria mãe de Jesus.
+nome_publico: Santa Isabel
+nome_registro: Elisheva
+nascimento: cerca de 45 a.C.
+falecimento: cerca de 15 d.C.
+nacionalidades: Judeia (Império Romano)
+religioes: judaísmo — descendente de Aarão
+idiomas: aramaico; hebraico
+linhagem: ambas
+relacoes: esposa de Zacarias; mãe de João Batista; PARENTA (grego: syngenis) de Maria (Lucas 1:36). O texto bíblico NÃO especifica o grau (prima é tradição posterior, não texto canônico)   # -> Parentesco [EXPLÍCITO: parenta; GRAU NÃO ESPECIFICADO]
+fonte: Lucas 1:5; 1:36
+confiabilidade: reconstruida-tradicional
+
+== João Batista ==
+identidade: Profeta asceta do deserto que pregou o arrependimento no Jordão e batizou Jesus; parente materno de Jesus.
+nome_publico: João Batista
+nome_registro: Yochanan ben Zekaryah
+nascimento: cerca de 5 a.C.   # cerca de seis meses antes de Jesus (Lc 1:36)
+falecimento: cerca de 29 d.C.   # executado na fortaleza de Maqueronte por Herodes Antipas
+profissoes: profeta; pregador itinerante
+nacionalidades: Judeia (Império Romano)
+religioes: judaísmo — linhagem sacerdotal de Aarão
+idiomas: aramaico; hebraico
+linhagem: ambas
+relacoes: filho de Zacarias e Isabel; parente de Jesus de Nazaré pelo lado materno   # -> Parentesco [EXPLÍCITO]
+fonte: Lucas 1:5-80; 3:1-20; Mateus 3; Marcos 1; 6:14-29; Flávio Josefo, Antiguidade dos Judeus 18.5.2
+confiabilidade: reconstruida-tradicional
+
+
+# --- RAMIFICAÇÃO B: OS "IRMÃOS DO SENHOR" [EXPLÍCITOS no texto; GRAU DEBATIDO] ---
+# O termo grego adelphoi é traduzido diferentemente conforme a tradição teológica:
+#   1. Protestante: irmãos de sangue (filhos biológicos posteriores de José e Maria).
+#   2. Ortodoxa (Epifânio / Protoevangelho de Tiago): meio-irmãos (filhos de José de um casamento anterior, sendo José viúvo).
+#   3. Católica (Jerônimo, c. 383 d.C.): primos em primeiro grau (filhos de Maria de Clopas, dita "irmã" de Maria).
+
+== Tiago, o Justo ==
+identidade: Apóstolo e líder principal da Igreja de Jerusalém após a Ressurreição; autor tradicional da Epístola de Tiago; chamado "irmão do Senhor".
+nome_publico: Tiago, o Justo (irmão do Senhor)
+nome_registro: Yaakov
+falecimento: cerca de 62 d.C.   # martirizado em Jerusalém por ordem do sumo sacerdote Anás II (Josefo, Ant. 20.9.1)
+profissoes: líder da Igreja apostólica de Jerusalém
+nacionalidades: Galileia / Judeia (Império Romano)
+religioes: judaísmo nazareno / cristianismo primitivo
+idiomas: aramaico; hebraico; grego
+linhagem: ambas
+relacoes: chamado "irmão do Senhor" (Mt 13:55; Mc 6:3; Gl 1:19). O GRAU é objeto de 3 leituras: irmão de sangue (protestante), meio-irmão por José viúvo (ortodoxa) ou primo (católica). Identificado por alguns exegetas com Tiago Menor, e por outros como figura distinta   # -> Parentesco [GRAU DEBATIDO / 3 HIPÓTESES CONFESSIONAIS]
+fonte: Marcos 6:3; Mateus 13:55; Gálatas 1:19; 2:9; Atos 15; Flávio Josefo, Ant. 20.9.1
+confiabilidade: reconstruida-tradicional
+
+== José (irmão do Senhor) ==
+identidade: Citado nos Evangelhos entre os quatro "irmãos" de Jesus de Nazaré.
+nome_publico: José (irmão do Senhor)
+nome_registro: Yosef / Joses
+nascimento: cerca de 5 d.C.
+nacionalidades: Galileia (Império Romano)
+religioes: judaísmo / fé cristã primitiva
+idiomas: aramaico galileu
+linhagem: ambas
+relacoes: citado nominalmente como "irmão de Jesus" em Marcos 6:3 e Mateus 13:55   # -> Parentesco [GRAU DEBATIDO: irmão, meio-irmão ou primo]
+fonte: Marcos 6:3; Mateus 13:55
+confiabilidade: reconstruida-tradicional
+
+== Simão (irmão do Senhor) ==
+identidade: Citado entre os "irmãos" de Jesus; pela tradição patrística (Hegesipo em Eusébio), segundo bispo de Jerusalém sucedendo Tiago o Justo.
+nome_publico: Simão (irmão do Senhor)
+nome_registro: Shimon
+falecimento: cerca de 107 d.C.   # segundo Hegesipo, martirizado sob Trajano
+profissoes: líder da comunidade cristã de Jerusalém
+nacionalidades: Galileia / Judeia (Império Romano)
+religioes: judaísmo / fé cristã primitiva
+idiomas: aramaico galileu; grego
+linhagem: ambas
+relacoes: citado nominalmente como "irmão de Jesus" em Marcos 6:3; Mateus 13:55   # -> Parentesco [GRAU DEBATIDO: irmão, meio-irmão ou primo]
+fonte: Marcos 6:3; Mateus 13:55; Eusébio de Cesareia, Hist. Ecl. 3.11; 3.32
+confiabilidade: reconstruida-tradicional
+
+== Judas (irmão do Senhor) ==
+identidade: Citado entre os "irmãos" de Jesus; tradicionalmente identificado com o autor da Epístola de Judas ("Judas, servo de Jesus Cristo e irmão de Tiago").
+nome_publico: Judas (irmão do Senhor)
+nome_registro: Yehudah
+nascimento: cerca de 10 d.C.
+profissoes: pregador e missionário
+nacionalidades: Galileia (Império Romano)
+religioes: judaísmo / fé cristã primitiva
+idiomas: aramaico galileu; grego
+linhagem: ambas
+relacoes: citado nominalmente como "irmão de Jesus" em Marcos 6:3; Mateus 13:55; Judas 1:1   # -> Parentesco [GRAU DEBATIDO: irmão, meio-irmão ou primo]
+fonte: Marcos 6:3; Mateus 13:55; Judas 1:1
+confiabilidade: reconstruida-tradicional
+
+
+# --- RAMIFICAÇÃO C: APÓSTOLOS IRMÃOS ENTRE SI [EXPLÍCITO no texto bíblico] ---
+
+== Simão Pedro ==
+identidade: Apóstolo; líder dos Doze; primeiro bispo de Roma segundo a tradição católica.
+nome_publico: Simão Pedro (São Pedro)
+nome_registro: Shimon bar Yonah (Cefas)
+mudanca_nome: Recebeu de Jesus o cognome Cefas/Pedro ("pedra", Mt 16:18; Jo 1:42)
+falecimento: cerca de 64 ou 67 d.C.   # martirizado em Roma sob Nero
+profissoes: pescador em Cafarnaum; apóstolo e líder eclesial
+nacionalidades: Betsaida / Galileia (Império Romano)
+religioes: judaísmo / cristianismo apostólico
+idiomas: aramaico galileu; hebraico litúrgico; grego funcional
+linhagem: ambas
+relacoes: filho de Jonas (João); IRMÃO de André; casado (sogra curada em Mc 1:30); sócio de pesca de Tiago e João   # -> Parentesco [EXPLÍCITO: irmão de André]
+fonte: Mateus 4:18; 16:16-19; Marcos 1:16,29-31; Lucas 5:1-11; João 1:40-42
+confiabilidade: reconstruida-tradicional
+
+== André ==
+identidade: Apóstolo; o primeiro chamado por Jesus; irmão de Simão Pedro e outrora discípulo de João Batista.
+nome_publico: Santo André Apóstolo
+nome_registro: Andreas bar Yonah
+falecimento: cerca de 60 d.C.   # martirizado em Patras, Acaia, na Grécia
+profissoes: pescador; apóstolo
+nacionalidades: Betsaida / Galileia (Império Romano)
+religioes: judaísmo / cristianismo apostólico
+idiomas: aramaico galileu; grego coiné
+linhagem: ambas
+relacoes: filho de Jonas; IRMÃO de Simão Pedro; ex-discípulo de João Batista   # -> Parentesco [EXPLÍCITO: irmão de Pedro]
+fonte: Mateus 4:18; João 1:35-44; Marcos 1:16
+confiabilidade: reconstruida-tradicional
+
+== Zebedeu ==
+identidade: Pescador galileu próspero no Mar de Tiberíades; proprietário de barcos e redes que empregava assalariados; pai de Tiago e João.
+nome_publico: Zebedeu
+nome_registro: Zavdai
+nascimento: cerca de 45 a.C.
+profissoes: mestre de pesca / empresário pesqueiro em Cafarnaum
+nacionalidades: Galileia (Império Romano)
+religioes: judaísmo
+idiomas: aramaico galileu
+linhagem: ambas
+relacoes: casado com Salomé; pai dos apóstolos Tiago Maior e João Evangelista   # -> Parentesco [EXPLÍCITO: pai de Tiago e João]
+fonte: Marcos 1:19-20; Mateus 4:21-22
+confiabilidade: reconstruida-tradicional
+
+== Salomé ==
+identidade: Seguidora devota de Jesus; mãe dos filhos de Zebedeu; presente na crucificação e na visita ao sepulcro no Domingo de Páscoa.
+nome_publico: Santa Salomé
+nome_registro: Shlomit
+nascimento: cerca de 40 a.C.
+falecimento: cerca de 45 d.C.
+nacionalidades: Galileia (Império Romano)
+religioes: judaísmo / fé cristã
+idiomas: aramaico galileu
+linhagem: ambas
+relacoes: esposa de Zebedeu; mãe de Tiago Maior e João Evangelista; comparando Mt 27:56, Mc 15:40 e Jo 19:25, a Hipótese A faz dela "a irmã da mãe de Jesus" — tornando Tiago e João primos de Jesus   # -> Parentesco [INFERIDO: Hipótese A de prima de Maria]
+fonte: Marcos 15:40; 16:1; Mateus 20:20-21; 27:56; João 19:25
+confiabilidade: reconstruida-tradicional
+
+== Tiago Maior ==
+identidade: Apóstolo do círculo mais íntimo de Jesus (com Pedro e João); primeiro dos Doze a ser martirizado.
+nome_publico: Tiago Maior (São Tiago de Zebedeu)
+nome_registro: Yaakov ben Zavdai
+falecimento: cerca de 44 d.C.   # decapitado em Jerusalém por Herodes Agripa I (Atos 12:2)
+profissoes: pescador; apóstolo
+nacionalidades: Galileia (Império Romano)
+religioes: judaísmo / cristianismo apostólico
+idiomas: aramaico galileu
+linhagem: ambas
+relacoes: filho de Zebedeu e Salomé; IRMÃO de João Evangelista [EXPLÍCITO]; primo de Jesus segundo a Hipótese A de João 19:25 [INFERIDO]   # -> Parentesco [EXPLÍCITO: irmão de João]
+fonte: Mateus 4:21; Marcos 3:17; 10:35-40; Atos 12:1-2
+confiabilidade: reconstruida-tradicional
+
+== João Evangelista ==
+identidade: Apóstolo amado; irmão de Tiago Maior; autor do Quarto Evangelho, de três epístolas e do Apocalipse.
+nome_publico: João Evangelista (São João Apóstolo)
+nome_registro: Yochanan ben Zavdai
+nascimento: cerca de 6 d.C.
+falecimento: cerca de 100 d.C.   # em Éfeso, de morte natural em idade avançada
+profissoes: pescador; apóstolo; evangelista e teólogo
+nacionalidades: Galileia (Império Romano)
+religioes: judaísmo / cristianismo apostólico
+idiomas: aramaico galileu; grego coiné
+linhagem: ambas
+relacoes: filho de Zebedeu e Salomé; IRMÃO de Tiago Maior [EXPLÍCITO]; aos pés da cruz recebeu Maria como mãe (Jo 19:26-27); primo de Jesus se Salomé for a irmã de Maria [INFERIDO]   # -> Parentesco [EXPLÍCITO: irmão de Tiago]
+fonte: Mateus 4:21; Marcos 3:17; João 19:25-27; 21:20-24
+confiabilidade: reconstruida-tradicional
+
+
+# --- RAMIFICAÇÃO D: PRIMOS DE JESUS [INFERIDO: As Duas Hipóteses de João 19:25] ---
+# Em João 19:25, junto à cruz estavam:
+# "a mãe de Jesus, e a irmã de sua mãe, Maria, mulher de Clopas, e Maria Madalena."
+# Há duas formas gramaticais e exegéticas de ler essa lista:
+#
+#   HIPÓTESE A (Lista de 4 mulheres):
+#   1. Maria, mãe de Jesus
+#   2. A irmã de sua mãe (= Salomé, mãe dos filhos de Zebedeu em Mc 15:40)
+#   3. Maria, mulher de Clopas
+#   4. Maria Madalena
+#   => Consequência: Salomé é tia materna de Jesus, logo Tiago Maior e João Evangelista são PRIMOS DE JESUS.
+#
+#   HIPÓTESE B (Lista de 3 mulheres ou aposição):
+#   "a irmã de sua mãe, [isto é,] Maria de Clopas"
+#   => Consequência: Maria de Clopas é irmã/cunhada de Maria. Como Clopas é identificado
+#      com Alfeu por Hegesipo (irmão de José), os filhos de Alfeu (Tiago Menor e José)
+#      são PRIMOS DE JESUS.
+
+== Clopas (Alfeu) ==
+identidade: Seguidor de Jesus citado na Paixão; identificado por Hegesipo (século II, em Eusébio Hist. Ecl. 3.11) como irmão de São José e pai de Simeão de Jerusalém; frequentemente identificado com Alfeu (forma aramaica Hilfai / Clopas).
+nome_publico: Clopas (Alfeu)
+nome_registro: Hilfai / Kleopas
+nascimento: cerca de 35 a.C.
+nacionalidades: Galileia (Império Romano)
+religioes: judaísmo
+idiomas: aramaico galileu
+linhagem: ambas
+relacoes: casado com Maria de Clopas; pai do apóstolo Tiago Menor e de José; irmão de São José segundo Hegesipo [TRADIÇÃO/INFERIDO]   # -> Parentesco [INFERIDO: Hipótese B]
+fonte: João 19:25; Marcos 3:18; Eusébio de Cesareia, Hist. Ecl. 3.11
+confiabilidade: reconstruida-tradicional
+
+== Maria de Clopas ==
+identidade: Discípula fiel de Jesus; presente na crucificação e na ressurreição; mãe de Tiago Menor e de José.
+nome_publico: Maria de Clopas (mulher de Clopas)
+nome_registro: Miryam
+nascimento: cerca de 30 a.C.
+falecimento: cerca de 50 d.C.
+nacionalidades: Galileia (Império Romano)
+religioes: judaísmo / fé cristã
+idiomas: aramaico galileu
+linhagem: ambas
+relacoes: esposa de Clopas; mãe de Tiago Menor e José (Mc 15:40); lida pela Hipótese B como a "irmã da mãe de Jesus" de Jo 19:25   # -> Parentesco [INFERIDO: Hipótese B]
+fonte: João 19:25; Marcos 15:40; 16:1; Mateus 27:56
+confiabilidade: reconstruida-tradicional
+
+== Tiago Menor ==
+identidade: Um dos Doze Apóstolos de Jesus, chamado "o Menor" para distingui-lo de Tiago ben Zebedeu.
+nome_publico: Tiago Menor (São Tiago, filho de Alfeu)
+nome_registro: Yaakov ben Hilfai
+falecimento: cerca de 62 d.C.
+profissoes: apóstolo
+nacionalidades: Galileia (Império Romano)
+religioes: judaísmo / cristianismo apostólico
+idiomas: aramaico galileu; grego
+linhagem: ambas
+relacoes: filho de Alfeu (Clopas) e Maria de Clopas [EXPLÍCITO]; pela tradição católica latina (São Jerônimo), identificado com Tiago o Justo ("irmão do Senhor") e primo direto de Jesus   # -> Parentesco [EXPLÍCITO como filho de Alfeu; INFERIDO como primo]
+fonte: Marcos 3:18; 15:40; Mateus 10:3; Atos 1:13
+confiabilidade: reconstruida-tradicional
+
+== Judas Tadeu ==
+identidade: Um dos Doze Apóstolos; chamado Judas de Tiago para distingui-lo de Judas Iscariotes.
+nome_publico: São Judas Tadeu
+nome_registro: Yehudah
+mudanca_nome: Chamado Tadeu ou Lebeu nos Evangelhos sinóticos para desambiguação
+falecimento: cerca de 70 d.C.   # martirizado na Pérsia ou Mesopotâmia segundo a tradição
+profissoes: apóstolo
+nacionalidades: Galileia (Império Romano)
+religioes: judaísmo / cristianismo apostólico
+idiomas: aramaico galileu; grego
+linhagem: ambas
+relacoes: em Lucas 6:16 é "Judas de Tiago" (o grego Ioudan Iakobou pode significar filho OU irmão de Tiago); a tradição latina o considera irmão de Tiago Menor e filho de Alfeu   # -> Parentesco [INFERIDO: ambiguidade do grego]
+fonte: Lucas 6:16; Atos 1:13; Mateus 10:3; João 14:22
+confiabilidade: reconstruida-tradicional
+
+
+# ==============================================================================
+# BLOCO 7: AVISO SOBRE A "SANTA PARENTELA" MEDIEVAL [TRADIÇÃO SEM BASE BÍBLICA]
+# ==============================================================================
+# A hagiografia medieval europeia (popularizada pela "Legenda Áurea" de Jacopo de
+# Varazze, século XIII) desenvolveu a doutrina do Trinubium Annae (Três Casamentos de Ana):
+#
+#   1. Ana + Joaquim  --> Maria (Mãe de Jesus) --> JESUS
+#   2. Ana + Cleofas  --> Maria Cleofas        --> Tiago Menor, José, Simão, Judas
+#   3. Ana + Salomé   --> Maria Salomé         --> Tiago Maior e João Evangelista
+#
+# Sob esse esquema medieval, todos os apóstolos citados seriam primos em primeiro
+# grau de Jesus por três meias-irmãs uterinas.
+#
+# ALERTA GENEALÓGICO PARA O APP:
+# Essa lenda NÃO possui qualquer fundamento no texto bíblico do Novo Testamento.
+# Foi rejeitada formalmente pelo Concílio de Trento e pela erudição bíblica moderna.
+# Jamais deve ser inserida como dado factual na árvore genealógica.

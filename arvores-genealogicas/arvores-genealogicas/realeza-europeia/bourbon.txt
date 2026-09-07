@@ -1,0 +1,115 @@
+# FAMILIA: Bourbon (Borbón) — França e Espanha
+# CONFIABILIDADE geral: documentada
+# FONTES: Britannica; Wikipedia; Casa Real Espanhola (casareal.es)
+# FORMATO: um bloco por pessoa (ver _MODELO-PESSOA.txt)
+# NOTA: o ramo espanhol dos Bourbon nasce de Filipe V, neto de Luís XIV, após a
+#       Guerra da Sucessão Espanhola — e reina na Espanha até hoje (Felipe VI).
+# LGPD: membros vivos marcados.
+# ---
+
+# --- RAMO FRANCÊS ---
+== Henrique IV da França ==
+identidade: Primeiro rei Bourbon da França; encerrou as guerras religiosas com o Édito de Nantes.
+nome_publico: Henrique IV
+nascimento: 1553
+falecimento: 1610   # assassinado
+profissoes: monarca
+nacionalidades: França; Navarra
+relacoes: fundador da dinastia Bourbon na França   # -> Parentesco
+fonte: Britannica
+confiabilidade: documentada
+
+== Luís XIV ==
+identidade: O "Rei Sol"; o mais longo reinado da história europeia (72 anos).
+nome_publico: Luís XIV
+nascimento: 1638
+falecimento: 1715
+profissoes: monarca
+nacionalidades: França
+foto: fotos/luis-xiv.webp
+relacoes: bisavô de Filipe V da Espanha   # -> Parentesco
+fonte: Britannica
+confiabilidade: documentada
+
+== Luís XVI ==
+identidade: Rei deposto e guilhotinado na Revolução Francesa.
+nome_publico: Luís XVI
+nascimento: 1754
+falecimento: 1793   # guilhotinado
+profissoes: monarca
+nacionalidades: França
+relacoes: casado com Maria Antonieta (elo com [[habsburgo]])   # -> Parentesco
+fonte: Britannica
+confiabilidade: documentada
+
+# --- RAMO ESPANHOL ---
+== Filipe V da Espanha ==
+identidade: Neto de Luís XIV; primeiro rei Bourbon da Espanha.
+nome_publico: Filipe V
+nascimento: 1683
+falecimento: 1746
+profissoes: monarca
+nacionalidades: França; Espanha
+relacoes: neto de Luís XIV; inicia o ramo espanhol dos Bourbon   # -> Parentesco
+fonte: Britannica
+confiabilidade: documentada
+
+== Afonso XIII ==
+nome_publico: Afonso XIII
+nascimento: 1886
+falecimento: 1941
+profissoes: monarca
+nacionalidades: Espanha
+relacoes: avô de Juan Carlos I; reinado encerrado com a República (1931)   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Juan de Borbón ==
+nome_publico: Juan de Borbón (Conde de Barcelona)
+nascimento: 1913
+falecimento: 1993
+nacionalidades: Espanha
+relacoes: filho de Afonso XIII; pai de Juan Carlos I   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Juan Carlos I ==
+identidade: Rei que conduziu a transição democrática espanhola pós-Franco; abdicou em 2014.
+nome_publico: Juan Carlos I
+nascimento: 1938
+profissoes: monarca (abdicou em 2014)
+nacionalidades: Espanha
+foto: fotos/juan-carlos-i.webp
+relacoes: neto de Afonso XIII; pai de Felipe VI   # -> Parentesco
+fonte: casareal.es   # LGPD: pessoa viva
+confiabilidade: documentada
+
+== Felipe VI ==
+identidade: Rei da Espanha desde 2014.
+nome_publico: Felipe VI
+nascimento: 1968
+profissoes: monarca
+nacionalidades: Espanha
+foto: fotos/felipe-vi.webp
+relacoes: filho de Juan Carlos I; casado com Letizia; herdeira: Leonor   # -> Parentesco
+fonte: casareal.es   # LGPD: pessoa viva
+confiabilidade: documentada
+
+== Letizia ==
+nome_publico: Rainha Letizia
+nome_registro: Letizia Ortiz Rocasolano
+nascimento: 1972
+profissoes: jornalista; rainha consorte
+nacionalidades: Espanha
+relacoes: esposa de Felipe VI   # -> Parentesco
+fonte: casareal.es   # LGPD: pessoa viva
+confiabilidade: documentada
+
+== Leonor, Princesa das Astúrias ==
+nome_publico: Leonor de Borbón
+nascimento: 2005
+profissoes: herdeira do trono (Princesa das Astúrias)
+nacionalidades: Espanha
+relacoes: filha de Felipe VI e Letizia   # -> Parentesco
+fonte: casareal.es   # LGPD: pessoa viva
+confiabilidade: documentada

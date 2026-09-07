@@ -5,6 +5,10 @@
 
 use serde::{Deserialize, Serialize};
 
+pub fn default_tipo_tempo() -> String {
+    "real".to_string()
+}
+
 #[derive(Debug, Serialize, Deserialize, Clone, sqlx::FromRow)]
 pub struct Pessoa {
     pub id: String,
@@ -17,6 +21,11 @@ pub struct Pessoa {
     /// Pessoa-placeholder da seção 2.2: nó real, sexo definido, nome em aberto.
     pub is_placeholder: bool,
     pub foto_url: Option<String>,
+    #[serde(default)]
+    pub is_publico: bool,
+    pub categoria: Option<String>,
+    #[serde(default = "default_tipo_tempo")]
+    pub tipo_tempo: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, sqlx::FromRow)]
@@ -102,4 +111,13 @@ pub struct Idioma {
     pub id: String,
     pub pessoa_id: String,
     pub idioma: String,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, sqlx::FromRow)]
+pub struct MarcoParticipante {
+    pub id: String,
+    pub marco_id: String,
+    pub pessoa_id: String,
+    pub papel: Option<String>,
+    pub visivel_na_pessoa: bool,
 }

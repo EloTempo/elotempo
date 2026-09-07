@@ -1,0 +1,131 @@
+# FAMILIA: Guinle (Rio de Janeiro)
+# CONFIABILIDADE geral: documentada
+# FONTES: Wikipedia; Clóvis Bulcão, "Os Guinle: a história de uma dinastia";
+#         Geni; Companhia Docas de Santos
+# FORMATO: um bloco por pessoa (ver _MODELO-PESSOA.txt)
+# NOTA: origem huguenote francesa (Hautes-Pyrénées). O sócio Cândido Gaffrée
+#       (não é da família) morreu em 1919 sem herdeiros e deixou sua parte aos
+#       filhos de Eduardo. LGPD: descendentes vivos marcados.
+# ---
+
+# --- ASCENDÊNCIA ---
+== Jean-Arnauld Guinle ==
+nome_publico: Jean-Arnauld Guinle
+profissoes: imigrante (comerciante)
+nacionalidades: França
+relacoes: pai do patriarca Eduardo; casou (1843, Montevidéu) com Josephine Palassin   # -> Parentesco
+fonte: Geni; parentesco.com.br
+confiabilidade: documentada
+
+== Josephine Palassin ==
+nome_publico: Josephine Désirée Bernardine Palassin
+nacionalidades: França
+relacoes: mãe do patriarca Eduardo Palassin Guinle   # -> Parentesco
+fonte: Geni; parentesco.com.br
+confiabilidade: documentada
+
+# --- GERAÇÃO 1 — o patriarca ---
+== Eduardo Palassin Guinle ==
+identidade: Patriarca da dinastia; cofundador da Companhia Docas de Santos e um dos homens mais ricos do Brasil.
+nome_publico: Eduardo Palassin Guinle
+nascimento: 1846   # Porto Alegre, 18 de março
+falecimento: 1912  # Rio de Janeiro, 10 de março
+profissoes: empresário (portos, ferrovias, comércio)
+nacionalidades: Brasil
+foto: fotos/eduardo-palassin-guinle.webp
+relacoes: casado com Guilhermina Coutinho da Silva; sete filhos; sócio de Cândido Gaffrée   # -> Parentesco
+fonte: Wikipedia; Geni
+confiabilidade: documentada
+
+== Guilhermina Coutinho da Silva ==
+nome_publico: Guilhermina Coutinho da Silva
+nacionalidades: Brasil
+relacoes: esposa de Eduardo Palassin Guinle; mãe dos sete filhos   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+# --- GERAÇÃO 2 — os sete filhos ---
+== Eduardo Guinle Filho ==
+identidade: Primogênito; pioneiro do setor imobiliário carioca (comprou terrenos de Copacabana em 1902).
+nome_publico: Eduardo Guinle
+profissoes: empresário (imobiliário; energia elétrica)
+nacionalidades: Brasil
+relacoes: filho de Eduardo Palassin   # -> Parentesco
+fonte: Bulcão; Wikipedia
+confiabilidade: documentada
+
+== Guilherme Guinle ==
+identidade: Empresário e mecenas; ligado à criação da CSN e a hospitais (Gaffrée e Guinle).
+nome_publico: Guilherme Guinle
+nascimento: 1882   # a confirmar
+falecimento: 1960  # a confirmar
+profissoes: empresário; mecenas
+nacionalidades: Brasil
+relacoes: filho de Eduardo Palassin   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Carlos Guinle ==
+nome_publico: Carlos Guinle
+profissoes: empresário
+nacionalidades: Brasil
+relacoes: filho de Eduardo Palassin; pai de Jorge "Jorginho" Guinle   # -> Parentesco
+fonte: Bulcão; Wikipedia
+confiabilidade: documentada
+
+== Arnaldo Guinle ==
+identidade: Empresário e mecenas do esporte; grande patrono do Fluminense F.C.
+nome_publico: Arnaldo Guinle
+profissoes: empresário; mecenas esportivo
+nacionalidades: Brasil
+relacoes: filho de Eduardo Palassin; não se casou, sem descendentes   # -> Parentesco
+fonte: Geni; Wikipedia
+confiabilidade: documentada
+
+== Octávio Guinle ==
+identidade: Fundador do Copacabana Palace (1923) e construtor do Palácio das Laranjeiras.
+nome_publico: Octávio Guinle
+profissoes: empresário (hotelaria)
+nacionalidades: Brasil
+foto: fotos/octavio-guinle.webp
+relacoes: filho de Eduardo Palassin; avô da atriz Guilhermina Guinle   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Celina Guinle ==
+nome_publico: Celina Guinle
+nacionalidades: Brasil
+relacoes: filha de Eduardo Palassin; casada com Linneo de Paula Machado   # -> Parentesco
+fonte: Geni
+confiabilidade: documentada
+
+== Heloísa Guinle ==
+nome_publico: Heloísa Guinle
+nacionalidades: Brasil
+relacoes: filha de Eduardo Palassin; casada com o primo Samuel Ribeiro (sem descendentes)   # -> Parentesco
+fonte: Geni
+confiabilidade: documentada
+
+# --- GERAÇÃO 3 ---
+== Jorge Guinle ==
+identidade: Bon vivant e crítico de jazz; dilapidou boa parte da fortuna herdada.
+nome_publico: Jorge "Jorginho" Guinle
+nascimento: 1916
+falecimento: 2004
+profissoes: crítico de jazz; escritor
+nacionalidades: Brasil
+relacoes: filho de Carlos Guinle   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+# --- DESCENDENTE VIVA (seleção) ---
+== Guilhermina Guinle ==
+nome_publico: Guilhermina Guinle
+profissoes: atriz
+nacionalidades: Brasil
+relacoes: neta de Octávio Guinle   # -> Parentesco
+fonte: Wikipedia   # LGPD: pessoa viva
+confiabilidade: documentada
+
+# Sócio (não familiar): Cândido Gaffrée (†1919, sem herdeiros) — cofundador da
+# Companhia Docas de Santos; legou sua parte aos filhos de Eduardo.

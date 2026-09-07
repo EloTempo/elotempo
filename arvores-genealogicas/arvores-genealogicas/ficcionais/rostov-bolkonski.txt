@@ -1,0 +1,106 @@
+# FAMILIA: Rostov e Bolkónski (Guerra e Paz) — FICÇÃO (literatura russa)
+# CONFIABILIDADE geral: ficcao (NÃO misturar com dados reais)
+# FONTES: cânon "Guerra e Paz", de Liev Tolstói; trad. Rubens Figueiredo (do russo)
+# FORMATO: um bloco por pessoa (ver _MODELO-PESSOA.txt)
+# NOTA: sem foto (direito autoral). Duas famílias que se unem pelo casamento de
+#       Nikolai Rostov com Maria Bolkónskaia. Inclui os conectores Bezúkhov e
+#       Kuráguin. Laços úteis: Pierre é ilegítimo; Sônia é prima pobre acolhida.
+# ---
+
+# --- FAMÍLIA ROSTOV ---
+== Conde Iliá Rostov ==
+nome_publico: Conde Iliá Rostov
+relacoes: patriarca; casado com a Condessa Natália; pai de Vera, Nikolai, Natacha e Petia   # -> Parentesco
+fonte: cânon Guerra e Paz
+confiabilidade: ficcao
+
+== Condessa Natália Rostova ==
+nome_publico: Condessa Natália Rostova
+relacoes: matriarca da família Rostov   # -> Parentesco
+fonte: cânon Guerra e Paz
+confiabilidade: ficcao
+
+== Nikolai Rostov ==
+identidade: Filho oficial de cavalaria; sustenta a família e restaura sua fortuna pelo casamento.
+nome_publico: Nikolai Rostov
+relacoes: filho dos Rostov; casa-se com Maria Bolkónskaia (une as duas famílias)   # -> Parentesco
+fonte: cânon Guerra e Paz
+confiabilidade: ficcao
+
+== Natacha Rostova ==
+identidade: Heroína central do romance; sua vitalidade atravessa toda a obra.
+nome_publico: Natacha Rostova
+relacoes: filha dos Rostov; noiva de Andrei Bolkónski; casa-se com Pierre Bezúkhov   # -> Parentesco
+fonte: cânon Guerra e Paz
+confiabilidade: ficcao
+
+== Vera Rostova ==
+nome_publico: Vera Rostova
+relacoes: filha mais velha dos Rostov   # -> Parentesco
+fonte: cânon Guerra e Paz
+confiabilidade: ficcao
+
+== Petia Rostov ==
+nome_publico: Petia Rostov
+relacoes: filho caçula dos Rostov; morre jovem na guerra   # -> Parentesco
+fonte: cânon Guerra e Paz
+confiabilidade: ficcao
+
+== Sônia ==
+nome_publico: Sônia
+relacoes: prima pobre criada como da família pelos Rostov (sem herança)   # -> Parentesco
+fonte: cânon Guerra e Paz
+confiabilidade: ficcao
+
+# --- FAMÍLIA BOLKÓNSKI ---
+== Velho Príncipe Bolkónski ==
+nome_publico: Príncipe Nikolai Bolkónski
+relacoes: patriarca severo; pai de Andrei e Maria   # -> Parentesco
+fonte: cânon Guerra e Paz
+confiabilidade: ficcao
+
+== Andrei Bolkónski ==
+identidade: Príncipe e oficial; busca sentido entre a guerra e o amor por Natacha.
+nome_publico: Príncipe Andrei Bolkónski
+relacoes: filho do velho príncipe; viúvo de Lise; noivo de Natacha; morre de ferimentos   # -> Parentesco
+fonte: cânon Guerra e Paz
+confiabilidade: ficcao
+
+== Lise Bolkónskaia ==
+nome_publico: Lise ("a pequena princesa")
+relacoes: esposa de Andrei; morre no parto de Nikolenka   # -> Parentesco
+fonte: cânon Guerra e Paz
+confiabilidade: ficcao
+
+== Maria Bolkónskaia ==
+identidade: Princesa devota e abnegada.
+nome_publico: Princesa Maria Bolkónskaia
+relacoes: filha do velho príncipe; irmã de Andrei; casa-se com Nikolai Rostov   # -> Parentesco
+fonte: cânon Guerra e Paz
+confiabilidade: ficcao
+
+== Nikolenka Bolkónski ==
+nome_publico: Nikolenka Bolkónski
+relacoes: filho de Andrei e Lise (órfão de mãe)   # -> Parentesco
+fonte: cânon Guerra e Paz
+confiabilidade: ficcao
+
+# --- CONECTORES (Bezúkhov e Kuráguin) ---
+== Pierre Bezúkhov ==
+identidade: Protagonista introspectivo; herda uma imensa fortuna e busca sentido para a vida.
+nome_publico: Pierre Bezúkhov
+relacoes: filho ILEGÍTIMO do Conde Kirill Bezúkhov (depois legitimado); casa com Hélène e depois com Natacha   # -> Parentesco
+fonte: cânon Guerra e Paz
+confiabilidade: ficcao
+
+== Hélène Kuráguina ==
+nome_publico: Hélène Kuráguina
+relacoes: 1ª esposa de Pierre; filha do príncipe Vassíli Kuráguin   # -> Parentesco
+fonte: cânon Guerra e Paz
+confiabilidade: ficcao
+
+== Anatole Kuráguin ==
+nome_publico: Anatole Kuráguin
+relacoes: irmão de Hélène; tenta fugir com Natacha, rompendo o noivado dela com Andrei   # -> Parentesco
+fonte: cânon Guerra e Paz
+confiabilidade: ficcao

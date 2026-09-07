@@ -1,0 +1,92 @@
+# FAMILIA: Álvares Penteado (café paulista → indústria; FAAP / Vila Penteado)
+# CONFIABILIDADE geral: documentada
+# FONTES: Silva Leme, Genealogia Paulistana (1903–05); Wikipedia; FAAP; FECAP;
+#         Memoriall; parentesco.com.br
+# FORMATO: um bloco por pessoa (ver _MODELO-PESSOA.txt)
+# NOTA: NÃO confundir com os Guedes Penteado (Olívia e Yolanda Penteado, mecenas
+#       do modernismo) — sobrenome igual, família diferente.
+# ---
+
+# --- ASCENDÊNCIA ---
+== João Carlos Leite Penteado ==
+nome_publico: João Carlos Leite Penteado
+relacoes: pai do Conde Álvares Penteado; casado com Maria Higina de Almeida Lima   # -> Parentesco
+fonte: Memoriall; parentesco.com.br
+confiabilidade: documentada
+
+# --- GERAÇÃO 1 — o Conde ---
+== Antônio Álvares Leite Penteado ==
+identidade: Cafeicultor que migrou para a indústria têxtil; conde (título papal) e grande mecenas.
+nome_publico: Conde Álvares Penteado
+nome_registro: Antônio Álvares Leite Penteado
+nascimento: 1852   # Mogi Mirim, 3 de fevereiro
+falecimento: 1912  # Paris, 25 de maio
+profissoes: cafeicultor; industrial (fiação de juta e lã); mecenas
+nacionalidades: Brasil
+foto: fotos/conde-alvares-penteado.webp
+relacoes: casado com Ana Paulina Lacerda Penteado; cinco filhos   # -> Parentesco
+fonte: Memoriall; Wikipedia
+confiabilidade: documentada
+
+== Ana Paulina Lacerda Penteado ==
+nome_publico: Condessa Álvares Penteado
+nome_registro: Ana Paulina Lacerda Penteado
+nacionalidades: Brasil
+relacoes: filha dos Barões de Araras; irmã do senador Antônio Lacerda Franco; esposa do Conde; mãe de 5 filhos   # -> Parentesco
+fonte: Memoriall
+confiabilidade: documentada
+
+# --- GERAÇÃO 2 — os cinco filhos ---
+== Armando Álvares Penteado ==
+identidade: Arquiteto, cafeicultor e mecenas; idealizador da FAAP (realizada após sua morte).
+nome_publico: Armando Álvares Penteado
+nascimento: 1884   # Santa Cruz das Palmeiras
+falecimento: 1947
+escolaridade: Escola Politécnica de São Paulo
+profissoes: arquiteto; cafeicultor; mecenas
+nacionalidades: Brasil
+foto: fotos/armando-alvares-penteado.webp
+relacoes: filho do Conde; casado com Annie Álvares Penteado (sem herdeiros)   # -> Parentesco
+fonte: Wikipedia; FAAP
+confiabilidade: documentada
+
+== Annie Álvares Penteado ==
+nome_publico: Annie Álvares Penteado
+nome_registro: Annie Alwis
+relacoes: esposa de Armando Álvares Penteado   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Silvio Álvares Penteado ==
+nome_publico: Silvio Álvares Penteado
+profissoes: empresário
+nacionalidades: Brasil
+relacoes: filho do Conde; presidiu o conselho da FECAP (1912–1956); casado com Honorina; pai de Honório   # -> Parentesco
+fonte: FECAP
+confiabilidade: documentada
+
+== Honório Álvares Penteado ==
+nome_publico: Honório Álvares Penteado
+relacoes: filho de Silvio; conselheiro da FECAP a partir de 1951   # -> Parentesco
+fonte: FECAP
+confiabilidade: documentada
+
+== Estela Penteado ==
+nome_publico: Estela Álvares Penteado
+relacoes: filha do Conde; casada com Caio Prado (elo com [[prado]])   # -> Parentesco
+fonte: O Mogiano
+confiabilidade: documentada
+
+== Eglantina Penteado ==
+nome_publico: Eglantina Álvares Penteado
+relacoes: filha do Conde; casada com Antônio Prado Júnior (elo com [[prado]])   # -> Parentesco
+fonte: O Mogiano
+confiabilidade: documentada
+
+== Antonieta Penteado ==
+nome_publico: Antonieta Álvares Penteado
+relacoes: filha do Conde; casada com Martinho Prado Neto (elo com [[prado]])   # -> Parentesco
+fonte: O Mogiano
+confiabilidade: documentada
+
+# Descendentes vivos (expandir com cautela LGPD): Silvio Álvares Penteado Neto etc.

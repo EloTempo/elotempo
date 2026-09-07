@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap">
+  <style>
+    body { margin: 0; font-family: 'Inter', system-ui, sans-serif; }
+    a { color: #2563eb; } a:hover { color: #0f1420; }
+    .marca { font-family: 'Sora', 'Inter', system-ui, sans-serif; }
+    .rot { font-family: 'Sora', system-ui, sans-serif; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; font-weight: 600; }
+  </style>
+</helmet>
+
+<div style="width: 1280px; height: 760px; box-sizing: border-box; background: #f4f5f7; color: #0f1420; display: flex; flex-direction: column;">
+
+  <div style="padding: 22px 44px 16px 44px; border-bottom: 1px solid #dfe3ea; display: flex; align-items: baseline; gap: 14px;">
+    <span class="rot" style="color: #6b7280;">Direção</span>
+    <span class="marca" style="font-size: 21px; font-weight: 600; letter-spacing: -.02em;">Programa</span>
+    <span style="font-size: 13px; color: #4b5563;">— o visitante já sabe o que quer. A página entrega rápido.</span>
+  </div>
+
+  <!-- a maquete -->
+  <div style="flex-grow: 1; padding: 22px 44px; display: flex; flex-direction: column; min-height: 0;">
+    <div style="flex-grow: 1; border: 1px solid #c3cad6; border-radius: 12px; background: #ffffff; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 1px 2px rgba(15,20,32,.06), 0 8px 20px rgba(15,20,32,.06);">
+
+      <!-- barra do site -->
+      <div style="padding: 12px 26px; border-bottom: 1px solid #dfe3ea; display: flex; align-items: center; gap: 10px; background: #ffffff;">
+        <svg width="22" height="22" viewBox="0 0 512 512" aria-hidden="true">
+          <rect width="512" height="512" rx="115" fill="#2563EB"/>
+          <g fill="none" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="38"><path d="M160 130v252"/><path d="M160 130h196"/><path d="M160 256h72"/><path d="M232 256l124-52M232 256l124 52"/><path d="M160 382h196"/></g>
+          <g fill="#FFFFFF"><circle cx="160" cy="130" r="38"/><circle cx="356" cy="130" r="38"/><circle cx="160" cy="256" r="38"/><circle cx="232" cy="256" r="38"/><circle cx="356" cy="204" r="38"/><circle cx="356" cy="308" r="38"/><circle cx="160" cy="382" r="38"/><circle cx="356" cy="382" r="38"/></g>
+        </svg>
+        <span class="marca" style="font-size: 15px; font-weight: 600; letter-spacing: -.03em;">Elotempo</span>
+        <div style="flex-grow: 1;"></div>
+        <span style="font-size: 12.5px; color: #4b5563;">Recursos</span>
+        <span style="font-size: 12.5px; color: #4b5563;">Código</span>
+        <span style="font-size: 12.5px; font-weight: 600; color: #ffffff; background: #2563eb; padding: 6px 13px; border-radius: 8px;">Baixar</span>
+      </div>
+
+      <!-- hero -->
+      <div style="padding: 40px 44px 30px 44px; display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 40px; align-items: center;">
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <h1 class="marca" style="margin: 0; font-size: 40px; font-weight: 600; line-height: 1.1; letter-spacing: -.03em; text-wrap: balance;">Sua árvore genealógica, inteira na sua máquina.</h1>
+          <p style="margin: 0; font-size: 15.5px; line-height: 1.6; color: #4b5563; max-width: 46ch;">Funciona sem internet. Sem conta, sem nuvem, sem limite de tamanho. Importa e exporta GEDCOM.</p>
+
+          <div style="display: flex; gap: 10px; padding-top: 4px;">
+            <div style="background: #2563eb; color: #ffffff; padding: 12px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 9px;">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7.5 11.5L12 16l4.5-4.5M5 19.5h14"/></svg>
+              Baixar para Windows
+            </div>
+            <div style="border: 1px solid #c3cad6; color: #0f1420; padding: 12px 18px; border-radius: 8px; font-size: 14px; font-weight: 500;">Linux · código-fonte</div>
+          </div>
+          <span style="font-size: 12px; color: #6b7280;">Gratuito e de código aberto · [VERSÃO] · [TAMANHO]</span>
+        </div>
+
+        <div style="height: 210px; border-radius: 10px; background: #eceef2; border: 1px solid #dfe3ea; display: flex; align-items: center; justify-content: center;">
+          <span style="font-size: 12.5px; color: #6b7280;">captura do aplicativo</span>
+        </div>
+      </div>
+
+      <!-- faixa de recursos -->
+      <div style="margin-top: auto; border-top: 1px solid #dfe3ea; background: #f1f3f7; padding: 18px 44px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 26px;">
+        <div style="display: flex; gap: 10px; align-items: flex-start;">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex: none; margin-top: 1px;"><path d="M5 12h14"/><g fill="#0d9488" stroke="none"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></g></svg>
+          <div><div style="font-size: 13px; font-weight: 600;">Linhas do tempo</div><div style="font-size: 12px; color: #4b5563; line-height: 1.45;">A vida da pessoa ao lado da história do país.</div></div>
+        </div>
+        <div style="display: flex; gap: 10px; align-items: flex-start;">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex: none; margin-top: 1px;"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 12l2.2 2.2L15.5 10"/></svg>
+          <div><div style="font-size: 13px; font-weight: 600;">GEDCOM 5.5.1 e 7.0</div><div style="font-size: 12px; color: #4b5563; line-height: 1.45;">Traz o que você já fez em outro programa.</div></div>
+        </div>
+        <div style="display: flex; gap: 10px; align-items: flex-start;">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex: none; margin-top: 1px;"><path d="M12 3l7 3v5.5c0 4-3 7.6-7 8.5-4-.9-7-4.5-7-8.5V6z"/></svg>
+          <div><div style="font-size: 13px; font-weight: 600;">Nada sai da máquina</div><div style="font-size: 12px; color: #4b5563; line-height: 1.45;">Sem conta, sem nuvem, sem telemetria.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- o argumento -->
+  <div style="padding: 0 44px 24px 44px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 26px;">
+    <div style="display: flex; flex-direction: column; gap: 4px;">
+      <span class="rot" style="color: #0d9488;">A favor</span>
+      <p style="margin: 0; font-size: 12.5px; line-height: 1.5; color: #4b5563;">Respeita o tempo de quem já decidiu. O download aparece antes de qualquer rolagem, e o produto se explica em três linhas. É como um programa livre se apresenta.</p>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 4px;">
+      <span class="rot" style="color: #b45309;">Contra</span>
+      <p style="margin: 0; font-size: 12.5px; line-height: 1.5; color: #4b5563;">Não convence ninguém. Quem chega sem saber por que registraria a família vai embora igual — e a tese do Elotempo, situar uma vida na sua época, nunca chega a ser dita.</p>
+    </div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

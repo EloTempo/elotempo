@@ -1,0 +1,109 @@
+# FAMILIA: Perón (Argentina)
+# CONFIABILIDADE geral: documentada
+# FONTES: Wikipedia; BBC Mundo; Infobae; Perfil; Diario de Cuyo
+# FORMATO: um bloco por pessoa (ver _MODELO-PESSOA.txt)
+# NOTA: Juan Perón não teve filhos nos três casamentos — a continuidade é
+#       política, não de sangue. O núcleo reúne as três esposas e a família de Evita.
+# LGPD: Isabel Perón está viva — apenas dados públicos.
+# ---
+
+# --- ASCENDÊNCIA ---
+== Mario Tomás Perón ==
+nome_publico: Mario Tomás Perón
+profissoes: agricultor
+nacionalidades: Argentina
+relacoes: pai de Juan Domingo Perón; casou com Juana Sosa Toledo (formalizado em 1901)   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Juana Sosa Toledo ==
+nome_publico: Juana Sosa
+relacoes: mãe de Juan Domingo Perón   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+# --- GERAÇÃO 1 ---
+== Juan Domingo Perón ==
+identidade: Militar e político; três vezes presidente da Argentina e fundador do peronismo.
+nome_publico: Juan Domingo Perón
+apelidos: o General
+nascimento: 1895   # Lobos, 8 de outubro
+falecimento: 1974
+profissoes: militar; político (presidente da Argentina)
+nacionalidades: Argentina
+foto: fotos/juan-domingo-peron.webp
+relacoes: irmão de Mario Avelino; casou com Aurelia Tizón, Eva Duarte e Isabel Martínez; sem filhos   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Mario Avelino Perón ==
+nome_publico: Mario Avelino Perón
+relacoes: irmão mais velho de Juan Domingo Perón   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+# --- AS TRÊS ESPOSAS ---
+== Aurelia Tizón ==
+identidade: Primeira esposa de Perón; professora, pintora e tradutora.
+nome_publico: Aurelia Tizón
+apelidos: Potota
+nascimento: 1902
+falecimento: 1938   # câncer
+profissoes: professora; pintora; tradutora
+nacionalidades: Argentina
+relacoes: 1ª esposa de Juan Domingo Perón (1929–1938); sem filhos   # -> Parentesco
+fonte: Infobae; Wikipedia
+confiabilidade: documentada
+
+== Eva Perón ==
+identidade: Atriz e líder política; primeira-dama, símbolo do peronismo e da conquista do voto feminino.
+nome_publico: Eva Perón
+nome_registro: María Eva Duarte
+apelidos: Evita
+nascimento: 1919   # Los Toldos, 7 de maio
+falecimento: 1952   # câncer cervical, aos 33
+profissoes: atriz; política; primeira-dama
+nacionalidades: Argentina
+foto: fotos/eva-peron.webp
+relacoes: 2ª esposa de Perón (1945–1952); filha de Juana Ibarguren e Juan Duarte; sem filhos   # -> Parentesco
+fonte: Wikipedia; Diario de Cuyo
+confiabilidade: documentada
+
+== Isabel Perón ==
+identidade: Bailarina; vice e depois presidenta da Argentina (1974–1976), a primeira mulher chefe de Estado do país.
+nome_publico: Isabel Perón
+nome_registro: María Estela Martínez Cartas
+apelidos: Isabelita
+nascimento: 1931   # La Rioja
+profissoes: bailarina; política (presidenta da Argentina)
+nacionalidades: Argentina
+relacoes: 3ª esposa de Perón (1961); sem filhos   # -> Parentesco
+fonte: BBC Mundo; Wikipedia   # LGPD: pessoa viva
+confiabilidade: documentada
+
+# --- FAMÍLIA DE EVITA ---
+== Juana Ibarguren ==
+nome_publico: Juana Ibarguren
+relacoes: mãe de Eva Perón   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Juan Duarte (pai) ==
+nome_publico: Juan Duarte
+profissoes: fazendeiro
+nacionalidades: Argentina
+relacoes: pai (natural) de Eva Perón; faleceu quando ela tinha ~6 anos   # -> Parentesco
+fonte: Diario de Cuyo
+confiabilidade: documentada
+
+== Juan Duarte (irmão) ==
+nome_publico: Juan "Juancito" Duarte
+apelidos: Juancito
+falecimento: 1953
+profissoes: secretário particular de Juan Perón
+nacionalidades: Argentina
+relacoes: único irmão homem de Eva Perón   # -> Parentesco
+fonte: Diario de Cuyo; Wikipedia
+confiabilidade: documentada
+
+# Irmãs de Evita (expandir): Elisa, Blanca e Erminda Duarte.

@@ -1,0 +1,95 @@
+# FAMILIA: Hitler (Alemanha/Áustria)
+# CONFIABILIDADE geral: documentada
+# FONTES: Wikipedia; biografias históricas
+# FORMATO: um bloco por pessoa (ver _MODELO-PESSOA.txt)
+# NOTA: Adolf Hitler não teve filhos. Os pais eram parentes (primos em grau
+#       afastado) e precisaram de dispensa papal para casar. A linhagem se
+#       encerra nos sobrinhos-netos vivos, nenhum com filhos.
+# LGPD: descendentes vivos tratados coletivamente, sem individualizar (privados).
+# ---
+
+== Alois Hitler ==
+nome_publico: Alois Hitler
+nome_registro: Alois Schicklgruber
+mudanca_nome: adotou "Hitler" (do padrasto) aos ~39 anos
+nascimento: 1837
+falecimento: 1903
+profissoes: funcionário aduaneiro
+nacionalidades: Áustria-Hungria
+relacoes: pai de Adolf; casou com a parenta Klara Pölzl (dispensa papal)   # -> Parentesco [CONSANGUINIDADE]
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Klara Pölzl ==
+nome_publico: Klara Hitler
+nome_registro: Klara Pölzl
+nascimento: 1860
+falecimento: 1907
+nacionalidades: Áustria-Hungria
+relacoes: mãe de Adolf; prima em 1º grau afastado do marido Alois   # -> Parentesco [CONSANGUINIDADE]
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Adolf Hitler ==
+identidade: Ditador da Alemanha nazista (1933–1945); responsável pela 2ª Guerra e pelo Holocausto.
+nome_publico: Adolf Hitler
+nascimento: 1889
+falecimento: 1945
+profissoes: político (ditador); militar
+nacionalidades: Áustria; Alemanha
+relacoes: filho de Alois e Klara; sem filhos   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Paula Hitler ==
+nome_publico: Paula Hitler
+nascimento: 1896
+falecimento: 1960
+nacionalidades: Áustria
+relacoes: única irmã de Adolf a chegar à vida adulta; sem filhos   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Angela Hitler ==
+nome_publico: Angela Hitler
+nascimento: 1883
+falecimento: 1949
+nacionalidades: Áustria
+relacoes: meia-irmã de Adolf; mãe de Geli Raubal   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Alois Hitler Jr. ==
+nome_publico: Alois Hitler Jr.
+nacionalidades: Áustria; Alemanha
+relacoes: meio-irmão de Adolf; pai de William Patrick e de Heinz   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Geli Raubal ==
+nome_publico: Geli Raubal
+nome_registro: Angela Maria Raubal
+nascimento: 1908
+falecimento: 1931   # morte em circunstâncias controversas no apartamento de Hitler
+nacionalidades: Áustria
+relacoes: filha de Angela; meia-sobrinha de Adolf   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== William Patrick Hitler ==
+identidade: Sobrinho que rompeu publicamente com o tio e emigrou para os EUA.
+nome_publico: William Patrick Stuart-Houston
+nome_registro: William Patrick Hitler
+mudanca_nome: adotou "Stuart-Houston" após a 2ª Guerra
+nascimento: 1911
+falecimento: 1987
+profissoes: técnico de laboratório; militar (Marinha dos EUA)
+nacionalidades: Reino Unido; EUA
+relacoes: filho de Alois Jr.; meio-sobrinho de Adolf   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+# LINHAGEM EM EXTINÇÃO: restam ~5 sobrinhos-netos vivos (EUA e Áustria),
+# descendentes de Alois Jr. e Angela. São pessoas privadas que evitam
+# publicidade; nenhum teve filhos. (LGPD: não individualizados aqui.)
+# Filho ilegítimo alegado (Jean-Marie Loret): não comprovado; historiadores duvidam.

@@ -1,0 +1,39 @@
+# FAMILIA: Casa de Davi
+# CONFIABILIDADE geral: reconstruida-tradicional
+# FONTES: Bíblia (edições críticas); tradições judaica e cristã
+# FORMATO: um bloco por pessoa (ver _MODELO-PESSOA.txt)
+# NOTA: linhagem real de Judá; ponto de partida da linhagem [[lurie]] e, segundo
+#       as tradições cristã e judaica, da linha messiânica.
+# ---
+
+== Jessé ==
+nome_publico: Jessé
+relacoes: pai do Rei Davi   # -> Parentesco
+fonte: tradição
+confiabilidade: reconstruida-tradicional
+
+== Rei David de Israel ==
+identidade: Segundo rei do Reino Unido de Israel e Judá, unificador das tribos e poeta autor dos Salmos.
+nome_publico: Rei David de Israel
+nascimento: cerca de 1040 a.C.
+falecimento: cerca de 970 a.C.
+profissoes: rei; poeta
+nacionalidades: Reino Unido de Israel e Judá
+foto: fotos/rei-david.webp
+relacoes: filho de Jessé; pai de Salomão   # -> Parentesco
+fonte: tradição bíblica (contestado)
+confiabilidade: reconstruida-tradicional
+
+== Salomão ==
+identidade: Rei de Israel, sucessor de Davi; associado à construção do Primeiro Templo.
+nome_publico: Salomão
+profissoes: rei
+relacoes: filho de Davi; pai de Roboão   # -> Parentesco
+fonte: tradição bíblica (contestado)
+confiabilidade: reconstruida-tradicional
+
+== Roboão ==
+nome_publico: Roboão
+relacoes: filho de Salomão; após seu reinado, o reino se divide (Judá e Israel)   # -> Parentesco
+fonte: tradição bíblica
+confiabilidade: reconstruida-tradicional

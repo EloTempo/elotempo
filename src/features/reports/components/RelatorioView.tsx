@@ -124,44 +124,65 @@ function Ficha({
 }
 
 /** O diagrama, em SVG estático e escalado para caber na largura da página. */
-function Diagrama({ grafo }: { grafo: TreeGraph }) {
+export function DiagramaImpressao({
+  grafo,
+  maxAltura,
+  className,
+}: {
+  grafo: TreeGraph;
+  maxAltura?: string;
+  className?: string;
+}) {
   const layout = calcularLayout(grafo);
 
   return (
-    <div className="mb-[8mm]">
+    <div className={className ?? 'mb-[8mm] w-full flex items-center justify-center'}>
       <svg
         viewBox={`0 0 ${layout.largura} ${layout.altura}`}
         width="100%"
-        style={{ maxHeight: '160mm' }}
+        style={{ maxHeight: maxAltura ?? '220mm', display: 'block' }}
+        preserveAspectRatio="xMidYMid meet"
         role="img"
         aria-label="Diagrama da árvore genealógica"
       >
-        <g fill="none" strokeWidth={1.5}>
+        <defs>
+          <filter id="sombra-card-print" x="-5%" y="-5%" width="110%" height="115%">
+            <feDropShadow dx="0" dy="1.5" stdDeviation="1.5" floodColor="#000" floodOpacity="0.08" />
+          </filter>
+        </defs>
+
+        <g fill="none" strokeWidth={1.8}>
           {layout.arestas.map((a) => (
             <path
               key={a.id}
               d={caminhoOrtogonal(a.origem, a.destino)}
-              stroke="#9a9284"
+              stroke="#8a8274"
               strokeDasharray={a.tipoVinculo && a.tipoVinculo !== 'biologico' ? '6 4' : undefined}
             />
           ))}
         </g>
 
         {layout.unioes.map((u) => (
-          <circle
-            key={u.id}
-            cx={u.x}
-            cy={u.y}
-            r={10}
-            fill={u.estado_vinculo === 'casamento' ? '#9a9284' : '#fff'}
-            stroke="#9a9284"
-            strokeWidth={1.5}
-          />
+          <g key={u.id} transform={`translate(${u.x}, ${u.y})`}>
+            <circle
+              r={10}
+              fill={u.estado_vinculo === 'casamento' ? '#8a8274' : '#fff'}
+              stroke="#8a8274"
+              strokeWidth={1.8}
+            />
+            {u.estado_vinculo === 'casamento' && (
+              <text textAnchor="middle" y={3.5} fontSize={10} fill="#fff" fontWeight="bold">
+                ⚭
+              </text>
+            )}
+          </g>
         ))}
 
         {layout.pessoas.map((p) => {
           const nome = [p.nome, p.sobrenome].filter(Boolean).join(' ');
           const anos = [p.ano_nascimento, p.ano_falecimento].filter(Boolean).join('–');
+          const corBordaSexo = p.sexo === 'M' ? '#3b82f6' : p.sexo === 'F' ? '#ec4899' : '#8a8274';
+
           return (
             <g key={p.id} transform={`translate(${p.x}, ${p.y})`}>
               <rect
@@ -169,24 +190,40 @@ function Diagrama({ grafo }: { grafo: TreeGraph }) {
                 y={-METRICAS.alturaNo / 2}
                 width={METRICAS.larguraNo}
                 height={METRICAS.alturaNo}
-                rx={6}
-                fill="#fff"
-                stroke={p.is_placeholder ? '#c4bcac' : '#8a8274'}
+                rx={8}
+                fill="#ffffff"
+                stroke={p.is_placeholder ? '#c4bcac' : '#b8b0a2'}
                 strokeWidth={1.5}
                 strokeDasharray={p.is_placeholder ? '5 4' : undefined}
+                filter="url(#sombra-card-print)"
+              />
+              {/* Barra lateral indicativa de sexo */}
+              <rect
+                x={-METRICAS.larguraNo / 2 + 1}
+                y={-METRICAS.alturaNo / 2 + 3}
+                width={5}
+                height={METRICAS.alturaNo - 6}
+                rx={2.5}
+                fill={corBordaSexo}
               />
               <text
                 textAnchor="middle"
-                y={-4}
+                y={-10}
                 fontSize={15}
+                fontFamily="'Source Serif 4', Georgia, serif"
                 fontWeight="bold"
-                fill="#2f2a22"
+                fill="#1c1917"
               >
-                {nome.length > 26 ? `${nome.slice(0, 25)}…` : nome}
+                {nome.length > 28 ? `${nome.slice(0, 27)}…` : nome}
               </text>
-              <text textAnchor="middle" y={16} fontSize={13} fill="#6b6355">
-                {anos || 'sem datas'}
+              <text textAnchor="middle" y={12} fontSize={12.5} fill="#57534e" fontFamily="sans-serif">
+                {anos ? `* ${anos}` : 'datas não registradas'}
               </text>
+              {p.categoria && (
+                <text textAnchor="middle" y={30} fontSize={10} fill="#78716c" fontFamily="sans-serif">
+                  {p.categoria.length > 34 ? `${p.categoria.slice(0, 33)}…` : p.categoria}
+                </text>
+              )}
             </g>
           );
         })}
@@ -221,7 +258,7 @@ export function RelatorioView({ relatorio, grafo, opcoes, titulo }: RelatorioVie
         </p>
       </header>
 
-      {mostrarDiagrama && grafo && <Diagrama grafo={grafo} />}
+      {mostrarDiagrama && grafo && <DiagramaImpressao grafo={grafo} />}
 
       {mostrarDiagrama && !grafo && (
         <p className="text-[10pt] italic text-[#6b6355]">

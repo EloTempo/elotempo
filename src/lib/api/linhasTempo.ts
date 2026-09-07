@@ -15,7 +15,11 @@ export interface LinhaDeContexto {
   id: string;
   categoria: string;
   titulo: string;
+  is_contexto: boolean;
+  is_bloqueada: boolean;
   fonte_referencia?: string | null;
+  escopo?: string | null;
+  icone?: string | null;
   /** Marcos de alta relevância — os únicos que a gaveta mostra. */
   marcos_alta: number;
   marcos_total: number;
@@ -38,11 +42,16 @@ export interface Marco {
 
 export interface MarcoPessoal {
   tipo: string;
+  titulo?: string | null;
   data_texto?: string | null;
   local?: string | null;
   ano?: number | null;
   /** Com quem, nos eventos que pertencem a uma união (o casamento). */
   com?: string | null;
+  is_participacao: boolean;
+  linha_titulo?: string | null;
+  papel?: string | null;
+  visivel_na_pessoa: boolean;
 }
 
 export interface LinhaPessoal {
@@ -76,13 +85,15 @@ export const buscarMarcos = (
   linhaIds: string[],
   anoDe?: number | null,
   anoAte?: number | null,
-  apenasAlta = true,
+  apenasAlta?: boolean | null,
+  relevanciaMinima?: 'alta' | 'media' | 'detalhe' | null,
 ): Promise<Marco[]> =>
   chamar<Marco[]>('buscar_marcos', {
     linhaIds,
     anoDe: anoDe ?? null,
     anoAte: anoAte ?? null,
-    apenasAlta,
+    apenasAlta: apenasAlta ?? null,
+    relevanciaMinima: relevanciaMinima ?? null,
   });
 
 export const montarLinhaPessoal = (pessoaId: string): Promise<LinhaPessoal> =>
@@ -99,3 +110,84 @@ export const quemEstavaVivo = (
 export function ehIntervalo(m: Marco): boolean {
   return m.ano_fim != null && m.ano_inicio != null && m.ano_fim > m.ano_inicio;
 }
+
+// ---------- CRUD Estúdio de Linhas do Tempo (Fatia 10a) ----------
+
+export interface NovaLinhaTempo {
+  categoria: string;
+  titulo: string;
+  fonte_referencia?: string | null;
+}
+
+export interface EdicaoLinhaTempo {
+  categoria: string;
+  titulo: string;
+  fonte_referencia?: string | null;
+}
+
+export interface NovoMarco {
+  linha_id: string;
+  data_periodo_texto: string;
+  titulo: string;
+  descricao?: string | null;
+  relevancia: string;
+  fonte_especifica?: string | null;
+  ano_inicio?: number | null;
+  ano_fim?: number | null;
+}
+
+export interface EdicaoMarco {
+  data_periodo_texto: string;
+  titulo: string;
+  descricao?: string | null;
+  relevancia: string;
+  fonte_especifica?: string | null;
+  ano_inicio?: number | null;
+  ano_fim?: number | null;
+}
+
+export interface NovoParticipante {
+  marco_id: string;
+  pessoa_id: string;
+  papel?: string | null;
+  visivel_na_pessoa: boolean;
+}
+
+export const criarLinhaTempo = (nova: NovaLinhaTempo): Promise<string> =>
+  chamar<string>('criar_linha_tempo', { nova });
+
+export const atualizarLinhaTempo = (id: string, edicao: EdicaoLinhaTempo): Promise<void> =>
+  chamar<void>('atualizar_linha_tempo', { id, edicao });
+
+export const deletarLinhaTempo = (id: string): Promise<void> =>
+  chamar<void>('deletar_linha_tempo', { id });
+
+export const criarMarco = (novo: NovoMarco): Promise<string> =>
+  chamar<string>('criar_marco', { novo });
+
+export const atualizarMarco = (id: string, edicao: EdicaoMarco): Promise<void> =>
+  chamar<void>('atualizar_marco', { id, edicao });
+
+export const deletarMarco = (id: string): Promise<void> =>
+  chamar<void>('deletar_marco', { id });
+
+export const adicionarParticipante = (novo: NovoParticipante): Promise<string> =>
+  chamar<string>('adicionar_participante', { novo });
+
+export const removerParticipante = (id: string): Promise<void> =>
+  chamar<void>('remover_participante', { id });
+
+export const toggleVisibilidadeParticipacao = (id: string, visivel: boolean): Promise<void> =>
+  chamar<void>('toggle_visibilidade_participacao', { id, visivel });
+
+export interface ParticipanteDetalhado {
+  id: string;
+  marco_id: string;
+  pessoa_id: string;
+  nome: string;
+  papel?: string | null;
+  visivel_na_pessoa: boolean;
+}
+
+export const buscarParticipantesMarco = (marcoId: string): Promise<ParticipanteDetalhado[]> =>
+  chamar<ParticipanteDetalhado[]>('buscar_participantes_marco', { marcoId });

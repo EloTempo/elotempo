@@ -40,12 +40,14 @@ export function previaDoTexto(d: DataEscolhida): string {
   if (d.qualificador === 'livre') return d.texto_livre?.trim() ?? '';
   if (!d.ano) return '';
 
+  const formataAno = (a: number) => (a < 0 ? `${Math.abs(a)} a.C.` : String(a));
+
   const nucleo =
     d.dia && d.mes
-      ? `${d.dia} de ${MESES[d.mes - 1]} de ${d.ano}`
+      ? `${d.dia} de ${MESES[d.mes - 1]} de ${formataAno(d.ano)}`
       : d.mes
-        ? `${MESES[d.mes - 1]} de ${d.ano}`
-        : String(d.ano);
+        ? `${MESES[d.mes - 1]} de ${formataAno(d.ano)}`
+        : formataAno(d.ano);
 
   switch (d.qualificador) {
     case 'cerca_de':
@@ -54,8 +56,10 @@ export function previaDoTexto(d: DataEscolhida): string {
       return `antes de ${nucleo}`;
     case 'apos':
       return `após ${nucleo}`;
-    case 'intervalo':
-      return d.ano_fim ? `entre ${d.ano} e ${d.ano_fim}` : nucleo;
+    case 'intervalo': {
+      const fimFormatado = d.ano_fim != null ? formataAno(d.ano_fim) : '';
+      return fimFormatado ? `entre ${formataAno(d.ano)} e ${fimFormatado}` : nucleo;
+    }
     default:
       return nucleo;
   }
@@ -137,32 +141,54 @@ export function CampoDeData({ rotulo, valor, aoMudar, ajuda }: CampoDeDataProps)
             </>
           )}
 
-          <input
-            type="number"
-            aria-label={q === 'intervalo' ? 'Ano inicial' : 'Ano'}
-            value={valor.ano ?? ''}
-            onChange={(e) => mudar({ ano: e.target.value ? Number(e.target.value) : null })}
-            placeholder="ano"
-            min={1000}
-            max={2200}
-            className={`${SELECT} w-[92px]`}
-          />
+          <div className="relative inline-flex items-center">
+            <input
+              type="number"
+              aria-label={q === 'intervalo' ? 'Ano inicial' : 'Ano'}
+              value={valor.ano ?? ''}
+              onChange={(e) => mudar({ ano: e.target.value ? Number(e.target.value) : null })}
+              placeholder="ano"
+              max={2200}
+              className={`${SELECT} w-[105px] ${valor.ano != null && valor.ano !== 0 ? 'pr-9 font-num' : 'font-num'}`}
+            />
+            {valor.ano != null && valor.ano !== 0 && (
+              <span
+                className={`absolute right-2 font-num text-[10px] font-bold pointer-events-none px-1 rounded ${
+                  valor.ano < 0 ? 'text-acento bg-sup' : 'text-tinta3'
+                }`}
+                title={valor.ano < 0 ? 'Antes de Cristo (a.C.)' : 'Depois de Cristo (d.C.)'}
+              >
+                {valor.ano < 0 ? 'a.C.' : 'd.C.'}
+              </span>
+            )}
+          </div>
 
           {q === 'intervalo' && (
             <>
               <span className="self-center text-xs text-tinta3">e</span>
-              <input
-                type="number"
-                aria-label="Ano final"
-                value={valor.ano_fim ?? ''}
-                onChange={(e) =>
-                  mudar({ ano_fim: e.target.value ? Number(e.target.value) : null })
-                }
-                placeholder="ano"
-                min={1000}
-                max={2200}
-                className={`${SELECT} w-[92px]`}
-              />
+              <div className="relative inline-flex items-center">
+                <input
+                  type="number"
+                  aria-label="Ano final"
+                  value={valor.ano_fim ?? ''}
+                  onChange={(e) =>
+                    mudar({ ano_fim: e.target.value ? Number(e.target.value) : null })
+                  }
+                  placeholder="ano"
+                  max={2200}
+                  className={`${SELECT} w-[105px] ${valor.ano_fim != null && valor.ano_fim !== 0 ? 'pr-9 font-num' : 'font-num'}`}
+                />
+                {valor.ano_fim != null && valor.ano_fim !== 0 && (
+                  <span
+                    className={`absolute right-2 font-num text-[10px] font-bold pointer-events-none px-1 rounded ${
+                      valor.ano_fim < 0 ? 'text-acento bg-sup' : 'text-tinta3'
+                    }`}
+                    title={valor.ano_fim < 0 ? 'Antes de Cristo (a.C.)' : 'Depois de Cristo (d.C.)'}
+                  >
+                    {valor.ano_fim < 0 ? 'a.C.' : 'd.C.'}
+                  </span>
+                )}
+              </div>
             </>
           )}
         </div>

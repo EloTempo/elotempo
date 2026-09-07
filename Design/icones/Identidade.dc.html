@@ -1,0 +1,155 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap">
+  <style>
+    body { margin: 0; font-family: 'Sora', 'Segoe UI', system-ui, sans-serif; }
+    a { color: #00A896; } a:hover { color: #0B1D3A; }
+    .lbl { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: #6B7280; font-weight: 500; }
+    .cap { font-size: 12.5px; line-height: 1.55; color: #55606E; }
+    .mono { font-family: ui-monospace, 'Cascadia Mono', 'DejaVu Sans Mono', monospace; }
+  </style>
+</helmet>
+
+<div style="width: 940px; height: 800px; box-sizing: border-box; background: #FBFCFD; color: #0B1D3A; display: flex; flex-direction: column;">
+
+  <div style="display: flex; align-items: flex-end; justify-content: space-between; padding: 34px 40px 20px 40px; border-bottom: 1px solid #E3E9EF;">
+    <div style="display: flex; flex-direction: column; gap: 7px;">
+      <span class="lbl">Elotempo · sistema de ícones</span>
+      <span style="font-size: 30px; font-weight: 600; letter-spacing: -.02em; line-height: 1;">Identidade</span>
+      <span class="cap" style="max-width: 560px;">Três peças. Hoje o executável ainda se apresenta ao sistema com o logo padrão do Tauri, e o app usa duas marcas que se contradizem.</span>
+    </div>
+    <span class="mono" style="font-size: 34px; color: #DCE3EA; font-weight: 300; line-height: 1;">02</span>
+  </div>
+
+  <!-- as três peças -->
+  <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border-bottom: 1px solid #E3E9EF;">
+
+    <!-- ícone de app -->
+    <div style="padding: 26px 24px 26px 40px; border-right: 1px solid #E3E9EF; display: flex; flex-direction: column; gap: 14px;">
+      <span class="lbl">A · ícone do aplicativo</span>
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <svg width="104" height="104" viewBox="0 0 512 512">
+          <rect width="512" height="512" rx="115" fill="#0B1D3A"/>
+          <g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="26">
+            <path d="M170 130v252" stroke="#2563EB"/>
+            <path d="M170 130h180" stroke="#00A896"/>
+            <path d="M170 256h74" stroke="#2563EB"/>
+            <path d="M244 256l106-42M244 256l106 42" stroke="#2563EB"/>
+            <path d="M170 382h180" stroke="#E8EEF4"/>
+          </g>
+          <g stroke="none">
+            <circle cx="170" cy="130" r="31" fill="#00A896"/><circle cx="350" cy="130" r="31" fill="#00A896"/>
+            <circle cx="170" cy="256" r="31" fill="#2563EB"/><circle cx="244" cy="256" r="31" fill="#2563EB"/>
+            <circle cx="350" cy="214" r="31" fill="#2563EB"/><circle cx="350" cy="298" r="31" fill="#2563EB"/>
+            <circle cx="170" cy="382" r="31" fill="#E8EEF4"/><circle cx="350" cy="382" r="31" fill="#E8EEF4"/>
+          </g>
+        </svg>
+        <div style="display: flex; flex-direction: column; gap: 9px;">
+          <svg width="48" height="48" viewBox="0 0 512 512"><rect width="512" height="512" rx="115" fill="#0B1D3A"/><g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="30"><path d="M170 130v252" stroke="#2563EB"/><path d="M170 130h180" stroke="#00A896"/><path d="M170 256h74" stroke="#2563EB"/><path d="M244 256l106-42M244 256l106 42" stroke="#2563EB"/><path d="M170 382h180" stroke="#E8EEF4"/></g><g stroke="none"><circle cx="170" cy="130" r="33" fill="#00A896"/><circle cx="350" cy="130" r="33" fill="#00A896"/><circle cx="170" cy="256" r="33" fill="#2563EB"/><circle cx="244" cy="256" r="33" fill="#2563EB"/><circle cx="350" cy="214" r="33" fill="#2563EB"/><circle cx="350" cy="298" r="33" fill="#2563EB"/><circle cx="170" cy="382" r="33" fill="#E8EEF4"/><circle cx="350" cy="382" r="33" fill="#E8EEF4"/></g></svg>
+          <svg width="32" height="32" viewBox="0 0 512 512"><rect width="512" height="512" rx="115" fill="#0B1D3A"/><g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="34"><path d="M170 130v252" stroke="#2563EB"/><path d="M170 130h180" stroke="#00A896"/><path d="M170 256h74" stroke="#2563EB"/><path d="M244 256l106-42M244 256l106 42" stroke="#2563EB"/><path d="M170 382h180" stroke="#E8EEF4"/></g><g stroke="none"><circle cx="170" cy="130" r="36" fill="#00A896"/><circle cx="350" cy="130" r="36" fill="#00A896"/><circle cx="170" cy="256" r="36" fill="#2563EB"/><circle cx="244" cy="256" r="36" fill="#2563EB"/><circle cx="350" cy="214" r="36" fill="#2563EB"/><circle cx="350" cy="298" r="36" fill="#2563EB"/><circle cx="170" cy="382" r="36" fill="#E8EEF4"/><circle cx="350" cy="382" r="36" fill="#E8EEF4"/></g></svg>
+        </div>
+      </div>
+      <p class="cap" style="margin: 0;">
+        Fundo <span class="mono">#0B1D3A</span>, raio 22,5&nbsp;% do lado. A linha do <em>futuro</em> vira <span class="mono">#E8EEF4</span> — marinho sobre marinho some, e o brand board já resolve assim.
+      </p>
+      <div style="border-left: 3px solid #00A896; padding: 2px 0 2px 13px;">
+        <p class="cap" style="margin: 0;">
+          Só <strong style="color:#0B1D3A;font-weight:600;">fora</strong> do aplicativo: executável, instalador, loja. Dentro, a paleta fixa desaparece nos temas escuros — ver a prancha 07.
+        </p>
+      </div>
+      <p class="cap" style="margin: 0;">
+        Abaixo de 48&nbsp;px o traço engrossa e os nós crescem: reduzir sem reequilibrar entope o miolo.
+      </p>
+    </div>
+
+    <!-- marca do cabeçalho -->
+    <div style="padding: 26px 24px; border-right: 1px solid #E3E9EF; display: flex; flex-direction: column; gap: 14px;">
+      <span class="lbl">B · marca do cabeçalho</span>
+      <div style="display: flex; align-items: center; gap: 18px;">
+        <div style="width: 104px; height: 104px; background: #FFFFFF; border: 1px solid #E3E9EF; border-radius: 10px; display: grid; place-items: center;">
+          <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#0B1D3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5.5 5h13M5.5 5v14M5.5 19h13M5.5 12h6.5M12 12l6.5-3M12 12l6.5 3"/>
+          </svg>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 10px; align-items: center;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0B1D3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 5h13M5.5 5v14M5.5 19h13M5.5 12h6.5M12 12l6.5-3M12 12l6.5 3"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0B1D3A" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 5h13M5.5 5v14M5.5 19h13M5.5 12h5.5M11 12l7.5-3.2M11 12l7.5 3.2"/></svg>
+        </div>
+      </div>
+      <p class="cap" style="margin: 0;">
+        Símbolo só, <strong style="color:#0B1D3A;font-weight:600;">sem nós</strong> e <strong style="color:#0B1D3A;font-weight:600;">monocromático</strong>, em <span class="mono">currentColor</span>. Substitui o <span class="mono">TreeDeciduous</span> no topo.
+      </p>
+      <div style="border-left: 3px solid #00A896; padding: 2px 0 2px 13px;">
+        <p class="cap" style="margin: 0;">
+          Tricolor no cabeçalho briga com os temas sépia. A paleta fixa fica onde a marca não convive com tema nenhum: executável, instalador, loja.
+        </p>
+      </div>
+    </div>
+
+    <!-- assinatura -->
+    <div style="padding: 26px 40px 26px 24px; display: flex; flex-direction: column; gap: 14px;">
+      <span class="lbl">C · assinatura horizontal</span>
+      <div style="background: #FFFFFF; border: 1px solid #E3E9EF; border-radius: 10px; padding: 20px 22px; display: flex; align-items: center; gap: 16px;">
+        <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+          <path d="M5.5 5h13" stroke="#00A896"/>
+          <path d="M5.5 5v14" stroke="#2563EB"/>
+          <path d="M5.5 12h6.5M12 12l6.5-3M12 12l6.5 3" stroke="#2563EB"/>
+          <path d="M5.5 19h13" stroke="#0B1D3A"/>
+        </svg>
+        <div style="display: flex; flex-direction: column; gap: 3px;">
+          <span style="font-size: 27px; font-weight: 500; letter-spacing: -.035em; line-height: 1;">Elotempo</span>
+          <span style="font-size: 7.5px; letter-spacing: .3em; color: #00A896; font-weight: 500;">HISTÓRIAS QUE CONECTAM GERAÇÕES</span>
+        </div>
+      </div>
+      <p class="cap" style="margin: 0;">
+        Splash, “Sobre” e a tela de desbloqueio, em <span class="mono">--acento</span> e <span class="mono">--acento2</span> — não na paleta fixa. Substitui o <span class="mono">GitBranch</span>.
+      </p>
+      <div style="background: #FFF7ED; border: 1px solid #FCD9A8; border-radius: 8px; padding: 12px 14px;">
+        <p class="cap" style="margin: 0; color: #7A4E12;">
+          <strong style="font-weight:600;">Converter a assinatura em contorno.</strong> Hoje o SVG traz texto vivo em Sora; sem a fonte instalada, a palavra é redesenhada em outra letra e muda de largura.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- matriz de exportação -->
+  <div style="padding: 24px 40px; display: flex; flex-direction: column; gap: 14px; flex-grow: 1;">
+    <div style="display: flex; align-items: baseline; justify-content: space-between;">
+      <span class="lbl">O que o compilador precisa receber</span>
+      <span class="mono" style="font-size: 10.5px; color: #9AA6B2;">src-tauri/icons/ · hoje: logo padrão do Tauri</span>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px;">
+      <div style="background: #FFFFFF; border: 1px solid #E3E9EF; border-radius: 9px; padding: 13px 15px; display: flex; flex-direction: column; gap: 5px;">
+        <span class="mono" style="font-size: 11.5px; font-weight: 600;">icon.ico</span>
+        <span class="cap" style="font-size: 11.5px;">Windows · 16/32/48/256 no mesmo arquivo</span>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #E3E9EF; border-radius: 9px; padding: 13px 15px; display: flex; flex-direction: column; gap: 5px;">
+        <span class="mono" style="font-size: 11.5px; font-weight: 600;">icon.icns</span>
+        <span class="cap" style="font-size: 11.5px;">macOS · até 1024, com margem própria</span>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #E3E9EF; border-radius: 9px; padding: 13px 15px; display: flex; flex-direction: column; gap: 5px;">
+        <span class="mono" style="font-size: 11.5px; font-weight: 600;">32 · 128 · 128@2x · 512</span>
+        <span class="cap" style="font-size: 11.5px;">PNG · listados no <span class="mono">tauri.conf.json</span></span>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #E3E9EF; border-radius: 9px; padding: 13px 15px; display: flex; flex-direction: column; gap: 5px;">
+        <span class="mono" style="font-size: 11.5px; font-weight: 600;">Square30…Square310</span>
+        <span class="cap" style="font-size: 11.5px;">Windows Store · 9 tamanhos já presentes</span>
+      </div>
+    </div>
+
+    <p class="cap" style="margin: 6px 0 0 0;">
+      Um SVG mestre de 512 gera todos por <span class="mono">tauri icon</span>. Não há bandeja no aplicativo — nenhum ícone de bandeja é necessário —, e um desktop não usa favicon: o <span class="mono">index.html</span> só aparece durante o desenvolvimento.
+    </p>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

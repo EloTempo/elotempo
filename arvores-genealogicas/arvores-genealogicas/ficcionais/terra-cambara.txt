@@ -1,0 +1,74 @@
+# FAMILIA: Terra-Cambará (O Tempo e o Vento) — FICÇÃO (literatura brasileira)
+# CONFIABILIDADE geral: ficcao (NÃO misturar com dados reais)
+# FONTES: cânon "O Tempo e o Vento", de Erico Verissimo (original em português)
+# FORMATO: um bloco por pessoa (ver _MODELO-PESSOA.txt)
+# NOTA: sem foto (direito autoral). Saga matrilinear que cobre ~200 anos do Rio
+#       Grande do Sul; começa com um filho ilegítimo (Pedro Terra). O nome
+#       "Rodrigo Terra Cambará" funde os dois sobrenomes da linhagem.
+# ---
+
+== Maneco Terra ==
+nome_publico: Maneco Terra
+relacoes: patriarca dos Terra (tropeiros paulistas); pai de Ana   # -> Parentesco
+fonte: cânon O Tempo e o Vento
+confiabilidade: ficcao
+
+== Ana Terra ==
+identidade: Matriarca fundadora da saga; sobrevive ao massacre da família.
+nome_publico: Ana Terra
+relacoes: filha de Maneco; mãe de Pedro Terra (com Pedro Missioneiro)   # -> Parentesco
+fonte: cânon O Tempo e o Vento
+confiabilidade: ficcao
+
+== Pedro Missioneiro ==
+nome_publico: Pedro Missioneiro
+relacoes: indígena/mestiço; pai de Pedro Terra (morto pela família Terra)   # -> Parentesco
+fonte: cânon O Tempo e o Vento
+confiabilidade: ficcao
+
+== Pedro Terra ==
+nome_publico: Pedro Terra
+relacoes: filho ilegítimo de Ana e Pedro Missioneiro; pai de Bibiana   # -> Parentesco
+fonte: cânon O Tempo e o Vento
+confiabilidade: ficcao
+
+== Bibiana Terra ==
+identidade: Neta de Ana; matriarca do clã Terra-Cambará (o nome "Bibiana" duplica "Ana").
+nome_publico: Bibiana Terra
+relacoes: filha de Pedro Terra; casada com o Capitão Rodrigo Cambará   # -> Parentesco
+fonte: cânon O Tempo e o Vento
+confiabilidade: ficcao
+
+== Capitão Rodrigo Cambará ==
+identidade: Forasteiro destemido cuja chegada funde as linhagens Terra e Cambará.
+nome_publico: Capitão Rodrigo Cambará
+relacoes: casado com Bibiana; morre na Revolução Farroupilha; pai de Bolívar   # -> Parentesco
+fonte: cânon O Tempo e o Vento
+confiabilidade: ficcao
+
+== Bolívar Cambará ==
+nome_publico: Bolívar Cambará
+relacoes: filho de Bibiana e Rodrigo; casado com Luzia Silva; pai de Licurgo   # -> Parentesco
+fonte: cânon O Tempo e o Vento
+confiabilidade: ficcao
+
+== Licurgo Cambará ==
+identidade: Intendente e chefe político de Santa Fé; defende o sobrado no cerco de 1895.
+nome_publico: Licurgo Cambará
+relacoes: filho de Bolívar; pai de Toríbio e de Rodrigo Terra Cambará   # -> Parentesco
+fonte: cânon O Tempo e o Vento
+confiabilidade: ficcao
+
+== Rodrigo Terra Cambará ==
+identidade: Médico e político; figura central de "O Arquipélago".
+nome_publico: Rodrigo Terra Cambará
+relacoes: filho de Licurgo; casado com Flora; pai de Floriano, Eduardo e Jango   # -> Parentesco
+fonte: cânon O Tempo e o Vento
+confiabilidade: ficcao
+
+== Floriano Cambará ==
+identidade: Escritor; alter ego do autor, que sonha narrar a própria família.
+nome_publico: Floriano Cambará
+relacoes: filho de Rodrigo Terra Cambará e Flora   # -> Parentesco
+fonte: cânon O Tempo e o Vento
+confiabilidade: ficcao

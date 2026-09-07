@@ -1,0 +1,1 @@
+Coloque aqui as imagens originais (jpg/png). Rode: python3 converter-fotos.py

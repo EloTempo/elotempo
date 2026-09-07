@@ -1,0 +1,79 @@
+# FAMILIA: Outras monarquias europeias — soberanos reinantes (2026)
+# CONFIABILIDADE geral: documentada
+# FONTES: casas reais oficiais; Wikipedia
+# FORMATO: um bloco por soberano (ver _MODELO-PESSOA.txt)
+# NOTA: são 12 monarquias soberanas na Europa. Aqui, os chefes de Estado atuais
+#       das casas ainda não cobertas em arquivo próprio. Todos vivos (LGPD).
+# ---
+
+== Philippe da Bélgica ==
+nome_publico: Rei Philippe
+nascimento: 1960
+profissoes: monarca (rei dos belgas, desde 2013)
+nacionalidades: Bélgica
+relacoes: casado com Mathilde; herdeira: Elisabeth   # -> Parentesco
+fonte: monarchie.be   # LGPD: pessoa viva
+confiabilidade: documentada
+
+== Willem-Alexander dos Países Baixos ==
+nome_publico: Rei Willem-Alexander
+nascimento: 1967
+profissoes: monarca (rei dos Países Baixos, desde 2013)
+nacionalidades: Países Baixos
+relacoes: casado com Máxima; herdeira: Catharina-Amalia   # -> Parentesco
+fonte: royal-house.nl   # LGPD: pessoa viva
+confiabilidade: documentada
+
+== Frederik X da Dinamarca ==
+nome_publico: Rei Frederik X
+nascimento: 1968
+profissoes: monarca (rei da Dinamarca, desde 2024)
+nacionalidades: Dinamarca
+relacoes: filho de Margrethe II (que abdicou em 2024); casado com Mary; herdeiro: Christian   # -> Parentesco
+fonte: kongehuset.dk   # LGPD: pessoa viva
+confiabilidade: documentada
+
+== Harald V da Noruega ==
+nome_publico: Rei Harald V
+nascimento: 1937
+profissoes: monarca (rei da Noruega, desde 1991)
+nacionalidades: Noruega
+relacoes: casado com Sonja; herdeiro: Haakon   # -> Parentesco
+fonte: royalcourt.no   # LGPD: pessoa viva
+confiabilidade: documentada
+
+== Carl XVI Gustaf da Suécia ==
+nome_publico: Rei Carl XVI Gustaf
+nascimento: 1946
+profissoes: monarca (rei da Suécia, desde 1973)
+nacionalidades: Suécia
+relacoes: casado com Silvia; herdeira: Victoria   # -> Parentesco
+fonte: kungahuset.se   # LGPD: pessoa viva
+confiabilidade: documentada
+
+== Alberto II de Mônaco ==
+nome_publico: Príncipe Alberto II
+nascimento: 1958
+profissoes: monarca (príncipe de Mônaco, desde 2005)
+nacionalidades: Mônaco
+relacoes: da Casa de Grimaldi; casado com Charlene; herdeiro: Jacques   # -> Parentesco
+fonte: palais.mc   # LGPD: pessoa viva
+confiabilidade: documentada
+
+== Hans-Adam II de Liechtenstein ==
+nome_publico: Príncipe Hans-Adam II
+nascimento: 1945
+profissoes: monarca (príncipe de Liechtenstein, desde 1989)
+nacionalidades: Liechtenstein
+relacoes: delegou o governo ao filho e regente Alois   # -> Parentesco
+fonte: fuerstenhaus.li   # LGPD: pessoa viva; Liechtenstein adotou primogenitura absoluta em 2026
+confiabilidade: documentada
+
+== Henri de Luxemburgo ==
+nome_publico: Grão-Duque Henri
+nascimento: 1955
+profissoes: monarca (grão-duque de Luxemburgo, desde 2000)
+nacionalidades: Luxemburgo
+relacoes: herdeiro: Guillaume — transição em andamento (confirmar)   # -> Parentesco
+fonte: monarchie.lu   # LGPD: pessoa viva
+confiabilidade: documentada

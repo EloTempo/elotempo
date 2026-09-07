@@ -103,7 +103,7 @@ pub fn validar_tipo_vinculo(tipo: &str) -> Resultado<()> {
 
 pub async fn buscar_pessoa(pool: &SqlitePool, id: &str) -> Resultado<Pessoa> {
     let row = sqlx::query(
-        "SELECT id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, foto_url
+        "SELECT id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, foto_url, is_publico, categoria, tipo_tempo
          FROM pessoas WHERE id = ?",
     )
     .bind(id)
@@ -120,6 +120,9 @@ pub async fn buscar_pessoa(pool: &SqlitePool, id: &str) -> Resultado<Pessoa> {
         is_vivo: row.try_get("is_vivo")?,
         is_placeholder: row.try_get("is_placeholder")?,
         foto_url: row.try_get("foto_url")?,
+        is_publico: row.try_get("is_publico")?,
+        categoria: row.try_get("categoria").ok().flatten(),
+        tipo_tempo: row.try_get("tipo_tempo").unwrap_or_else(|_| "real".to_string()),
     })
 }
 
@@ -326,15 +329,17 @@ pub struct NovaPessoa {
     pub minibiografia: Option<String>,
     pub is_vivo: bool,
     pub foto_url: Option<String>,
+    pub tipo_tempo: Option<String>,
 }
 
 pub async fn criar_pessoa(pool: &SqlitePool, nova: NovaPessoa) -> Resultado<String> {
     validar_sexo(&nova.sexo)?;
     let id = Uuid::new_v4().to_string();
+    let tipo_tempo = nova.tipo_tempo.unwrap_or_else(|| "real".to_string());
 
     sqlx::query(
-        "INSERT INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, foto_url)
-         VALUES (?, ?, ?, ?, ?, ?, 0, ?)",
+        "INSERT INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, foto_url, tipo_tempo)
+         VALUES (?, ?, ?, ?, ?, ?, 0, ?, ?)",
     )
     .bind(&id)
     .bind(nova.nome.trim())
@@ -343,6 +348,7 @@ pub async fn criar_pessoa(pool: &SqlitePool, nova: NovaPessoa) -> Resultado<Stri
     .bind(&nova.minibiografia)
     .bind(nova.is_vivo)
     .bind(&nova.foto_url)
+    .bind(&tipo_tempo)
     .execute(pool)
     .await?;
 
@@ -428,7 +434,7 @@ pub async fn atualizar_pessoa(pool: &SqlitePool, pessoa: &Pessoa) -> Resultado<(
 
     sqlx::query(
         "UPDATE pessoas
-         SET nome = ?, sobrenome = ?, sexo = ?, minibiografia = ?, is_vivo = ?, foto_url = ?
+         SET nome = ?, sobrenome = ?, sexo = ?, minibiografia = ?, is_vivo = ?, foto_url = ?, tipo_tempo = ?
          WHERE id = ?",
     )
     .bind(pessoa.nome.trim())
@@ -437,6 +443,7 @@ pub async fn atualizar_pessoa(pool: &SqlitePool, pessoa: &Pessoa) -> Resultado<(
     .bind(&pessoa.minibiografia)
     .bind(pessoa.is_vivo)
     .bind(&pessoa.foto_url)
+    .bind(&pessoa.tipo_tempo)
     .bind(&pessoa.id)
     .execute(pool)
     .await?;
@@ -716,6 +723,7 @@ mod testes {
                 minibiografia: None,
                 is_vivo: false,
                 foto_url: None,
+                tipo_tempo: None,
             },
         )
         .await
@@ -1120,6 +1128,7 @@ mod testes {
                 minibiografia: None,
                 is_vivo: true,
                 foto_url: None,
+                tipo_tempo: None,
             },
         )
         .await

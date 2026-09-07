@@ -61,8 +61,8 @@ describe('marcosComRotulo', () => {
   it('rotula mais quando se aproxima o zoom', () => {
     const marcos = [marco('a', 1500), marco('b', 1520), marco('c', 1540)];
 
-    const afastado = marcosComRotulo(marcos, (ano) => (ano - 1500) * 1);
-    const aproximado = marcosComRotulo(marcos, (ano) => (ano - 1500) * 10);
+    const afastado = marcosComRotulo(marcos, (ano: number) => (ano - 1500) * 1);
+    const aproximado = marcosComRotulo(marcos, (ano: number) => (ano - 1500) * 10);
 
     expect(aproximado.size).toBeGreaterThan(afastado.size);
     expect(aproximado.size).toBe(3);

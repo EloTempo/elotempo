@@ -1,0 +1,38 @@
+# FAMILIA: Moisés
+# CONFIABILIDADE geral: reconstruida-tradicional
+# FONTES: Bíblia (edições críticas)
+# FORMATO: um bloco por pessoa (ver _MODELO-PESSOA.txt)
+# NOTA: linhagem tradicional (Êxodo). Segundo o texto, Anrão casou com a tia
+#       Joquebede — mais um caso de consanguinidade na tradição.
+# ---
+
+== Anrão ==
+nome_publico: Anrão
+relacoes: pai de Moisés; casado com Joquebede   # -> Parentesco [CONSANGUINIDADE]
+fonte: tradição (Êxodo)
+confiabilidade: reconstruida-tradicional
+
+== Joquebede ==
+nome_publico: Joquebede
+relacoes: mãe de Moisés, Arão e Miriã   # -> Parentesco
+fonte: tradição (Êxodo)
+confiabilidade: reconstruida-tradicional
+
+== Moisés ==
+identidade: Líder que, segundo a tradição, conduziu o Êxodo e recebeu a Lei.
+nome_publico: Moisés
+relacoes: filho de Anrão e Joquebede; casado com Zípora   # -> Parentesco
+fonte: tradição (Êxodo)
+confiabilidade: reconstruida-tradicional
+
+== Arão ==
+nome_publico: Arão
+relacoes: irmão de Moisés; origem da linhagem sacerdotal   # -> Parentesco
+fonte: tradição (Êxodo)
+confiabilidade: reconstruida-tradicional
+
+== Miriã ==
+nome_publico: Miriã
+relacoes: irmã de Moisés e Arão   # -> Parentesco
+fonte: tradição (Êxodo)
+confiabilidade: reconstruida-tradicional

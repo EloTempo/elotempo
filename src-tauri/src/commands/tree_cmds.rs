@@ -21,6 +21,7 @@ use tauri::State;
 
 use crate::domain::erros::Resultado;
 use crate::domain::eventos_cmds::tipos;
+use crate::domain::models::default_tipo_tempo;
 
 #[derive(Debug, Serialize, Deserialize, sqlx::FromRow)]
 pub struct PessoaNode {
@@ -32,6 +33,7 @@ pub struct PessoaNode {
     pub is_placeholder: bool,
     pub ano_nascimento: Option<i64>,
     pub ano_falecimento: Option<i64>,
+    pub minibiografia: Option<String>,
     /// Caminho relativo do retrato, para o card desenhar a foto (fatia 03).
     pub foto_url: Option<String>,
     pub tem_foto: bool,
@@ -40,6 +42,13 @@ pub struct PessoaNode {
     /// presença" do card descritos na seção 10.
     pub tem_documentos: bool,
     pub tem_religiao: bool,
+    #[serde(default)]
+    pub is_publico: bool,
+    pub categoria: Option<String>,
+    #[serde(default = "default_tipo_tempo")]
+    pub tipo_tempo: String,
+    pub arvore_nome: Option<String>,
+    pub arvore_id: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -127,6 +136,11 @@ pub async fn buscar_grafo_arvore(
         SELECT u.slot_masculino_id FROM unioes u JOIN nucleo n ON u.slot_feminino_id = n.id
         UNION
         SELECT u.slot_feminino_id FROM unioes u JOIN nucleo n ON u.slot_masculino_id = n.id
+        UNION
+        -- Se a pessoa raiz pertence a uma árvore do acervo, inclui todos os membros dessa árvore
+        SELECT am.pessoa_id FROM arvore_membros am
+        WHERE am.pessoa_id IS NOT NULL
+          AND am.arvore_id = (SELECT arvore_id FROM arvore_membros WHERE pessoa_id = ?1 LIMIT 1)
         "#,
     )
     .bind(&raiz_id)
@@ -154,6 +168,7 @@ pub async fn buscar_grafo_arvore(
         r#"
         SELECT
             p.id, p.nome, p.sobrenome, p.sexo, p.is_vivo, p.is_placeholder,
+            p.minibiografia,
             (SELECT e.ano_inicio FROM eventos e
               WHERE e.pessoa_id = p.id AND e.tipo_evento = '{nascimento}'
               ORDER BY e.ano_inicio LIMIT 1) AS ano_nascimento,
@@ -164,7 +179,12 @@ pub async fn buscar_grafo_arvore(
             (p.foto_url IS NOT NULL AND p.foto_url <> '') AS tem_foto,
             (p.minibiografia IS NOT NULL AND p.minibiografia <> '') AS tem_biografia,
             EXISTS(SELECT 1 FROM documento_vinculos dv WHERE dv.pessoa_id = p.id) AS tem_documentos,
-            EXISTS(SELECT 1 FROM religioes_pessoa r WHERE r.pessoa_id = p.id) AS tem_religiao
+            EXISTS(SELECT 1 FROM religioes_pessoa r WHERE r.pessoa_id = p.id) AS tem_religiao,
+            p.is_publico,
+            p.categoria,
+            p.tipo_tempo,
+            (SELECT a.nome FROM arvore_membros am JOIN arvores a ON a.id = am.arvore_id WHERE am.pessoa_id = p.id LIMIT 1) AS arvore_nome,
+            (SELECT a.id FROM arvore_membros am JOIN arvores a ON a.id = am.arvore_id WHERE am.pessoa_id = p.id LIMIT 1) AS arvore_id
         FROM pessoas p
         WHERE p.id IN ({marcadores})
         "#,
@@ -314,6 +334,7 @@ pub async fn buscar_pessoas(
         r#"
         SELECT
             p.id, p.nome, p.sobrenome, p.sexo, p.is_vivo, p.is_placeholder,
+            p.minibiografia,
             (SELECT e.ano_inicio FROM eventos e
               WHERE e.pessoa_id = p.id AND e.tipo_evento = '{nascimento}'
               ORDER BY e.ano_inicio LIMIT 1) AS ano_nascimento,
@@ -324,7 +345,12 @@ pub async fn buscar_pessoas(
             (p.foto_url IS NOT NULL AND p.foto_url <> '') AS tem_foto,
             (p.minibiografia IS NOT NULL AND p.minibiografia <> '') AS tem_biografia,
             EXISTS(SELECT 1 FROM documento_vinculos dv WHERE dv.pessoa_id = p.id) AS tem_documentos,
-            EXISTS(SELECT 1 FROM religioes_pessoa r WHERE r.pessoa_id = p.id) AS tem_religiao
+            EXISTS(SELECT 1 FROM religioes_pessoa r WHERE r.pessoa_id = p.id) AS tem_religiao,
+            p.is_publico,
+            p.categoria,
+            p.tipo_tempo,
+            (SELECT a.nome FROM arvore_membros am JOIN arvores a ON a.id = am.arvore_id WHERE am.pessoa_id = p.id LIMIT 1) AS arvore_nome,
+            (SELECT a.id FROM arvore_membros am JOIN arvores a ON a.id = am.arvore_id WHERE am.pessoa_id = p.id LIMIT 1) AS arvore_id
         FROM pessoas p
         -- Sem acento dos dois lados: "jose" precisa achar "José", porque
         -- ninguém digita acento procurando.
@@ -389,6 +415,7 @@ mod testes {
                 minibiografia: None,
                 is_vivo: false,
                 foto_url: None,
+                tipo_tempo: None,
             },
         )
         .await

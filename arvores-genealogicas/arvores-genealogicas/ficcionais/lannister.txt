@@ -1,0 +1,47 @@
+# FAMILIA: Lannister (As Crônicas de Gelo e Fogo / Game of Thrones) — FICÇÃO
+# CONFIABILIDADE geral: ficcao (NÃO misturar com dados reais)
+# FONTES: cânon ASOIAF / GoT (livros e série)
+# FORMATO: um bloco por pessoa (ver _MODELO-PESSOA.txt)
+# NOTA: sem foto (direito autoral). A consanguinidade é central ao enredo:
+#       Tywin casou com a prima Joanna, e os filhos de Cersei são de Jaime.
+# ---
+
+== Tywin Lannister ==
+identidade: Patriarca da Casa Lannister; senhor de Rochedo Casterly.
+nome_publico: Tywin Lannister
+relacoes: casado com a prima Joanna; pai de Cersei, Jaime e Tyrion   # -> Parentesco [CONSANGUINIDADE]
+fonte: cânon ASOIAF
+confiabilidade: ficcao
+
+== Joanna Lannister ==
+nome_publico: Joanna Lannister
+relacoes: prima e esposa de Tywin; mãe dos três filhos   # -> Parentesco [CONSANGUINIDADE]
+fonte: cânon ASOIAF
+confiabilidade: ficcao
+
+== Cersei Lannister ==
+identidade: Rainha; busca o poder a qualquer custo.
+nome_publico: Cersei Lannister
+relacoes: filha de Tywin; casada com Robert Baratheon; filhos gerados com o irmão Jaime   # -> Parentesco [CONSANGUINIDADE]
+fonte: cânon ASOIAF
+confiabilidade: ficcao
+
+== Jaime Lannister ==
+identidade: Cavaleiro da Guarda Real; irmão gêmeo de Cersei.
+nome_publico: Jaime Lannister
+relacoes: filho de Tywin; gêmeo de Cersei; pai secreto dos filhos dela   # -> Parentesco [CONSANGUINIDADE]
+fonte: cânon ASOIAF
+confiabilidade: ficcao
+
+== Tyrion Lannister ==
+identidade: O irmão mais novo, arguto e político.
+nome_publico: Tyrion Lannister
+relacoes: filho caçula de Tywin   # -> Parentesco
+fonte: cânon ASOIAF
+confiabilidade: ficcao
+
+== Joffrey Baratheon ==
+nome_publico: Joffrey Baratheon
+relacoes: filho de Cersei e Jaime (oficialmente, de Robert Baratheon)   # -> Parentesco [CONSANGUINIDADE]
+fonte: cânon ASOIAF
+confiabilidade: ficcao

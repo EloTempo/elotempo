@@ -1,0 +1,89 @@
+# FAMILIA: Stalin / Dzhugashvili (Geórgia / URSS)
+# CONFIABILIDADE geral: documentada
+# FONTES: Wikipedia; biografias históricas
+# FORMATO: um bloco por pessoa (ver _MODELO-PESSOA.txt)
+# LGPD: descendentes vivos marcados.
+# ---
+
+== Besarion Jughashvili ==
+nome_publico: Besarion Jughashvili
+profissoes: sapateiro
+nacionalidades: Geórgia (Império Russo)
+relacoes: pai de Stalin; casado com Ekaterine Geladze   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Stalin ==
+identidade: Líder da União Soviética de meados dos anos 1920 até 1953.
+nome_publico: Josef Stalin
+nome_registro: Ioseb Jughashvili
+apelidos: Koba
+nascimento: 1878
+falecimento: 1953
+profissoes: político (líder da URSS); revolucionário
+nacionalidades: Geórgia; URSS
+foto: fotos/stalin.webp
+relacoes: casou com Kato Svanidze e depois com Nadezhda Alliluyeva; três filhos   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Kato Svanidze ==
+nome_publico: Kato Svanidze
+nascimento: 1885
+falecimento: 1907   # tifo
+nacionalidades: Geórgia
+relacoes: 1ª esposa de Stalin; mãe de Yakov   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Nadezhda Alliluyeva ==
+nome_publico: Nadezhda Alliluyeva
+nascimento: 1901
+falecimento: 1932   # suicídio
+nacionalidades: URSS
+relacoes: 2ª esposa de Stalin; mãe de Vasily e Svetlana   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Yakov Dzhugashvili ==
+nome_publico: Yakov Dzhugashvili
+nascimento: 1907
+falecimento: 1943   # morreu prisioneiro na Alemanha
+profissoes: militar
+nacionalidades: URSS
+relacoes: filho de Stalin e Kato   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Vasily Stalin ==
+nome_publico: Vasily Stalin
+nascimento: 1921
+falecimento: 1962
+profissoes: militar (general da Força Aérea)
+nacionalidades: URSS
+relacoes: filho de Stalin e Nadezhda   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Svetlana Alliluyeva ==
+identidade: Filha de Stalin; causou sensação ao desertar para os EUA em 1967.
+nome_publico: Svetlana Alliluyeva
+mudanca_nome: passou a usar "Lana Peters" nos EUA
+nascimento: 1926
+falecimento: 2011
+profissoes: escritora
+nacionalidades: URSS; EUA
+relacoes: filha de Stalin e Nadezhda   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Chrese Evans ==
+nome_publico: Chrese Evans
+nome_registro: Olga Peters
+nascimento: 1971
+nacionalidades: EUA
+relacoes: filha de Svetlana; neta de Stalin   # -> Parentesco
+fonte: Wikipedia   # LGPD: pessoa viva
+confiabilidade: documentada
+
+# Outros netos (expandir): Yevgeny Dzhugashvili (1936–2016), Galina (1938–2007).

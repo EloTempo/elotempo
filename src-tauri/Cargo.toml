@@ -1,9 +1,9 @@
 [package]
-name = "arvore-genealogica"
-version = "0.1.0"
-description = "Software desktop offline para árvores genealógicas, compatível com GEDCOM 7.0"
+name = "elotempo"
+version = "1.0.0"
+description = "Elotempo — Software desktop offline para árvores genealógicas e contexto de vidas, compatível com GEDCOM 7.0"
 authors = ["Gabriel Nascimento"]
-license = "MIT"
+license = "GPL-3.0-or-later"
 # `repository` fica de fora até o projeto ser publicado — um endereço que não
 # existe é pior do que campo ausente.
 edition = "2021"
@@ -28,6 +28,12 @@ uuid = { version = "1", features = ["v4"] }
 # Sem `default-features`, para não arrastar codecs que não usamos — o formato
 # pede deflate, e só.
 zip = { version = "2", default-features = false, features = ["deflate"] }
+# Criptografia e segurança offline (Modo Híbrido Flexível / Cofre AES-256-GCM / Argon2id)
+argon2 = "0.5"
+aes-gcm = "0.10"
+rand = "0.8"
+sha2 = "0.10"
+zeroize = { version = "1.8", features = ["derive"] }
 
 [features]
 default = []

@@ -17,9 +17,11 @@
   /* Tema Padrão: Clássico Claro */
   :root {
     --mesa: #e2d9c8; --bg: #efe9dd; --sup: #e8e1d3; --card: #f8f3e8; --card2: #efe7d6;
-    --borda: #d3c6ac; --borda2: #bfae8e; --tinta: #3a3125; --tinta2: #8b7f6a; --tinta3: #a89b83;
+    --borda: #c8b99c; --borda2: #bfae8e; --tinta: #241e16; --tinta2: #544837; --tinta3: #756651;
     --linha: #b9a888; --masc: #3c5a78; --fem: #8f3f4e; --anel: #b9a074;
-    --acento: #7a5c34; --acento-tinta: #faf6ec; --chip: #e4dbc7;
+    --acento: #7a5c34; --acento-tinta: #faf6ec;
+    --acento2: #3d6b60; --acento2-tinta: #faf6ec;
+    --chip: #e4dbc7;
     /* Linhas do tempo — paleta PRÓPRIA, de propósito.
      *
      * A primeira versão reaproveitava `--masc` e `--fem` para as categorias, e
@@ -38,31 +40,43 @@
     --raio: 14px; --raio-s: 9px;
     --sombra: 0 1px 2px rgba(58,49,37,.10), 0 6px 18px rgba(58,49,37,.07);
     
-    --f-tit: 'Libre Baskerville', Georgia, serif;
-    --f-corpo: 'Source Serif 4', Georgia, serif;
-    --f-num: 'Source Serif 4', Georgia, serif;
-    --peso-tit: 700;
-    --tracking: 0em;
+    --f-tit: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    --f-corpo: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    --f-num: 'Inter', system-ui, sans-serif;
+    --f-marca: 'Sora', 'Inter', system-ui, sans-serif;
+    --peso-tit: 650;
+    --tracking: -0.015em;
   }
 
   /* Tema Clássico Escuro */
   :root[data-tema="classico-escuro"] {
     --mesa: #171410; --bg: #211d18; --sup: #26221c; --card: #2b261f; --card2: #332d25;
-    --borda: #463d31; --borda2: #5d5140; --tinta: #f0e5d1; --tinta2: #a99a86; --tinta3: #8b7d69;
+    --borda: #463d31; --borda2: #5d5140; --tinta: #f5ede0; --tinta2: #c4b6a4; --tinta3: #a39582;
     --linha: #6f6046; --masc: #8fbcdc; --fem: #e07a94; --anel: #b9a074;
-    --acento: #d8c39a; --acento-tinta: #221e18; --chip: #332d25;
+    --acento: #d8c39a; --acento-tinta: #221e18;
+    --acento2: #84b3a4; --acento2-tinta: #171410;
+    --chip: #332d25;
     --lt-historia: #8fbcdc; --lt-politica: #d9a566;
     --lt-moeda: #a8bd7a; --lt-tecnologia: #b0a0d8;
     --lt-projeto: #7fc9bd;
     --sombra: 0 1px 2px rgba(0,0,0,.4), 0 8px 22px rgba(0,0,0,.35);
+
+    --f-tit: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    --f-corpo: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    --f-num: 'Inter', system-ui, sans-serif;
+    --f-marca: 'Sora', 'Inter', system-ui, sans-serif;
+    --peso-tit: 650;
+    --tracking: -0.015em;
   }
 
   /* Tema Moderno Claro */
   :root[data-tema="moderno-claro"] {
     --mesa: #e6e9ef; --bg: #f4f5f7; --sup: #eceef2; --card: #ffffff; --card2: #f1f3f7;
-    --borda: #dfe3ea; --borda2: #c3cad6; --tinta: #0f1420; --tinta2: #6b7280; --tinta3: #98a1af;
+    --borda: #dfe3ea; --borda2: #c3cad6; --tinta: #0f1420; --tinta2: #4b5563; --tinta3: #6b7280;
     --linha: #c8d0dc; --masc: #2563eb; --fem: #e11d63; --anel: #98a1af;
-    --acento: #2563eb; --acento-tinta: #ffffff; --chip: #e8ebf1;
+    --acento: #2563eb; --acento-tinta: #ffffff;
+    --acento2: #0d9488; --acento2-tinta: #ffffff;
+    --chip: #e8ebf1;
     --lt-historia: #1d4ed8; --lt-politica: #b45309;
     --lt-moeda: #15803d; --lt-tecnologia: #7c3aed;
     --lt-projeto: #0f766e;
@@ -70,19 +84,22 @@
     --raio: 12px; --raio-s: 8px;
     --sombra: 0 1px 2px rgba(15,20,32,.06), 0 8px 20px rgba(15,20,32,.06);
     
-    --f-tit: 'IBM Plex Sans', system-ui, sans-serif;
-    --f-corpo: 'IBM Plex Sans', system-ui, sans-serif;
-    --f-num: 'IBM Plex Mono', monospace;
-    --peso-tit: 600;
-    --tracking: -0.01em;
+    --f-tit: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    --f-corpo: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    --f-num: 'Inter', system-ui, monospace;
+    --f-marca: 'Sora', 'Inter', system-ui, sans-serif;
+    --peso-tit: 650;
+    --tracking: -0.015em;
   }
 
   /* Tema Moderno Escuro */
   :root[data-tema="moderno-escuro"] {
     --mesa: #06080c; --bg: #0b0d12; --sup: #101319; --card: #161a22; --card2: #1c212b;
-    --borda: #242a35; --borda2: #333b49; --tinta: #eef2f7; --tinta2: #8b95a5; --tinta3: #6c7686;
+    --borda: #242a35; --borda2: #333b49; --tinta: #eef2f7; --tinta2: #a3adc0; --tinta3: #8a96a8;
     --linha: #2e3542; --masc: #5b8bf9; --fem: #fb3b73; --anel: #5c6673;
-    --acento: #5b8bf9; --acento-tinta: #0b0d12; --chip: #1c212b;
+    --acento: #5b8bf9; --acento-tinta: #0b0d12;
+    --acento2: #2bbfab; --acento2-tinta: #06080c;
+    --chip: #1c212b;
     --lt-historia: #7aa2ff; --lt-politica: #f0a83c;
     --lt-moeda: #5fd18a; --lt-tecnologia: #b39bfb;
     --lt-projeto: #4fd6cf;
@@ -90,15 +107,23 @@
     --raio: 12px; --raio-s: 8px;
     --sombra: 0 1px 2px rgba(0,0,0,.5), 0 8px 22px rgba(0,0,0,.45);
     
-    --f-tit: 'IBM Plex Sans', system-ui, sans-serif;
-    --f-corpo: 'IBM Plex Sans', system-ui, sans-serif;
-    --f-num: 'IBM Plex Mono', monospace;
-    --peso-tit: 600;
-    --tracking: -0.01em;
+    --f-tit: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    --f-corpo: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    --f-num: 'Inter', system-ui, monospace;
+    --f-marca: 'Sora', 'Inter', system-ui, sans-serif;
+    --peso-tit: 650;
+    --tracking: -0.015em;
+  }
+
+  html {
+    font-size: 15px;
   }
 
   body {
     @apply bg-mesa text-tinta font-corpo antialiased m-0;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   a {
@@ -119,56 +144,53 @@
   }
 }
 
+#print-portal-root {
+  display: none;
+}
+
+/* Identidade Visual EloTempo */
+.font-marca {
+  font-family: 'Sora', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif !important;
+}
+
 /* Regras Globais de Impressão */
 @media print {
-  @page { margin: 18mm; size: A4 portrait; }
+  @page {
+    margin: 12mm;
+    size: auto;
+  }
 
-  /* Papel é branco.
-   *
-   * O `body` usa `bg-mesa`, que nos temas claros é um bege (#e2d9c8) e nos
-   * escuros é quase preto. O `print-color-adjust: exact` abaixo — que existe
-   * para as cores do documento saírem fiéis — obrigava esse fundo a ser
-   * impresso também, e ele aparecia como um bloco bege no rodapé de toda
-   * página. `visibility: hidden` esconde os filhos, mas não o fundo do
-   * próprio body. */
   html, body {
     background: #fff !important;
     background-image: none !important;
   }
 
-  /* Remove a UI do aplicativo da página impressa */
-  body * {
-    visibility: hidden;
-  }
-  
-  /* Exibe apenas o contêiner de impressão */
-  #print-container, #print-container * {
-    visibility: visible;
-  }
-  #print-container {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-  }
-
-  /* A casca do app usa `h-screen`. Em papel, isso esticaria o documento até
-   * uma tela inteira mesmo quando o relatório é curto, deixando um vão em
-   * branco (ou colorido) depois do conteúdo. */
-  #root,
-  #root > div {
-    height: auto !important;
-    min-height: 0 !important;
-    overflow: visible !important;
-    background: transparent !important;
-  }
-
-  /* Sobreposições fixas (modais, gaveta) não pertencem ao papel. */
-  .fixed {
+  /* Oculta toda a aplicação interativa na impressão */
+  #root {
     display: none !important;
   }
 
-  /* Força a impressão das cores de fundo exatas (ignora modo noturno do SO) */
+  /* Exibe o contêiner de impressão no fluxo natural do documento (sem absolute) */
+  #print-portal-root {
+    display: block !important;
+    position: static !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    color: #2f2a22 !important;
+    background: #fff !important;
+    font-family: 'Source Serif 4', Georgia, serif;
+  }
+
+  #print-container {
+    display: block !important;
+    position: static !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Força a impressão das cores de fundo exatas */
   *, *::before, *::after {
     print-color-adjust: exact !important;
     -webkit-print-color-adjust: exact !important;
@@ -179,22 +201,12 @@
     break-inside: avoid;
   }
 
-  /* O documento impresso é sempre em papel branco com tinta escura, mesmo
-     que o usuário esteja com um tema noturno na tela. */
-  #print-container {
-    color: #2f2a22;
-    background: #fff;
-    font-family: 'Source Serif 4', Georgia, serif;
-  }
-
-  /* Uma ficha não se parte entre páginas: ler metade de um antepassado no pé
-     de uma folha e a outra metade no topo da seguinte é pior do que gastar o
-     espaço em branco. */
+  /* Uma ficha não se parte entre páginas */
   .ficha-relatorio {
     break-inside: avoid;
   }
 
-  /* Cada geração começa numa página nova, quando a opção estiver ligada. */
+  /* Cada geração começa numa página nova, quando a opção estiver ligada */
   .geracao-relatorio {
     break-before: page;
   }
@@ -202,13 +214,34 @@
     break-before: auto;
   }
 
-  /* Nunca deixar um título de geração sozinho no fim da página. */
-  #print-container h2 {
+  /* Nunca deixar um título de geração sozinho no fim da página */
+  #print-container h2,
+  #print-portal-root h2 {
     break-after: avoid;
   }
 
-  /* O diagrama é uma peça só. */
-  #print-container svg {
+  /* O diagrama é uma peça só */
+  #print-container svg,
+  #print-portal-root svg {
     break-inside: avoid;
+  }
+
+  /* Pranchas ABNT de Linha do Tempo em A4 Paisagem */
+  .academic-a4-landscape {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    break-after: page !important;
+    page-break-after: always !important;
+    box-shadow: none !important;
+    border: none !important;
+    margin: 0 auto !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 190mm !important;
+  }
+
+  .academic-print-root {
+    display: block !important;
+    width: 100% !important;
   }
 }

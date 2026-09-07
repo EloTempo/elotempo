@@ -1,0 +1,52 @@
+# FAMILIA: 19ª Dinastia do Egito (Ramséssida)
+# CONFIABILIDADE geral: reconstruida-tradicional
+# FONTES: egiptologia acadêmica
+# FORMATO: um bloco por pessoa (ver _MODELO-PESSOA.txt)
+# ---
+
+== Ramessés I ==
+nome_publico: Ramessés I
+falecimento: cerca de 1290 a.C.
+profissoes: faraó (fundador da dinastia)
+nacionalidades: Egito
+relacoes: iniciou a 19ª dinastia; pai de Seti I   # -> Parentesco
+fonte: egiptologia
+confiabilidade: reconstruida-tradicional
+
+== Seti I ==
+nome_publico: Seti I
+falecimento: cerca de 1279 a.C.
+profissoes: faraó
+nacionalidades: Egito
+relacoes: filho de Ramessés I; pai de Ramessés II   # -> Parentesco
+fonte: egiptologia
+confiabilidade: reconstruida-tradicional
+
+== Ramessés II ==
+identidade: "Ramessés, o Grande"; reinou cerca de 66 anos e teve mais de 100 filhos.
+nome_publico: Ramessés II
+nascimento: cerca de 1303 a.C.
+falecimento: cerca de 1213 a.C.
+profissoes: faraó
+nacionalidades: Egito
+foto: fotos/ramesses-ii.webp
+relacoes: filho de Seti I; esposa principal Nefertari; sucessor Merneptah   # -> Parentesco
+fonte: egiptologia
+confiabilidade: reconstruida-tradicional
+
+== Nefertari ==
+nome_publico: Nefertari
+profissoes: rainha
+nacionalidades: Egito
+relacoes: esposa principal de Ramessés II   # -> Parentesco
+fonte: egiptologia
+confiabilidade: reconstruida-tradicional
+
+== Merneptah ==
+nome_publico: Merneptah
+falecimento: cerca de 1203 a.C.
+profissoes: faraó
+nacionalidades: Egito
+relacoes: filho e sucessor de Ramessés II   # -> Parentesco
+fonte: egiptologia
+confiabilidade: reconstruida-tradicional

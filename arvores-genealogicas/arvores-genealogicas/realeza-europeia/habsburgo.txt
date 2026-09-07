@@ -1,0 +1,147 @@
+# FAMILIA: Habsburgo — Áustria e Espanha
+# CONFIABILIDADE geral: documentada
+# FONTES: Britannica; Wikipedia; historiografia europeia
+# FORMATO: um bloco por pessoa (ver _MODELO-PESSOA.txt)
+# NOTA: caso clássico de CONSANGUINIDADE. Casamentos repetidos entre tios e
+#       sobrinhas e entre primos levaram, no ramo espanhol, a Carlos II — cujo
+#       coeficiente de parentesco era próximo ao de um filho de irmãos.
+# ---
+
+# --- UNIÃO FUNDADORA (Habsburgo + Espanha) ---
+== Filipe, o Belo ==
+nome_publico: Filipe I de Castela (o Belo)
+nascimento: 1478
+falecimento: 1506
+nacionalidades: Borgonha; Castela
+relacoes: casado com Joana de Castela; uniu Habsburgo e a coroa espanhola   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Joana de Castela ==
+nome_publico: Joana, a Louca
+nascimento: 1479
+falecimento: 1555
+nacionalidades: Castela; Aragão
+relacoes: filha dos Reis Católicos; mãe de Carlos V   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+# --- RAMO ESPANHOL ---
+== Carlos V ==
+identidade: Sacro Imperador e rei da Espanha; governou um império "onde o sol não se punha".
+nome_publico: Carlos V (Carlos I da Espanha)
+nascimento: 1500
+falecimento: 1558
+profissoes: monarca (imperador)
+nacionalidades: Habsburgo; Espanha
+foto: fotos/carlos-v.webp
+relacoes: filho de Filipe e Joana; pai de Filipe II   # -> Parentesco
+fonte: Britannica
+confiabilidade: documentada
+
+== Filipe II ==
+identidade: Rei da Espanha no auge do império; casou-se quatro vezes, incluindo com a sobrinha Ana da Áustria.
+nome_publico: Filipe II
+nascimento: 1527
+falecimento: 1598
+profissoes: monarca
+nacionalidades: Espanha
+relacoes: filho de Carlos V; casou com a sobrinha Ana da Áustria   # -> Parentesco [CONSANGUINIDADE]
+fonte: Britannica
+confiabilidade: documentada
+
+== Carlos II da Espanha ==
+identidade: Último Habsburgo espanhol; incapacitado por gerações de endogamia, morreu sem herdeiros, o que deflagrou a Guerra da Sucessão Espanhola.
+nome_publico: Carlos II (o Enfeitiçado)
+apelidos: El Hechizado
+nascimento: 1661
+falecimento: 1700
+profissoes: monarca
+nacionalidades: Espanha
+relacoes: fim do ramo espanhol dos Habsburgo   # -> Parentesco [CONSANGUINIDADE]
+fonte: Wikipedia; Britannica
+confiabilidade: documentada
+
+# --- RAMO AUSTRÍACO ---
+== Maria Teresa ==
+identidade: Arquiduquesa da Áustria e soberana dos domínios Habsburgo; mãe de 16 filhos.
+nome_publico: Maria Teresa da Áustria
+nascimento: 1717
+falecimento: 1780
+profissoes: monarca
+nacionalidades: Áustria
+foto: fotos/maria-teresa.webp
+relacoes: mãe de Maria Antonieta e do imperador José II   # -> Parentesco
+fonte: Britannica
+confiabilidade: documentada
+
+== Maria Antonieta ==
+identidade: Arquiduquesa austríaca que se tornou rainha da França; guilhotinada na Revolução.
+nome_publico: Maria Antonieta
+nascimento: 1755
+falecimento: 1793
+nacionalidades: Áustria; França
+relacoes: filha de Maria Teresa; casada com Luís XVI (elo com [[bourbon]])   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Francisco José I ==
+identidade: Imperador da Áustria-Hungria por 68 anos; seu reinado terminou em plena 1ª Guerra.
+nome_publico: Francisco José I
+nascimento: 1830
+falecimento: 1916
+profissoes: monarca (imperador)
+nacionalidades: Áustria-Hungria
+foto: fotos/francisco-jose.webp
+relacoes: casado com a prima Isabel ("Sissi"); pai do príncipe Rudolf   # -> Parentesco [CONSANGUINIDADE]
+fonte: Britannica
+confiabilidade: documentada
+
+== Isabel da Baviera (Sissi) ==
+nome_publico: Imperatriz Isabel ("Sissi")
+nascimento: 1837
+falecimento: 1898   # assassinada em Genebra
+nacionalidades: Baviera; Áustria
+relacoes: prima e esposa de Francisco José I   # -> Parentesco [CONSANGUINIDADE]
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Francisco Ferdinando ==
+identidade: Herdeiro do trono austro-húngaro; seu assassinato em Sarajevo (1914) desencadeou a 1ª Guerra Mundial.
+nome_publico: Arquiduque Francisco Ferdinando
+nascimento: 1863
+falecimento: 1914   # assassinado em Sarajevo
+profissoes: herdeiro (arquiduque)
+nacionalidades: Áustria-Hungria
+relacoes: sobrinho de Francisco José I   # -> Parentesco
+fonte: Britannica
+confiabilidade: documentada
+
+== Carlos I da Áustria ==
+nome_publico: Carlos I
+nascimento: 1887
+falecimento: 1922
+profissoes: monarca (último imperador austro-húngaro)
+nacionalidades: Áustria-Hungria
+relacoes: sobrinho-neto de Francisco José I; pai de Otto   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Otto von Habsburgo ==
+nome_publico: Otto von Habsburgo
+nascimento: 1912
+falecimento: 2011
+profissoes: político (eurodeputado); escritor
+nacionalidades: Áustria; Alemanha
+relacoes: filho de Carlos I; chefe da Casa de Habsburgo até 2007   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Karl von Habsburgo ==
+nome_publico: Karl von Habsburgo
+nascimento: 1961
+profissoes: atual chefe da Casa de Habsburgo
+nacionalidades: Áustria
+relacoes: neto de Carlos I   # -> Parentesco
+fonte: Wikipedia   # LGPD: pessoa viva
+confiabilidade: documentada

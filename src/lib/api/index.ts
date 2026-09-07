@@ -53,3 +53,7 @@ export * from './union';
 export * from './events';
 export * from './attributes';
 export * from './tree';
+export * from './estatisticas';
+export * from './arvores';
+export * from './marcadores';
+export * from './seguranca';

@@ -1,0 +1,145 @@
+# FAMILIA: Windsor (Reino Unido) — ancorada em Vitória
+# CONFIABILIDADE geral: documentada
+# FONTES: Casa Real Britânica (royal.uk); Wikipedia; Britannica
+# FORMATO: um bloco por pessoa (ver _MODELO-PESSOA.txt)
+# NOTA: a Casa de Windsor foi assim nomeada por Jorge V em 1917 (antes, Saxe-
+#       Coburgo-Gota). Vitória é "a avó da Europa": seus descendentes ocuparam
+#       tronos do Reino Unido, Alemanha, Rússia, Espanha e Escandinávia.
+# LGPD: membros vivos — apenas dados públicos.
+# ---
+
+# --- ANCESTRAL CONECTORA ---
+== Rainha Vitória ==
+identidade: Rainha do Reino Unido por 63 anos; "a avó da Europa", cujos descendentes se espalharam pelos tronos do continente.
+nome_publico: Rainha Vitória
+nascimento: 1819
+falecimento: 1901
+profissoes: monarca (rainha do Reino Unido)
+nacionalidades: Reino Unido
+foto: fotos/rainha-vitoria.webp
+relacoes: casada com o primo Alberto de Saxe-Coburgo-Gota; portadora do gene da hemofilia   # -> Parentesco [CONSANGUINIDADE]
+fonte: royal.uk; Wikipedia
+confiabilidade: documentada
+
+== Alberto de Saxe-Coburgo-Gota ==
+nome_publico: Príncipe Alberto
+nascimento: 1819
+falecimento: 1861
+nacionalidades: Alemanha; Reino Unido
+relacoes: primo e marido da Rainha Vitória   # -> Parentesco [CONSANGUINIDADE]
+fonte: Wikipedia
+confiabilidade: documentada
+
+# --- LINHA DE SUCESSÃO ---
+== Eduardo VII ==
+nome_publico: Eduardo VII
+nascimento: 1841
+falecimento: 1910
+profissoes: monarca
+nacionalidades: Reino Unido
+relacoes: filho de Vitória e Alberto; casado com Alexandra da Dinamarca   # -> Parentesco
+fonte: royal.uk
+confiabilidade: documentada
+
+== Jorge V ==
+identidade: Rei que renomeou a dinastia como "Windsor" em 1917, em meio à 1ª Guerra.
+nome_publico: Jorge V
+nascimento: 1865
+falecimento: 1936
+profissoes: monarca
+nacionalidades: Reino Unido
+relacoes: filho de Eduardo VII; casado com Maria de Teck; fundou a Casa de Windsor   # -> Parentesco
+fonte: royal.uk
+confiabilidade: documentada
+
+== Eduardo VIII ==
+identidade: Rei que abdicou em 1936 para se casar com Wallis Simpson.
+nome_publico: Eduardo VIII
+nascimento: 1894
+falecimento: 1972
+profissoes: monarca (abdicou)
+nacionalidades: Reino Unido
+relacoes: filho mais velho de Jorge V   # -> Parentesco
+fonte: royal.uk
+confiabilidade: documentada
+
+== Jorge VI ==
+nome_publico: Jorge VI
+nascimento: 1895
+falecimento: 1952
+profissoes: monarca
+nacionalidades: Reino Unido
+relacoes: filho de Jorge V; assumiu após a abdicação do irmão; casado com Isabel Bowes-Lyon   # -> Parentesco
+fonte: royal.uk
+confiabilidade: documentada
+
+== Isabel Bowes-Lyon ==
+nome_publico: Rainha-mãe Isabel
+nascimento: 1900
+falecimento: 2002
+nacionalidades: Reino Unido
+relacoes: esposa de Jorge VI; mãe de Elizabeth II   # -> Parentesco
+fonte: royal.uk
+confiabilidade: documentada
+
+== Elizabeth II ==
+identidade: Rainha do Reino Unido por 70 anos — o reinado mais longo da história britânica.
+nome_publico: Elizabeth II
+nascimento: 1926
+falecimento: 2022
+profissoes: monarca
+nacionalidades: Reino Unido
+foto: fotos/elizabeth-ii.webp
+relacoes: filha de Jorge VI; casada com Filipe, duque de Edimburgo; 4 filhos   # -> Parentesco
+fonte: royal.uk
+confiabilidade: documentada
+
+== Filipe, Duque de Edimburgo ==
+nome_publico: Príncipe Filipe
+nascimento: 1921
+falecimento: 2021
+nacionalidades: Grécia; Reino Unido
+relacoes: marido de Elizabeth II (também tataraneto da Rainha Vitória)   # -> Parentesco [CONSANGUINIDADE]
+fonte: royal.uk
+confiabilidade: documentada
+
+== Carlos III ==
+identidade: Rei do Reino Unido desde 2022.
+nome_publico: Carlos III
+nascimento: 1948
+profissoes: monarca
+nacionalidades: Reino Unido
+foto: fotos/carlos-iii.webp
+relacoes: filho de Elizabeth II; casou com Diana Spencer e depois com Camilla; pai de William e Harry   # -> Parentesco
+fonte: royal.uk   # LGPD: pessoa viva
+confiabilidade: documentada
+
+== Diana, Princesa de Gales ==
+nome_publico: Diana Spencer
+nascimento: 1961
+falecimento: 1997
+nacionalidades: Reino Unido
+relacoes: 1ª esposa de Carlos III; mãe de William e Harry   # -> Parentesco
+fonte: royal.uk
+confiabilidade: documentada
+
+== William, Príncipe de Gales ==
+nome_publico: William, Príncipe de Gales
+nascimento: 1982
+profissoes: membro da realeza (herdeiro do trono)
+nacionalidades: Reino Unido
+relacoes: filho de Carlos III e Diana; casado com Catherine (Kate) Middleton   # -> Parentesco
+fonte: royal.uk   # LGPD: pessoa viva
+confiabilidade: documentada
+
+== Harry, Duque de Sussex ==
+nome_publico: Harry, Duque de Sussex
+nascimento: 1984
+nacionalidades: Reino Unido
+relacoes: filho de Carlos III e Diana; casado com Meghan Markle   # -> Parentesco
+fonte: royal.uk   # LGPD: pessoa viva
+confiabilidade: documentada
+
+# Filhos de William e Kate (menores/jovens — dados públicos mínimos):
+#   George (2013), Charlotte (2015), Louis (2018).
+# Outros filhos de Elizabeth II: Anne (1950), Andrew (1960), Edward (1964).

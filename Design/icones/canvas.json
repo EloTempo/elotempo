@@ -1,0 +1,65 @@
+{
+  "artboards": [
+    {
+      "file": "Main.dc.html",
+      "x": 0,
+      "y": 0,
+      "w": 940,
+      "h": 800
+    },
+    {
+      "file": "Identidade.dc.html",
+      "x": 1040,
+      "y": 0,
+      "w": 940,
+      "h": 800
+    },
+    {
+      "file": "Dominio.dc.html",
+      "x": 2080,
+      "y": 0,
+      "w": 940,
+      "h": 820
+    },
+    {
+      "file": "Genealogicos.dc.html",
+      "x": 0,
+      "y": 960,
+      "w": 940,
+      "h": 760
+    },
+    {
+      "file": "Temas.dc.html",
+      "x": 1040,
+      "y": 960,
+      "w": 940,
+      "h": 660
+    },
+    {
+      "file": "Escopo.dc.html",
+      "x": 2080,
+      "y": 960,
+      "w": 940,
+      "h": 760
+    },
+    {
+      "file": "Cor.dc.html",
+      "x": 0,
+      "y": 1880,
+      "w": 940,
+      "h": 1020
+    }
+  ],
+  "annotations": [
+    {
+      "id": "regra-mestra",
+      "x": 0,
+      "y": -150,
+      "w": 620,
+      "text": "A regra que sustenta as outras: o ícone herda a gramática do logo (traço reto, ponta arredondada, nó cheio), nunca a geometria. Redesenhado na grade de 24, não reduzido de 400."
+    }
+  ],
+  "launch": {
+    "view": "canvas"
+  }
+}

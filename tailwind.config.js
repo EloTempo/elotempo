@@ -23,12 +23,15 @@ export default {
         anel: 'var(--anel)',
         acento: 'var(--acento)',
         'acento-tinta': 'var(--acento-tinta)',
+        acento2: 'var(--acento2)',
+        'acento2-tinta': 'var(--acento2-tinta)',
         chip: 'var(--chip)',
       },
       fontFamily: {
         tit: 'var(--f-tit)',
         corpo: 'var(--f-corpo)',
         num: 'var(--f-num)',
+        marca: ['Sora', 'Inter', 'system-ui', 'sans-serif'],
       },
       fontWeight: {
         tit: 'var(--peso-tit)',

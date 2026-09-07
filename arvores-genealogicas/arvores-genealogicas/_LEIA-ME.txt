@@ -1,0 +1,29 @@
+# ÁRVORES GENEALÓGICAS CONHECIDAS — PESQUISA
+#
+# FORMATO: um BLOCO por pessoa (ver _MODELO-PESSOA.txt), com os campos do card
+# do app. É YAML — pode manter .txt ou renomear para .yaml para parse direto.
+# Blocos separados por linha "== Nome ==".
+#
+# DATAS APROXIMADAS: use "cerca de 1040 a.C." (equivale a data aproximada;
+# no GEDCOM 7.0 vira o qualificador ABT). Ideal para figuras antigas/incertas.
+#
+# CONFIABILIDADE (casa com a lente popular/crítico do app):
+#   documentada              -> registros primários (cartórios, censos, arquivos)
+#   reconstruida-tradicional -> linhagem antiga/religiosa, trechos contestados
+#   mista                    -> parte recente documentada, parte antiga tradicional
+#   ficcao                   -> personagens de obra; NUNCA misturar com dados reais
+#
+# FOTOS: arquivos pequenos em webp, na pasta fotos/.
+#   1) coloque a imagem original em fotos-originais/
+#   2) rode:  python3 converter-fotos.py   (gera fotos/<slug>.webp ~512px)
+#   3) referencie no bloco:  foto: fotos/<slug>.webp
+#   LICENÇA: use imagens de domínio público / Creative Commons (ex.: Wikimedia
+#   Commons) para figuras históricas. Pessoas vivas: cuidado com direitos de
+#   imagem e LGPD. Ficcionais: atenção a direitos autorais (evite no acervo).
+#
+# MAPA -> GEDCOM 7.0 (destino final):
+#   nome_publico->NAME | nascimento->BIRT/DATE (ABT p/ "cerca de") |
+#   falecimento->DEAT | nacionalidades->NATI | religioes->RELI |
+#   escolaridade->EDUC | profissoes->OCCU | identidade->NOTE | foto->OBJE/FILE
+#
+# LGPD: famílias com pessoas vivas -> apenas figuras públicas e dados já públicos.

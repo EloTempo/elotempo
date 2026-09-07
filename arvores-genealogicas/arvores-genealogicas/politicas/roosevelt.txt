@@ -1,0 +1,206 @@
+# FAMILIA: Roosevelt (EUA) — ramos Oyster Bay e Hyde Park
+# CONFIABILIDADE geral: documentada
+# FONTES: Theodore Roosevelt Presidential Library; FDR Library; Wikipedia
+# FORMATO: um bloco por pessoa (ver _MODELO-PESSOA.txt)
+# NOTA: dois ramos de um ancestral comum; TR e FDR eram primos de 5º grau, e
+#       Eleanor (sobrinha de TR) casou com FDR, unindo os dois ramos.
+# ---
+
+# --- RAIZ COMUM ---
+== Claes Martenszen van Rosenvelt ==
+identidade: Imigrante holandês; ancestral de toda a família Roosevelt na América.
+nome_publico: Claes Martenszen van Rosenvelt
+nascimento: cerca de 1626
+falecimento: 1659
+nacionalidades: Novos Países Baixos (Nova Amsterdã)
+relacoes: patriarca imigrante   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Nicholas Roosevelt ==
+nome_publico: Nicholas Roosevelt
+profissoes: vereador (alderman)
+nacionalidades: EUA (colonial)
+relacoes: primeiro a usar "Roosevelt"; seus filhos Johannes (ramo Oyster Bay) e Jacobus/James (ramo Hyde Park) originaram os dois ramos   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+# --- RAMO OYSTER BAY (Theodore) ---
+== Theodore Roosevelt Sr. ==
+nome_publico: Theodore Roosevelt Sr.
+nascimento: 1831
+falecimento: 1878
+profissoes: empresário; filantropo
+nacionalidades: EUA
+relacoes: pai do presidente TR e de Elliott; casado com Martha Bulloch   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Martha Bulloch Roosevelt ==
+nome_publico: Martha "Mittie" Bulloch
+nascimento: 1835
+falecimento: 1884
+nacionalidades: EUA
+relacoes: mãe de TR e de Elliott (avó paterna de Eleanor)   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Theodore Roosevelt ==
+identidade: 26º presidente dos EUA; líder progressista e Nobel da Paz de 1906.
+nome_publico: Theodore Roosevelt
+apelidos: TR; Teddy
+nascimento: 1858
+falecimento: 1919
+profissoes: político (presidente dos EUA); militar; escritor; naturalista
+nacionalidades: EUA
+foto: fotos/theodore-roosevelt.webp
+relacoes: filho de Theodore Sr. e Martha; casou com Alice Lee e depois Edith Carow; 6 filhos; tio de Eleanor   # -> Parentesco
+fonte: TR Library; Wikipedia
+confiabilidade: documentada
+
+== Edith Kermit Carow Roosevelt ==
+nome_publico: Edith Kermit Carow
+nascimento: 1861
+falecimento: 1948
+relacoes: 2ª esposa de TR; primeira-dama   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Alice Roosevelt Longworth ==
+nome_publico: Alice Roosevelt Longworth
+nascimento: 1884
+falecimento: 1980
+profissoes: socialite; escritora
+nacionalidades: EUA
+relacoes: filha de TR e da 1ª esposa, Alice Lee   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Theodore Roosevelt Jr. ==
+nome_publico: Theodore Roosevelt Jr.
+nascimento: 1887
+falecimento: 1944
+profissoes: militar (general, herói do Dia D); político
+relacoes: filho de TR e Edith   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Kermit Roosevelt ==
+nome_publico: Kermit Roosevelt
+nascimento: 1889
+falecimento: 1943
+profissoes: militar; explorador; empresário
+relacoes: filho de TR e Edith   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Quentin Roosevelt ==
+nome_publico: Quentin Roosevelt
+nascimento: 1897
+falecimento: 1918   # abatido como aviador na 1ª Guerra
+profissoes: aviador militar
+relacoes: filho caçula de TR e Edith   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Elliott Roosevelt ==
+nome_publico: Elliott Roosevelt
+nascimento: 1860
+falecimento: 1894
+nacionalidades: EUA
+relacoes: irmão de TR; pai de Eleanor Roosevelt   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+# Outros filhos de TR (expandir): Ethel Roosevelt Derby (1891–1977); Archibald Roosevelt (1894–1979).
+
+# --- RAMO HYDE PARK (Franklin) ---
+== James Roosevelt ==
+nome_publico: James Roosevelt
+nascimento: 1828
+falecimento: 1900
+profissoes: empresário
+nacionalidades: EUA
+relacoes: pai de FDR; casado com Sara Delano   # -> Parentesco
+fonte: FDR Library; Wikipedia
+confiabilidade: documentada
+
+== Sara Delano Roosevelt ==
+nome_publico: Sara Ann Delano
+nascimento: 1854
+falecimento: 1941
+nacionalidades: EUA
+relacoes: mãe de FDR   # -> Parentesco
+fonte: FDR Library
+confiabilidade: documentada
+
+== Franklin D. Roosevelt ==
+identidade: 32º presidente dos EUA; único eleito quatro vezes; liderou o país na Depressão e na 2ª Guerra.
+nome_publico: Franklin D. Roosevelt
+apelidos: FDR
+nascimento: 1882
+falecimento: 1945
+profissoes: político (presidente dos EUA); advogado
+nacionalidades: EUA
+foto: fotos/franklin-d-roosevelt.webp
+relacoes: filho único de James e Sara; primo de 5º grau de TR; casou (1905) com Eleanor; 5 filhos adultos   # -> Parentesco
+fonte: FDR Library; Wikipedia
+confiabilidade: documentada
+
+== Eleanor Roosevelt ==
+identidade: Primeira-dama e diplomata; presidiu o comitê da Declaração Universal dos Direitos Humanos.
+nome_publico: Eleanor Roosevelt
+nome_registro: Anna Eleanor Roosevelt
+nascimento: 1884
+falecimento: 1962
+profissoes: diplomata; ativista; escritora
+nacionalidades: EUA
+foto: fotos/eleanor-roosevelt.webp
+relacoes: filha de Elliott (ramo Oyster Bay); sobrinha de TR; esposa de FDR — elo entre os dois ramos   # -> Parentesco
+fonte: FDR Library; Wikipedia
+confiabilidade: documentada
+
+== Anna Roosevelt Halsted ==
+nome_publico: Anna Roosevelt
+nascimento: 1906
+falecimento: 1975
+profissoes: jornalista; escritora
+relacoes: filha de FDR e Eleanor   # -> Parentesco
+fonte: FDR Library
+confiabilidade: documentada
+
+== James Roosevelt II ==
+nome_publico: James Roosevelt
+nascimento: 1907
+falecimento: 1991
+profissoes: político (deputado federal); militar
+relacoes: filho de FDR e Eleanor   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Elliott Roosevelt (filho de FDR) ==
+nome_publico: Elliott Roosevelt
+nascimento: 1910
+falecimento: 1990
+profissoes: militar (aviador); escritor
+relacoes: filho de FDR e Eleanor   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Franklin D. Roosevelt Jr. ==
+nome_publico: Franklin D. Roosevelt Jr.
+nascimento: 1914
+falecimento: 1988
+profissoes: político (deputado federal)
+relacoes: filho de FDR e Eleanor   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== John Aspinwall Roosevelt ==
+nome_publico: John Roosevelt
+nascimento: 1916
+falecimento: 1981
+profissoes: empresário
+relacoes: filho caçula de FDR e Eleanor   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada

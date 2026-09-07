@@ -1,0 +1,110 @@
+{
+  "artboards": [
+    {
+      "file": "Main.dc.html",
+      "x": 0,
+      "y": 0,
+      "w": 1280,
+      "h": 900,
+      "page": "page-1",
+      "is_interactive": true
+    },
+    {
+      "file": "Anatomia.dc.html",
+      "x": 1380,
+      "y": 0,
+      "w": 1280,
+      "h": 1820,
+      "page": "page-1"
+    },
+    {
+      "file": "Perguntas.dc.html",
+      "x": 2760,
+      "y": 0,
+      "w": 1080,
+      "h": 1020,
+      "page": "page-1"
+    },
+    {
+      "file": "Downloads.dc.html",
+      "x": 0,
+      "y": 1020,
+      "w": 1080,
+      "h": 800,
+      "page": "page-1"
+    },
+    {
+      "file": "Sistema.dc.html",
+      "x": 2760,
+      "y": 1140,
+      "w": 1080,
+      "h": 920,
+      "page": "page-1"
+    },
+    {
+      "file": "Telefone.dc.html",
+      "x": 0,
+      "y": 1940,
+      "w": 390,
+      "h": 1900,
+      "page": "page-1"
+    },
+    {
+      "file": "DirecaoPrograma.dc.html",
+      "x": 0,
+      "y": 0,
+      "w": 1280,
+      "h": 760,
+      "page": "page-2"
+    },
+    {
+      "file": "DirecaoMemoria.dc.html",
+      "x": 1380,
+      "y": 0,
+      "w": 1280,
+      "h": 760,
+      "page": "page-2",
+      "is_interactive": true
+    },
+    {
+      "file": "ParaQuem.dc.html",
+      "x": 1180,
+      "y": 1940,
+      "w": 940,
+      "h": 900,
+      "page": "page-1"
+    },
+    {
+      "file": "Apoio.dc.html",
+      "x": 1180,
+      "y": 2960,
+      "w": 940,
+      "h": 820,
+      "page": "page-1"
+    }
+  ],
+  "annotations": [
+    {
+      "id": "decisao-direcao",
+      "x": 0,
+      "y": -180,
+      "w": 700,
+      "page": "page-2",
+      "text": "Resolvido: ficou o Híbrido — a pergunta girando da Memória, com os três downloads acima da dobra como no Programa. Estas duas ficam de arquivo, para lembrar o que foi trocado e por quê."
+    }
+  ],
+  "pages": [
+    {
+      "id": "page-1",
+      "name": "O site"
+    },
+    {
+      "id": "page-2",
+      "name": "Direções (arquivo)"
+    }
+  ],
+  "launch": {
+    "view": "canvas",
+    "page": "page-1"
+  }
+}

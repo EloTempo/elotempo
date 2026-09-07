@@ -73,6 +73,8 @@ export const TIPOS_EVENTO = {
   sepultamento: 'sepultamento',
 } as const;
 
+export type TipoTempo = 'real' | 'ficticio';
+
 export interface Person {
   id: string;
   nome: string;
@@ -82,6 +84,9 @@ export interface Person {
   is_vivo: boolean;
   is_placeholder: boolean;
   foto_url?: string | null;
+  is_publico?: boolean;
+  categoria?: string | null;
+  tipo_tempo?: TipoTempo;
 }
 
 /** O que se envia para criar — sem `id`, que o backend gera. */
@@ -92,6 +97,7 @@ export interface NewPerson {
   minibiografia?: string | null;
   is_vivo: boolean;
   foto_url?: string | null;
+  tipo_tempo?: TipoTempo;
 }
 
 export interface Union {
@@ -261,6 +267,7 @@ export interface PersonNode {
   is_placeholder: boolean;
   ano_nascimento?: number | null;
   ano_falecimento?: number | null;
+  minibiografia?: string | null;
   /** Caminho relativo do retrato, quando há um escolhido (fatia 03). */
   foto_url?: string | null;
   /** Ícones de presença do card (seção 10). */
@@ -268,6 +275,12 @@ export interface PersonNode {
   tem_biografia: boolean;
   tem_documentos: boolean;
   tem_religiao: boolean;
+  is_publico?: boolean;
+  categoria?: string | null;
+  tipo_tempo?: TipoTempo;
+  arvore_nome?: string | null;
+  arvore_id?: string | null;
+  tipo_vinculo?: string | null;
 }
 
 export interface UnionNode {
@@ -331,6 +344,7 @@ export interface PersonSummary {
   sobrenome?: string | null;
   sexo: Sex;
   is_placeholder: boolean;
+  is_publico?: boolean;
 }
 
 export interface UnionSummary {

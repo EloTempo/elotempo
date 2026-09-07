@@ -1,0 +1,67 @@
+# FAMILIA: Skywalker (Star Wars) — FICÇÃO
+# CONFIABILIDADE geral: ficcao (NÃO misturar com dados reais)
+# FONTES: cânon Star Wars (filmes)
+# FORMATO: um bloco por pessoa (ver _MODELO-PESSOA.txt)
+# NOTA: sem foto (direito autoral). Datas no universo ficcional (ABY/BBY) omitidas.
+# ---
+
+== Shmi Skywalker ==
+nome_publico: Shmi Skywalker
+relacoes: mãe de Anakin   # -> Parentesco
+fonte: cânon Star Wars
+confiabilidade: ficcao
+
+== Anakin Skywalker ==
+identidade: Cavaleiro Jedi que se torna o Sith Darth Vader; figura central da saga.
+nome_publico: Anakin Skywalker
+apelidos: Darth Vader
+relacoes: filho de Shmi; casado com Padmé; pai de Luke e Leia   # -> Parentesco
+fonte: cânon Star Wars
+confiabilidade: ficcao
+
+== Padmé Amidala ==
+nome_publico: Padmé Amidala
+relacoes: esposa de Anakin; mãe de Luke e Leia   # -> Parentesco
+fonte: cânon Star Wars
+confiabilidade: ficcao
+
+== Luke Skywalker ==
+identidade: Jedi; protagonista da trilogia original.
+nome_publico: Luke Skywalker
+relacoes: filho de Anakin e Padmé; irmão gêmeo de Leia   # -> Parentesco
+fonte: cânon Star Wars
+confiabilidade: ficcao
+
+== Leia Organa ==
+identidade: Princesa e líder da Rebelião.
+nome_publico: Leia Organa
+relacoes: filha de Anakin e Padmé; gêmea de Luke; adotada por Bail e Breha Organa; casada com Han Solo   # -> Parentesco
+fonte: cânon Star Wars
+confiabilidade: ficcao
+
+== Bail Organa ==
+nome_publico: Bail Organa
+relacoes: pai adotivo de Leia   # -> Parentesco
+fonte: cânon Star Wars
+confiabilidade: ficcao
+
+== Han Solo ==
+nome_publico: Han Solo
+relacoes: marido de Leia; pai de Ben Solo   # -> Parentesco
+fonte: cânon Star Wars
+confiabilidade: ficcao
+
+== Ben Solo ==
+identidade: Filho de Han e Leia que se torna o vilão Kylo Ren.
+nome_publico: Ben Solo (Kylo Ren)
+relacoes: filho de Han Solo e Leia Organa   # -> Parentesco
+fonte: cânon Star Wars
+confiabilidade: ficcao
+
+== Rey ==
+identidade: Heroína da trilogia sequência; ao final, adota o sobrenome Skywalker.
+nome_publico: Rey Skywalker
+mudanca_nome: adota "Skywalker" ao final (por sangue, é neta de Palpatine)
+relacoes: sem laço de sangue com os Skywalker; herda o nome   # -> Parentesco
+fonte: cânon Star Wars
+confiabilidade: ficcao

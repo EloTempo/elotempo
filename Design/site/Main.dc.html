@@ -1,0 +1,174 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap">
+  <style>
+    body { margin: 0; font-family: 'Inter', system-ui, sans-serif; }
+    a { color: #2563eb; } a:hover { color: #0f1420; }
+    .marca { font-family: 'Sora', 'Inter', system-ui, sans-serif; }
+    .rot { font-family: 'Sora', system-ui, sans-serif; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; font-weight: 600; }
+    @keyframes entra-a { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+    @keyframes entra-b { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+    @media (prefers-reduced-motion: reduce) { .gira { animation: none !important; } }
+  </style>
+</helmet>
+
+<div style="width: 1280px; height: 900px; box-sizing: border-box; background: #f4f5f7; color: #0f1420; display: flex; flex-direction: column;">
+
+  <div style="padding: 22px 44px 16px 44px; border-bottom: 1px solid #dfe3ea; display: flex; align-items: baseline; gap: 14px;">
+    <span class="rot" style="color: #2563eb;">Direção escolhida</span>
+    <span class="marca" style="font-size: 21px; font-weight: 600; letter-spacing: -.02em;">Híbrido</span>
+    <span style="font-size: 13px; color: #4b5563;">— a pergunta engancha, o download está logo abaixo. O eixo vira prova na seção seguinte.</span>
+  </div>
+
+  <!-- a maquete do topo da página -->
+  <div style="flex-grow: 1; padding: 22px 44px 26px 44px; display: flex; flex-direction: column; min-height: 0;">
+    <div style="flex-grow: 1; border: 1px solid #c3cad6; border-radius: 12px; background: #ffffff; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 1px 2px rgba(15,20,32,.06), 0 8px 20px rgba(15,20,32,.06);">
+
+      <!-- barra -->
+      <div style="padding: 13px 30px; border-bottom: 1px solid #dfe3ea; display: flex; align-items: center; gap: 10px;">
+        <svg width="23" height="23" viewBox="0 0 512 512" aria-hidden="true">
+          <rect width="512" height="512" rx="115" fill="#2563EB"/>
+          <g fill="none" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="38"><path d="M160 130v252"/><path d="M160 130h196"/><path d="M160 256h72"/><path d="M232 256l124-52M232 256l124 52"/><path d="M160 382h196"/></g>
+          <g fill="#FFFFFF"><circle cx="160" cy="130" r="38"/><circle cx="356" cy="130" r="38"/><circle cx="160" cy="256" r="38"/><circle cx="232" cy="256" r="38"/><circle cx="356" cy="204" r="38"/><circle cx="356" cy="308" r="38"/><circle cx="160" cy="382" r="38"/><circle cx="356" cy="382" r="38"/></g>
+        </svg>
+        <span class="marca" style="font-size: 15.5px; font-weight: 600; letter-spacing: -.03em;">Elotempo</span>
+        <div style="flex-grow: 1;"></div>
+        <span style="font-size: 12.5px; color: #4b5563;">Como funciona</span>
+        <span style="font-size: 12.5px; color: #4b5563;">Código</span>
+        <span style="font-size: 12.5px; font-weight: 600; color: #ffffff; background: #2563eb; padding: 7px 14px; border-radius: 8px;">Baixar</span>
+      </div>
+
+      <!-- hero -->
+      <div style="padding: 40px 56px 14px 56px; display: flex; flex-direction: column; gap: 18px; align-items: center; text-align: center;">
+        <h1 class="marca" style="margin: 0; font-size: 43px; font-weight: 600; line-height: 1.12; letter-spacing: -.03em; max-width: 20ch; text-wrap: balance; min-height: 146px; display: flex; align-items: center; justify-content: center;">
+          <span class="gira" style="display: block; animation: {{animacao}} .5s cubic-bezier(.2,.7,.3,1);">{{pergunta}}</span>
+        </h1>
+        <p style="margin: 0; font-size: 16.5px; line-height: 1.6; color: #4b5563; max-width: 58ch;">O Elotempo põe a vida de cada pessoa da sua família no mesmo eixo que a história do país, a moeda que circulava e a tecnologia que chegava. Funciona sem internet, e nada sai da sua máquina.</p>
+      </div>
+
+      <!-- a chamada: não é mais explicação, é a voz do gesto -->
+      <div style="padding: 4px 56px 14px 56px; text-align: center;">
+        <span class="marca" style="font-size: 16px; font-weight: 600; color: #0d9488; letter-spacing: -.01em;">O que você registrar hoje vira o passado deles. Seus netos vão agradecer.</span>
+      </div>
+
+      <!-- os três downloads, acima da dobra -->
+      <div style="padding: 8px 56px 0 56px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px;">
+        <div style="background: #2563eb; color: #ffffff; border-radius: 10px; padding: 14px 18px; display: flex; align-items: center; gap: 12px; min-height: 48px;">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex: none;" aria-hidden="true"><path d="M4 6.4l7-1v6.1H4zM13 5.1l7-1v7.4h-7zM4 12.5h7v6.1l-7-1zM13 12.5h7v7.4l-7-1z"/></svg>
+          <div style="display: flex; flex-direction: column; gap: 1px; flex-grow: 1; text-align: left;">
+            <span style="font-size: 14.5px; font-weight: 600;">Windows</span>
+            <span style="font-size: 11.5px; opacity: .85;">instalador .msi</span>
+          </div>
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex: none;" aria-hidden="true"><path d="M12 4v11M7.5 11.5L12 16l4.5-4.5M5 19.5h14"/></svg>
+        </div>
+
+        <div style="border: 1px solid #c3cad6; background: #ffffff; border-radius: 10px; padding: 14px 18px; display: flex; align-items: center; gap: 12px; min-height: 48px;">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex: none;" aria-hidden="true"><path d="M9 4.8a3 3 0 0 1 6 0v3.4c0 1 .5 1.7 1.2 2.6 1 1.3 1.8 2.9 1.8 4.7a6 6 0 0 1-12 0c0-1.8.8-3.4 1.8-4.7.7-.9 1.2-1.6 1.2-2.6z"/></svg>
+          <div style="display: flex; flex-direction: column; gap: 1px; flex-grow: 1; text-align: left;">
+            <span style="font-size: 14.5px; font-weight: 600;">Linux</span>
+            <span style="font-size: 11.5px; color: #6b7280;">formato a definir</span>
+          </div>
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex: none;" aria-hidden="true"><path d="M12 4v11M7.5 11.5L12 16l4.5-4.5M5 19.5h14"/></svg>
+        </div>
+
+        <div style="border: 1px solid #c3cad6; background: #ffffff; border-radius: 10px; padding: 14px 18px; display: flex; align-items: center; gap: 12px; min-height: 48px;">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex: none;" aria-hidden="true"><path d="M9 18.5c-4 1.2-4-2.2-5.5-2.6M15 21v-3.3c0-.9-.1-1.3-.6-1.7 2.6-.3 5.1-1.3 5.1-5.6a4.3 4.3 0 0 0-1.2-3c.1-.3.5-1.5-.1-3.1 0 0-1-.3-3.2 1.2a11 11 0 0 0-5.8 0C6.9 3.9 5.9 4.2 5.9 4.2c-.6 1.6-.2 2.8-.1 3.1a4.3 4.3 0 0 0-1.2 3c0 4.3 2.5 5.3 5.1 5.6-.4.4-.6.9-.6 1.7V21"/></svg>
+          <div style="display: flex; flex-direction: column; gap: 1px; flex-grow: 1; text-align: left;">
+            <span style="font-size: 14.5px; font-weight: 600;">Código-fonte</span>
+            <span style="font-size: 11.5px; color: #6b7280;">GitHub</span>
+          </div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex: none;" aria-hidden="true"><path d="M8 16L16 8M9.5 8H16v6.5"/></svg>
+        </div>
+      </div>
+
+      <div style="padding: 12px 56px 0 56px; text-align: center;">
+        <span style="font-size: 12.5px; color: #6b7280;"><strong style="color: #4b5563;">Programa de computador</strong>, para Windows e Linux · gratuito e de código aberto</span>
+      </div>
+
+      <!-- a dobra -->
+      <div style="margin-top: auto; display: flex; align-items: center; gap: 12px; padding: 0 56px;">
+        <div style="flex-grow: 1; height: 1px; background: repeating-linear-gradient(to right, #c3cad6 0 6px, transparent 6px 12px);"></div>
+        <span class="rot" style="color: #9aa6b4;">dobra · 1280 × 800</span>
+        <div style="flex-grow: 1; height: 1px; background: repeating-linear-gradient(to right, #c3cad6 0 6px, transparent 6px 12px);"></div>
+      </div>
+
+      <!-- o começo da prova, espiando -->
+      <div style="padding: 18px 56px 22px 56px; display: flex; flex-direction: column; gap: 10px; opacity: .5;">
+        <span class="rot" style="color: #6b7280;">a seguir · o eixo, como prova</span>
+        <div style="border: 1px solid #dfe3ea; border-radius: 10px; background: #f8f9fb; padding: 14px 18px; display: flex; flex-direction: column; gap: 10px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="font-size: 10.5px; font-weight: 600; color: #1d4ed8; width: 90px; flex: none;">História</span>
+            <div style="flex-grow: 1; position: relative; height: 13px;">
+              <div style="position: absolute; left: 0; right: 0; top: 6px; height: 2px; background: #dfe3ea;"></div>
+              <div style="position: absolute; left: 9%; top: 1px; width: 3px; height: 11px; border-radius: 2px; background: #1d4ed8;"></div>
+              <div style="position: absolute; left: 30%; top: 1px; width: 3px; height: 11px; border-radius: 2px; background: #1d4ed8;"></div>
+              <div style="position: absolute; left: 55%; top: 1px; width: 3px; height: 11px; border-radius: 2px; background: #1d4ed8;"></div>
+              <div style="position: absolute; left: 78%; top: 1px; width: 3px; height: 11px; border-radius: 2px; background: #1d4ed8;"></div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="font-size: 10.5px; font-weight: 600; color: #2563eb; width: 90px; flex: none;">Antônio Silva</span>
+            <div style="flex-grow: 1; position: relative; height: 13px;">
+              <div style="position: absolute; left: 12%; width: 58%; top: 2px; height: 10px; border-radius: 5px; background: #2563eb; opacity: .85;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+
+<script data-dc-script data-props='{"segundos":{"editor":"range","default":6,"min":3,"max":12,"step":1,"unit":"s","section":"Rodízio"}}'>
+class Component extends DCLogic {
+  state = { i: 0 };
+
+  perguntas = [
+    'Seu bisavô nasceu em 1918. O que mais acontecia?',
+    'Qual moeda era usada quando seu bisavô tinha 12 anos?',
+    'Quantas moedas diferentes sua avó usou ao longo da vida?',
+    'Quem governava o Brasil quando sua avó nasceu?',
+    'Quando a fotografia foi inventada, o Brasil ainda tinha escravidão.',
+    'Sua tataravó viu o primeiro automóvel passar na rua?',
+    'Quantas gerações separam você de quem chegou de navio?',
+    'Qual é a pessoa mais antiga que você consegue nomear?'
+  ];
+
+  componentDidMount() {
+    var reduz = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduz) return;
+    this.ligar();
+  }
+
+  componentDidUpdate(antes) {
+    if (antes.segundos !== this.props.segundos) { this.desligar(); this.ligar(); }
+  }
+
+  componentWillUnmount() { this.desligar(); }
+
+  ligar() {
+    var s = this.props.segundos ?? 6;
+    this.relogio = setInterval(function () {
+      this.setState({ i: (this.state.i + 1) % this.perguntas.length });
+    }.bind(this), s * 1000);
+  }
+
+  desligar() { if (this.relogio) clearInterval(this.relogio); }
+
+  renderVals() {
+    return {
+      pergunta: this.perguntas[this.state.i],
+      animacao: this.state.i % 2 === 0 ? 'entra-a' : 'entra-b'
+    };
+  }
+}
+</script>
+</body>
+</html>

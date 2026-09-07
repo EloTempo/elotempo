@@ -1,137 +1,138 @@
-# Árvore Genealógica
+# Elotempo
 
-Software desktop **100% offline** para construir árvores genealógicas
-familiares, sem limite de tamanho. Os dados ficam só na sua máquina.
-
-> **Estado: em desenvolvimento inicial (v0.1).** O núcleo funciona — cadastro
-> de pessoas, uniões, árvore desenhada com pan/zoom — mas ainda não há
-> instalador publicado. Veja [o que já funciona](#o-que-já-funciona).
+Software desktop **100% offline, local-first e de código aberto** para construir árvores genealógicas familiares e explorar a história de vidas através do tempo, sem limite de registros. Os dados ficam exclusivamente na sua máquina.
 
 ---
 
 ## Por que existe
 
-Programas de genealogia tendem a virar planilhas de parentesco. Este parte de
-outra ideia: **ajudar a memória**. Saber que um bisavô nasceu em 1912 diz
-pouco; saber que ele tinha 18 anos na Revolução de 30, que ouvia as músicas que
-tocavam então e que o dinheiro do bolso dele se chamava réis situa a pessoa
-numa vida — e é isso que faz alguém lembrar de uma história para contar.
+Programas de genealogia tendem a virar meras planilhas de parentesco. Este software parte de outra ideia: **resgatar e situar a memória humana**. Saber que um antepassado nasceu em 1890 diz pouco; saber que ele tinha 24 anos quando estourou a Primeira Guerra Mundial, que moeda circulava no seu bolso, como a cidade dele se chamava na época e quais parentes viveram contemporaneamente a ele situa a pessoa numa vida real — e é isso que desperta histórias que valem a pena ser contadas.
 
-Daí três compromissos que não se negociam:
+### Nossos Três Compromissos Fundamentais
 
-- **Local-first** — nada sai da sua máquina sem você mandar. Não há nuvem, não
-  há conta, não há telemetria. O programa funciona com o cabo de rede
-  arrancado.
-- **Você é dono do arquivo** — o acervo é um SQLite na sua pasta de dados.
-  Copie, leve para outro computador, guarde num pendrive.
-- **Padrão aberto** — o modelo segue o GEDCOM 7.0, para o seu trabalho não
-  ficar preso aqui dentro.
-
-## O que já funciona
-
-- Cadastro de pessoas com nascimento, falecimento e o indicador de vivo
-- Uniões com filhos, respeitando as regras de parentesco
-- **Ancestral desconhecido vira um nó de verdade** — cadastre um filho sabendo
-  só o nome da mãe; quando descobrir o nome do pai, edite aquele nó e os filhos
-  continuam pendurados nele
-- Árvore desenhada em layout vertical clássico, com pan, zoom e zoom semântico
-- Busca por nome e sobrenome
-- Datas do jeito que a genealogia real exige: `1890`, `cerca de 1890`,
-  `antes de 1914`, `1902-1904` — e nenhuma delas é obrigatória
-- Quatro temas visuais (clássico e moderno, claro e escuro)
-
-### Ainda não
-
-Uniões pela interface · fotos e documentos · autocomplete de cidades ·
-relatórios em PDF · estatísticas · importar/exportar GEDCOM · linhas do tempo
-de contexto histórico.
+- **Local-first e 100% Offline** — Nada sai do seu computador sem o seu consentimento explícito. Não há nuvem obrigatória, não há cadastro, não há rastreamento ou telemetria. O programa funciona perfeitamente mesmo sem conexão à internet.
+- **Soberania dos Dados** — O acervo é um banco de dados SQLite salvo localmente na sua pasta de dados. Você pode copiar o arquivo, guardá-lo em pendrive, fazer backups físicos e manter o controle total.
+- **Padrão Aberto Universal** — Suporte estrito ao padrão universal **GEDCOM 7.0 e 5.5.1** (incluindo pacotes GEDZip para fotos e mídias), garantindo que seu trabalho nunca fique preso a um formato proprietário.
 
 ---
 
-## Rodando o projeto
+## Principais Funcionalidades
 
-Precisa de [Node.js 20+](https://nodejs.org) e do
-[Rust](https://rustup.rs) (com as
-[dependências do Tauri](https://tauri.app/start/prerequisites/) para o seu
-sistema).
+### 🌳 Árvore Genealógica Interativa
+- Diagramação hierárquica clara com pan e zoom fluído via mouse, trackpad ou controles.
+- **Zoom Semântico**: os cartões adaptam o nível de detalhamento automaticamente de acordo com o nível de aproximação.
+- **Tratamento de Ancestrais Desconhecidos**: cadastre um filho conhecendo apenas a mãe; o pai torna-se um nó desconhecido (*placeholder*) que pode ser identificado a qualquer momento sem quebrar os vínculos.
+- Vistas auxiliares: Visão Completa (ancestrais e descendentes), Apenas Ascendentes, Apenas Descendentes e tabela **Ahnentafel**.
+- Exportação gráfica em alta resolução: gere **pôsteres em PNG ou vetores SVG** para impressão em gráficas.
 
-A partir da raiz do projeto:
+### ⏱️ Linha do Tempo e Estúdio de Vidas
+- **Comparação de Múltiplas Vidas**: adicione parentes ao mesmo eixo cronológico horizontal para visualizar contemporaneidades e intervalos de vida lado a lado.
+- **Cálculo Automático de Idades**: visualização da longevidade ao falecer ou idade atual, e idade exata em cada acontecimento (casamento, nascimento de filhos, marcos históricos).
+- **Guias Temporais Tracejadas e Crosshair Sincronizado**: grade de fundo para alinhamento e cursor magnético (*Snap*) que atrai o marcador com precisão para anos de nascimento, óbito ou eventos.
+- **Painel Flutuante de Sincronia**: acompanhe em tempo real a idade de cada parente e os acontecimentos históricos mundiais de qualquer ano selecionado.
+- Camadas temáticas de contexto histórico (Brasil Império/República, moedas, tecnologia e eventos mundiais), além de estúdio para criar suas próprias linhas cronológicas.
+
+### 👥 Conexões Familiares e Ficha Biográfica
+- Interface prática para adicionar pais, múltiplos cônjuges e filhos com respeito estrito às regras genealógicas (prevenção de ciclos e casamentos inválidos).
+- **Nomes ao Longo da Vida**: suporte a múltiplos nomes (nascimento, religioso, casamento, apelidos e títulos nobres).
+- Eventos de vida detalhados: nascimento, batismo, união civil/religiosa, óbito, sepultamento e eventos personalizados com datas qualificadas (*cerca de*, *antes de*, *depois de*, *faixas de anos*).
+- Anexação de fotos e documentos históricos com suporte a foto de perfil principal.
+- Autocomplete integrado de municípios brasileiros conectado à base oficial do **IBGE**.
+
+### 📄 Central de Impressão e Relatórios (WYSIWYG)
+- Visualização de folha real com proporções milimétricas (A4 / A3, Retrato / Paisagem), margens físicas e sombras suaves.
+- **Zoom do Preview** (50% a 150%) e botão *Ajustar à Tela*.
+- **Navegador de Páginas**: folheie página por página (*Página X de Y*) antes de imprimir ou salvar em PDF.
+- Modos flexíveis:
+  - *Combinado*: diagrama da árvore seguido das fichas biográficas.
+  - *Só Hierarquia*: pôster visual das relações.
+  - *Só Texto*: relatório cronológico com quebra por geração e miniaturas.
+- Filtros de privacidade integrados: opção de ocultar parentes vivos para preservação de dados confidenciais.
+
+### 🔄 Importação e Exportação GEDCOM
+- Importação completa de arquivos `.ged` (v5.5.1 e v7.0) com assistente de resolução de conflitos e conferência passo a passo.
+- Exportação nos formatos GEDCOM 7.0 universal e GEDZip (pacote com arquivo de dados e pasta de mídias compactados).
+
+### 🔍 Busca Multicritério, Estatísticas e Ferramentas
+- Busca em tempo real por nome e sobrenome, com normalização de acentos e busca fonética/apelidos.
+- Filtros avançados por década de nascimento, cidade, país, religião, profissão, escolaridade e condição de vida.
+- Painel analítico de estatísticas: distribuição por sexo, longevidade média, pirâmide de gerações e século de maior concentração.
+- **Calculadora de Parentesco**: calcula e explica em português claro o grau exato de parentesco entre quaisquer duas pessoas da árvore.
+- **Fusão de Pessoas**: ferramenta para unir cadastros duplicados sem perder fotos ou anotações.
+
+### 🌐 Acessibilidade e Multilíngue
+- **Internacionalização (i18n)**: alterne instantaneamente entre **Português (`pt-BR`)** e **Inglês (`en-US`)**.
+- Quatro temas visuais integrados (Clássico Claro, Clássico Escuro, Moderno Claro, Moderno Escuro).
+- Controle global de tamanho de fonte para acessibilidade visual.
+- Histórico completo de ações com suporte a Desfazer (*Undo* - `Ctrl+Z`) e Refazer (*Redo* - `Ctrl+Y`).
+
+---
+
+## Onde ficam os seus dados
+
+O seu acervo genealógico é armazenado em formato SQLite na pasta de dados do seu sistema operacional:
+
+| Sistema | Caminho dos Dados |
+|---|---|
+| **Windows** | `%APPDATA%\com.arvore.genealogica\acervo.sqlite` |
+| **Linux** | `~/.local/share/com.arvore.genealogica/acervo.sqlite` |
+| **macOS** | `~/Library/Application Support/com.arvore.genealogica/acervo.sqlite` |
+
+As fotos e documentos anexados residem na subpasta `midia/` dentro do mesmo diretório. Fazer backup da sua história consiste simplesmente em copiar esse arquivo e pasta para o seu armazenamento de confiança.
+
+---
+
+## Rodando o Projeto Localmente
+
+### Pré-requisitos
+- [Node.js 20+](https://nodejs.org)
+- [Rust & Cargo](https://rustup.rs) (com as dependências do [Tauri v2](https://tauri.app/start/prerequisites/))
+
+### Instalação e Desenvolvimento
 
 ```bash
+# Instalar dependências do frontend
 npm install
+
+# Iniciar em modo de desenvolvimento (Vite + Tauri)
 npm run tauri dev
 ```
 
-Na primeira execução o Rust compila do zero e demora vários minutos. Depois é
-rápido.
-
-### Abrindo rápido para testar
-
-Depois da primeira compilação, há um atalho que deixa tudo em dia e abre o
-programa sem terminal: dê **duplo clique em `abrir-arvore.cmd`** (Windows), ou
-rode:
-
+### Atalho de Execução Rápida (Windows)
+Após a primeira compilação, você pode iniciar o aplicativo diretamente dando um duplo clique em **`abrir-arvore.cmd`** ou rodando:
 ```bash
 npm run abrir
 ```
 
-As duas compilações são incrementais — sem mudanças, leva poucos segundos. O
-atalho avisa se o programa já estiver aberto: uma janela em execução trava o
-próprio executável, e a compilação falharia no fim, depois de já ter gasto o
-tempo.
-
-Para gerar o **instalador** de verdade (MSI e NSIS no Windows), que é build de
-release e demora bem mais:
-
+### Gerando o Instalador de Produção
+Para compilar o binário otimizado e gerar os instaladores nativos:
 ```bash
 npm run instalador
 ```
-
-### Onde ficam os seus dados
-
-O acervo é um arquivo SQLite criado na pasta de dados do seu usuário:
-
-| Sistema | Caminho |
-|---|---|
-| Windows | `%APPDATA%\com.arvore.genealogica\acervo.sqlite` |
-| macOS | `~/Library/Application Support/com.arvore.genealogica/acervo.sqlite` |
-| Linux | `~/.local/share/com.arvore.genealogica/acervo.sqlite` |
-
-Fazer backup é copiar esse arquivo. Nada mais.
+* No **Windows**: gera instaladores `.msi` e `.exe` (NSIS).
+* No **Linux**: gera `.AppImage` (universal) e pacote `.deb`.
 
 ---
 
-## Contribuindo
+## Verificação e Qualidade de Código
 
-Contribuições são bem-vindas. Antes de abrir um PR:
+Para executar a bateria de validações antes de commits ou lançamentos:
 
 ```bash
-npm run verificar   # typecheck + testes do frontend + testes do domínio
+npm run verificar
 ```
-
-Leia o **[CLAUDE.md](CLAUDE.md)** — ele descreve as invariantes do modelo de
-dados, que são a parte do sistema onde um erro corrompe o acervo de alguém em
-silêncio. Em particular:
-
-- Uma pessoa é filha de **no máximo uma união**
-- A união tem **sempre dois slots**, um masculino e um feminino; slot sem nome
-  recebe um placeholder, nunca fica vazio
-- Filhos ligam-se à **união**, nunca a um pai ou mãe direto
-- Ninguém é ancestral de si mesmo
-
-Elas estão implementadas em `src-tauri/src/domain/regras.rs`, garantidas por
-índices no banco, e cobertas por testes. **Mudança em regra de conexão vem com
-teste.**
-
-A especificação completa do produto está em
-[`Instruções/`](Instru%C3%A7%C3%B5es/instrucoes-projeto-arvore-genealogica.md).
+Este comando executa em sequência:
+1. `npm run typecheck`: Validação estrita de tipos TypeScript (zero erros).
+2. `npm run test`: Suíte de testes unitários do frontend (Vitest).
+3. `npm run test:rust`: 240+ testes unitários das regras de domínio e invariantes genealógicas no backend Rust.
 
 ---
 
 ## Licença
 
-[MIT](LICENSE) — use, modifique e redistribua à vontade.
+Distribuído sob a licença **[GNU General Public License v3.0 or later (GPL-3.0-or-later)](LICENSE)**.
 
-As bibliotecas e fontes de terceiros usadas estão listadas, com suas licenças,
-em [TERCEIROS.md](TERCEIROS.md). Os dados de municípios vêm da API de
-Localidades do IBGE (dados abertos).
+### Propriedade dos Dados do Usuário
+A licença GPL aplica-se estritamente ao código-fonte do software. Todos os dados genealógicos, árvores familiares, biografias, fotografias e documentos cadastrados ou exportados pertencem **exclusiva e privadamente ao usuário**, sem qualquer reivindicação ou ingerência da licença sobre as suas informações familiares.
+
+Copyright (C) 2026 Gabriel Nascimento.

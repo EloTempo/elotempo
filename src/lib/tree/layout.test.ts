@@ -473,4 +473,155 @@ describe('caminhoOrtogonal', () => {
     expect(d).toContain('L 300 100');
     expect(d.endsWith('L 300 200')).toBe(true);
   });
+
+  it('em saltos de 2 ou mais gerações, a canaleta passa no vão livre sem cortar cartões', () => {
+    const d = caminhoOrtogonal({ x: 100, y: 0 }, { x: 300, y: 392 });
+    expect(d).toContain('L 100 98');
+    expect(d).toContain('L 300 98');
+    expect(d.endsWith('L 300 392')).toBe(true);
+  });
+
+  it('garante que pais ficam sempre acima dos filhos (Y menor)', () => {
+    const pPai = pessoa('pai', 'M', 1900);
+    const pMae = pessoa('mae', 'F', 1905);
+    const pFilho = pessoa('filho', 'M', 1930);
+    const pNeto = pessoa('neto', 'M', 1960);
+
+    const uPais = uniao('u1', 'pai', 'mae');
+    const uFilho = uniao('u2', 'filho', 'filho');
+
+    const g = grafo(
+      [pPai, pMae, pFilho, pNeto],
+      [uPais, uFilho],
+      [
+        ['u1', 'filho'],
+        ['u2', 'neto'],
+      ],
+    );
+
+    const layout = calcularLayout(g);
+    const mapa = new Map(layout.pessoas.map((p) => [p.id, p]));
+
+    expect(mapa.get('pai')!.y).toBeLessThan(mapa.get('filho')!.y);
+    expect(mapa.get('mae')!.y).toBeLessThan(mapa.get('filho')!.y);
+    expect(mapa.get('filho')!.y).toBeLessThan(mapa.get('neto')!.y);
+  });
+
+  it('cadeia monoparental profunda (estilo Adão) mantém largura contida e alinhamento sem explosão exponencial', () => {
+    // 10 gerações em linha reta monoparental
+    const nodes: PersonNode[] = [];
+    const unions: UnionNode[] = [];
+    const links: Array<[string, string]> = [];
+
+    for (let i = 0; i < 10; i++) {
+      nodes.push(pessoa(`p${i}`, 'M', 2000 - i * 30));
+      if (i < 9) {
+        unions.push(uniao(`u${i}`, `p${i}`, `p${i}`));
+        links.push([`u${i}`, `p${i + 1}`]);
+      }
+    }
+
+    const g = grafo(nodes, unions, links);
+    const layout = calcularLayout(g);
+
+    // A largura total NÃO deve explodir para 900.000px, deve ser próxima de um card + margens
+    expect(layout.largura).toBeLessThan(600);
+
+    // Todos os nós em linha reta devem estar alinhados no mesmo X
+    const primeiroX = layout.pessoas[0].x;
+    for (const p of layout.pessoas) {
+      expect(Math.abs(p.x - primeiroX)).toBeLessThan(1);
+    }
+  });
+
+  it('resolução de colisões afasta cards garantindo zero sobreposição', () => {
+    const p1 = pessoa('p1', 'M');
+    const p2 = pessoa('p2', 'M');
+    // Duas pessoas sem parentesco que caem na mesma geração
+    const g = grafo([p1, p2], []);
+    const layout = calcularLayout(g);
+
+    const pos1 = layout.pessoas.find((p) => p.id === 'p1')!;
+    const pos2 = layout.pessoas.find((p) => p.id === 'p2')!;
+
+    expect(sobrepoe(pos1, pos2)).toBe(false);
+    expect(Math.abs(pos1.x - pos2.x)).toBeGreaterThanOrEqual(METRICAS.larguraNo + METRICAS.espacoIrmaos);
+  });
+
+  it('consolida uniões duplicadas para o mesmo casal reunindo os filhos sob a mesma união', () => {
+    const pai = pessoa('pai', 'M');
+    const mae = pessoa('mae', 'F');
+    const f1 = pessoa('filho1', 'M');
+    const f2 = pessoa('filho2', 'M');
+
+    // Duas uniões distintas entre o mesmo casal, cada uma com um filho (como em sementes com duplicidade)
+    const u1 = uniao('u1', 'pai', 'mae');
+    const u2 = uniao('u2', 'pai', 'mae');
+
+    const g: TreeGraph = {
+      raiz_id: 'pai',
+      nodes: [pai, mae, f1, f2],
+      unions: [u1, u2],
+      links: [
+        { source: 'pai', target: 'u1', tipo: 'pai_uniao' },
+        { source: 'mae', target: 'u1', tipo: 'mae_uniao' },
+        { source: 'pai', target: 'u2', tipo: 'pai_uniao' },
+        { source: 'mae', target: 'u2', tipo: 'mae_uniao' },
+        { source: 'u1', target: 'filho1', tipo: 'uniao_filho' },
+        { source: 'u2', target: 'filho2', tipo: 'uniao_filho' },
+      ],
+    };
+
+    const layout = calcularLayout(g);
+
+    // Deve ter apenas 1 anel de união desenhado
+    expect(layout.unioes).toHaveLength(1);
+    // Os dois filhos devem estar lado a lado na mesma geração sem sobreposição
+    const pF1 = layout.pessoas.find((p) => p.id === 'filho1')!;
+    const pF2 = layout.pessoas.find((p) => p.id === 'filho2')!;
+    expect(pF1.y).toBe(pF2.y);
+    expect(sobrepoe(pF1, pF2)).toBe(false);
+  });
+
+  it('posiciona raízes secundárias centralizadas acima de filhos já alocados por casamento colateral', () => {
+    // Cenário tipo Darwin:
+    // Raiz 1: AvoMaterno + AvoMaterna -> Mae
+    // Raiz 2: AvoPaterno -> Pai
+    // Pai + Mae -> Filho
+    const avoM = pessoa('avoM', 'M');
+    const avoF = pessoa('avoF', 'F');
+    const mae = pessoa('mae', 'F');
+    const avoPaterno = pessoa('avoPaterno', 'M');
+    const pai = pessoa('pai', 'M');
+    const neto = pessoa('neto', 'M');
+
+    const uMat = uniao('uMat', 'avoM', 'avoF');
+    const uPat = uniao('uPat', 'avoPaterno', 'avoPaterno'); // monoparental ou com placeholder
+    const uCasal = uniao('uCasal', 'pai', 'mae');
+
+    const g: TreeGraph = {
+      raiz_id: 'avoM',
+      nodes: [avoM, avoF, mae, avoPaterno, pai, neto],
+      unions: [uMat, uPat, uCasal],
+      links: [
+        { source: 'avoM', target: 'uMat', tipo: 'pai_uniao' },
+        { source: 'avoF', target: 'uMat', tipo: 'mae_uniao' },
+        { source: 'uMat', target: 'mae', tipo: 'uniao_filho' },
+        { source: 'avoPaterno', target: 'uPat', tipo: 'pai_uniao' },
+        { source: 'uPat', target: 'pai', tipo: 'uniao_filho' },
+        { source: 'pai', target: 'uCasal', tipo: 'pai_uniao' },
+        { source: 'mae', target: 'uCasal', tipo: 'mae_uniao' },
+        { source: 'uCasal', target: 'neto', tipo: 'uniao_filho' },
+      ],
+    };
+
+    const layout = calcularLayout(g);
+    const pAvoPaterno = layout.pessoas.find((p) => p.id === 'avoPaterno')!;
+    const pPai = layout.pessoas.find((p) => p.id === 'pai')!;
+
+    // O avô paterno não deve ser jogado milhares de pixels para o lado:
+    // a distância horizontal para o pai deve ser moderada e não um abismo de milhares de pixels
+    expect(Math.abs(pAvoPaterno.x - pPai.x)).toBeLessThan(500);
+  });
 });
+

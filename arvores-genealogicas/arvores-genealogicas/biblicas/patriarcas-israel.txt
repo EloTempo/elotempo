@@ -1,0 +1,60 @@
+# FAMILIA: Patriarcas de Israel
+# CONFIABILIDADE geral: reconstruida-tradicional
+# FONTES: Bíblia (edições críticas); estudos histórico-críticos
+# FORMATO: um bloco por pessoa (ver _MODELO-PESSOA.txt)
+# NOTA: linhagem tradicional (Gênesis), não documental. Consanguinidade recorrente:
+#       Isaac casou com a prima Rebeca; Jacó, com as primas Lia e Raquel.
+# ---
+
+== Abraão ==
+nome_publico: Abraão
+relacoes: patriarca; casado com Sara; pai de Isaac   # -> Parentesco
+fonte: tradição (Gênesis)
+confiabilidade: reconstruida-tradicional
+
+== Sara ==
+nome_publico: Sara
+relacoes: esposa de Abraão; mãe de Isaac   # -> Parentesco
+fonte: tradição (Gênesis)
+confiabilidade: reconstruida-tradicional
+
+== Isaac ==
+nome_publico: Isaac
+relacoes: filho de Abraão e Sara; casado com a prima Rebeca   # -> Parentesco [CONSANGUINIDADE]
+fonte: tradição (Gênesis)
+confiabilidade: reconstruida-tradicional
+
+== Rebeca ==
+nome_publico: Rebeca
+relacoes: esposa (e prima) de Isaac; mãe de Jacó e Esaú   # -> Parentesco [CONSANGUINIDADE]
+fonte: tradição (Gênesis)
+confiabilidade: reconstruida-tradicional
+
+== Jacó ==
+identidade: Também chamado Israel; seus doze filhos dão origem às 12 tribos.
+nome_publico: Jacó (Israel)
+relacoes: filho de Isaac; casado com as primas Lia e Raquel   # -> Parentesco [CONSANGUINIDADE]
+fonte: tradição (Gênesis)
+confiabilidade: reconstruida-tradicional
+
+== Esaú ==
+nome_publico: Esaú
+relacoes: irmão gêmeo de Jacó   # -> Parentesco
+fonte: tradição (Gênesis)
+confiabilidade: reconstruida-tradicional
+
+== José ==
+identidade: Filho de Jacó vendido pelos irmãos; ascende no Egito.
+nome_publico: José
+relacoes: filho de Jacó e Raquel   # -> Parentesco
+fonte: tradição (Gênesis)
+confiabilidade: reconstruida-tradicional
+
+== Judá ==
+nome_publico: Judá
+relacoes: filho de Jacó e Lia; tribo de onde a tradição faz descender a Casa de Davi ([[casa-de-davi]])   # -> Parentesco
+fonte: tradição (Gênesis)
+confiabilidade: reconstruida-tradicional
+
+# As 12 tribos (filhos de Jacó; expandir): Rúben, Simeão, Levi, Judá, Dã,
+# Naftali, Gade, Aser, Issacar, Zebulom, José e Benjamim.

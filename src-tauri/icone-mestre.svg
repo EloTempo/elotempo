@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Ícone mestre do Elotempo — a fonte de src-tauri/icons/.
+
+  Regerar depois de qualquer alteração aqui:
+
+      npx tauri icon src-tauri/icone-mestre.svg
+
+  O comando produz o .ico do Windows, o .icns do macOS, os PNGs listados em
+  tauri.conf.json e os nove Square*Logo da Windows Store. Antes disto o
+  executável se apresentava ao sistema com o logo padrão do Tauri.
+
+  A linha do futuro sai em claro, não em marinho: marinho sobre marinho
+  desaparece. É como o manual da marca resolve a versão de ícone.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024" role="img" aria-label="Elotempo">
+  <rect width="1024" height="1024" rx="230" fill="#0B1D3A"/>
+
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="52">
+    <path d="M340 260v504" stroke="#2563EB"/>
+    <path d="M340 260h360" stroke="#00A896"/>
+    <path d="M340 512h148" stroke="#2563EB"/>
+    <path d="M488 512l212-84M488 512l212 84" stroke="#2563EB"/>
+    <path d="M340 764h360" stroke="#E8EEF4"/>
+  </g>
+
+  <g stroke="none">
+    <circle cx="340" cy="260" r="62" fill="#00A896"/>
+    <circle cx="700" cy="260" r="62" fill="#00A896"/>
+    <circle cx="340" cy="512" r="62" fill="#2563EB"/>
+    <circle cx="488" cy="512" r="62" fill="#2563EB"/>
+    <circle cx="700" cy="428" r="62" fill="#2563EB"/>
+    <circle cx="700" cy="596" r="62" fill="#2563EB"/>
+    <circle cx="340" cy="764" r="62" fill="#E8EEF4"/>
+    <circle cx="700" cy="764" r="62" fill="#E8EEF4"/>
+  </g>
+</svg>

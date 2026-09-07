@@ -13,13 +13,23 @@
  */
 
 import { useEffect, useState } from 'react';
-import { FileText, ImagePlus, Pencil, Star, User, X } from 'lucide-react';
+import {
+  FileText,
+  ImagePlus,
+  Pencil,
+  Star,
+  User,
+  X,
+  Users,
+} from 'lucide-react';
+import { IconeArvore, IconeRelacoes } from '../../../components/icons';
 import { Button } from '../../../components/ui/Button';
 import { Input } from '../../../components/ui/Input';
 import { Select } from '../../../components/ui/Select';
 import { ImagemDoAcervo } from '../../../components/ui/ImagemDoAcervo';
 import { CampoDeData } from '../../../components/ui/CampoDeData';
 import { escolherArquivo } from '../../../lib/api';
+import { useI18n } from '../../../i18n/I18nContext';
 import { SecaoAtributo, CampoCurto, type ItemDeLista } from './SecaoAtributo';
 import { SecaoNomes } from './SecaoNomes';
 import {
@@ -59,20 +69,18 @@ import { DATA_VAZIA, type DataEscolhida, type Person, type Place, type Sex } fro
 interface PersonDetailsProps {
   pessoaId: string;
   onFechar: () => void;
+  onDefinirComoRaiz?: (pessoaId: string) => void;
+  onCalcularParentesco?: (pessoaId: string) => void;
+  onFundirPessoa?: (pessoaId: string) => void;
+  isRaizAtual?: boolean;
 }
-
-const OPCOES_SEXO = [
-  { value: 'M', label: 'Masculino' },
-  { value: 'F', label: 'Feminino' },
-  { value: 'X', label: 'Não-binário / outro' },
-  { value: 'U', label: 'Desconhecido' },
-];
 
 function mensagemDeErro(erro: unknown): string | null {
   if (!erro) return null;
   if (erro instanceof ErroDoAcervo || erro instanceof Error) return erro.message;
   return String(erro);
 }
+
 
 /**
  * Concorda com o sexo em vez de fixar o feminino.
@@ -87,7 +95,15 @@ function situacaoDeFalecimento(sexo: string): string {
   return 'Pessoa falecida';
 }
 
-export function PersonDetails({ pessoaId, onFechar }: PersonDetailsProps) {
+export function PersonDetails({
+  pessoaId,
+  onFechar,
+  onDefinirComoRaiz,
+  onCalcularParentesco,
+  onFundirPessoa,
+  isRaizAtual = false,
+}: PersonDetailsProps) {
+  const { t } = useI18n();
   const { data: pessoa, isLoading, error } = usePessoa(pessoaId);
   const salvar = useSalvarPessoa(pessoaId);
 
@@ -196,11 +212,20 @@ export function PersonDetails({ pessoaId, onFechar }: PersonDetailsProps) {
         </div>
 
         <div className="flex-1 min-w-0 flex flex-col gap-1">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <span className={`w-1 h-5 rounded-sm flex-none ${faixaSexo}`} aria-hidden />
             <h2 className="font-tit font-bold text-xl text-tinta m-0 truncate">
               {nomeCompleto}
             </h2>
+            {pessoa.tipo_tempo === 'ficticio' ? (
+              <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-purple-500/15 text-purple-700 dark:text-purple-300 border border-purple-500/30 flex items-center gap-1">
+                <span>✨</span> Fictício / Literário
+              </span>
+            ) : (
+              <span className="px-2 py-0.5 text-[10px] font-medium rounded-full bg-acento/10 text-tinta2 border border-acento/20 flex items-center gap-1">
+                <span>🌍</span> Tempo Real
+              </span>
+            )}
           </div>
           {/* Os outros nomes ficam à vista no cabeçalho.
               A seção que os edita fica logo abaixo da identidade, mas some da
@@ -226,18 +251,65 @@ export function PersonDetails({ pessoaId, onFechar }: PersonDetailsProps) {
             </p>
           )}
           <p className="font-num text-[12.5px] text-tinta2 m-0">
-            {pessoa.is_vivo ? 'Pessoa viva' : situacaoDeFalecimento(pessoa.sexo)}
+            {pessoa.is_vivo ? t('perfil', 'pessoaViva') : situacaoDeFalecimento(pessoa.sexo)}
           </p>
         </div>
 
-        <button
-          type="button"
-          onClick={onFechar}
-          aria-label="Fechar ficha"
-          className="text-tinta3 hover:text-tinta p-1 rounded-raio-s hover:bg-sup transition-colors flex-none"
-        >
-          <X className="w-5 h-5" />
-        </button>
+        <div className="flex items-center gap-1.5 flex-wrap justify-end ml-3 flex-none">
+          {onCalcularParentesco && (
+            <button
+              type="button"
+              onClick={() => onCalcularParentesco(pessoaId)}
+              className="px-2.5 py-1 text-xs font-semibold rounded-raio-s border border-borda2 bg-card text-tinta hover:bg-sup transition-colors flex items-center gap-1.5 cursor-pointer shadow-2xs"
+              title={t('topo', 'parentescoDesc')}
+            >
+              <IconeRelacoes className="w-3.5 h-3.5 text-acento" />
+              {t('topo', 'parentesco')}
+            </button>
+          )}
+
+          {onFundirPessoa && (
+            <button
+              type="button"
+              onClick={() => onFundirPessoa(pessoaId)}
+              className="px-2.5 py-1 text-xs font-semibold rounded-raio-s border border-borda2 bg-card text-tinta hover:bg-sup transition-colors flex items-center gap-1.5 cursor-pointer shadow-2xs"
+              title="Fundir/mesclar este registro com outro duplicado no acervo"
+            >
+              <Users className="w-3.5 h-3.5 text-acento" />
+              {t('topo', 'mesclarPessoas')}
+            </button>
+          )}
+
+          {onDefinirComoRaiz && (
+            <button
+              type="button"
+              onClick={() => onDefinirComoRaiz(pessoaId)}
+              disabled={isRaizAtual}
+              className={`px-2.5 py-1 text-xs font-semibold rounded-raio-s border transition-colors flex items-center gap-1.5 ${
+                isRaizAtual
+                  ? 'bg-sup text-tinta3 border-borda cursor-default'
+                  : 'bg-card text-tinta hover:bg-sup border-borda2 cursor-pointer shadow-2xs'
+              }`}
+              title={
+                isRaizAtual
+                  ? 'Esta pessoa já é o foco/raiz da árvore ativa'
+                  : 'Focar a árvore ativa nesta pessoa'
+              }
+            >
+              <IconeArvore className="w-3.5 h-3.5 text-acento" />
+              {isRaizAtual ? t('arvore', 'raizAtual') : t('arvore', 'definirComoRaiz')}
+            </button>
+          )}
+
+          <button
+            type="button"
+            onClick={onFechar}
+            aria-label={t('comum', 'fechar')}
+            className="text-tinta3 hover:text-tinta p-1 rounded-raio-s hover:bg-sup transition-colors flex-none"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
       </header>
 
       {/* Corpo */}
@@ -246,7 +318,7 @@ export function PersonDetails({ pessoaId, onFechar }: PersonDetailsProps) {
         <section className="md:col-span-2 flex flex-col gap-3">
           <div className="flex items-center justify-between">
             <h3 className="font-num text-[10.5px] uppercase tracking-wider text-tinta3 m-0">
-              Identidade
+              {t('ficha', 'identidade')}
             </h3>
             {!editando && (
               <button
@@ -255,7 +327,7 @@ export function PersonDetails({ pessoaId, onFechar }: PersonDetailsProps) {
                 className="text-[11px] text-acento hover:text-tinta transition-colors flex items-center gap-1 bg-transparent border-none cursor-pointer p-0"
               >
                 <Pencil className="w-3 h-3" />
-                Editar
+                {t('comum', 'editar')}
               </button>
             )}
           </div>
@@ -268,53 +340,90 @@ export function PersonDetails({ pessoaId, onFechar }: PersonDetailsProps) {
 
           {editando ? (
             <form
-              className="flex flex-col gap-3"
+              className="flex flex-col gap-4"
               onSubmit={(e) => {
                 e.preventDefault();
                 salvar.mutate(rascunho, { onSuccess: () => setEditando(false) });
               }}
             >
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <Input
-                  label="Nome"
+                  label={t('ficha', 'nome')}
                   value={rascunho.nome}
                   onChange={(e) => setRascunho({ ...rascunho, nome: e.target.value })}
+                  required
                 />
                 <Input
-                  label="Sobrenome"
+                  label={t('ficha', 'sobrenome')}
                   value={rascunho.sobrenome ?? ''}
                   onChange={(e) => setRascunho({ ...rascunho, sobrenome: e.target.value })}
                 />
               </div>
 
-              <p className="text-xs text-tinta3 m-0 -mt-1 leading-relaxed">
-                Este é o <strong className="text-tinta2 font-semibold">nome de exibição</strong> —
-                o que aparece no card da árvore e na busca. O nome completo de nascimento, o
-                religioso, o de casada e outros ficam em{' '}
-                <strong className="text-tinta2 font-semibold">“Nomes ao longo da vida”</strong>,
-                logo abaixo.
-              </p>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <Select
-                  label="Sexo"
+                  label={t('ficha', 'sexo')}
                   value={rascunho.sexo}
                   onChange={(e) => setRascunho({ ...rascunho, sexo: e.target.value as Sex })}
-                  options={OPCOES_SEXO}
+                  options={[
+                    { value: 'M', label: t('ficha', 'masculino') },
+                    { value: 'F', label: t('ficha', 'feminino') },
+                    { value: 'X', label: t('ficha', 'outro') },
+                    { value: 'U', label: t('ficha', 'desconhecido') },
+                  ]}
                 />
-                <label className="flex items-end gap-2 pb-2 cursor-pointer text-sm text-tinta2">
-                  <input
-                    type="checkbox"
-                    className="rounded border-borda text-acento focus:ring-acento/50"
-                    checked={rascunho.is_vivo}
-                    onChange={(e) => setRascunho({ ...rascunho, is_vivo: e.target.checked })}
-                  />
-                  Pessoa viva
-                </label>
+                <div className="flex flex-col justify-end gap-2 pb-1">
+                  <label className="flex items-center gap-2 cursor-pointer text-xs text-tinta">
+                    <input
+                      type="checkbox"
+                      checked={rascunho.is_publico}
+                      onChange={(e) => setRascunho({ ...rascunho, is_publico: e.target.checked })}
+                      className="rounded border-borda"
+                    />
+                    <span>{t('ficha', 'isPublico')}</span>
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer text-xs text-tinta">
+                    <input
+                      type="checkbox"
+                      checked={rascunho.is_vivo}
+                      onChange={(e) => setRascunho({ ...rascunho, is_vivo: e.target.checked })}
+                      className="rounded border-borda"
+                    />
+                    <span>{t('ficha', 'isVivo')}</span>
+                  </label>
+                </div>
               </div>
 
-              <label className="flex flex-col gap-1">
-                <span className="text-sm font-semibold text-tinta2">Minibiografia</span>
+              <div className="p-2.5 bg-fundo/40 rounded-raio-s border border-borda/60 flex flex-col gap-1.5">
+                <span className="text-xs font-semibold text-tinta">Cronologia / Natureza do Tempo</span>
+                <div className="flex items-center gap-4 text-xs">
+                  <label className="flex items-center gap-1.5 cursor-pointer text-tinta">
+                    <input
+                      type="radio"
+                      name="rascunho_tipo_tempo"
+                      value="real"
+                      checked={rascunho.tipo_tempo !== 'ficticio'}
+                      onChange={() => setRascunho({ ...rascunho, tipo_tempo: 'real' })}
+                      className="text-acento"
+                    />
+                    <span>🌍 Tempo Real / Histórico</span>
+                  </label>
+                  <label className="flex items-center gap-1.5 cursor-pointer text-tinta">
+                    <input
+                      type="radio"
+                      name="rascunho_tipo_tempo"
+                      value="ficticio"
+                      checked={rascunho.tipo_tempo === 'ficticio'}
+                      onChange={() => setRascunho({ ...rascunho, tipo_tempo: 'ficticio' })}
+                      className="text-purple-600"
+                    />
+                    <span>✨ Tempo Fictício / Literário</span>
+                  </label>
+                </div>
+              </div>
+
+              <label className="flex flex-col gap-1.5">
+                <span className="text-xs font-semibold text-tinta">{t('ficha', 'minibiografia')}</span>
                 <textarea
                   value={rascunho.minibiografia ?? ''}
                   onChange={(e) => setRascunho({ ...rascunho, minibiografia: e.target.value })}
@@ -333,10 +442,10 @@ export function PersonDetails({ pessoaId, onFechar }: PersonDetailsProps) {
                     setEditando(false);
                   }}
                 >
-                  Cancelar
+                  {t('comum', 'cancelar')}
                 </Button>
                 <Button type="submit" size="sm" disabled={salvar.isPending}>
-                  {salvar.isPending ? 'Salvando…' : 'Salvar'}
+                  {salvar.isPending ? t('comum', 'carregando') : t('comum', 'salvar')}
                 </Button>
               </div>
             </form>

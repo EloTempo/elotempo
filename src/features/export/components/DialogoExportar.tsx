@@ -10,6 +10,8 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Check, Download, FileDown, Package } from 'lucide-react';
 import { Button } from '../../../components/ui/Button';
+import { useGatekeeper } from '../../security';
+import { useI18n } from '../../../i18n/I18nContext';
 import {
   exportarGedcom,
   extensaoDeExportacao,
@@ -30,6 +32,8 @@ function mensagemDeErro(erro: unknown): string | null {
 }
 
 export function DialogoExportar({ raizId, onFechar }: DialogoExportarProps) {
+  const { t } = useI18n();
+  const { executarComGatekeeper } = useGatekeeper();
   const [escopoArvore, setEscopoArvore] = useState(false);
   const [ocultarVivas, setOcultarVivas] = useState(false);
   const [incluirMidia, setIncluirMidia] = useState(true);
@@ -49,17 +53,21 @@ export function DialogoExportar({ raizId, onFechar }: DialogoExportarProps) {
       const caminho = await escolherOndeSalvar(extensao ?? 'ged');
       if (!caminho) return; // cancelou, o que é normal
 
-      setExportando(true);
-      const r = await exportarGedcom(caminho, {
-        raiz_id: escopoArvore ? raizId : null,
-        ocultar_vivas: ocultarVivas,
-        incluir_midia: incluirMidia,
+      await executarComGatekeeper(t('seguranca', 'gatekeeperDescGedcom'), async (ticket) => {
+        setExportando(true);
+        try {
+          const r = await exportarGedcom(caminho, {
+            raiz_id: escopoArvore ? raizId : null,
+            ocultar_vivas: ocultarVivas,
+            incluir_midia: incluirMidia,
+          }, ticket);
+          setResumo(r);
+        } finally {
+          setExportando(false);
+        }
       });
-      setResumo(r);
     } catch (e) {
       setErro(mensagemDeErro(e));
-    } finally {
-      setExportando(false);
     }
   };
 

@@ -1,0 +1,58 @@
+# FAMILIA: Rio Branco / Silva Paranhos
+# CONFIABILIDADE geral: documentada
+# FONTES: Academia Brasileira de Letras; Arquivo Nacional (MAPA); FGV; FIRJAN; Wikipedia
+# FORMATO: um bloco por pessoa (ver _MODELO-PESSOA.txt)
+# ---
+
+== José Maria da Silva Paranhos (Visconde do Rio Branco) ==
+identidade: Estadista do Império; presidente do Conselho de Ministros e responsável pela Lei do Ventre Livre (1871).
+nome_publico: Visconde do Rio Branco
+nome_registro: José Maria da Silva Paranhos
+nascimento: 1819   # Salvador, 16 de março
+falecimento: 1880  # Rio de Janeiro, 1 de novembro
+escolaridade: Academia Real dos Guardas-Marinhas; Real Academia Militar
+profissoes: estadista; diplomata; militar; jornalista
+nacionalidades: Brasil (Império)
+foto: fotos/visconde-do-rio-branco.webp
+relacoes: casado (1842) com Teresa de Figueiredo Rodrigues Faria; 9 filhos, entre eles o Barão do Rio Branco   # -> Parentesco
+fonte: FIRJAN; Wikipedia
+confiabilidade: documentada
+
+== Teresa de Figueiredo Rodrigues Faria ==
+nome_publico: Teresa de Figueiredo Faria
+relacoes: esposa do Visconde do Rio Branco; mãe de 9 filhos   # -> Parentesco
+fonte: FIRJAN; Arquivo Nacional
+confiabilidade: documentada
+
+== José Maria da Silva Paranhos Júnior (Barão do Rio Branco) ==
+identidade: Diplomata, "patrono da diplomacia brasileira"; consolidou as fronteiras do país como Ministro das Relações Exteriores.
+nome_publico: Barão do Rio Branco
+nome_registro: José Maria da Silva Paranhos Júnior
+apelidos: Juca Paranhos
+nascimento: 1845   # Rio de Janeiro, 20 de abril
+falecimento: 1912  # Rio de Janeiro, 10 de fevereiro
+escolaridade: Colégio Pedro II; Faculdade de Direito de SP; bacharel pela Faculdade de Direito do Recife (1866)
+profissoes: diplomata; historiador; geógrafo; jornalista; professor
+nacionalidades: Brasil
+foto: fotos/barao-do-rio-branco.webp
+relacoes: filho primogênito do Visconde; casado com Marie Stevens; 5 filhos   # -> Parentesco
+fonte: Academia Brasileira de Letras; Arquivo Nacional (MAPA)   # barão em 1888; ABL cadeira 34; indicado ao Nobel da Paz (1911)
+confiabilidade: documentada
+
+== Marie Stevens ==
+identidade: Atriz belga; esposa do Barão do Rio Branco.
+nome_publico: Marie Stevens
+nacionalidades: Bélgica
+relacoes: esposa do Barão do Rio Branco; 5 filhos   # -> Parentesco
+fonte: eBiografia; Wikipedia
+confiabilidade: documentada
+
+== Paulo do Rio Branco ==
+nome_publico: Paulo do Rio Branco
+profissoes: jogador de rúgbi
+relacoes: neto do Visconde do Rio Branco   # -> Parentesco  (confirmar filiação exata)
+fonte: Wikipedia
+confiabilidade: documentada
+
+# Demais filhos do Visconde (expandir): Tomás; Maria Luiza; Amélia Augusta;
+# Augusta Amélia; João Horácio; Alfredo; Francisca; Flóro — todos "da Silva Paranhos".

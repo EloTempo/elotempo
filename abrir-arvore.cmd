@@ -1,7 +1,7 @@
 @echo off
 setlocal
 chcp 65001 >nul 2>&1
-title Arvore Genealogica - abrindo
+title Elotempo - abrindo
 
 rem ---------------------------------------------------------------------
 rem Atalho de teste: deixa tudo em dia e abre o aplicativo.
@@ -16,13 +16,13 @@ rem ---------------------------------------------------------------------
 
 pushd "%~dp0"
 
-set "EXE=src-tauri\target\debug\arvore-genealogica.exe"
+set "EXE=src-tauri\target\debug\elotempo.exe"
 
 rem ---------------------------------------------------------------------
 rem O aplicativo aberto trava o proprio .exe, e a build falha ao tentar
 rem substitui-lo. Vale avisar antes de gastar um minuto compilando.
 rem ---------------------------------------------------------------------
-tasklist /FI "IMAGENAME eq arvore-genealogica.exe" 2>nul | find /I "arvore-genealogica.exe" >nul
+tasklist /FI "IMAGENAME eq elotempo.exe" 2>nul | find /I "elotempo.exe" >nul
 if not errorlevel 1 (
     echo.
     echo   O aplicativo ja esta aberto.

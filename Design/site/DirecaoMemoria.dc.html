@@ -1,0 +1,161 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap">
+  <style>
+    body { margin: 0; font-family: 'Inter', system-ui, sans-serif; }
+    a { color: #2563eb; } a:hover { color: #0f1420; }
+    .marca { font-family: 'Sora', 'Inter', system-ui, sans-serif; }
+    .rot { font-family: 'Sora', system-ui, sans-serif; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; font-weight: 600; }
+    @keyframes entra-a { from { opacity: 0; transform: translateY(9px); } to { opacity: 1; transform: none; } }
+    @keyframes entra-b { from { opacity: 0; transform: translateY(9px); } to { opacity: 1; transform: none; } }
+    @media (prefers-reduced-motion: reduce) { .gira { animation: none !important; } }
+  </style>
+</helmet>
+
+<div style="width: 1280px; height: 760px; box-sizing: border-box; background: #f4f5f7; color: #0f1420; display: flex; flex-direction: column;">
+
+  <div style="padding: 22px 44px 16px 44px; border-bottom: 1px solid #dfe3ea; display: flex; align-items: baseline; gap: 14px;">
+    <span class="rot" style="color: #6b7280;">Direção</span>
+    <span class="marca" style="font-size: 21px; font-weight: 600; letter-spacing: -.02em;">Memória</span>
+    <span style="font-size: 13px; color: #4b5563;">— o visitante não sabe que quer isto. A página mostra antes de pedir.</span>
+  </div>
+
+  <div style="flex-grow: 1; padding: 22px 44px; display: flex; flex-direction: column; min-height: 0;">
+    <div style="flex-grow: 1; border: 1px solid #c3cad6; border-radius: 12px; background: #ffffff; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 1px 2px rgba(15,20,32,.06), 0 8px 20px rgba(15,20,32,.06);">
+
+      <div style="padding: 12px 26px; border-bottom: 1px solid #dfe3ea; display: flex; align-items: center; gap: 10px;">
+        <svg width="22" height="22" viewBox="0 0 512 512" aria-hidden="true">
+          <rect width="512" height="512" rx="115" fill="#2563EB"/>
+          <g fill="none" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="38"><path d="M160 130v252"/><path d="M160 130h196"/><path d="M160 256h72"/><path d="M232 256l124-52M232 256l124 52"/><path d="M160 382h196"/></g>
+          <g fill="#FFFFFF"><circle cx="160" cy="130" r="38"/><circle cx="356" cy="130" r="38"/><circle cx="160" cy="256" r="38"/><circle cx="232" cy="256" r="38"/><circle cx="356" cy="204" r="38"/><circle cx="356" cy="308" r="38"/><circle cx="160" cy="382" r="38"/><circle cx="356" cy="382" r="38"/></g>
+        </svg>
+        <span class="marca" style="font-size: 15px; font-weight: 600; letter-spacing: -.03em;">Elotempo</span>
+        <div style="flex-grow: 1;"></div>
+        <span style="font-size: 12.5px; color: #4b5563;">Recursos</span>
+        <span style="font-size: 12.5px; color: #4b5563;">Código</span>
+        <span style="font-size: 12.5px; font-weight: 600; color: #2563eb;">Baixar</span>
+      </div>
+
+      <!-- hero: a tese, e o eixo do tempo como prova -->
+      <div style="padding: 42px 52px 22px 52px; display: flex; flex-direction: column; gap: 16px; align-items: center; text-align: center;">
+        <h1 class="marca" style="margin: 0; font-size: 42px; font-weight: 600; line-height: 1.12; letter-spacing: -.03em; max-width: 19ch; text-wrap: balance; min-height: 142px; display: flex; align-items: center; justify-content: center;">
+          <span class="gira" style="display: block; animation: {{animacao}} .5s cubic-bezier(.2,.7,.3,1);">{{pergunta}}</span>
+        </h1>
+        <p style="margin: 0; font-size: 16px; line-height: 1.6; color: #4b5563; max-width: 56ch;">O Elotempo põe a vida de cada pessoa da sua família no mesmo eixo que a história do país, a moeda que circulava e a tecnologia que chegava. Genealogia não é só quem descende de quem.</p>
+      </div>
+
+      <!-- o eixo -->
+      <div style="padding: 6px 52px 0 52px;">
+        <div style="border: 1px solid #dfe3ea; border-radius: 10px; background: #f8f9fb; padding: 18px 22px 14px 22px; display: flex; flex-direction: column; gap: 13px;">
+
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="font-size: 10.5px; font-weight: 600; color: #1d4ed8; width: 96px; flex: none;">História</span>
+            <div style="flex-grow: 1; position: relative; height: 15px;">
+              <div style="position: absolute; left: 0; right: 0; top: 7px; height: 2px; background: #dfe3ea;"></div>
+              <div style="position: absolute; left: 8%; top: 2px; width: 3px; height: 13px; border-radius: 2px; background: #1d4ed8;"></div>
+              <div style="position: absolute; left: 26%; top: 2px; width: 3px; height: 13px; border-radius: 2px; background: #1d4ed8;"></div>
+              <div style="position: absolute; left: 47%; top: 2px; width: 3px; height: 13px; border-radius: 2px; background: #1d4ed8;"></div>
+              <div style="position: absolute; left: 71%; top: 2px; width: 3px; height: 13px; border-radius: 2px; background: #1d4ed8;"></div>
+            </div>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="font-size: 10.5px; font-weight: 600; color: #15803d; width: 96px; flex: none;">Moeda</span>
+            <div style="flex-grow: 1; position: relative; height: 15px;">
+              <div style="position: absolute; left: 0; right: 0; top: 7px; height: 2px; background: #dfe3ea;"></div>
+              <div style="position: absolute; left: 4%; width: 30%; top: 4px; height: 8px; border-radius: 4px; background: #15803d; opacity: .8;"></div>
+              <div style="position: absolute; left: 36%; width: 26%; top: 4px; height: 8px; border-radius: 4px; background: #15803d; opacity: .55;"></div>
+              <div style="position: absolute; left: 64%; width: 33%; top: 4px; height: 8px; border-radius: 4px; background: #15803d; opacity: .8;"></div>
+            </div>
+          </div>
+
+          <div style="border-top: 1px solid #dfe3ea; padding-top: 13px; display: flex; align-items: center; gap: 12px;">
+            <span style="font-size: 10.5px; font-weight: 600; color: #2563eb; width: 96px; flex: none;">Antônio Silva</span>
+            <div style="flex-grow: 1; position: relative; height: 22px;">
+              <div style="position: absolute; left: 12%; width: 58%; top: 5px; height: 12px; border-radius: 6px; background: #2563eb; opacity: .85;"></div>
+              <span style="position: absolute; left: 12%; top: -3px; font-size: 9px; color: #2563eb; font-weight: 600;">1918</span>
+              <span style="position: absolute; left: 66%; top: -3px; font-size: 9px; color: #2563eb; font-weight: 600;">1994</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- download, depois do argumento -->
+      <div style="margin-top: auto; padding: 18px 52px 20px 52px; display: flex; align-items: center; gap: 14px; justify-content: center;">
+        <div style="background: #2563eb; color: #ffffff; padding: 12px 22px; border-radius: 8px; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 9px;">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7.5 11.5L12 16l4.5-4.5M5 19.5h14"/></svg>
+          Baixar o Elotempo
+        </div>
+        <span style="font-size: 12.5px; color: #6b7280;">Windows, Linux ou o código-fonte · gratuito e aberto</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding: 0 44px 24px 44px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 26px;">
+    <div style="display: flex; flex-direction: column; gap: 4px;">
+      <span class="rot" style="color: #0d9488;">A favor</span>
+      <p style="margin: 0; font-size: 12.5px; line-height: 1.5; color: #4b5563;">A manchete faz uma pergunta que a pessoa nunca se fez, e o eixo responde na mesma tela. É a única coisa que o Elotempo faz e os outros não — mostrar isso é o argumento inteiro.</p>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 4px;">
+      <span class="rot" style="color: #b45309;">Contra</span>
+      <p style="margin: 0; font-size: 12.5px; line-height: 1.5; color: #4b5563;">Faz quem já decidiu rolar a página. E a manchete assume um bisavô brasileiro do começo do século — se soar específica demais, exclui em vez de convidar.</p>
+    </div>
+  </div>
+</div>
+</x-dc>
+
+<script data-dc-script data-props='{"segundos":{"editor":"range","default":6,"min":3,"max":12,"step":1,"unit":"s","section":"Rodízio"}}'>
+class Component extends DCLogic {
+  state = { i: 0 };
+
+  perguntas = [
+    'Seu bisavô nasceu em 1918. O que mais acontecia?',
+    'Qual moeda era usada quando seu bisavô tinha 12 anos?',
+    'Quantas moedas diferentes sua avó usou ao longo da vida?',
+    'Quem governava o Brasil quando sua avó nasceu?',
+    'Quando a fotografia foi inventada, o Brasil ainda tinha escravidão.',
+    'Sua tataravó viu o primeiro automóvel passar na rua?',
+    'Quantas gerações separam você de quem chegou de navio?',
+    'Qual é a pessoa mais antiga que você consegue nomear?'
+  ];
+
+  componentDidMount() {
+    // Quem pediu menos movimento fica com a pergunta âncora, parada.
+    var reduz = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduz) return;
+    this.ligar();
+  }
+
+  componentDidUpdate(antes) {
+    if (antes.segundos !== this.props.segundos) { this.desligar(); this.ligar(); }
+  }
+
+  componentWillUnmount() { this.desligar(); }
+
+  ligar() {
+    var s = this.props.segundos ?? 6;
+    this.relogio = setInterval(function () {
+      this.setState({ i: (this.state.i + 1) % this.perguntas.length });
+    }.bind(this), s * 1000);
+  }
+
+  desligar() { if (this.relogio) clearInterval(this.relogio); }
+
+  renderVals() {
+    return {
+      pergunta: this.perguntas[this.state.i],
+      // O nome da animação alterna para ela reiniciar a cada troca.
+      animacao: this.state.i % 2 === 0 ? 'entra-a' : 'entra-b'
+    };
+  }
+}
+</script>
+</body>
+</html>

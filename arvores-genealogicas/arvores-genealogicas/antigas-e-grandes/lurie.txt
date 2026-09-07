@@ -1,0 +1,66 @@
+# FAMILIA: Lurie / Luria
+# CONFIABILIDADE geral: reconstruida-tradicional
+# FONTES: Neil Rosenstein, "The Unbroken Chain" (1990) e "The Lurie Legacy" (2004);
+#         Guinness (ed. 1999); Encyclopaedia Judaica
+# FORMATO: um bloco por pessoa (ver _MODELO-PESSOA.txt)
+# NOTA: dinastia rabínica asquenaze; o Guinness (1999) a citou como a família viva
+#       mais antiga. A descendência de Davi via Rashi é TRADIÇÃO, sem prova
+#       documental completa (Einsiedler, Avotaynu) — tratar como reconstruída.
+# ---
+
+== Rei David ==
+nome_publico: Rei David de Israel
+nascimento: cerca de 1040 a.C.
+relacoes: ancestral reivindicado da linhagem (contestado) — ver [[casa-de-davi]]   # -> Parentesco
+fonte: tradição
+confiabilidade: reconstruida-tradicional
+
+== Rashi ==
+identidade: Rabino e comentarista de Troyes; um dos maiores sábios judeus medievais.
+nome_publico: Rashi
+nome_registro: Shlomo Yitzchaki
+nascimento: 1040
+falecimento: 1105
+profissoes: rabino; comentarista bíblico e talmúdico
+nacionalidades: França
+relacoes: ancestral-chave; a ligação dele ao Rei David é tradicional   # -> Parentesco
+fonte: Rosenstein   # ponto de junção entre parte documentada e parte tradicional
+confiabilidade: reconstruida-tradicional
+
+== Jehiel Luria ==
+nome_publico: Jehiel Luria
+nascimento: cerca de 1200
+profissoes: rabino (chefe do tribunal rabínico de Brest-Litovsk)
+nacionalidades: Europa Central
+relacoes: primeiro Luria firmemente situado na árvore (séc. XIII)   # -> Parentesco
+fonte: Rosenstein
+confiabilidade: reconstruida-tradicional
+
+== Solomon Luria ==
+identidade: O "Maharshal"; grande decisor haláchico do séc. XVI.
+nome_publico: Solomon Luria (Maharshal)
+nascimento: cerca de 1510
+falecimento: 1573
+profissoes: rabino; talmudista
+nacionalidades: Polônia-Lituânia
+relacoes: descendente da linha Luria; ramo de muitas dinastias posteriores   # -> Parentesco
+fonte: Rosenstein
+confiabilidade: documentada
+
+== David Luria ==
+nome_publico: David Luria
+nascimento: 1798
+falecimento: 1855
+profissoes: rabino; comentarista; linguista
+nacionalidades: Império Russo (Bielorrússia)
+relacoes: descendente do Maharshal   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+# HOMÔNIMOS / CONEXÃO NÃO COMPROVADA (registrar com ressalva):
+#  - Isaac Luria, "o Ari" (1534–1572), cabalista de Safed — mesma grafia, mas
+#    Rosenstein alerta que NÃO se liga com segurança à linhagem principal.
+#  - Salvador Luria (1912–1991), Nobel de Medicina — variante do nome; conexão
+#    à linhagem principal não confirmada.
+# Conexões amplas atribuídas pela obra (via casamentos/ramos): Freud, Marx,
+# Mendelssohn, Montefiore, Isaiah Berlin — tratar como reivindicadas, não diretas.

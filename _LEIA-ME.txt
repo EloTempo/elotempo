@@ -1,0 +1,23 @@
+# ÁRVORES GENEALÓGICAS CONHECIDAS — PESQUISA
+#
+# FORMATO DE CADA LINHA:
+#   Nome Completo | nascimento–falecimento | relação/papel | fonte
+#   (use "?" quando não souber; "a verificar" na fonte quando ainda não confirmado)
+#   Delimitador: pipe " | "  (evita conflito com vírgulas em nomes e fontes)
+#
+# CABEÇALHO DE CADA ARQUIVO:
+#   # FAMILIA        -> nome + nota de categoria
+#   # CONFIABILIDADE -> documentada | reconstruida-tradicional | mista | ficcao
+#   # FONTES         -> referências sugeridas para a verificação
+#
+# CAMADAS DE CONFIABILIDADE:
+#   documentada             -> registros primários (cartórios, censos, arquivos)
+#   reconstruida-tradicional-> linhagem antiga/religiosa, trechos contestados
+#   mista                   -> parte recente documentada, parte antiga tradicional
+#   ficcao                  -> personagens de obra; NUNCA misturar com dados reais
+#
+# LGPD: em famílias com pessoas vivas, restrinja-se a figuras públicas e dados
+#       já públicos. Nada de endereços, documentos ou dados sensíveis.
+#
+# DESTINO: estes .txt são inventário inicial. Depois de preenchidos e verificados,
+#          convertem para GEDCOM 7.0 (padrão do app).

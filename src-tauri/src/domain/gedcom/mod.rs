@@ -42,9 +42,13 @@ pub struct ResumoExportacao {
 pub async fn exportar_gedcom(
     caminho: String,
     opcoes: OpcoesExportacao,
+    ticket_autorizacao: Option<String>,
     app: tauri::AppHandle,
     db: State<'_, SqlitePool>,
+    seguranca: State<'_, crate::domain::seguranca::EstadoSeguranca>,
 ) -> Resultado<ResumoExportacao> {
+    crate::domain::seguranca::autorizar_acao_sensivel(&seguranca, None, ticket_autorizacao.as_deref()).await?;
+
     let exportacao = exportador::montar(&db, &opcoes).await?;
 
     let destino = Path::new(&caminho);
@@ -231,6 +235,7 @@ mod testes {
                 minibiografia: None,
                 is_vivo: vivo,
                 foto_url: None,
+                tipo_tempo: None,
             },
         )
         .await

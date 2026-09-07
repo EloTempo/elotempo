@@ -1,0 +1,49 @@
+# FAMILIA: Targaryen (As Crônicas de Gelo e Fogo / Game of Thrones) — FICÇÃO
+# CONFIABILIDADE geral: ficcao (NÃO misturar com dados reais)
+# FONTES: cânon ASOIAF / GoT (livros e série)
+# FORMATO: um bloco por pessoa (ver _MODELO-PESSOA.txt)
+# NOTA: sem foto (direito autoral). Os Targaryen praticavam casamento entre irmãos
+#       para "manter o sangue puro" — o paralelo ficcional dos [[habsburgo]].
+# ---
+
+== Aerys II Targaryen ==
+identidade: O "Rei Louco"; último Targaryen no Trono de Ferro antes da Rebelião.
+nome_publico: Aerys II Targaryen
+apelidos: o Rei Louco
+relacoes: casado com a irmã Rhaella; pai de Rhaegar, Viserys e Daenerys   # -> Parentesco [CONSANGUINIDADE]
+fonte: cânon ASOIAF
+confiabilidade: ficcao
+
+== Rhaella Targaryen ==
+nome_publico: Rhaella Targaryen
+relacoes: irmã e esposa de Aerys II   # -> Parentesco [CONSANGUINIDADE]
+fonte: cânon ASOIAF
+confiabilidade: ficcao
+
+== Rhaegar Targaryen ==
+identidade: Príncipe herdeiro; sua fuga com Lyanna Stark deflagra a guerra.
+nome_publico: Rhaegar Targaryen
+relacoes: filho de Aerys; pai de Jon Snow (com Lyanna Stark)   # -> Parentesco
+fonte: cânon ASOIAF
+confiabilidade: ficcao
+
+== Viserys Targaryen ==
+nome_publico: Viserys Targaryen
+relacoes: filho de Aerys; irmão de Daenerys   # -> Parentesco
+fonte: cânon ASOIAF
+confiabilidade: ficcao
+
+== Daenerys Targaryen ==
+identidade: A "Mãe dos Dragões"; busca retomar o trono.
+nome_publico: Daenerys Targaryen
+apelidos: Mãe dos Dragões
+relacoes: filha de Aerys e Rhaella; tia (e depois amante) de Jon Snow   # -> Parentesco [CONSANGUINIDADE]
+fonte: cânon ASOIAF
+confiabilidade: ficcao
+
+== Jon Snow ==
+identidade: Criado como bastardo dos Stark; revela-se Targaryen (Aegon), herdeiro legítimo.
+nome_publico: Jon Snow (Aegon Targaryen)
+relacoes: filho de Rhaegar e Lyanna Stark; sobrinho de Daenerys   # -> Parentesco [CONSANGUINIDADE]
+fonte: cânon ASOIAF
+confiabilidade: ficcao

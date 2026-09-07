@@ -1,0 +1,80 @@
+# FAMILIA: Casa Imperial do Japão — a monarquia hereditária contínua mais antiga
+# CONFIABILIDADE geral: mista (imperadores recentes documentados; origem mítica)
+# FONTES: Agência da Casa Imperial; Britannica; Wikipedia
+# FORMATO: um bloco por pessoa (ver _MODELO-PESSOA.txt)
+# NOTA: Naruhito é tido como o 126º imperador, descendente de Jimmu por tradição.
+#       Sucessão só masculina (Lei da Casa Imperial de 1947). LGPD: vivos marcados.
+# ---
+
+== Imperador Jimmu ==
+identidade: Fundador lendário da linhagem imperial japonesa.
+nome_publico: Imperador Jimmu
+nascimento: cerca de 711 a.C.   # tradicional/mítico
+falecimento: cerca de 585 a.C.
+profissoes: monarca (1º imperador, tradicional)
+nacionalidades: Japão
+relacoes: ancestral fundador (mítico)   # -> Parentesco
+fonte: Agência da Casa Imperial   # reinado tradicional a partir de 660 a.C.
+confiabilidade: reconstruida-tradicional
+
+# ===== salto de linhagem (contínua por tradição; expandir) =====
+== Imperador Meiji ==
+identidade: Imperador da modernização do Japão (Restauração Meiji).
+nome_publico: Imperador Meiji
+nome_registro: Mutsuhito
+nascimento: 1852
+falecimento: 1912
+profissoes: monarca
+nacionalidades: Japão
+relacoes: linha imperial   # -> Parentesco
+fonte: Britannica
+confiabilidade: documentada
+
+== Imperador Shōwa ==
+nome_publico: Imperador Shōwa (Hirohito)
+nome_registro: Hirohito
+nascimento: 1901
+falecimento: 1989
+profissoes: monarca
+nacionalidades: Japão
+relacoes: neto de Meiji; pai de Akihito   # -> Parentesco
+fonte: Britannica
+confiabilidade: documentada
+
+== Akihito ==
+identidade: Imperador da era Heisei; primeiro a abdicar em cerca de 200 anos (2019).
+nome_publico: Akihito (Imperador Emérito)
+nascimento: 1933
+profissoes: monarca (1989–2019); biólogo marinho
+nacionalidades: Japão
+relacoes: filho de Hirohito; casou com Michiko (primeira plebeia); pai de Naruhito   # -> Parentesco
+fonte: Britannica   # LGPD: pessoa viva
+confiabilidade: documentada
+
+== Naruhito ==
+identidade: 126º imperador do Japão; era Reiwa, desde 2019.
+nome_publico: Naruhito
+nascimento: 1960
+profissoes: monarca
+nacionalidades: Japão
+foto: fotos/naruhito.webp
+relacoes: filho de Akihito; casado com Masako; pai de Aiko; herdeiro é o irmão Fumihito   # -> Parentesco
+fonte: Agência da Casa Imperial   # LGPD: pessoa viva
+confiabilidade: documentada
+
+== Fumihito ==
+nome_publico: Príncipe Fumihito (Akishino)
+nascimento: 1965
+profissoes: membro da realeza (herdeiro do trono)
+nacionalidades: Japão
+relacoes: irmão mais novo de Naruhito; herdeiro; pai do príncipe Hisahito (2006)   # -> Parentesco
+fonte: Agência da Casa Imperial   # LGPD: pessoa viva
+confiabilidade: documentada
+
+== Aiko ==
+nome_publico: Princesa Aiko
+nascimento: 2001
+nacionalidades: Japão
+relacoes: filha de Naruhito e Masako (impedida de reinar pela regra de sucessão masculina)   # -> Parentesco
+fonte: Agência da Casa Imperial   # LGPD: pessoa viva
+confiabilidade: documentada

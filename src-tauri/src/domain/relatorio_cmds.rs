@@ -101,8 +101,11 @@ fn agrupar(linhas: Vec<(String, String)>) -> HashMap<String, Vec<String>> {
 #[tauri::command]
 pub async fn montar_relatorio(
     opcoes: OpcoesRelatorio,
+    ticket_autorizacao: Option<String>,
     db: State<'_, SqlitePool>,
+    seguranca: State<'_, crate::domain::seguranca::EstadoSeguranca>,
 ) -> Resultado<Relatorio> {
+    crate::domain::seguranca::autorizar_acao_sensivel(&seguranca, None, ticket_autorizacao.as_deref()).await?;
     montar(&db, &opcoes).await
 }
 
@@ -580,6 +583,7 @@ mod testes {
                 minibiografia: None,
                 is_vivo: vivo,
                 foto_url: None,
+                tipo_tempo: None,
             },
         )
         .await

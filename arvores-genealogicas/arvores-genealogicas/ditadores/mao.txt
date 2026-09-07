@@ -1,0 +1,103 @@
+# FAMILIA: Mao (China)
+# CONFIABILIDADE geral: documentada
+# FONTES: Wikipedia; New World Encyclopedia
+# FORMATO: um bloco por pessoa (ver _MODELO-PESSOA.txt)
+# NOTA: quatro casamentos, dez filhos (muitos perdidos na guerra/Longa Marcha).
+# LGPD: descendentes vivos marcados.
+# ---
+
+== Mao Yichang ==
+nome_publico: Mao Yichang
+profissoes: agricultor
+nacionalidades: China
+relacoes: pai de Mao Zedong; casado com Wen Qimei   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Mao Zedong ==
+identidade: Fundador da República Popular da China e líder do Partido Comunista até 1976.
+nome_publico: Mao Zedong
+apelidos: Presidente Mao
+nascimento: 1893
+falecimento: 1976
+profissoes: político (líder da RPC); revolucionário
+nacionalidades: China
+foto: fotos/mao-zedong.webp
+relacoes: quatro esposas (Luo Yixiu, Yang Kaihui, He Zizhen, Jiang Qing); dez filhos   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Yang Kaihui ==
+nome_publico: Yang Kaihui
+nascimento: 1901
+falecimento: 1930   # executada pelo Kuomintang
+nacionalidades: China
+relacoes: 2ª esposa de Mao; mãe de Mao Anying e Mao Anqing   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== He Zizhen ==
+nome_publico: He Zizhen
+nascimento: 1910
+falecimento: 1984
+nacionalidades: China
+relacoes: 3ª esposa de Mao; mãe de Li Min   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Jiang Qing ==
+identidade: 4ª esposa de Mao; líder do "Bando dos Quatro" na Revolução Cultural.
+nome_publico: Jiang Qing
+apelidos: Madame Mao
+nascimento: 1914
+falecimento: 1991
+profissoes: atriz; política
+nacionalidades: China
+relacoes: 4ª esposa de Mao; mãe de Li Na   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Mao Anying ==
+nome_publico: Mao Anying
+nascimento: 1922
+falecimento: 1950   # morto na Guerra da Coreia
+profissoes: militar
+nacionalidades: China
+relacoes: filho de Mao e Yang Kaihui   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Mao Anqing ==
+nome_publico: Mao Anqing
+nascimento: 1924
+falecimento: 2007
+nacionalidades: China
+relacoes: filho de Mao e Yang Kaihui; pai de Mao Xinyu   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Li Min ==
+nome_publico: Li Min
+nascimento: 1936
+profissoes: política
+nacionalidades: China
+relacoes: filha de Mao e He Zizhen   # -> Parentesco
+fonte: Wikipedia   # LGPD: pessoa viva
+confiabilidade: documentada
+
+== Li Na ==
+nome_publico: Li Na
+nascimento: 1940
+nacionalidades: China
+relacoes: filha de Mao e Jiang Qing   # -> Parentesco
+fonte: Wikipedia   # LGPD: pessoa viva
+confiabilidade: documentada
+
+== Mao Xinyu ==
+nome_publico: Mao Xinyu
+nascimento: 1970
+profissoes: militar (general); historiador
+nacionalidades: China
+relacoes: neto de Mao (filho de Mao Anqing); único neto homem   # -> Parentesco
+fonte: Wikipedia   # LGPD: pessoa viva
+confiabilidade: documentada

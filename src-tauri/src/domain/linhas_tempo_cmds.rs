@@ -41,7 +41,11 @@ pub struct LinhaDeContexto {
     pub id: String,
     pub categoria: String,
     pub titulo: String,
+    pub is_contexto: bool,
+    pub is_bloqueada: bool,
     pub fonte_referencia: Option<String>,
+    pub escopo: Option<String>,
+    pub icone: Option<String>,
     /// Quantos marcos de alta relevância — os que a gaveta mostra.
     pub marcos_alta: i64,
     pub marcos_total: i64,
@@ -63,19 +67,20 @@ pub struct Marco {
     pub ano_fim: Option<i64>,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Clone)]
 pub struct MarcoPessoal {
     pub tipo: String,
+    pub titulo: Option<String>,
     /// O que o usuário escreveu. O ano derivado só posiciona no eixo.
     pub data_texto: Option<String>,
     pub local: Option<String>,
     pub ano: Option<i64>,
     /// Com quem, nos eventos que pertencem a uma união.
-    ///
-    /// Um casamento é evento de duas vidas, e sem isto a linha de quem teve
-    /// dois casamentos mostraria duas marcas idênticas. Fica vazio quando o
-    /// cônjuge é placeholder: "casou com [desconhecido]" não informa nada.
     pub com: Option<String>,
+    pub is_participacao: bool,
+    pub linha_titulo: Option<String>,
+    pub papel: Option<String>,
+    pub visivel_na_pessoa: bool,
 }
 
 #[derive(Debug, Serialize)]
@@ -110,16 +115,16 @@ pub async fn listar_linhas_de_contexto(
     db: State<'_, SqlitePool>,
 ) -> Resultado<Vec<LinhaDeContexto>> {
     Ok(sqlx::query_as::<_, LinhaDeContexto>(
-        "SELECT l.id, l.categoria, l.titulo, l.fonte_referencia,
+        "SELECT l.id, l.categoria, l.titulo, l.is_contexto, l.is_bloqueada, l.fonte_referencia,
+                l.escopo, l.icone,
                 COALESCE(SUM(e.relevancia = 'alta'), 0) AS marcos_alta,
                 COUNT(e.id) AS marcos_total,
                 MIN(e.ano_inicio) AS ano_min,
                 MAX(COALESCE(e.ano_fim, e.ano_inicio)) AS ano_max
          FROM linhas_tempo l
          LEFT JOIN eventos_linha e ON e.linha_id = l.id
-         WHERE l.is_contexto = 1
          GROUP BY l.id
-         ORDER BY l.categoria, l.titulo",
+         ORDER BY l.is_contexto DESC, l.categoria, l.titulo",
     )
     .fetch_all(&*db)
     .await?)
@@ -136,14 +141,25 @@ pub async fn buscar_marcos(
     ano_de: Option<i64>,
     ano_ate: Option<i64>,
     apenas_alta: Option<bool>,
+    relevancia_minima: Option<String>,
     db: State<'_, SqlitePool>,
+) -> Resultado<Vec<Marco>> {
+    marcos_filtrados(&db, linha_ids, ano_de, ano_ate, apenas_alta, relevancia_minima).await
+}
+
+pub async fn marcos_filtrados(
+    db: &SqlitePool,
+    linha_ids: Vec<String>,
+    ano_de: Option<i64>,
+    ano_ate: Option<i64>,
+    apenas_alta: Option<bool>,
+    relevancia_minima: Option<String>,
 ) -> Resultado<Vec<Marco>> {
     if linha_ids.is_empty() {
         return Ok(vec![]);
     }
 
     let marcadores = vec!["?"; linha_ids.len()].join(",");
-    let so_alta = apenas_alta.unwrap_or(true);
 
     let mut sql = format!(
         "SELECT id, linha_id, data_periodo_texto, titulo, descricao, relevancia,
@@ -152,9 +168,23 @@ pub async fn buscar_marcos(
          WHERE linha_id IN ({marcadores})"
     );
 
-    if so_alta {
-        sql.push_str(" AND relevancia = 'alta'");
+    match relevancia_minima.as_deref() {
+        Some("detalhe") => {
+            // Inclui alta, media e detalhe: sem filtro extra
+        }
+        Some("media") => {
+            sql.push_str(" AND (relevancia IN ('alta', 'media') OR relevancia IS NULL)");
+        }
+        Some("alta") => {
+            sql.push_str(" AND (relevancia = 'alta' OR relevancia IS NULL)");
+        }
+        _ => {
+            if apenas_alta.unwrap_or(true) {
+                sql.push_str(" AND (relevancia = 'alta' OR relevancia IS NULL)");
+            }
+        }
     }
+
     // Sobreposição: fim >= janela_de E início <= janela_ate.
     if ano_de.is_some() {
         sql.push_str(" AND COALESCE(ano_fim, ano_inicio) >= ?");
@@ -175,7 +205,7 @@ pub async fn buscar_marcos(
         q = q.bind(ate);
     }
 
-    Ok(q.fetch_all(&*db).await?)
+    Ok(q.fetch_all(db).await?)
 }
 
 /// A linha pessoal: a faixa da vida e os eventos sobre ela.
@@ -244,10 +274,15 @@ pub async fn linha_pessoal(db: &SqlitePool, pessoa_id: &str) -> Resultado<LinhaP
 
         marcos.push(MarcoPessoal {
             tipo,
+            titulo: None,
             data_texto: l.try_get("data_texto")?,
             local: l.try_get("local")?,
             ano,
             com: None,
+            is_participacao: false,
+            linha_titulo: None,
+            papel: None,
+            visivel_na_pessoa: true,
         });
     }
 
@@ -287,10 +322,51 @@ pub async fn linha_pessoal(db: &SqlitePool, pessoa_id: &str) -> Resultado<LinhaP
     for l in de_uniao {
         marcos.push(MarcoPessoal {
             tipo: l.try_get("tipo_evento")?,
+            titulo: None,
             data_texto: l.try_get("data_texto")?,
             local: l.try_get("local")?,
             ano: l.try_get("ano_inicio")?,
             com: l.try_get("com")?,
+            is_participacao: false,
+            linha_titulo: None,
+            papel: None,
+            visivel_na_pessoa: true,
+        });
+    }
+
+    // As participações em marcos de linhas criadas (seção 4 da fatia 10).
+    let participacoes = sqlx::query(
+        "SELECT mp.papel, mp.visivel_na_pessoa,
+                e.titulo, e.data_periodo_texto, e.ano_inicio,
+                l.titulo AS linha_titulo
+         FROM marco_participantes mp
+         JOIN eventos_linha e ON e.id = mp.marco_id
+         JOIN linhas_tempo l ON l.id = e.linha_id
+         WHERE mp.pessoa_id = ?",
+    )
+    .bind(&pessoa_id)
+    .fetch_all(db)
+    .await?;
+
+    for p in participacoes {
+        let papel: Option<String> = p.try_get("papel")?;
+        let visivel: bool = p.try_get("visivel_na_pessoa")?;
+        let linha_titulo: String = p.try_get("linha_titulo")?;
+        let titulo: String = p.try_get("titulo")?;
+        let data_periodo_texto: String = p.try_get("data_periodo_texto")?;
+        let ano: Option<i64> = p.try_get("ano_inicio")?;
+
+        marcos.push(MarcoPessoal {
+            tipo: "participacao".to_string(),
+            titulo: Some(titulo),
+            data_texto: Some(data_periodo_texto),
+            local: None,
+            ano,
+            com: None,
+            is_participacao: true,
+            linha_titulo: Some(linha_titulo),
+            papel,
+            visivel_na_pessoa: visivel,
         });
     }
 
@@ -386,6 +462,240 @@ pub async fn quem_estava_vivo(
     })
 }
 
+// ---------- CRUD Estúdio de Linhas do Tempo (Fatia 10a) ----------
+
+use serde::Deserialize;
+
+#[derive(Debug, Deserialize)]
+pub struct NovaLinhaTempo {
+    pub categoria: String,
+    pub titulo: String,
+    pub fonte_referencia: Option<String>,
+}
+
+#[tauri::command]
+pub async fn criar_linha_tempo(
+    nova: NovaLinhaTempo,
+    db: State<'_, SqlitePool>,
+) -> Resultado<String> {
+    let id = uuid::Uuid::new_v4().to_string();
+    sqlx::query(
+        "INSERT INTO linhas_tempo (id, categoria, titulo, fonte_referencia, is_contexto, is_bloqueada)
+         VALUES (?, ?, ?, ?, 0, 0)"
+    )
+    .bind(&id)
+    .bind(nova.categoria)
+    .bind(nova.titulo)
+    .bind(nova.fonte_referencia)
+    .execute(&*db)
+    .await?;
+    Ok(id)
+}
+
+#[derive(Debug, Deserialize)]
+pub struct EdicaoLinhaTempo {
+    pub categoria: String,
+    pub titulo: String,
+    pub fonte_referencia: Option<String>,
+}
+
+#[tauri::command]
+pub async fn atualizar_linha_tempo(
+    id: String,
+    edicao: EdicaoLinhaTempo,
+    db: State<'_, SqlitePool>,
+) -> Resultado<()> {
+    // A migration 013 recusa UPDATE de is_bloqueada=1
+    sqlx::query(
+        "UPDATE linhas_tempo SET categoria = ?, titulo = ?, fonte_referencia = ?
+         WHERE id = ? AND is_bloqueada = 0"
+    )
+    .bind(edicao.categoria)
+    .bind(edicao.titulo)
+    .bind(edicao.fonte_referencia)
+    .bind(id)
+    .execute(&*db)
+    .await?;
+    Ok(())
+}
+
+#[tauri::command]
+pub async fn deletar_linha_tempo(
+    id: String,
+    db: State<'_, SqlitePool>,
+) -> Resultado<()> {
+    sqlx::query("DELETE FROM linhas_tempo WHERE id = ? AND is_bloqueada = 0")
+    .bind(id)
+    .execute(&*db)
+    .await?;
+    Ok(())
+}
+
+#[derive(Debug, Deserialize)]
+pub struct NovoMarco {
+    pub linha_id: String,
+    pub data_periodo_texto: String,
+    pub titulo: String,
+    pub descricao: Option<String>,
+    pub relevancia: String,
+    pub fonte_especifica: Option<String>,
+    pub ano_inicio: Option<i64>,
+    pub ano_fim: Option<i64>,
+}
+
+#[tauri::command]
+pub async fn criar_marco(
+    novo: NovoMarco,
+    db: State<'_, SqlitePool>,
+) -> Resultado<String> {
+    let id = uuid::Uuid::new_v4().to_string();
+    sqlx::query(
+        "INSERT INTO eventos_linha (id, linha_id, data_periodo_texto, titulo, descricao, relevancia, fonte_especifica, ano_inicio, ano_fim)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+    )
+    .bind(&id)
+    .bind(novo.linha_id)
+    .bind(novo.data_periodo_texto)
+    .bind(novo.titulo)
+    .bind(novo.descricao)
+    .bind(novo.relevancia)
+    .bind(novo.fonte_especifica)
+    .bind(novo.ano_inicio)
+    .bind(novo.ano_fim)
+    .execute(&*db)
+    .await?;
+    Ok(id)
+}
+
+#[derive(Debug, Deserialize)]
+pub struct EdicaoMarco {
+    pub data_periodo_texto: String,
+    pub titulo: String,
+    pub descricao: Option<String>,
+    pub relevancia: String,
+    pub fonte_especifica: Option<String>,
+    pub ano_inicio: Option<i64>,
+    pub ano_fim: Option<i64>,
+}
+
+#[tauri::command]
+pub async fn atualizar_marco(
+    id: String,
+    edicao: EdicaoMarco,
+    db: State<'_, SqlitePool>,
+) -> Resultado<()> {
+    sqlx::query(
+        "UPDATE eventos_linha
+         SET data_periodo_texto = ?, titulo = ?, descricao = ?, relevancia = ?, fonte_especifica = ?, ano_inicio = ?, ano_fim = ?
+         WHERE id = ?"
+    )
+    .bind(edicao.data_periodo_texto)
+    .bind(edicao.titulo)
+    .bind(edicao.descricao)
+    .bind(edicao.relevancia)
+    .bind(edicao.fonte_especifica)
+    .bind(edicao.ano_inicio)
+    .bind(edicao.ano_fim)
+    .bind(id)
+    .execute(&*db)
+    .await?;
+    Ok(())
+}
+
+#[tauri::command]
+pub async fn deletar_marco(
+    id: String,
+    db: State<'_, SqlitePool>,
+) -> Resultado<()> {
+    sqlx::query("DELETE FROM eventos_linha WHERE id = ?")
+    .bind(id)
+    .execute(&*db)
+    .await?;
+    Ok(())
+}
+
+#[derive(Debug, Deserialize)]
+pub struct NovoParticipante {
+    pub marco_id: String,
+    pub pessoa_id: String,
+    pub papel: Option<String>,
+    pub visivel_na_pessoa: bool,
+}
+
+#[tauri::command]
+pub async fn adicionar_participante(
+    novo: NovoParticipante,
+    db: State<'_, SqlitePool>,
+) -> Resultado<String> {
+    let id = uuid::Uuid::new_v4().to_string();
+    sqlx::query(
+        "INSERT INTO marco_participantes (id, marco_id, pessoa_id, papel, visivel_na_pessoa)
+         VALUES (?, ?, ?, ?, ?)"
+    )
+    .bind(&id)
+    .bind(novo.marco_id)
+    .bind(novo.pessoa_id)
+    .bind(novo.papel)
+    .bind(novo.visivel_na_pessoa)
+    .execute(&*db)
+    .await?;
+    Ok(id)
+}
+
+#[tauri::command]
+pub async fn remover_participante(
+    id: String,
+    db: State<'_, SqlitePool>,
+) -> Resultado<()> {
+    sqlx::query("DELETE FROM marco_participantes WHERE id = ?")
+    .bind(id)
+    .execute(&*db)
+    .await?;
+    Ok(())
+}
+
+#[tauri::command]
+pub async fn toggle_visibilidade_participacao(
+    id: String,
+    visivel: bool,
+    db: State<'_, SqlitePool>,
+) -> Resultado<()> {
+    sqlx::query("UPDATE marco_participantes SET visivel_na_pessoa = ? WHERE id = ?")
+    .bind(visivel)
+    .bind(id)
+    .execute(&*db)
+    .await?;
+    Ok(())
+}
+
+#[derive(Debug, serde::Serialize, sqlx::FromRow)]
+pub struct ParticipanteDetalhado {
+    pub id: String,
+    pub marco_id: String,
+    pub pessoa_id: String,
+    pub nome: String,
+    pub papel: Option<String>,
+    pub visivel_na_pessoa: bool,
+}
+
+#[tauri::command]
+pub async fn buscar_participantes_marco(
+    marco_id: String,
+    db: State<'_, SqlitePool>,
+) -> Resultado<Vec<ParticipanteDetalhado>> {
+    Ok(sqlx::query_as::<_, ParticipanteDetalhado>(
+        "SELECT m.id, m.marco_id, m.pessoa_id, m.papel, m.visivel_na_pessoa,
+                TRIM(p.nome || ' ' || COALESCE(p.sobrenome, '')) AS nome
+         FROM marco_participantes m
+         JOIN pessoas p ON p.id = m.pessoa_id
+         WHERE m.marco_id = ?
+         ORDER BY p.nome"
+    )
+    .bind(marco_id)
+    .fetch_all(&*db)
+    .await?)
+}
+
 #[cfg(test)]
 mod testes {
     use super::*;
@@ -412,6 +722,7 @@ mod testes {
                 minibiografia: None,
                 is_vivo: vivo,
                 foto_url: None,
+                tipo_tempo: None,
             },
         )
         .await
@@ -444,12 +755,44 @@ mod testes {
                 .await
                 .unwrap();
 
-        const ESPERADAS: [&str; 5] = [
+        const ESPERADAS: [&str; 37] = [
             "História do Brasil",
+            "Independência do Brasil (1822)",
             "Presidentes da República",
             "A moeda de cada época",
             "Tecnologias de acesso público",
             "Este programa",
+            "Grandes Acontecimentos da História Mundial",
+            "Moedas em Circulação - Brasil",
+            "Moedas em Circulação - Estados Unidos",
+            "Moedas em Circulação - Europa & Territórios Históricos",
+            "Moedas em Circulação - Rússia",
+            "Governantes do Brasil - Monarquia e República Velha",
+            "Governantes do Brasil - Era Vargas a 1964",
+            "Governantes do Brasil - Ditadura Militar e Nova República",
+            "Tecnologia - Transporte",
+            "Tecnologia - Comunicação",
+            "Tecnologia - Computação",
+            "Ciência - Medicina e Saúde",
+            "Tecnologia - Energia",
+            "Ciência - Astronomia e Física",
+            "Ciência - Biologia e Evolução",
+            "Livros e Literatura Fundamental",
+            "Livros e Literatura - Brasil",
+            "Guerras e Conflitos - Mundo",
+            "Guerras e Conflitos - Brasil",
+            "Religiões e História Religiosa",
+            "Entidades Políticas do Mundo Bíblico",
+            "Economia e Ciclos Econômicos do Brasil",
+            "Constituições Brasileiras",
+            "Escravidão e Abolicionismo no Brasil",
+            "Ciência e Inovação no Brasil",
+            "Rússia e União Soviética - Entidades Políticas e Espaço",
+            "América Latina - Integração e Transformações Políticas",
+            "Grandes Pandemias Históricas",
+            "Transformações Sociais e Direitos",
+            "Cultura - Música, Cinema e Esportes",
+            "Pessoas que Mudaram a História",
         ];
 
         for titulo in ESPERADAS {
@@ -746,6 +1089,7 @@ mod testes {
                 minibiografia: None,
                 is_vivo: false,
                 foto_url: None,
+                tipo_tempo: None,
             },
         )
         .await
@@ -759,6 +1103,7 @@ mod testes {
                 minibiografia: None,
                 is_vivo: false,
                 foto_url: None,
+                tipo_tempo: None,
             },
         )
         .await
@@ -864,4 +1209,120 @@ mod testes {
         assert_eq!(anos, vec![Some(1920), Some(1945), Some(1990)]);
         assert_eq!(linha.marcos[1].tipo, tipos::CASAMENTO);
     }
+
+    #[tokio::test]
+    async fn marcar_uma_pessoa_num_marco_faz_o_marco_aparecer_na_linha_dela() {
+        let pool = pool_de_teste().await;
+        let ele = pessoa(&pool, "Antônio", false).await;
+        evento(&pool, &ele, tipos::NASCIMENTO, "1920", 1920).await;
+
+        // Cria uma linha e um marco
+        let lt_id = uuid::Uuid::new_v4().to_string();
+        sqlx::query("INSERT INTO linhas_tempo (id, categoria, titulo, is_contexto, is_bloqueada) VALUES (?, 'projeto', 'Nossa Empresa', 0, 0)")
+            .bind(&lt_id)
+            .execute(&pool)
+            .await
+            .unwrap();
+
+        let marco_id = uuid::Uuid::new_v4().to_string();
+        sqlx::query("INSERT INTO eventos_linha (id, linha_id, data_periodo_texto, titulo, relevancia, ano_inicio) VALUES (?, ?, '1950', 'Fundação', 'alta', 1950)")
+            .bind(&marco_id)
+            .bind(&lt_id)
+            .execute(&pool)
+            .await
+            .unwrap();
+
+        // Adiciona Antônio como participante com papel 'Fundador'
+        let part_id = uuid::Uuid::new_v4().to_string();
+        sqlx::query("INSERT INTO marco_participantes (id, marco_id, pessoa_id, papel, visivel_na_pessoa) VALUES (?, ?, ?, 'Fundador', 1)")
+            .bind(&part_id)
+            .bind(&marco_id)
+            .bind(&ele)
+            .execute(&pool)
+            .await
+            .unwrap();
+
+        let linha = linha_pessoal(&pool, &ele).await.unwrap();
+        assert_eq!(linha.marcos.len(), 2);
+        let part = linha.marcos.iter().find(|m| m.is_participacao).expect("participação deve estar na linha");
+        assert_eq!(part.titulo.as_deref(), Some("Fundação"));
+        assert_eq!(part.linha_titulo.as_deref(), Some("Nossa Empresa"));
+        assert_eq!(part.papel.as_deref(), Some("Fundador"));
+        assert!(part.visivel_na_pessoa);
+        assert_eq!(part.ano, Some(1950));
+    }
+
+    #[tokio::test]
+    async fn desligar_visibilidade_preserva_o_vinculo_e_marca_como_oculto() {
+        let pool = pool_de_teste().await;
+        let ele = pessoa(&pool, "Antônio", false).await;
+
+        let lt_id = uuid::Uuid::new_v4().to_string();
+        sqlx::query("INSERT INTO linhas_tempo (id, categoria, titulo, is_contexto, is_bloqueada) VALUES (?, 'projeto', 'Festa', 0, 0)")
+            .bind(&lt_id)
+            .execute(&pool)
+            .await
+            .unwrap();
+
+        let marco_id = uuid::Uuid::new_v4().to_string();
+        sqlx::query("INSERT INTO eventos_linha (id, linha_id, data_periodo_texto, titulo, relevancia, ano_inicio) VALUES (?, ?, '1960', 'Bodas', 'alta', 1960)")
+            .bind(&marco_id)
+            .bind(&lt_id)
+            .execute(&pool)
+            .await
+            .unwrap();
+
+        let part_id = uuid::Uuid::new_v4().to_string();
+        sqlx::query("INSERT INTO marco_participantes (id, marco_id, pessoa_id, papel, visivel_na_pessoa) VALUES (?, ?, ?, 'Convidado', 0)")
+            .bind(&part_id)
+            .bind(&marco_id)
+            .bind(&ele)
+            .execute(&pool)
+            .await
+            .unwrap();
+
+        let linha = linha_pessoal(&pool, &ele).await.unwrap();
+        assert_eq!(linha.marcos.len(), 1);
+        let part = &linha.marcos[0];
+        assert!(part.is_participacao);
+        assert!(!part.visivel_na_pessoa); // continua presente para 'mostrar ocultos'
+    }
+
+    #[tokio::test]
+    async fn zoom_semantico_filtra_por_relevancia_minima() {
+        let pool = pool_de_teste().await;
+
+        let lt_id = uuid::Uuid::new_v4().to_string();
+        sqlx::query("INSERT INTO linhas_tempo (id, categoria, titulo, is_contexto, is_bloqueada) VALUES (?, 'historia', 'Teste Zoom', 0, 0)")
+            .bind(&lt_id)
+            .execute(&pool)
+            .await
+            .unwrap();
+
+        // 3 marcos: alta, media, detalhe
+        sqlx::query("INSERT INTO eventos_linha (id, linha_id, data_periodo_texto, titulo, relevancia, ano_inicio) VALUES ('m-alta', ?, '1910', 'Alta', 'alta', 1910)")
+            .bind(&lt_id).execute(&pool).await.unwrap();
+        sqlx::query("INSERT INTO eventos_linha (id, linha_id, data_periodo_texto, titulo, relevancia, ano_inicio) VALUES ('m-media', ?, '1920', 'Media', 'media', 1920)")
+            .bind(&lt_id).execute(&pool).await.unwrap();
+        sqlx::query("INSERT INTO eventos_linha (id, linha_id, data_periodo_texto, titulo, relevancia, ano_inicio) VALUES ('m-detalhe', ?, '1930', 'Detalhe', 'detalhe', 1930)")
+            .bind(&lt_id).execute(&pool).await.unwrap();
+
+        // Só alta
+        let alta = marcos_filtrados(&pool, vec![lt_id.clone()], Some(1900), Some(1950), None, Some("alta".to_string())).await.unwrap();
+        assert_eq!(alta.len(), 1);
+        assert_eq!(alta[0].id, "m-alta");
+
+        // Média traz alta e média
+        let media = marcos_filtrados(&pool, vec![lt_id.clone()], Some(1900), Some(1950), None, Some("media".to_string())).await.unwrap();
+        assert_eq!(media.len(), 2);
+        let ids: Vec<_> = media.iter().map(|m| m.id.as_str()).collect();
+        assert!(ids.contains(&"m-alta"));
+        assert!(ids.contains(&"m-media"));
+
+        // Detalhe traz tudo
+        let detalhe = marcos_filtrados(&pool, vec![lt_id.clone()], Some(1900), Some(1950), None, Some("detalhe".to_string())).await.unwrap();
+        assert_eq!(detalhe.len(), 3);
+    }
 }
+
+

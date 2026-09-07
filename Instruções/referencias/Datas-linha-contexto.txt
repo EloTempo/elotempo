@@ -1,0 +1,510 @@
+=====================================================================
+LINHA: Grandes Acontecimentos da História Mundial
+CATEGORIA: História Geral
+ESCOPO: Mundo
+=====================================================================
+-10000 | -4000 | Revolução Agrícola (Neolítico) | Transição do nomadismo caçador-coletor para a agricultura e sedentarização | alta
+-3500 | -3000 | Surgimento das Primeiras Civilizações | Primeiras cidades-Estado, irrigação e escrita cuneiforme | alta
+-3500 | -539 | Mesopotâmia | Civilizações suméria, acádia, babilônica e assíria entre os rios Tigre e Eufrates | alta
+-3100 | -30 | Egito Antigo | Da unificação do Alto e Baixo Egito até a anexação pelo Império Romano | alta
+-1200 | -146 | Grécia Antiga | Períodos arcaico, clássico e helenístico; berço da democracia e filosofia ocidental | alta
+-27 | 476 | Império Romano | Da ascensão de Augusto à queda de Roma Ocidental | alta
+476 | 476 | Queda do Império Romano do Ocidente | Deposição de Rômulo Augusto pelos hérulos; início da Idade Média | alta
+622 | 750 | Expansão Islâmica Inicial | Da Hégira de Maomé à consolidação do Califado Omíada no Oriente Médio e Península Ibérica | alta
+1095 | 1291 | Cruzadas | Campanhas militares cristãs convocadas pelo Papa Urbano II no Oriente Próximo | alta
+1346 | 1353 | Peste Negra | Epidemia de peste bubônica que dizimou um terço da população europeia | alta
+1300 | 1600 | Renascimento Cultural e Artístico | Movimento de valorização do humanismo e da Antiguidade Clássica | alta
+1415 | 1600 | Expansão Marítima Europeia | Grandes navegações e rotas marítimas para as Índias e o Atlântico | alta
+1492 | 1492 | Chegada de Colombo à América | Início do processo sistemático de colonização europeia no continente americano | alta
+1517 | 1648 | Reforma Protestante | Movimento de ruptura religiosa iniciado por Martinho Lutero até a Paz de Vestfália | alta
+1543 | 1687 | Revolução Científica | De Copérnico a Newton; estabelecimento do método científico e da física clássica | alta
+1760 | 1840 | Primeira Revolução Industrial | Mecanização têxtil, ferro e máquina a vapor iniciadas na Grã-Bretanha | alta
+1776 | 1825 | Independências Americanas | Processos de independência nos EUA, América Espanhola e Brasil | alta
+1789 | 1799 | Revolução Francesa | Fim do Antigo Regime francês, Queda da Bastilha e Declaração dos Direitos do Homem | alta
+1870 | 1914 | Neocolonialismo e Imperialismo | Partilha da África e dominação europeia na Ásia durante a Segunda Revolução Industrial | alta
+1914 | 1918 | Primeira Guerra Mundial | Conflito de trincheiras entre a Tríplice Entente e as Potências Centrais | alta
+1917 | 1917 | Revolução Russa | Queda do czarismo e tomada de poder pelos bolcheviques liderados por Lenin | alta
+1939 | 1945 | Segunda Guerra Mundial | Conflito global entre Aliados e o Eixo; Holocausto e bombas atômicas | alta
+1947 | 1991 | Guerra Fria | Polarização ideológica, militar e geopolítica entre EUA e União Soviética | alta
+1989 | 1989 | Queda do Muro de Berlim | Colapso simbólico do bloco socialista europeu e reunificação da Alemanha | alta
+1991 | 1991 | Dissolução da União Soviética | Renúncia de Gorbachev e fim da URSS; reconfiguração geopolítica global | alta
+1990 | 2026 | Globalização Contemporânea | Integração acelerada de mercados financeiros, cadeias de suprimentos e redes digitais | alta
+1991 | 1991 | Abertura Pública da World Wide Web | Disponibilização do protocolo www criado por Tim Berners-Lee ao público | alta
+2020 | 2023 | Pandemia de COVID-19 | Emergência de saúde pública internacional causada pelo vírus SARS-CoV-2 | alta
+2022 | 2026 | Era da Inteligência Artificial Generativa | Disseminação em larga escala de modelos de linguagem e redes neurais profundas | alta
+
+=====================================================================
+LINHA: Moedas em Circulação - Brasil
+CATEGORIA: Moedas & Economia
+ESCOPO: Brasil
+=====================================================================
+1500 | 1808 | Réis Coloniais | Padrão monetário herdado de Portugal em circulação na colônia | media
+1808 | 1942 | Réis (mil-réis) | Moeda do Reino Unido, Império do Brasil e Primeira República | alta
+1942 | 1967 | Cruzeiro (Cr$) | Criado por Getúlio Vargas para modernizar o sistema decimal (1 Cr$ = 1.000 réis) | alta
+1967 | 1970 | Cruzeiro Novo (NCr$) | Moeda de transição com corte de três zeros diante da inflação | alta
+1970 | 1986 | Cruzeiro (Cr$) | Retorno formal do nome Cruzeiro mantendo a equivalência ao Cruzeiro Novo | alta
+1986 | 1989 | Cruzado (Cz$) | Criado no Plano Cruzado com corte de três zeros e congelamento de preços | alta
+1989 | 1990 | Cruzado Novo (NCz$) | Moeda do Plano Verão com corte de mais três zeros | alta
+1990 | 1993 | Cruzeiro (Cr$) | Retorno do Cruzeiro implementado pelo Plano Collor | alta
+1993 | 1994 | Cruzeiro Real (CR$) | Moeda transitória para o cálculo do alinhamento da URV | alta
+1994 | 2026 | Real (R$) | Padrão monetário instituído pelo Plano Real | alta
+
+=====================================================================
+LINHA: Moedas em Circulação - Estados Unidos
+CATEGORIA: Moedas & Economia
+ESCOPO: Estados Unidos
+=====================================================================
+1535 | 1857 | Spanish Dollar (Real de a 8) | Dólar espanhol amplamente aceito como moeda de curso legal no comércio colonial e americano | media
+1775 | 1785 | Continental Currency | Papel-moeda emitido pelo Congresso Continental durante a Guerra de Independência | alta
+1792 | 1873 | Dólar Bimetálico (Coinage Act de 1792) | Estabelecimento oficial do dólar com lastro vinculado em ouro e prata | alta
+1873 | 1933 | Padrão-Ouro Clássico (Gold Standard) | Fim do bimetalismo (Coinage Act de 1873) e lastro exclusivo em ouro formalizado em 1900 | alta
+1944 | 1971 | Sistema de Bretton Woods | Dólar estabelecido como reserva monetária global lastreada em ouro a US$ 35/onça | alta
+1971 | 2026 | Dólar Fiduciário (Nixon Shock) | Fim da conversibilidade direta em ouro; consolidação do dólar fiduciário flutuante | alta
+
+=====================================================================
+LINHA: Moedas em Circulação - Europa & Territórios Históricos
+CATEGORIA: Moedas & Economia
+ESCOPO: Europa
+=====================================================================
+-211 | 244 | Denário Romano | Principal moeda de prata de Roma durante a República e o Alto Império | alta
+312 | 1453 | Soldo Bizantino (Solidus) | Moeda de ouro instituída por Constantino I; padrão financeiro por séculos | alta
+1158 | 2026 | Libra Esterlina | Moeda instituída por Henrique II na Inglaterra; a mais antiga divisa ainda em circulação | alta
+1252 | 1533 | Florim Florentino | Moeda de ouro de Florença amplamente utilizada no comércio mercantil europeu | media
+1284 | 1797 | Ducado Veneziano | Moeda de ouro cunhada pela República de Veneza para transações internacionais | media
+1360 | 2002 | Franco Francês | Moeda histórica francesa oficializada no padrão decimal em 1795 e extinta pelo Euro | alta
+1873 | 2002 | Marco Alemão (Mark / Deutsche Mark) | Moeda unificada do Império Alemão e da República Federal até a adoção do Euro | alta
+1999 | 2026 | Euro (€) | Moeda única europeia adotada eletronicamente em 1999 e em circulação física em 2002 | alta
+
+=====================================================================
+LINHA: Moedas em Circulação - Rússia
+CATEGORIA: Moedas & Economia
+ESCOPO: Rússia
+=====================================================================
+1704 | 1917 | Rublo Imperial Russo | Reforma monetária de Pedro, o Grande, estabelecendo o rublo decimal em prata | alta
+1922 | 1991 | Rublo Soviético | Moeda oficial da URSS utilizada em todas as repúblicas soviéticas | alta
+1992 | 2026 | Rublo da Federação Russa | Moeda instituída após o colapso soviético, redenominada em 1998 | alta
+
+=====================================================================
+LINHA: Governantes do Brasil - Monarquia e República Velha
+CATEGORIA: Poder e Governo
+ESCOPO: Brasil
+=====================================================================
+1822 | 1831 | Dom Pedro I | Primeiro Imperador do Brasil; outorgou a Constituição de 1824 e abdicou ao trono | alta
+1831 | 1840 | Período Regencial | Transição governada por Regências Trinas e Unas até a maioridade de Pedro II | alta
+1840 | 1889 | Dom Pedro II | Segundo Imperador; quase cinco décadas de estabilidade monárquica e consolidação nacional | alta
+1889 | 1891 | Deodoro da Fonseca | Proclamador da República e primeiro Presidente Constitucional da República Velha | alta
+1891 | 1894 | Floriano Peixoto | Vice-presidente que assumiu após renúncia de Deodoro; consolidou o regime contra revoltas | alta
+1894 | 1898 | Prudente de Morais | Primeiro presidente civil do Brasil; enfrentou a Guerra de Canudos | alta
+1898 | 1902 | Campos Sales | Instituidor da 'Política dos Governadores' e do saneamento financeiro via Funding Loan | alta
+1902 | 1906 | Rodrigues Alves | Modernização urbana e sanitária do Rio de Janeiro; enfrentou a Revolta da Vacina | alta
+1906 | 1909 | Afonso Pena | Expansão ferroviária e apoio à cafeicultura pelo Convênio de Taubaté; faleceu no cargo | media
+1909 | 1910 | Nilo Peçanha | Assumiu após a morte de Afonso Pena; criou o Serviço de Proteção aos Índios | media
+1910 | 1914 | Hermes da Fonseca | Política das Salvações; enfrentou a Revolta da Chibata e o Contestado | media
+1914 | 1918 | Venceslau Brás | Mandato marcado pela participação do Brasil na Primeira Guerra Mundial e Gripe Espanhola | media
+1918 | 1919 | Delfim Moreira | Vice-presidente em exercício devido ao falecimento do presidente eleito Rodrigues Alves | media
+1919 | 1922 | Epitácio Pessoa | Centenário da Independência e eclosão do movimento Tenentista (18 do Forte) | media
+1922 | 1926 | Artur Bernardes | Mandato integralmente sob estado de sítio devido a rebeliões militares tenentistas | media
+1926 | 1930 | Washington Luís | Último presidente da República Velha; deposto pela Revolução de 1930 | alta
+
+=====================================================================
+LINHA: Governantes do Brasil - Era Vargas a 1964
+CATEGORIA: Poder e Governo
+ESCOPO: Brasil
+=====================================================================
+1930 | 1934 | Getúlio Vargas (Governo Provisório) | Chegada ao poder após a Revolução de 1930; enfrentou a Revolução Constitucionalista | alta
+1934 | 1937 | Getúlio Vargas (Governo Constitucional) | Eleito indiretamente pela Assembleia Constituinte de 1934 | alta
+1937 | 1945 | Getúlio Vargas (Estado Novo) | Ditadura autoritária personalista; industrialização de base e envio da FEB à Itália | alta
+1945 | 1946 | José Linhares | Presidente do STF que governou interinamente após a deposição de Vargas | media
+1946 | 1951 | Eurico Gaspar Dutra | Mandato constitucional sob a Carta de 1946; alinhamento aos EUA na Guerra Fria | alta
+1951 | 1954 | Getúlio Vargas (Constitucional) | Eleito por voto direto; criação da Petrobras e crise institucional que levou ao suicídio | alta
+1954 | 1955 | João Café Filho | Vice-presidente que assumiu após o suicídio de Vargas | media
+1955 | 1955 | Carlos Luz | Presidente da Câmara dos Deputados no cargo por três dias; deposto pelo Golpe Preventivo | media
+1955 | 1956 | Nereu Ramos | Presidente do Senado que garantiu a posse pacífica de Juscelino Kubitschek | media
+1956 | 1961 | Juscelino Kubitschek | Plano de Metas, 50 anos em 5, abertura à indústria automobilística e fundação de Brasília | alta
+1961 | 1961 | Jânio Quadros | Mandato de sete meses encerrado por renúncia inesperada gerando crise institucional | alta
+1961 | 1961 | Ranieri Mazzilli | Presidente da Câmara no exercício da presidência durante a Crise da Renúncia | media
+1961 | 1964 | João Goulart | Governo marcado pela fase parlamentarista, retorno ao presidencialismo e Reformas de Base | alta
+
+=====================================================================
+LINHA: Governantes do Brasil - Ditadura Militar e Nova República
+CATEGORIA: Poder e Governo
+ESCOPO: Brasil
+=====================================================================
+1964 | 1967 | Humberto Castelo Branco | Primeiro general-presidente após o golpe civil-militar de 1964; edição do AI-1 e AI-2 | alta
+1967 | 1969 | Arthur da Costa e Silva | Promulgação da Constituição de 1967 e edição do AI-5; afastado por problemas de saúde | alta
+1969 | 1969 | Junta Militar de 1969 | Triunvirato das Forças Armadas no comando executivo até a posse de Médici | media
+1969 | 1974 | Emílio Garrastazu Médici | Período dos Anos de Chumbo, forte repressão política e o chamado Milagre Econômico | alta
+1974 | 1979 | Ernesto Geisel | Início do processo de abertura política lenta, gradual e segura; revogação do AI-5 | alta
+1979 | 1985 | João Figueiredo | Concessão da Lei da Anistia, fim do bipartidarismo e transição para o poder civil | alta
+1985 | 1990 | José Sarney | Início da Nova República; redemocratização, Assembleia Constituinte de 1988 e Plano Cruzado | alta
+1990 | 1992 | Fernando Collor de Mello | Primeiro eleito por voto direto pós-1960; abertura de mercado e processo de impeachment | alta
+1992 | 1995 | Itamar Franco | Conduziu a transição após a queda de Collor e o lançamento vitorioso do Plano Real | alta
+1995 | 2003 | Fernando Henrique Cardoso | Consolidação da estabilidade monetária, privatizações e instituição da reeleição | alta
+2003 | 2011 | Luiz Inácio Lula da Silva | Programas de transferência de renda, crescimento via commodities e expansão do consumo | alta
+2011 | 2016 | Dilma Rousseff | Primeira mulher presidente; recessão econômica, protestos de 2013 e processo de impeachment | alta
+2016 | 2018 | Michel Temer | Assumiu após impeachment; aprovação do Teto de Gastos e Reforma Trabalhista | alta
+2019 | 2022 | Jair Bolsonaro | Gestão conservadora, desregulamentação, pandemia de COVID-19 e privatização da Eletrobras | alta
+2023 | 2026 | Luiz Inácio Lula da Silva | Terceiro mandato presidencial de Lula, focado em reinserção externa e política fiscal | alta
+
+=====================================================================
+LINHA: Tecnologia - Transporte
+CATEGORIA: Tecnologia e Inovação
+ESCOPO: Mundo
+=====================================================================
+1769 | 1769 | Veículo a Vapor de Cugnot | Primeiro protótipo funcional de carruagem autopropelida a vapor | media
+1804 | 1804 | Primeira Locomotiva a Vapor | Richard Trevithick demonstra tração mecânica ferroviária no País de Gales | alta
+1807 | 1807 | Navio a Vapor Comercial | Robert Fulton opera o barco Clermont comercialmente no Rio Hudson | alta
+1817 | 1817 | Bicicleta Primitiva (Draisine) | Karl Drais patenteia a máquina de caminhar sem pedais | media
+1863 | 1863 | Primeiro Metrô do Mundo | Inauguração do trecho subterrâneo a vapor do Metropolitan Railway em Londres | alta
+1886 | 1886 | Automóvel a Combustão Interna | Karl Benz patenteia o Benz Patent-Motorwagen movido a gasolina | alta
+1885 | 1885 | Primeira Motocicleta | Gottlieb Daimler cria a Reitwagen com motor a combustão interna | media
+1906 | 1906 | Voo do 14-Bis | Santos Dumont realiza o primeiro voo homologado de aparelho mais pesado que o ar sem catapulta | alta
+1939 | 1939 | Primeiro Helicóptero Funcional | Igor Sikorsky testa com sucesso o helicóptero VS-300 | alta
+1944 | 1944 | Primeiro Foguete Espacial (V-2) | O foguete balístico V-2 alemão cruza a linha de Kármán (100 km de altitude) | alta
+1957 | 1957 | Primeiro Satélite Artificial | Lançamento do Sputnik 1 pela União Soviética | alta
+1964 | 1964 | Primeiro Trem de Alta Velocidade | Inauguração da linha Shinkansen (Tokaido) entre Tóquio e Osaka | alta
+1969 | 1969 | Chegada do Homem à Lua | Missão Apollo 11 transporta Neil Armstrong e Buzz Aldrin à superfície lunar | alta
+1978 | 1978 | Lançamento do Primeiro Satélite GPS | Início da constelação Navstar do Departamento de Defesa dos EUA | alta
+2008 | 2008 | Veículo Elétrico Moderno de Longo Alcance | Tesla Motors lança o modelo esportivo Tesla Roadster com baterias de íon-lítio | alta
+
+=====================================================================
+LINHA: Tecnologia - Comunicação
+CATEGORIA: Tecnologia e Inovação
+ESCOPO: Mundo
+=====================================================================
+-3200 | -3200 | Invenção da Escrita | Desenvolvimento da escrita cuneiforme na Mesopotâmia e hieróglifos no Egito | alta
+1440 | 1450 | Prensa Móvel de Gutenberg | Invenção dos tipos móveis metálicos revolucionando a reprodução de livros | alta
+1837 | 1844 | Telégrafo Elétrico | Samuel Morse patenteia o código e envia a primeira mensagem telegráfica oficial | alta
+1876 | 1876 | Invenção do Telefone | Alexander Graham Bell registra a patente do transmissor eletromagnético de voz | alta
+1895 | 1896 | Telegrafia sem Fio (Rádio) | Guglielmo Marconi demonstra transmissões de sinais via ondas eletromagnéticas | alta
+1927 | 1927 | Televisão Eletrônica | Philo Farnsworth transmite a primeira imagem por tubo de feixe de elétrons | alta
+1962 | 1962 | Primeiro Satélite Ativo de Comunicações | Telstar 1 viabiliza a primeira transmissão de televisão ao vivo transatlântica | alta
+1964 | 1964 | Aparelho de Fax Moderno | Lançamento do primeiro aparelho de fax de mesa pela Xerox | media
+1973 | 1973 | Primeira Ligação de Celular | Martin Cooper realiza a primeira ligação de um telefone móvel portátil Motorola | alta
+1989 | 1991 | Criação da World Wide Web | Tim Berners-Lee propõe os protocolos HTTP e HTML no CERN | alta
+1992 | 1992 | Envio do Primeiro SMS | Neil Papworth envia a mensagem 'Merry Christmas' de um computador a um celular | media
+2004 | 2004 | Disseminação de Redes Sociais Globais | Lançamento do TheFacebook, inaugurando a era das plataformas de redes sociais de massa | alta
+2007 | 2007 | Lançamento do iPhone | Apple introduz a interface multitouch consolidando o smartphone moderno | alta
+2011 | 2011 | Popularização da Videoconferência em Nuvem | Fundação e disseminação da plataforma Zoom Video Communications | media
+2022 | 2022 | Disseminação de Interfaces de IA de Diálogo | Lançamento do ChatGPT inaugurando interação conversacional em larga escala | alta
+
+=====================================================================
+LINHA: Tecnologia - Computação
+CATEGORIA: Tecnologia e Inovação
+ESCOPO: Mundo
+=====================================================================
+1837 | 1837 | Máquina Analítica de Babbage | Primeiro projeto mecânico conceitual de um computador programável de uso geral | alta
+1936 | 1936 | Conceito da Máquina de Turing | Alan Turing publica artigo formulando os fundamentos da computação universal | alta
+1941 | 1941 | Z3 de Konrad Zuse | Primeiro computador digital eletromecânico totalmente programável e automático | media
+1945 | 1946 | Computador ENIAC | Primeiro computador digital eletrônico de grande escala para cálculo militar | alta
+1947 | 1947 | Invenção do Transistor | John Bardeen, Walter Brattain e William Shockley no Bell Labs criam o transistor | alta
+1958 | 1959 | Invenção do Circuito Integrado | Jack Kilby e Robert Noyce criam chips integrando múltiplos componentes | alta
+1964 | 1964 | Mainframe IBM System/360 | Padronização arquitetural corporativa com suporte a famílias inteiras de computadores | alta
+1971 | 1971 | Primeiro Microprocessador Comercial | Intel lança o processador Intel 4004 de 4 bits em um único chip | alta
+1977 | 1981 | Computador Pessoal (Apple II e IBM PC) | Computadores saem de laboratórios rumo ao consumo doméstico e empresarial | alta
+2006 | 2006 | Computação em Nuvem Comercial | Amazon Web Services lança o EC2 e o S3, iniciando a era de infraestrutura como serviço | alta
+2007 | 2007 | Computação Acelerada por GPU (CUDA) | Nvidia lança a arquitetura CUDA viabilizando processamento paralelo massivo | media
+2012 | 2012 | Salto em Deep Learning (AlexNet) | Rede neural convolucional vence a ImageNet, desencadeando a corrida do aprendizado profundo | alta
+2017 | 2017 | Arquitetura Transformer | Publicação do artigo 'Attention Is All You Need' pelo Google, alicerce dos LLMs | alta
+2019 | 2019 | Demonstração de Supremacia Quântica | Processador Sycamore do Google resolve em minutos cálculo impraticável para supercomputadores | alta
+
+=====================================================================
+LINHA: Ciência - Medicina e Saúde
+CATEGORIA: Ciência e Conhecimento
+ESCOPO: Mundo
+=====================================================================
+1796 | 1796 | Primeira Vacina (Varíola) | Edward Jenner utiliza vírus da varíola bovina para imunizar humanos | alta
+1846 | 1846 | Primeira Anestesia Cirúrgica com Éter | William Morton demonstra o uso do éter sulfúrico no Massachusetts General Hospital | alta
+1867 | 1867 | Introdução da Antissepsia Médica | Joseph Lister utiliza ácido fênico reduzindo mortes cirúrgicas por infecção | alta
+1876 | 1884 | Teoria Microbiana das Doenças | Louis Pasteur e Robert Koch isolam bactérias e comprovam que germes causam enfermidades | alta
+1895 | 1895 | Descoberta dos Raios-X | Wilhelm Röntgen descobre radiação eletromagnética que permite radiografar ossos humanos | alta
+1921 | 1922 | Isolamento e Aplicação da Insulina | Frederick Banting e Charles Best purificam a insulina para tratamento de diabetes | alta
+1928 | 1928 | Descoberta da Penicilina | Alexander Fleming descobre propriedades antibacterianas do fungo Penicillium notatum | alta
+1953 | 1953 | Descoberta da Estrutura do DNA | James Watson, Francis Crick e Rosalind Franklin decifram a dupla hélice | alta
+1960 | 1960 | Pílula Anticoncepcional | Aprovação do primeiro contraceptivo oral pela FDA revolucionando os direitos reprodutivos | alta
+1967 | 1967 | Primeiro Transplante de Coração | Christiaan Barnard realiza o primeiro transplante cardíaco humano na África do Sul | alta
+1978 | 1978 | Primeiro Bebê de Fertilização In Vitro | Nascimento de Louise Brown no Reino Unido viabilizado por Robert Edwards | alta
+1983 | 1983 | Invenção da Técnica de PCR | Kary Mullis desenvolve a reação em cadeia da polimerase para replicar DNA | alta
+1990 | 2003 | Projeto Genoma Humano | Consórcio científico internacional sequencia 99% do genoma humano com precisão | alta
+2012 | 2012 | Edição Genética via CRISPR-Cas9 | Jennifer Doudna e Emmanuelle Charpentier demonstram mecanismo preciso de edição gênica | alta
+2020 | 2020 | Primeiras Vacinas de RNA Mensageiro | Aprovação emergencial de vacinas com plataforma de mRNA contra a COVID-19 | alta
+
+=====================================================================
+LINHA: Tecnologia - Energia
+CATEGORIA: Tecnologia e Inovação
+ESCOPO: Mundo
+=====================================================================
+1769 | 1769 | Aperfeiçoamento da Máquina a Vapor | James Watt patenteia o condensador separado multiplicando o rendimento energético | alta
+1821 | 1831 | Indução Eletromagnética e Motor Elétrico | Michael Faraday descobre princípios de indução e rotatividade elétrica contínua | alta
+1876 | 1876 | Motor de Combustão de Quatro Tempos | Nikolaus Otto projeta o motor de ciclo a combustão interna a gasolina | alta
+1882 | 1882 | Primeira Usina Elétrica Comercial | Thomas Edison inaugura a estação geradora de corrente contínua em Pearl Street, NY | alta
+1882 | 1882 | Primeira Usina Hidrelétrica do Mundo | Entrada em operação da usina de Fox River em Appleton, Wisconsin | alta
+1892 | 1892 | Patente do Motor Diesel | Rudolf Diesel desenvolve motor térmico com ignição por compressão de ar | media
+1942 | 1942 | Primeiro Reator Nuclear (Chicago Pile-1) | Enrico Fermi lidera a produção da primeira reação nuclear em cadeia autossustentada | alta
+1954 | 1954 | Primeira Célula Solar de Silício | Bell Labs projeta célula fotovoltaica viável com conversão de 6% da luz solar | alta
+1980 | 1980 | Primeira Fazenda Eólica Moderna | Instalação do primeiro parque de turbinas eólicas em New Hampshire, EUA | media
+1985 | 1991 | Bateria de Íon de Lítio | Goodenough, Whittingham e Yoshino viabilizam baterias recarregáveis de alta densidade | alta
+
+=====================================================================
+LINHA: Ciência - Astronomia e Física
+CATEGORIA: Ciência e Conhecimento
+ESCOPO: Mundo
+=====================================================================
+1543 | 1543 | Teoria Heliocêntrica de Copérnico | Publicação de 'De revolutionibus orbium coelestium' tirando a Terra do centro cósmico | alta
+1609 | 1619 | Leis de Kepler do Movimento Planetário | Johannes Kepler formula leis que definem órbitas elípticas e variações de velocidade | alta
+1609 | 1610 | Observações Telescópicas de Galileu | Galileu Galilei descobre luas de Júpiter, crateras lunares e fases de Vênus | alta
+1687 | 1687 | Gravitação Universal e Leis do Movimento | Isaac Newton publica o 'Principia', estabelecendo a mecânica clássica | alta
+1824 | 1850 | Formulação da Termodinâmica | Nicolas Carnot, Rudolf Clausius e Lord Kelvin estruturam as leis de calor e entropia | alta
+1865 | 1865 | Eletromagnetismo Clássico | James Clerk Maxwell publica equações unificando eletricidade, magnetismo e luz | alta
+1900 | 1900 | Hipótese Quântica de Planck | Max Planck propõe que a energia é irradiada e absorvida em pacotes discretos (quanta) | alta
+1905 | 1915 | Teoria da Relatividade Especial e Geral | Albert Einstein redefine conceitos de espaço, tempo, massa, gravidade e aceleração | alta
+1925 | 1927 | Mecânica Quântica Matricial e Ondulatória | Heisenberg, Schrödinger e Bohr estabelecem a física quântica probabilística | alta
+1929 | 1929 | Expansão do Universo (Lei de Hubble) | Edwin Hubble demonstra que galáxias distantes se afastam proporcionalmente à distância | alta
+1931 | 1931 | Teoria do Átomo Primordial (Big Bang) | Georges Lemaître propõe a origem expansiva do universo a partir de um ponto singular | alta
+1965 | 1965 | Descoberta da Radiação Cósmica de Fundo | Arno Penzias e Robert Wilson confirmam experimentalmente o eco residual do Big Bang | alta
+1974 | 1974 | Consolidação do Modelo Padrão de Partículas | Estruturação da teoria das partículas fundamentais (quarks, léptons e bósons) | alta
+1995 | 1995 | Descoberta do Primeiro Exoplaneta | Michel Mayor e Didier Queloz descobrem planeta orbitando a estrela 51 Pegasi | alta
+2015 | 2016 | Detecção de Ondas Gravitacionais | Observatório LIGO registra deformações do espaço-tempo causadas pela fusão de buracos negros | alta
+
+=====================================================================
+LINHA: Ciência - Biologia e Evolução
+CATEGORIA: Ciência e Conhecimento
+ESCOPO: Mundo
+=====================================================================
+1735 | 1735 | Sistema de Classificação de Lineu | Carl von Linné publica o 'Systema Naturae', criando a nomenclatura binomial biológica | alta
+1859 | 1859 | Teoria da Evolução por Seleção Natural | Charles Darwin publica 'A Origem das Espécies' fundamentando a ancestralidade comum | alta
+1866 | 1866 | Leis da Hereditariedade de Mendel | Gregor Mendel estabelece os princípios básicos de dominância e segregação genética | alta
+1910 | 1910 | Teoria Cromossômica da Hereditariedade | Thomas Hunt Morgan comprova que os genes residem fisicamente em cromossomos | alta
+1944 | 1944 | DNA como Portador da Informação Genética | Experimento de Avery-MacLeod-McCarty comprova que o DNA carrega o material hereditário | alta
+1977 | 1977 | Método de Sequenciamento de DNA | Frederick Sanger cria o método de terminação por dideoxinucleotídeos | alta
+
+=====================================================================
+LINHA: Livros e Literatura Fundamental
+CATEGORIA: Livros e Literatura
+ESCOPO: Mundo
+=====================================================================
+-2100 | -1200 | Epopeia de Gilgamesh | Um dos primeiros poemas épicos da humanidade registrado em tabuletas de argila | alta
+-750 | -700 | Ilíada e Odisseia de Homero | Épicos gregos sobre a Guerra de Troia e o retorno do guerreiro Odisseu | alta
+-29 | -19 | Eneida de Virgílio | Poema épico latino que mitifica as origens divinas e históricas de Roma | alta
+1308 | 1320 | Divina Comédia de Dante Alighieri | Épico em língua toscana estruturado na viagem pelo Inferno, Purgatório e Paraíso | alta
+1601 | 1601 | Hamlet de William Shakespeare | Tragédia existencial sobre vingança, poder e dúvida no Castelo de Elsinore | alta
+1605 | 1615 | Dom Quixote de Miguel de Cervantes | Romance seminal sobre a loucura idealista e sátira da cavalaria medieval | alta
+1543 | 1543 | De revolutionibus orbium coelestium | Nicolau Copérnico estabelece as bases matemáticas e teóricas do heliocentrismo | alta
+1687 | 1687 | Philosophiae Naturalis Principia Mathematica | Isaac Newton publica a formulação matemática da gravidade e as três leis da dinâmica | alta
+1859 | 1859 | A Origem das Espécies | Charles Darwin expõe formalmente as evidências científicas da seleção natural | alta
+1905 | 1905 | Sobre a Eletrodinâmica dos Corpos em Movimento | Artigo de Einstein no Annalen der Physik inaugurando a Teoria da Relatividade Restrita | alta
+
+=====================================================================
+LINHA: Livros e Literatura - Brasil
+CATEGORIA: Livros e Literatura
+ESCOPO: Brasil
+=====================================================================
+1769 | 1769 | O Uraguai | Poema épico do Arcadismo escrito por Basílio da Gama sobre as Guerras Guaraníticas | media
+1865 | 1865 | Iracema | Romance indianista do Romantismo escrito por José de Alencar, a virgem dos lábios de mel | alta
+1881 | 1881 | Memórias Póstumas de Brás Cubas | Machado de Assis inaugura o Realismo brasileiro com o narrador defunto autor | alta
+1899 | 1899 | Dom Casmurro | Obra-prima realista de Machado de Assis com o conflito sobre Capitu e Bentinho | alta
+1902 | 1902 | Os Sertões | Euclides da Cunha combina análise sociológica, geográfica e reportagem da Guerra de Canudos | alta
+1922 | 1922 | Pauliceia Desvairada | Livro de poemas de Mário de Andrade que deflagra a estética do Modernismo brasileiro | alta
+1938 | 1938 | Vidas Secas | Romance do Modernismo regionalista de Graciliano Ramos sobre retirantes no sertão | alta
+1956 | 1956 | Grande Sertão: Veredas | Obra monumental de João Guimarães Rosa explorando a travessia e metafísica dos jagunços | alta
+
+=====================================================================
+LINHA: Guerras e Conflitos - Mundo
+CATEGORIA: Guerras e Conflitos
+ESCOPO: Mundo
+=====================================================================
+-499 | -449 | Guerras Greco-Pérsicas | Conflitos entre cidades-Estado gregas e o Império Aquemênida (Maratona, Termópilas, Salamina) | alta
+-264 | -146 | Guerras Púnicas | Três conflitos entre a República Romana e Cartago pela hegemonia no Mar Mediterrâneo | alta
+1803 | 1815 | Guerras Napoleônicas | Campanhas militares da França imperial contra diversas coalizões monárquicas europeias | alta
+1861 | 1865 | Guerra Civil Americana | Conflito armado entre a União e os Estados Confederados do Sul escravista | alta
+1914 | 1918 | Primeira Guerra Mundial | Trincheiras, armas químicas e mobilização industrial na Europa e Oriente Médio | alta
+1939 | 1945 | Segunda Guerra Mundial | Invasão da Polônia, expansão nazista, front oriental, Guerra no Pacífico e armas atômicas | alta
+1950 | 1953 | Guerra da Coreia | Primeiro grande conflito armado por procuração da Guerra Fria; divisão na península no Paralelo 38 | alta
+1955 | 1975 | Guerra do Vietnã | Resistência do Vietnã do Norte e vietcongues contra forças do Vietnã do Sul e EUA | alta
+1990 | 1991 | Guerra do Golfo | Coalizão liderada pelos EUA repele a invasão e anexação do Kuwait pelo Iraque | alta
+2001 | 2021 | Guerra do Afeganistão | Invasão liderada pelos EUA após o 11 de Setembro e saída em 2021 com retorno do Talibã | alta
+
+=====================================================================
+LINHA: Guerras e Conflitos - Brasil
+CATEGORIA: Guerras e Conflitos
+ESCOPO: Brasil
+=====================================================================
+1835 | 1845 | Guerra dos Farrapos (Revolução Farroupilha) | Rebelião republicana separatista no Rio Grande do Sul contra o governo regencial | alta
+1864 | 1870 | Guerra do Paraguai | Tríplice Aliança (Brasil, Argentina e Uruguai) enfrenta as forças paraguaias de Solano López | alta
+1896 | 1897 | Guerra de Canudos | Exército brasileiro destrói a comunidade messiânica de Antônio Conselheiro na Bahia | alta
+1912 | 1916 | Guerra do Contestado | Conflito social armado entre sertanejos messiânicos e forças policiais/federais em SC e PR | alta
+1930 | 1930 | Revolução de 1930 | Movimento armado liderado pela Aliança Liberal que derrubou a República Velha e empossou Vargas | alta
+1932 | 1932 | Revolução Constitucionalista de 1932 | Insurreição armada paulista exigindo uma nova Constituição e eleições livres | alta
+1964 | 1964 | Golpe Militar de 1964 | Deposição armada do presidente João Goulart e implantação do regime militar no Brasil | alta
+
+=====================================================================
+LINHA: Religiões e História Religiosa
+CATEGORIA: Religião
+ESCOPO: Mundo
+=====================================================================
+-1800 | -1500 | Período dos Patriarcas Bíblicos | Tradições patriarcais de Abraão, Isaque e Jacó no Levante / Canaã | alta
+-1250 | -1250 | Êxodo do Egito | Tradição da libertação dos hebreus do Egito e estabelecimento da Aliança no Sinai | alta
+-1000 | -930 | Reino Unido de Israel | Monarquia unificada sob os governos de Saul, Davi e Salomão; construção do 1º Templo | alta
+-930 | -930 | Cisão Monárquica (Israel e Judá) | Divisão política após a morte de Salomão em Reino do Norte (Israel) e do Sul (Judá) | alta
+-722 | -722 | Queda do Reino do Norte (Samaria) | Conquista e dispersão das dez tribos do Norte pelo Império Assírio | alta
+-586 | -538 | Exílio Babilônico | Destruição de Jerusalém e do 1º Templo por Nabucodonosor II; cativeiro na Babilônia | alta
+-516 | 70 | Período do Segundo Templo | Reconstrução do Templo sob domínio persa até a destruição definitiva pelos romanos | alta
+-4 | -4 | Nascimento de Jesus de Nazaré | Estimativa histórica convencional para a natividade na Judeia | alta
+30 | 33 | Crucificação de Jesus | Morte de Jesus em Jerusalém e nascimento das primeiras comunidades apostólicas cristãs | alta
+64 | 64 | Perseguição aos Cristãos sob Nero | Primeiro massacre sistemático de cristãos em Roma após o grande incêndio | alta
+70 | 70 | Destruição de Jerusalém | Legiões romanas comandadas por Tito destroem o Templo e dispersam a população judaica | alta
+313 | 313 | Edito de Milão | Imperadores Constantino e Licínio concedem liberdade religiosa aos cristãos no Império Romano | alta
+325 | 325 | Primeiro Concílio de Niceia | Primeiro concílio ecumênico convocado por Constantino para unificar o dogma da Trindade | alta
+622 | 622 | A Hégira e Início da Era Islâmica | Maomé e seguidores migram de Meca para Medina; marco zero do calendário muçulmano | alta
+1054 | 1054 | Grande Cisma do Oriente | Ruptura mútua e excomunhão entre a Igreja Católica Romana e a Igreja Ortodoxa | alta
+1517 | 1517 | Publicação das 95 Teses de Lutero | Martinho Lutero afixa as teses em Wittenberg criticando as indulgências papais | alta
+1545 | 1563 | Concílio de Trento (Contrarreforma) | Reunião dogmática da Igreja Católica reafirmando doutrinas e combatendo o protestantismo | alta
+
+=====================================================================
+LINHA: Entidades Políticas do Mundo Bíblico
+CATEGORIA: História Antiga
+ESCOPO: Oriente Próximo
+=====================================================================
+-3100 | -332 | Antigo Egito Dinástico | Faraós das dinastias menfita e tebana interagindo com os povos semitas do Levante | alta
+-2000 | -1200 | Canaã Pré-Israelita | Cidades-Estado autônomas sob influência egípcia na faixa costeira do Levante | alta
+-1365 | -609 | Império Assírio | Potência militar mesopotâmica que subjugou a Síria, o Norte de Israel e a Fenícia | alta
+-626 | -539 | Império Neobabilônico | Reinado caldeu de Nabucodonosor II que dominou o Oriente Próximo e saqueou Jerusalém | alta
+-550 | -330 | Império Persa Aquemênida | Ciro, o Grande permite o retorno dos judeus exilados e reconstrução de Jerusalém | alta
+-1200 | -332 | Fenícia | Cidades mercantis marítimas (Tiro, Sídon e Biblos) responsáveis pelo alfabeto fonético | media
+-336 | -323 | Império Macedônio de Alexandre | Conquista relâmpago do Oriente Médio e disseminação da cultura helenística | alta
+-63 | 476 | Domínio Romano sobre a Judeia | Conquista de Jerusalém por Pompeu e administração provincial imperial romana | alta
+
+=====================================================================
+LINHA: Economia e Ciclos Econômicos do Brasil
+CATEGORIA: Moedas & Economia
+ESCOPO: Brasil
+=====================================================================
+1500 | 1530 | Ciclo do Pau-Brasil | Extração vegetal exploratória litorânea via escambo com populações indígenas | media
+1530 | 1700 | Ciclo da Cana-de-Açúcar | Sistema de monocultura em latifúndios no Nordeste baseado em mão de obra escravizada | alta
+1695 | 1780 | Ciclo do Ouro e Diamantes | Exploração mineral em Minas Gerais, interiorização territorial e mudança da capital para o Rio | alta
+1830 | 1930 | Ciclo do Café | Expansão cafeeira no Vale do Paraíba e Oeste Paulista, sustentando a economia imperial e republicana | alta
+1879 | 1912 | Primeiro Ciclo da Borracha | Extração de látex na Amazônia, urbanização de Manaus e Belém com a exportação mundial | media
+1930 | 1980 | Ciclo da Industrialização por Substituição | Criação de estatais de base (CSN, Petrobras), rodovias e urbanização industrial acelerada | alta
+
+=====================================================================
+LINHA: Constituições Brasileiras
+CATEGORIA: Política e Leis
+ESCOPO: Brasil
+=====================================================================
+1824 | 1889 | Constituição Imperial de 1824 | Outorgada por D. Pedro I; instituiu quatro poderes (Executivo, Legislativo, Judiciário e Moderador) | alta
+1891 | 1934 | Constituição Republicana de 1891 | Promulgada sob o modelo federalista presidencialista americano; separação Igreja-Estado | alta
+1934 | 1937 | Constituição de 1934 | Criou o voto secreto, sufrágio feminino, Justiça Eleitoral e direitos trabalhistas | alta
+1937 | 1945 | Constituição Polaca de 1937 | Outorgada por Getúlio Vargas para inaugurar a ditadura corporativista do Estado Novo | alta
+1946 | 1967 | Constituição Democrática de 1946 | Redemocratização pós-Vargas restaurando o equilíbrio institucional e direitos cívicos | alta
+1967 | 1988 | Constituição de 1967 | Centralizou poderes no Executivo militar e institucionalizou a doutrina de segurança nacional | alta
+1988 | 2026 | Constituição Cidadã de 1988 | Vigente; garantia extensiva de direitos civis, sociais, fundamentais e descentralização federativa | alta
+
+=====================================================================
+LINHA: Escravidão e Abolicionismo no Brasil
+CATEGORIA: Sociedade e Direitos
+ESCOPO: Brasil
+=====================================================================
+1535 | 1888 | Tráfico Negreiro e Escravidão Africana | Período de cerca de três séculos de exploração forçada de milhões de africanos e descendentes | alta
+1695 | 1695 | Morte de Zumbi e Queda de Palmares | Queda do maior quilombo autônomo de resistência antiescravista colonial em Alagoas | alta
+1850 | 1850 | Lei Eusébio de Queirós | Extinção definitiva e proibição legal do tráfico negreiro transatlântico para o Brasil | alta
+1871 | 1871 | Lei do Ventre Livre | Declarou libertos os filhos de mulheres escravizadas nascidos a partir daquela data | alta
+1885 | 1885 | Lei dos Sexagenários (Saraiva-Cotegipe) | Liberdade formal para escravizados com mais de 60 anos com exigência de indenização | media
+1888 | 1888 | Lei Áurea | Princesa Isabel sanciona o fim formal e imediato da escravidão no território brasileiro | alta
+
+=====================================================================
+LINHA: Ciência e Inovação no Brasil
+CATEGORIA: Tecnologia e Inovação
+ESCOPO: Brasil
+=====================================================================
+1808 | 1808 | Fundação da Imprensa Régia | Chegada da Corte portuguesa autoriza a primeira publicação impressa oficial no Brasil | alta
+1852 | 1852 | Instalação do Primeiro Telégrafo | Linha telegráfica inaugurada interligando o Palácio de São Cristóvão ao Quartel-General no Rio | media
+1877 | 1877 | Primeiro Telefone no Brasil | D. Pedro II manda instalar aparelhos telefônicos no Palácio de São Cristóvão após a Exposição da Filadélfia | alta
+1923 | 1923 | Primeira Transmissão Oficial de Rádio | Roquette-Pinto funda a Rádio Sociedade do Rio de Janeiro pioneira na radiodifusão | media
+1950 | 1950 | Inauguração da Televisão no Brasil | Assis Chateaubriand inaugura a PRF-3 TV Tupi canal 3 em São Paulo | alta
+1956 | 1960 | Construção e Inauguração de Brasília | Edificação acelerada da nova capital federal no Planalto Central projetada por Lúcio Costa e Niemeyer | alta
+1969 | 1969 | Criação da Embraer | Fundação da Empresa Brasileira de Aeronáutica para alavancar a indústria de defesa e aviação | alta
+1995 | 1995 | Abertura Comercial da Internet no Brasil | Ministério das Comunicações autoriza provedores de acesso comercial discado à rede mundial | alta
+1996 | 1996 | Adoção da Urna Eletrônica | Primeira votação informatizada brasileira implementada em capitais pelo TSE | alta
+2020 | 2020 | Lançamento do PIX | Banco Central do Brasil lança o sistema nacional de pagamentos instantâneos eletrônicos | alta
+
+=====================================================================
+LINHA: Rússia e União Soviética - Entidades Políticas e Espaço
+CATEGORIA: História Geral
+ESCOPO: Rússia
+=====================================================================
+882 | 1240 | Rússia de Kiev (Rus de Kiev) | Primeira federação eslava oriental unificada centrada na cidade de Kiev | media
+1547 | 1721 | Czarado da Rússia | Centralização monárquica sob Ivan IV (o Terrível) e ascensão da dinastia Romanov | media
+1721 | 1917 | Império Russo | Proclamação imperial sob Pedro I o Grande; expansão até a Eurásia e queda de Nicolau II | alta
+1922 | 1991 | União das Repúblicas Socialistas Soviéticas | Estado socialista multinacional governado pelo Partido Comunista | alta
+1991 | 2026 | Federação Russa | Estado soberano sucessor da URSS estabelecido pós-dissolução sob Boris Yeltsin | alta
+1957 | 1957 | Lançamento do Sputnik 1 | Primeiro satélite artificial lançado com sucesso ao espaço pelo programa espacial soviético | alta
+1957 | 1957 | Voo da Cadela Laika (Sputnik 2) | Primeiro ser vivo a orbitar a Terra a bordo de uma espaçonave | media
+1961 | 1961 | Yuri Gagarin no Espaço (Vostok 1) | Primeiro cosmonauta humano a orbitar a Terra e retornar em segurança | alta
+1986 | 2001 | Operação da Estação Espacial Mir | Primeira estação espacial modular habitada de longa permanência na órbita terrestre | alta
+
+=====================================================================
+LINHA: América Latina - Integração e Transformações Políticas
+CATEGORIA: História Geral
+ESCOPO: América Latina
+=====================================================================
+1810 | 1826 | Guerras de Independência Hispano-Americanas | Campanhas libertadoras de Simón Bolívar e José de San Martín | alta
+1948 | 1948 | Criação da OEA | Fundação da Organização dos Estados Americanos em Bogotá para cooperação hemisférica | media
+1959 | 1959 | Revolução Cubana | Fidel Castro, Che Guevara e rebeldes derrubam Fulgencio Batista instaurando regime socialista | alta
+1960 | 1980 | Ciclo de Ditaduras Militares no Cone Sul | Regimes autoritários no Brasil, Argentina, Chile, Uruguai e Paraguai (Operação Condor) | alta
+1980 | 1990 | Processo de Redemocratização Latino-Americano | Transição de juntas militares para governos civis eleitos em todo o subcontinente | alta
+1991 | 1991 | Assinatura do Tratado de Assunção (Mercosul) | Brasil, Argentina, Paraguai e Uruguai criam o Mercado Comum do Sul | alta
+
+=====================================================================
+LINHA: Grandes Pandemias Históricas
+CATEGORIA: Medicina e Saúde
+ESCOPO: Mundo
+=====================================================================
+165 | 180 | Peste Antonina | Epidemia provavelmente de varíola que atingiu o Império Romano e matou o imperador Marco Aurélio | media
+541 | 542 | Peste de Justiniano | Primeira grande onda documentada de peste bubônica afetando o Império Bizantino | alta
+1346 | 1353 | A Peste Negra | Segunda pandemia de peste bubônica com mortalidade catastrófica na Eurásia | alta
+1817 | 1824 | Primeira Pandemia Global de Cólera | Surto em Calcutá disseminado por rotas mercantis na Ásia e Europa | media
+1918 | 1920 | Gripe Espanhola (H1N1) | Pandemia de influenza virulentíssima que infectou meio bilhão de pessoas | alta
+1981 | 2026 | Pandemia de HIV/AIDS | Identificação do vírus da imunodeficiência humana e sua disseminação global | alta
+2020 | 2023 | Pandemia de COVID-19 | Crise sanitária do coronavírus declarada emergência internacional pela OMS | alta
+
+=====================================================================
+LINHA: Transformações Sociais e Direitos
+CATEGORIA: Sociedade e Direitos
+ESCOPO: Mundo
+=====================================================================
+1789 | 1789 | Declaração dos Direitos do Homem e do Cidadão | Marco dos direitos civis universais e igualdade perante a lei na França revolucionária | alta
+1893 | 1893 | Primeiro País com Sufrágio Feminino | Nova Zelândia torna-se o primeiro território autogovernado com voto irrestrito a mulheres | alta
+1932 | 1932 | Sufrágio Feminino no Brasil | Código Eleitoral de 1932 garante formalmente o direito de voto para as mulheres brasileiras | alta
+1943 | 1943 | Consolidação das Leis do Trabalho (CLT) | Getúlio Vargas unifica normas de proteção ao trabalhador urbano no Brasil | alta
+1948 | 1948 | Declaração Universal dos Direitos Humanos | Assembleia Geral da ONU aprova o documento em resposta às atrocidades da 2ª Guerra | alta
+1964 | 1968 | Movimento dos Direitos Civis nos EUA | Marchas de Martin Luther King Jr., aprovação do Civil Rights Act e Voting Rights Act | alta
+2013 | 2013 | Resolução do Casamento Civil Igualitário no Brasil | CNJ obriga cartórios de todo o país a celebrarem casamentos entre pessoas do mesmo sexo | media
+
+=====================================================================
+LINHA: Cultura - Música, Cinema e Esportes
+CATEGORIA: Cultura e Lazer
+ESCOPO: Mundo
+=====================================================================
+1877 | 1877 | Invenção do Fonógrafo | Thomas Edison projeta o primeiro equipamento mecânico capaz de gravar e reproduzir áudio | alta
+1895 | 1895 | Primeira Exibição de Cinema | Irmãos Auguste e Louis Lumière realizam a primeira sessão pública de cinema pago em Paris | alta
+1896 | 1896 | Primeiros Jogos Olímpicos Modernos | Atenas sedia o renascimento das Olimpíadas idealizado pelo Barão Pierre de Coubertin | alta
+1920 | 1920 | Nascimento da Indústria Fonográfica do Jazz | Gravações de Louis Armstrong e orquestras espalham o jazz internacionalmente | media
+1927 | 1927 | Primeiro Filme Sonoro Comercial | Lançamento de 'O Cantor de Jazz' (The Jazz Singer) sincronizando falas e músicas na tela | alta
+1930 | 1930 | Primeira Copa do Mundo FIFA | Disputada e sediada no Uruguai com final vencida pela seleção anfitriã | alta
+1954 | 1954 | Eclosão do Rock and Roll | Gravações de Elvis Presley no Sun Studio e 'Rock Around the Clock' popularizam o gênero jovem | alta
+1958 | 1958 | Primeiro Título Mundial de Futebol do Brasil | Seleção Brasileira vence a Copa do Mundo na Suécia revelando Pelé ao planeta | alta
+2008 | 2008 | Consolidação do Streaming Musical | Plataforma Spotify inicia operação transformando o consumo musical em áudio digital sob demanda | media
+
+=====================================================================
+LINHA: Pessoas que Mudaram a História
+CATEGORIA: Biografias e Personalidades
+ESCOPO: Mundo
+=====================================================================
+1564 | 1642 | Galileu Galilei | Astrônomo e físico italiano que aperfeiçoou o telescópio e defendeu o heliocentrismo | alta
+1643 | 1727 | Isaac Newton | Físico e matemático inglês, formulador da gravitação universal e do cálculo diferencial | alta
+1809 | 1882 | Charles Darwin | Naturalista britânico responsável pela teoria da evolução através da seleção natural | alta
+1856 | 1943 | Nikola Tesla | Engenheiro inventor dos sistemas de transmissão elétrica de corrente alternada e motores de indução | alta
+1867 | 1934 | Marie Curie | Pioneira no estudo da radioatividade, descobridora do rádio e polônio, primeira a vencer dois Prêmios Nobel | alta
+1873 | 1932 | Alberto Santos Dumont | Inventor brasileiro pioneiro dos dirigíveis a gás e aviação mais pesada que o ar na França | alta
+1879 | 1955 | Albert Einstein | Físico teórico alemão formulador das teorias da Relatividade Especial e Geral | alta
+1912 | 1954 | Alan Turing | Matemático britânico, pioneiro da ciência da computação teórica e criptoanalista da máquina Enigma | alta

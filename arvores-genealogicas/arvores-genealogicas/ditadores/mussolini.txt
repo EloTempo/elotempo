@@ -1,0 +1,122 @@
+# FAMILIA: Mussolini (Itália)
+# CONFIABILIDADE geral: documentada
+# FONTES: Wikipedia; imprensa italiana
+# FORMATO: um bloco por pessoa (ver _MODELO-PESSOA.txt)
+# NOTA: elo com a cultura pop — Romano casou com Maria Scicolone, irmã de Sophia
+#       Loren, tornando a atriz tia de Alessandra Mussolini.
+# LGPD: descendentes vivos marcados.
+# ---
+
+== Alessandro Mussolini ==
+nome_publico: Alessandro Mussolini
+profissoes: ferreiro; socialista
+nacionalidades: Itália
+relacoes: pai de Benito; casado com Rosa Maltoni   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Benito Mussolini ==
+identidade: Fundador do fascismo; ditador da Itália (o "Duce") de 1922 a 1943.
+nome_publico: Benito Mussolini
+apelidos: o Duce
+nascimento: 1883
+falecimento: 1945
+profissoes: político (ditador); jornalista
+nacionalidades: Itália
+foto: fotos/benito-mussolini.webp
+relacoes: casado com Rachele Guidi; cinco filhos   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Rachele Mussolini ==
+nome_publico: Rachele Mussolini
+nome_registro: Rachele Guidi
+apelidos: donna Rachele
+nascimento: 1890
+falecimento: 1979
+nacionalidades: Itália
+relacoes: esposa de Benito; mãe dos cinco filhos   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Edda Mussolini ==
+identidade: Filha mais velha do Duce; casada com o chanceler Galeazzo Ciano.
+nome_publico: Edda Ciano
+nascimento: 1910
+falecimento: 1995
+nacionalidades: Itália
+relacoes: filha de Benito; casada com Galeazzo Ciano   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Galeazzo Ciano ==
+nome_publico: Galeazzo Ciano
+nascimento: 1903
+falecimento: 1944   # executado após votar contra Mussolini no Grande Conselho
+profissoes: político (ministro das Relações Exteriores)
+nacionalidades: Itália
+relacoes: genro de Benito   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Vittorio Mussolini ==
+nome_publico: Vittorio Mussolini
+nascimento: 1916
+falecimento: 1997
+profissoes: crítico e produtor de cinema
+nacionalidades: Itália
+relacoes: filho de Benito e Rachele   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Bruno Mussolini ==
+nome_publico: Bruno Mussolini
+nascimento: 1918
+falecimento: 1941   # acidente aéreo
+profissoes: aviador militar
+nacionalidades: Itália
+relacoes: filho de Benito e Rachele   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Romano Mussolini ==
+identidade: Filho caçula homem do Duce; pianista de jazz e pintor.
+nome_publico: Romano Mussolini
+nascimento: 1927
+falecimento: 2006
+profissoes: pianista de jazz; pintor
+nacionalidades: Itália
+relacoes: filho de Benito; casou com Maria Scicolone (irmã de Sophia Loren); pai de Alessandra   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Anna Maria Mussolini ==
+nome_publico: Anna Maria Mussolini
+nascimento: 1929
+falecimento: 1968
+profissoes: locutora de rádio
+nacionalidades: Itália
+relacoes: filha caçula de Benito e Rachele   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Alessandra Mussolini ==
+identidade: Neta do Duce; política (deputada e eurodeputada).
+nome_publico: Alessandra Mussolini
+nascimento: 1962
+profissoes: política; ex-atriz
+nacionalidades: Itália
+relacoes: filha de Romano e Maria Scicolone; sobrinha de Sophia Loren   # -> Parentesco
+fonte: Wikipedia   # LGPD: pessoa viva
+confiabilidade: documentada
+
+== Rachele Mussolini (política) ==
+nome_publico: Rachele Mussolini
+nascimento: 1974
+profissoes: política
+nacionalidades: Itália
+relacoes: neta de Benito (filha de Romano com a 2ª esposa)   # -> Parentesco
+fonte: Wikipedia   # LGPD: pessoa viva
+confiabilidade: documentada
+
+# Filho de relacionamento anterior (contestado): Benito Albino Mussolini, com Ida Dalser.

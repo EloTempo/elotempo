@@ -1,0 +1,250 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap">
+  <style>
+    body { margin: 0; font-family: 'Inter', system-ui, sans-serif; }
+    a { color: #2563eb; } a:hover { color: #0f1420; }
+    .marca { font-family: 'Sora', 'Inter', system-ui, sans-serif; }
+    .rot { font-family: 'Sora', system-ui, sans-serif; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: #6b7280; font-weight: 600; }
+    .nota { font-size: 12.5px; line-height: 1.55; color: #4b5563; }
+    .bloco { border: 1px solid #c3cad6; border-radius: 12px; background: #ffffff; }
+    .fantasma { background: #eceef2; border-radius: 8px; }
+  </style>
+</helmet>
+
+<div style="width: 1280px; height: 1820px; box-sizing: border-box; background: #f4f5f7; color: #0f1420; display: flex; flex-direction: column;">
+
+  <div style="display: flex; align-items: flex-end; justify-content: space-between; padding: 36px 44px 22px 44px; border-bottom: 1px solid #dfe3ea;">
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <span class="rot">Elotempo · site público</span>
+      <span class="marca" style="font-size: 32px; font-weight: 600; letter-spacing: -.025em; line-height: 1;">Anatomia da página</span>
+      <span class="nota" style="font-size: 14px; max-width: 660px;">Uma página só, rolagem única, na direção <strong>Híbrida</strong>. O download sobe para o topo; o argumento visual vem logo depois, para quem ficou. Cada faixa tem um trabalho, e nenhuma existe para preencher espaço.</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 11px;">
+      <svg width="34" height="34" viewBox="0 0 512 512" aria-hidden="true">
+        <rect width="512" height="512" rx="115" fill="#2563EB"/>
+        <g fill="none" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="30"><path d="M160 130v252"/><path d="M160 130h196"/><path d="M160 256h72"/><path d="M232 256l124-52M232 256l124 52"/><path d="M160 382h196"/></g>
+        <g fill="#FFFFFF"><circle cx="160" cy="130" r="33"/><circle cx="356" cy="130" r="33"/><circle cx="160" cy="256" r="33"/><circle cx="232" cy="256" r="33"/><circle cx="356" cy="204" r="33"/><circle cx="356" cy="308" r="33"/><circle cx="160" cy="382" r="33"/><circle cx="356" cy="382" r="33"/></g>
+      </svg>
+      <span class="marca" style="font-size: 20px; font-weight: 600; letter-spacing: -.045em;">Elotempo</span>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 700px minmax(0, 1fr); gap: 34px; padding: 24px 44px 32px 44px; flex-grow: 1;">
+
+    <!-- mapa -->
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+
+      <div class="bloco" style="padding: 13px 18px; display: flex; align-items: center; gap: 12px;">
+        <div style="width: 20px; height: 20px; border-radius: 5px; background: #2563eb; flex: none;"></div>
+        <span class="marca" style="font-size: 13px; font-weight: 600;">Elotempo</span>
+        <div style="flex-grow: 1;"></div>
+        <div class="fantasma" style="width: 66px; height: 9px;"></div>
+        <div class="fantasma" style="width: 44px; height: 9px;"></div>
+        <div style="background: #2563eb; border-radius: 6px; width: 68px; height: 26px;"></div>
+      </div>
+
+      <!-- 1 hero + downloads -->
+      <div class="bloco" style="padding: 24px 22px; display: flex; flex-direction: column; gap: 13px; border-left: 3px solid #2563eb;">
+        <span class="rot" style="color: #2563eb;">1 · a pergunta e o download</span>
+        <div style="display: flex; flex-direction: column; gap: 8px; align-items: center;">
+          <div class="fantasma" style="width: 86%; height: 20px; background: #d7dce4;"></div>
+          <div class="fantasma" style="width: 62%; height: 20px; background: #d7dce4;"></div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 6px; align-items: center; padding-top: 2px;">
+          <div class="fantasma" style="width: 78%; height: 9px;"></div>
+          <div class="fantasma" style="width: 58%; height: 9px;"></div>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; padding-top: 6px;">
+          <div style="background: #2563eb; border-radius: 8px; height: 44px;"></div>
+          <div style="border: 1px solid #c3cad6; border-radius: 8px; height: 44px;"></div>
+          <div style="border: 1px solid #c3cad6; border-radius: 8px; height: 44px;"></div>
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 10px; padding: 2px 0;">
+        <div style="flex-grow: 1; height: 1px; background: repeating-linear-gradient(to right, #c3cad6 0 6px, transparent 6px 12px);"></div>
+        <span class="rot" style="color: #9aa6b4;">dobra</span>
+        <div style="flex-grow: 1; height: 1px; background: repeating-linear-gradient(to right, #c3cad6 0 6px, transparent 6px 12px);"></div>
+      </div>
+
+      <!-- 2 o eixo -->
+      <div class="bloco" style="padding: 22px; display: flex; flex-direction: column; gap: 12px;">
+        <span class="rot">2 · o eixo, como prova</span>
+        <div style="border: 1px solid #dfe3ea; border-radius: 8px; background: #f8f9fb; padding: 14px 16px; display: flex; flex-direction: column; gap: 9px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div class="fantasma" style="width: 64px; height: 8px; flex: none;"></div>
+            <div style="flex-grow: 1; position: relative; height: 11px;">
+              <div style="position: absolute; left: 0; right: 0; top: 5px; height: 2px; background: #dfe3ea;"></div>
+              <div style="position: absolute; left: 10%; top: 0; width: 3px; height: 11px; border-radius: 2px; background: #1d4ed8;"></div>
+              <div style="position: absolute; left: 38%; top: 0; width: 3px; height: 11px; border-radius: 2px; background: #1d4ed8;"></div>
+              <div style="position: absolute; left: 72%; top: 0; width: 3px; height: 11px; border-radius: 2px; background: #1d4ed8;"></div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div class="fantasma" style="width: 64px; height: 8px; flex: none;"></div>
+            <div style="flex-grow: 1; position: relative; height: 11px;">
+              <div style="position: absolute; left: 14%; width: 56%; top: 1px; height: 9px; border-radius: 5px; background: #2563eb; opacity: .85;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 a tela -->
+      <div class="bloco" style="padding: 22px; display: flex; flex-direction: column; gap: 12px;">
+        <span class="rot">3 · a tela</span>
+        <div style="height: 130px; border-radius: 8px; background: #eceef2; border: 1px solid #dfe3ea; display: flex; align-items: center; justify-content: center; gap: 22px;">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 7v3.6M4.6 10.6h14.8M4.6 10.6V15M12 10.6V15M19.4 10.6V15"/><g fill="#6b7280" stroke="none"><circle cx="12" cy="5" r="2"/><circle cx="4.6" cy="17" r="2"/><circle cx="12" cy="17" r="2"/><circle cx="19.4" cy="17" r="2"/></g></svg>
+          <span class="nota" style="color: #6b7280;">captura da árvore com a gaveta aberta</span>
+        </div>
+      </div>
+
+      <!-- 4 três razões -->
+      <div class="bloco" style="padding: 22px; display: flex; flex-direction: column; gap: 13px;">
+        <span class="rot">4 · para quem é</span>
+        <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px;">
+          <div style="display: flex; flex-direction: column; gap: 7px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><g fill="#0d9488" stroke="none"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></g></svg>
+            <div class="fantasma" style="width: 78%; height: 9px;"></div>
+            <div class="fantasma" style="width: 100%; height: 7px;"></div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 7px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5.5c0 4-3 7.6-7 8.5-4-.9-7-4.5-7-8.5V6z"/></svg>
+            <div class="fantasma" style="width: 70%; height: 9px;"></div>
+            <div class="fantasma" style="width: 100%; height: 7px;"></div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 7px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 12L5 6M12 12l7-6M12 12v7M5 6h14"/><g fill="#0d9488" stroke="none"><circle cx="12" cy="12" r="2"/><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="12" cy="19" r="2"/></g></svg>
+            <div class="fantasma" style="width: 84%; height: 9px;"></div>
+            <div class="fantasma" style="width: 100%; height: 7px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5 impressão -->
+      <div class="bloco" style="padding: 22px; display: flex; flex-direction: column; gap: 12px;">
+        <span class="rot">5 · o que sai no papel</span>
+        <div style="display: flex; gap: 12px; align-items: center;">
+          <div style="width: 52px; height: 73px; background: #ffffff; border: 1px solid #c3cad6; border-radius: 3px; flex: none;"></div>
+          <div style="width: 52px; height: 73px; background: #ffffff; border: 1px solid #c3cad6; border-radius: 3px; flex: none;"></div>
+          <div style="display: flex; flex-direction: column; gap: 6px; flex-grow: 1;">
+            <div class="fantasma" style="width: 70%; height: 9px;"></div>
+            <div class="fantasma" style="width: 100%; height: 7px;"></div>
+            <div class="fantasma" style="width: 86%; height: 7px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6 repetir -->
+      <div class="bloco" style="padding: 16px 22px; display: flex; align-items: center; gap: 16px; background: #eef3fb; border-color: #b9cdf2;">
+        <span class="rot" style="color: #2563eb;">6 · repetir</span>
+        <div class="fantasma" style="width: 200px; height: 9px; background: #d3e0f6;"></div>
+        <div style="flex-grow: 1;"></div>
+        <div style="background: #2563eb; border-radius: 8px; width: 150px; height: 36px;"></div>
+      </div>
+
+      <!-- 7 apoio e fórum -->
+      <div class="bloco" style="padding: 20px 22px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px;">
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <span class="rot">7 · ajude o projeto</span>
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <div style="width: 38px; height: 38px; border: 1px solid #c3cad6; border-radius: 5px; background: #f8f9fb; flex: none;"></div>
+            <div style="display: flex; flex-direction: column; gap: 5px; flex-grow: 1;">
+              <div class="fantasma" style="width: 100%; height: 8px;"></div>
+              <div class="fantasma" style="width: 62%; height: 6px;"></div>
+            </div>
+          </div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px; border-left: 1px solid #dfe3ea; padding-left: 20px;">
+          <span class="rot">fórum · em breve</span>
+          <div class="fantasma" style="width: 100%; height: 7px;"></div>
+          <div class="fantasma" style="width: 78%; height: 7px;"></div>
+        </div>
+      </div>
+
+      <!-- 8 autoria -->
+      <div class="bloco" style="padding: 22px; display: flex; flex-direction: column; gap: 11px;">
+        <span class="rot">8 · quem fez</span>
+        <div style="display: flex; gap: 14px; align-items: flex-start;">
+          <div style="width: 42px; height: 42px; border-radius: 50%; background: #eceef2; flex: none;"></div>
+          <div style="display: flex; flex-direction: column; gap: 6px; flex-grow: 1;">
+            <div class="fantasma" style="width: 46%; height: 10px;"></div>
+            <div class="fantasma" style="width: 100%; height: 7px;"></div>
+            <div class="fantasma" style="width: 80%; height: 7px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bloco" style="padding: 15px 22px; display: flex; align-items: center; gap: 14px; background: #f1f3f7;">
+        <span class="rot">9 · rodapé</span>
+        <div style="flex-grow: 1;"></div>
+        <div class="fantasma" style="width: 58px; height: 8px;"></div>
+        <div class="fantasma" style="width: 70px; height: 8px;"></div>
+      </div>
+    </div>
+
+    <!-- notas -->
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+
+      <div style="display: flex; flex-direction: column; gap: 5px;">
+        <span class="rot" style="color: #2563eb;">1 · a pergunta e o download</span>
+        <p class="nota" style="margin: 0;">A manchete gira entre as oito perguntas — conjunto na prancha <em>As perguntas do hero</em>. O subtítulo <strong>não gira</strong>: é ele que carrega o que o programa é, então a mensagem não depende de qual pergunta está na tela.</p>
+        <p class="nota" style="margin: 4px 0 0 0;">As três opções de download entram aqui com peso igual. Windows preenchido porque é o único com build testado hoje, não porque seja “o certo”.</p>
+        <p class="nota" style="margin: 4px 0 0 0;"><strong style="color: #0f1420;">A chamada entra colada nos botões</strong>, em verde-azulado e um corpo menor que o subtítulo — assim ela lê como a voz do gesto, não como um terceiro parágrafo de explicação.</p>
+        <div style="border-left: 3px solid #0d9488; padding: 2px 0 2px 13px; margin-top: 4px;">
+          <p class="nota" style="margin: 0;"><strong style="color: #0f1420;">A chamada é a única frase da página que fala do futuro.</strong> A primeira metade faz o trabalho conceitual — hoje vira o passado deles —, a segunda entrega a emoção. E o elogio recai sobre o que a pessoa vai registrar, não sobre o programa: a página não se gaba em lugar nenhum, e é daí que vem a credibilidade dela.</p>
+        </div>
+        <p class="nota" style="margin: 4px 0 0 0;"><strong style="color: #0f1420;">A linha fina diz “programa de computador”.</strong> A maior parte das visitas chega pelo telefone, e o Elotempo não roda lá — dizer isso junto da ação evita a pessoa tocar num botão que não faz nada. No telefone, o bloco inteiro é substituído: ver a prancha <em>Telefone</em>.</p>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 5px;">
+        <span class="rot">2 · o eixo, como prova</span>
+        <p class="nota" style="margin: 0;">A pergunta do hero cobra uma resposta, e esta é a seção que entrega. História, moeda e a vida de uma pessoa no mesmo eixo — a única coisa que o Elotempo faz e os outros não.</p>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 5px;">
+        <span class="rot">3 · a tela</span>
+        <p class="nota" style="margin: 0;">A prova de que o programa existe: captura da árvore com a gaveta aberta.</p>
+        <p class="nota" style="margin: 4px 0 0 0; color: #b45309;"><strong>Precisa ser feita.</strong> Real, tema Moderno Claro, com um acervo de exemplo — não uma maquete.</p>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 5px;">
+        <span class="rot">4 · para quem é</span>
+        <p class="nota" style="margin: 0;">Três razões, não uma lista de recursos:</p>
+        <p class="nota" style="margin: 2px 0 0 0;"><strong>A vida no contexto.</strong> História do Brasil, moeda, presidentes e tecnologias ao lado da vida da pessoa.</p>
+        <p class="nota" style="margin: 2px 0 0 0;"><strong>Os dados são seus.</strong> Funciona sem internet, nada sai da máquina. Entra e sai em GEDCOM.</p>
+        <p class="nota" style="margin: 2px 0 0 0;"><strong>Família sem buraco.</strong> Ancestral desconhecido vira um nó de verdade, e os filhos ficam nele até o nome aparecer.</p>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 5px;">
+        <span class="rot" style="color: #2563eb;">6 · repetir</span>
+        <p class="nota" style="margin: 0;">Uma ação principal, dita duas vezes. Quem rolou até aqui leu o argumento inteiro e não deve ter de subir para agir.</p>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 5px;">
+        <span class="rot">8 · quem fez</span>
+        <p class="nota" style="margin: 0;">Idealizado e desenvolvido por <strong>Gabriel Nascimento</strong>, com Claude e Gemini. Curto e em primeira pessoa — num programa que pede confiança para guardar a história de uma família, saber quem está atrás dele é argumento, não vaidade.</p>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 5px;">
+        <span class="rot">9 · rodapé</span>
+        <p class="nota" style="margin: 0;">Licença, repositório, e a nota de que <strong>nem o programa nem a página coletam nada</strong>. Sem cadastro, sem newsletter, sem cookie de rastreamento — decidido, não “por enquanto”. Num produto cujo argumento é “nada sai da sua máquina”, um formulário no site contradiria a coisa toda.</p>
+      </div>
+
+      <div style="border-top: 1px solid #dfe3ea; padding-top: 14px; display: flex; flex-direction: column; gap: 5px;">
+        <span class="rot">O que a página não terá</span>
+        <p class="nota" style="margin: 0;">Sem depoimentos (não há usuários ainda), sem números inventados, sem preço, sem blog, sem “cadastre-se”. Uma página que promete pouco e entrega o que promete.</p>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

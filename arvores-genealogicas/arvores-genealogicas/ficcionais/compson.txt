@@ -1,0 +1,54 @@
+# FAMILIA: Compson (O Som e a Fúria) — FICÇÃO (literatura americana)
+# CONFIABILIDADE geral: ficcao (NÃO misturar com dados reais)
+# FONTES: cânon "O Som e a Fúria", de William Faulkner; trad. Paulo Henriques Britto
+# FORMATO: um bloco por pessoa (ver _MODELO-PESSOA.txt)
+# NOTA: sem foto (direito autoral). Retrato da decadência de uma família
+#       aristocrática do Sul dos EUA (saga de Yoknapatawpha).
+# ---
+
+== Jason Compson III ==
+nome_publico: Jason Compson III
+relacoes: pai da família; casado com Caroline Bascomb   # -> Parentesco
+fonte: cânon O Som e a Fúria
+confiabilidade: ficcao
+
+== Caroline Compson ==
+nome_publico: Caroline Bascomb Compson
+relacoes: mãe da família Compson   # -> Parentesco
+fonte: cânon O Som e a Fúria
+confiabilidade: ficcao
+
+== Quentin Compson ==
+identidade: O filho mais velho, atormentado; narrador de uma das seções.
+nome_publico: Quentin Compson
+relacoes: filho de Jason III e Caroline   # -> Parentesco
+fonte: cânon O Som e a Fúria
+confiabilidade: ficcao
+
+== Caddy Compson ==
+identidade: A irmã, eixo emocional do romance.
+nome_publico: Candace "Caddy" Compson
+relacoes: filha de Jason III e Caroline; mãe da (ilegítima) Miss Quentin   # -> Parentesco
+fonte: cânon O Som e a Fúria
+confiabilidade: ficcao
+
+== Jason Compson IV ==
+identidade: O irmão amargo e cínico que assume o comando da casa em ruína.
+nome_publico: Jason Compson IV
+relacoes: filho de Jason III e Caroline   # -> Parentesco
+fonte: cânon O Som e a Fúria
+confiabilidade: ficcao
+
+== Benjy Compson ==
+identidade: O irmão com deficiência intelectual; abre o romance com seu monólogo.
+nome_publico: Benjamin "Benjy" Compson
+mudanca_nome: registrado Maury, renomeado Benjamin pela família
+relacoes: filho caçula de Jason III e Caroline   # -> Parentesco
+fonte: cânon O Som e a Fúria
+confiabilidade: ficcao
+
+== Miss Quentin ==
+nome_publico: Miss Quentin
+relacoes: filha ilegítima de Caddy; criada pelos Compson (homônima do tio Quentin)   # -> Parentesco
+fonte: cânon O Som e a Fúria
+confiabilidade: ficcao

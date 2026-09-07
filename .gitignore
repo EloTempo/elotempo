@@ -43,3 +43,15 @@ npm-debug.log*
 
 # Configuração local de ferramentas de agente
 .claude/
+
+# Caches e arquivos temporários de desenvolvimento
+scratch/
+sora_test.ttf
+*.zip
+*.part
+__pycache__/
+*.pyc
+_imagens_elotempo/
+
+# Repositório separado do site
+elotempo-site/

@@ -1,0 +1,917 @@
+<title>Auditoria de Design Elotempo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+  :root {
+    --ground: #F2F6F9;
+    --surface: #FFFFFF;
+    --surface-2: #E9F0F5;
+    --ink: #0B1D3A;
+    --ink-2: #4A5A6E;
+    --ink-3: #7C8FA3;
+    --rule: #D5E0EA;
+    --rule-2: #BECDDA;
+    --teal: #007D6F;
+    --blue: #2563EB;
+    --warn: #A8480B;
+    --warn-bg: #FBF0E6;
+    --warn-rule: #E8C9A8;
+
+    --f-marca: 'Sora', 'Segoe UI', system-ui, sans-serif;
+    --f-corpo: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+    --f-dado: 'IBM Plex Mono', ui-monospace, 'Cascadia Mono', monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #080F18;
+      --surface: #0F1A26;
+      --surface-2: #16232F;
+      --ink: #E8EFF5;
+      --ink-2: #9AAEC0;
+      --ink-3: #6B7F93;
+      --rule: #1F2E3D;
+      --rule-2: #2C3E50;
+      --teal: #35C9B5;
+      --blue: #6D9BFF;
+      --warn: #E5A55A;
+      --warn-bg: #241A0F;
+      --warn-rule: #43301C;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #080F18;
+    --surface: #0F1A26;
+    --surface-2: #16232F;
+    --ink: #E8EFF5;
+    --ink-2: #9AAEC0;
+    --ink-3: #6B7F93;
+    --rule: #1F2E3D;
+    --rule-2: #2C3E50;
+    --teal: #35C9B5;
+    --blue: #6D9BFF;
+    --warn: #E5A55A;
+    --warn-bg: #241A0F;
+    --warn-rule: #43301C;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--f-corpo);
+    font-size: 17px;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .folha {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 32px 96px 32px;
+  }
+
+  /* ---------- cabeçalho ---------- */
+
+  header.capa {
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+    padding: 56px 0 34px 0;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .marca-linha {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .marca-nome {
+    font-family: var(--f-marca);
+    font-weight: 500;
+    font-size: 30px;
+    letter-spacing: -0.0446em;
+    line-height: 1;
+    color: var(--ink);
+  }
+
+  h1 {
+    font-family: var(--f-marca);
+    font-weight: 600;
+    font-size: clamp(30px, 5vw, 46px);
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+    margin: 0;
+    max-width: 20ch;
+    text-wrap: balance;
+  }
+
+  .resumo {
+    font-size: 19px;
+    line-height: 1.6;
+    color: var(--ink-2);
+    margin: 0;
+    max-width: 62ch;
+  }
+
+  .credito {
+    font-family: var(--f-dado);
+    font-size: 11.5px;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  /* ---------- números-chave ---------- */
+
+  .chaves {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    margin: 34px 0 0 0;
+  }
+
+  .chave {
+    background: var(--surface);
+    padding: 15px 17px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .chave b {
+    font-family: var(--f-dado);
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .chave span {
+    font-size: 13.5px;
+    line-height: 1.35;
+    color: var(--ink-2);
+  }
+
+  /* ---------- seções ---------- */
+
+  section {
+    padding-top: 52px;
+  }
+
+  .marcador {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--f-dado);
+    font-size: 11px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 3px;
+    margin-bottom: 14px;
+  }
+  .m-achado  { background: var(--surface-2); color: var(--ink-2); }
+  .m-defeito { background: var(--warn-bg); color: var(--warn); border: 1px solid var(--warn-rule); }
+  .m-decisao { background: var(--surface-2); color: var(--teal); }
+  .m-erro    { background: var(--surface-2); color: var(--ink-2); }
+  .m-aberto  { background: transparent; color: var(--ink-3); border: 1px dashed var(--rule-2); }
+
+  h2 {
+    font-family: var(--f-marca);
+    font-weight: 600;
+    font-size: 27px;
+    line-height: 1.2;
+    letter-spacing: -0.018em;
+    margin: 0 0 14px 0;
+    max-width: 24ch;
+    text-wrap: balance;
+  }
+
+  h3 {
+    font-family: var(--f-marca);
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: -0.008em;
+    margin: 26px 0 8px 0;
+  }
+
+  p { margin: 0 0 15px 0; max-width: 66ch; }
+  p:last-child { margin-bottom: 0; }
+
+  .col { max-width: 66ch; }
+
+  code, .dado {
+    font-family: var(--f-dado);
+    font-size: .855em;
+    background: var(--surface-2);
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+
+  strong { font-weight: 600; }
+  em { font-style: italic; }
+
+  a { color: var(--teal); text-underline-offset: 3px; }
+  a:hover { color: var(--ink); }
+  a:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 2px; }
+
+  ul { margin: 0 0 15px 0; padding-left: 20px; max-width: 66ch; }
+  li { margin-bottom: 7px; }
+  li::marker { color: var(--ink-3); }
+
+  /* ---------- tabelas ---------- */
+
+  .rolo { overflow-x: auto; margin: 22px 0; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+    min-width: 480px;
+  }
+
+  th {
+    text-align: left;
+    font-family: var(--f-dado);
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    padding: 0 14px 8px 0;
+    border-bottom: 1px solid var(--rule-2);
+  }
+
+  td {
+    padding: 10px 14px 10px 0;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+    color: var(--ink-2);
+  }
+
+  td:first-child { color: var(--ink); }
+  td.num { font-family: var(--f-dado); font-variant-numeric: tabular-nums; }
+  tr.grave td { color: var(--warn); }
+  tr.grave td.num { font-weight: 500; }
+
+  /* ---------- aviso ---------- */
+
+  .aviso {
+    background: var(--warn-bg);
+    border: 1px solid var(--warn-rule);
+    border-radius: 4px;
+    padding: 18px 20px;
+    margin: 22px 0;
+    max-width: 66ch;
+  }
+  .aviso p { color: var(--warn); margin-bottom: 10px; }
+  .aviso p:last-child { margin-bottom: 0; }
+  .aviso code { background: rgba(168, 72, 11, .1); }
+
+  /* ---------- amostra tipográfica ---------- */
+
+  .amostra {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    padding: 34px 30px 26px 30px;
+    margin: 24px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    overflow-x: auto;
+  }
+
+  .amostra-palavra {
+    font-family: var(--f-marca);
+    font-weight: 500;
+    font-size: 68px;
+    letter-spacing: -0.0446em;
+    line-height: 1;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+
+  .amostra-falso {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    font-weight: 500;
+    font-size: 68px;
+    letter-spacing: -0.0446em;
+    line-height: 1;
+    color: var(--ink-3);
+    white-space: nowrap;
+  }
+
+  .amostra-rot {
+    font-family: var(--f-dado);
+    font-size: 11px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  /* ---------- amostras de cor ---------- */
+
+  .temas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 12px;
+    margin: 22px 0;
+  }
+
+  .tema {
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .tema-palco {
+    height: 84px;
+    display: grid;
+    place-items: center;
+  }
+
+  .tema-pe {
+    padding: 10px 12px;
+    background: var(--surface);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .tema-pe b {
+    font-family: var(--f-dado);
+    font-weight: 500;
+    font-size: 14px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .tema-pe span { font-size: 12.5px; color: var(--ink-2); line-height: 1.3; }
+
+  /* ---------- grade de ícones ---------- */
+
+  .icones {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
+    gap: 12px;
+    margin: 22px 0;
+  }
+
+  .icone {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 18px 14px 13px 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 11px;
+    text-align: center;
+  }
+
+  .icone span { font-size: 12.5px; color: var(--ink-2); line-height: 1.3; }
+
+  /* ---------- lista de decisões ---------- */
+
+  .pendencias {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    margin: 22px 0;
+  }
+
+  .pendencia {
+    background: var(--surface);
+    padding: 16px 19px;
+    display: flex;
+    gap: 16px;
+    align-items: baseline;
+  }
+
+  .pendencia b {
+    font-family: var(--f-marca);
+    font-weight: 600;
+    font-size: 15px;
+    flex: none;
+    min-width: 190px;
+  }
+
+  .pendencia p { font-size: 15px; margin: 0; color: var(--ink-2); }
+
+  footer {
+    margin-top: 64px;
+    padding-top: 22px;
+    border-top: 1px solid var(--rule-2);
+    font-size: 14px;
+    color: var(--ink-3);
+    max-width: 66ch;
+  }
+
+  @media (max-width: 640px) {
+    body { font-size: 16px; }
+    .folha { padding: 0 20px 64px 20px; }
+    .pendencia { flex-direction: column; gap: 5px; }
+    .pendencia b { min-width: 0; }
+    .amostra-palavra, .amostra-falso { font-size: 44px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+
+<div class="folha">
+
+  <header class="capa">
+    <div class="marca-linha">
+      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true">
+        <path d="M5.5 5h13" stroke="#00A896"/>
+        <path d="M5.5 5v14" stroke="#2563EB"/>
+        <path d="M5.5 12h6.5M12 12l6.5-3M12 12l6.5 3" stroke="#2563EB"/>
+        <path d="M5.5 19h13" stroke="currentColor"/>
+      </svg>
+      <span class="marca-nome">Elotempo</span>
+    </div>
+
+    <h1>O que a auditoria de design encontrou</h1>
+
+    <p class="resumo">
+      Comparei o manual da marca, o plano de design e o código que está rodando. Três coisas
+      não se encontram, uma delas é um defeito medido, e os oito ícones que faltavam já estão
+      desenhados e no aplicativo.
+    </p>
+
+    <span class="credito">5 de setembro de 2026 · marca, cor, tipografia e iconografia</span>
+  </header>
+
+  <div class="chaves">
+    <div class="chave"><b>8</b><span>ícones autorais desenhados</span></div>
+    <div class="chave"><b>13</b><span>tokens do plano nunca implementados</span></div>
+    <div class="chave"><b>184</b><span>cores fixas fora do sistema</span></div>
+    <div class="chave"><b>1,04:1</b><span>contraste da marca no tema escuro</span></div>
+    <div class="chave"><b>0</b><span>SVGs no plano de design</span></div>
+  </div>
+
+  <!-- ============================================================ -->
+  <section>
+    <span class="marcador m-achado">Achado · tipografia</span>
+    <h2>A assinatura é texto vivo, e a máquina não tem a fonte</h2>
+
+    <div class="col">
+      <p>
+        Você me passou a configuração exata do SVG: <strong>Sora, peso 500 Medium, 112&nbsp;px,
+        letter-spacing −5</strong>. Isso fecha uma dúvida e abre outra.
+      </p>
+      <p>
+        O arquivo declara <code>font-family="Sora, Inter, Arial, sans-serif"</code>. O Elotempo
+        embarca cinco famílias — Inter, Libre Baskerville, Source Serif 4, IBM Plex Sans e IBM
+        Plex Mono — e <strong>nenhuma delas é a Sora</strong>. Em qualquer máquina sem a fonte
+        instalada, a palavra é redesenhada na primeira que existir.
+      </p>
+    </div>
+
+    <div class="amostra">
+      <div>
+        <span class="amostra-rot">Sora 500 · tracking −0,0446 em</span>
+        <div class="amostra-palavra">Elotempo</div>
+      </div>
+      <div>
+        <span class="amostra-rot">o mesmo tracking numa fonte que não é a Sora</span>
+        <div class="amostra-falso">Elotempo</div>
+      </div>
+    </div>
+
+    <div class="col">
+      <p>
+        E o problema não é só o desenho das letras. O tracking de −5 foi ajustado <em>para as
+        métricas da Sora</em>: outra fonte tem sidebearings diferentes, então o mesmo −5 fecha
+        demais ou de menos. A assinatura muda de forma e de largura conforme a máquina.
+      </p>
+
+      <h3>O que isso implica em número</h3>
+      <p>
+        −5&nbsp;px sobre 112&nbsp;px é <strong>−0,0446&nbsp;em</strong>. Guardado assim, o
+        tracking sobrevive a qualquer redimensionamento — em píxeis, ele só vale nos 112.
+      </p>
+
+      <h3>A saída</h3>
+      <p>
+        <strong>Converter a assinatura em contorno.</strong> Vira geometria: exata em toda
+        máquina, sem depender de fonte instalada, sem cair em nada. É o que se faz com logotipo,
+        e resolve o caso sozinho.
+      </p>
+      <p>
+        Adotar a Sora como fonte do <em>aplicativo</em> é outra decisão, separada. Confirmei que
+        ela existe como <code>@fontsource/sora</code> na versão 5.3.0, então há caminho para
+        embarcá-la sem tocar na regra de funcionar sem internet. Mas isso esbarra no achado
+        seguinte.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section>
+    <span class="marcador m-achado">Achado · plano contra código</span>
+    <h2>O plano de design e o aplicativo divergiram em três frentes</h2>
+
+    <div class="col">
+      <p>
+        O plano é uma prancheta de 17 telas com 38 tokens por tema. O aplicativo tem 30. A
+        diferença não é aleatória.
+      </p>
+
+      <h3>Treze tokens que o plano pede e o código não tem</h3>
+      <p>
+        <code>--campo</code> e <code>--sombra-campo</code> (superfície de entrada com relevo
+        próprio), <code>--acento2</code> (o segundo acento), <code>--realce</code>,
+        <code>--pontos</code> e <code>--grad-mesa</code> (o fundo pontilhado, hoje escrito à
+        mão no <code>TreeCanvas</code>), <code>--vidro</code> / <code>--vidro-borda</code> /
+        <code>--desfoque</code> (painéis translúcidos como sistema — há 17 usos de
+        <code>backdrop-blur</code> avulsos), os gradientes, e <code>--foto</code> /
+        <code>--icones</code>, que no plano são interruptores de densidade do card.
+      </p>
+
+      <h3>A tipografia foi unificada em Inter, e isso apaga metade da diferença entre os temas</h3>
+      <p>
+        No plano, o que separa clássico de moderno é a <em>letra</em>: Libre Baskerville com
+        Source Serif 4 de um lado, IBM Plex Sans com IBM Plex Mono do outro. Um é serifado de
+        livro, o outro é sans de tela.
+      </p>
+      <p>
+        No código, os quatro temas usam Inter. O “clássico” virou o moderno em tons sépia. E o
+        <code>fontes.css</code> continua embarcando as cinco famílias, das quais quatro não são
+        referenciadas por token nenhum — peso morto no instalador.
+      </p>
+
+      <h3>A cor escapou do sistema</h3>
+      <p>
+        O plano é categórico: <em>“um único conjunto de tokens; nada de cor solta no código”</em>.
+        Contei <strong>184 cores fixas do Tailwind em 15 arquivos</strong> —
+        <code>text-stone-500</code>, <code>bg-amber-500</code>, <code>text-emerald-400</code> —
+        que não acompanham a troca de tema.
+      </p>
+      <p>
+        Junto delas, <strong>32 usos de <code>dark:</code></strong> que não fazem o que parecem:
+        o <code>tailwind.config.js</code> não declara <code>darkMode</code>, então a variante
+        segue o <code>prefers-color-scheme</code> do <strong>sistema operacional</strong>, não o
+        tema escolhido no aplicativo. Quem usa Clássico Claro num Windows em modo escuro recebe
+        as cores erradas — e o contrário também.
+      </p>
+
+      <h3>O que foi na direção contrária, e a favor</h3>
+      <p>
+        As cinco cores de linha do tempo (<code>--lt-*</code>) não existiam no plano — nasceram
+        depois e são o único subsistema de cor com disciplina completa, incluindo um teste que
+        mede contraste real nos quatro temas. É o modelo do que os outros deveriam ser.
+      </p>
+      <p>
+        As convenções genealógicas do plano estão implementadas: <code>†</code> falecimento,
+        <code>⚭ ⚯ ⚮</code> para os estados de união, <code>c. 1945</code> para data aproximada e
+        <em>“sem registro”</em> em vez de campo vazio. Falta uma só — o sobrenome em versalete
+        nas telas de registro.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section>
+    <span class="marcador m-defeito">Defeito medido · cor</span>
+    <h2>A paleta da marca desaparece nos temas escuros</h2>
+
+    <div class="col">
+      <p>
+        Você reparou que o ícone principal estava azul e o resto do aplicativo não. Fui medir, e
+        é pior do que desencontro de gosto.
+      </p>
+    </div>
+
+    <div class="temas">
+      <div class="tema">
+        <div class="tema-palco" style="background: #f8f3e8;">
+          <svg width="46" height="46" viewBox="0 0 512 512" aria-hidden="true"><rect width="512" height="512" rx="115" fill="#0B1D3A"/><g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="34"><path d="M170 130v252" stroke="#2563EB"/><path d="M170 130h180" stroke="#00A896"/><path d="M170 256h74" stroke="#2563EB"/><path d="M244 256l106-42M244 256l106 42" stroke="#2563EB"/><path d="M170 382h180" stroke="#E8EEF4"/></g></svg>
+        </div>
+        <div class="tema-pe"><b>15,17:1</b><span>Clássico claro — legível, mas frio na sala</span></div>
+      </div>
+
+      <div class="tema">
+        <div class="tema-palco" style="background: #2b261f;">
+          <svg width="46" height="46" viewBox="0 0 512 512" aria-hidden="true"><rect width="512" height="512" rx="115" fill="#0B1D3A"/><g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="34"><path d="M170 130v252" stroke="#2563EB"/><path d="M170 130h180" stroke="#00A896"/><path d="M170 256h74" stroke="#2563EB"/><path d="M244 256l106-42M244 256l106 42" stroke="#2563EB"/><path d="M170 382h180" stroke="#E8EEF4"/></g></svg>
+        </div>
+        <div class="tema-pe" style="background: var(--warn-bg);"><b style="color: var(--warn);">1,12:1</b><span style="color: var(--warn);">Clássico escuro — o azulejo some</span></div>
+      </div>
+
+      <div class="tema">
+        <div class="tema-palco" style="background: #ffffff;">
+          <svg width="46" height="46" viewBox="0 0 512 512" aria-hidden="true"><rect width="512" height="512" rx="115" fill="#0B1D3A"/><g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="34"><path d="M170 130v252" stroke="#2563EB"/><path d="M170 130h180" stroke="#00A896"/><path d="M170 256h74" stroke="#2563EB"/><path d="M244 256l106-42M244 256l106 42" stroke="#2563EB"/><path d="M170 382h180" stroke="#E8EEF4"/></g></svg>
+        </div>
+        <div class="tema-pe"><b>16,79:1</b><span>Moderno claro — é a casa da marca</span></div>
+      </div>
+
+      <div class="tema">
+        <div class="tema-palco" style="background: #161a22;">
+          <svg width="46" height="46" viewBox="0 0 512 512" aria-hidden="true"><rect width="512" height="512" rx="115" fill="#0B1D3A"/><g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="34"><path d="M170 130v252" stroke="#2563EB"/><path d="M170 130h180" stroke="#00A896"/><path d="M170 256h74" stroke="#2563EB"/><path d="M244 256l106-42M244 256l106 42" stroke="#2563EB"/><path d="M170 382h180" stroke="#E8EEF4"/></g></svg>
+        </div>
+        <div class="tema-pe" style="background: var(--warn-bg);"><b style="color: var(--warn);">1,04:1</b><span style="color: var(--warn);">Moderno escuro — o azulejo some</span></div>
+      </div>
+    </div>
+
+    <div class="col">
+      <p>
+        O marinho <code>#0B1D3A</code> contra o fundo do card de cada tema. Nos dois escuros o
+        azulejo vira um retângulo invisível com três linhas coloridas flutuando. E no clássico
+        claro, que é o tema padrão, é um bloco frio numa sala quente — exatamente o que você viu.
+      </p>
+      <p>
+        <strong>Foi erro meu levar a paleta fixa para dentro do aplicativo.</strong> Eu tinha
+        escrito a regra certa — “a marca colorida fica onde ela se apresenta” — e aplicado errado,
+        porque o splash e o “Sobre” estão dentro dos temas.
+      </p>
+
+      <h3>A peça que falta já estava escrita no seu plano</h3>
+      <p>
+        O plano de design especifica <code>--acento2</code> nos quatro temas, e nos quatro ele é
+        verde-azulado. É o teal da marca já traduzido para cada sala — escrito antes de o logo
+        existir, e nunca implementado.
+      </p>
+    </div>
+
+    <div class="rolo">
+      <table>
+        <thead>
+          <tr><th>Tema</th><th>--acento</th><th>--acento2</th><th>sobre o card</th><th>entre si</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Clássico claro</td><td class="num">#7a5c34</td><td class="num">#3d6b60</td><td class="num">5,47:1</td><td class="num">1,02:1</td></tr>
+          <tr><td>Clássico escuro</td><td class="num">#d8c39a</td><td class="num">#84b3a4</td><td class="num">6,40:1</td><td class="num">1,36:1</td></tr>
+          <tr><td>Moderno claro</td><td class="num">#2563eb</td><td class="num">#0d9488</td><td class="num">3,74:1</td><td class="num">1,38:1</td></tr>
+          <tr><td>Moderno escuro</td><td class="num">#5b8bf9</td><td class="num">#2bbfab</td><td class="num">7,59:1</td><td class="num">1,41:1</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="col">
+      <p>
+        No moderno claro o <code>--acento2</code> é <code>#0d9488</code> — a um passo do
+        <code>#00A896</code> do manual. Os quatro passam o mínimo de 3:1 exigido para elemento
+        gráfico.
+      </p>
+      <p>
+        Uma ressalva que a medição expõe: no clássico claro os dois acentos têm luminância quase
+        idêntica (1,02:1 entre si). Lá a marca de duas cores lê pela <em>forma</em>, não pelo
+        contraste — e é mais um motivo para o símbolo pequeno do cabeçalho seguir monocromático.
+      </p>
+    </div>
+
+    <h3 style="max-width: 66ch;">A regra que resolve</h3>
+    <div class="rolo">
+      <table>
+        <thead>
+          <tr><th>Significa</th><th>Token</th><th>Onde vale</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Sexo</td><td class="num">--masc · --fem</td><td>card da árvore, faixa de vida</td></tr>
+          <tr><td>Categoria de linha do tempo</td><td class="num">--lt-* (cinco)</td><td>gaveta e marcos</td></tr>
+          <tr><td>Ação, seleção, foco</td><td class="num">--acento</td><td>botões, seleção, links</td></tr>
+          <tr><td>A marca, dentro do app</td><td class="num">--acento2</td><td>splash, Sobre, desbloqueio</td></tr>
+          <tr><td>A marca, fora do app</td><td class="num">paleta fixa</td><td>.exe, instalador, loja</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="col">
+      <p>
+        Uma frase governa tudo: <strong>cada cor tem um significado, e nenhum significado tem
+        duas cores.</strong> Fora do aplicativo a marca não convive com tema nenhum e precisa ser
+        sempre igual para ser reconhecida. Dentro, tudo obedece ao tema — inclusive ela.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section>
+    <span class="marcador m-decisao">Feito · iconografia</span>
+    <h2>Oito desenhos, e o executável parou de ser o Tauri</h2>
+
+    <div class="col">
+      <p>
+        O aplicativo usava 95 ícones distintos do Lucide em 41 arquivos, duas marcas que se
+        contradiziam — uma árvore botânica no topo, um grafo de versionamento no splash — e, no
+        instalador, o logo padrão do Tauri.
+      </p>
+      <p>
+        A gramática veio da seção “Construção” do seu manual: traço reto, ponta arredondada, nó
+        em círculo cheio, espessura constante. Mas o desenho <strong>não</strong> é o logo
+        reduzido.
+      </p>
+
+      <h3>A conta que decide tudo</h3>
+      <p>
+        A razão nó/traço do símbolo é <code>34 ÷ 14 ≈ 2,4</code>. Reduzir o SVG de 400&nbsp;px
+        para 24 daria traço <code>0,84</code> — invisível. Trazida para a grade de 24 do Lucide,
+        onde o traço é 2, essa mesma razão faz o nó virar <code>r 2</code>: o dobro exato do
+        traço. É a única constante que precisa ser decorada.
+      </p>
+      <p>
+        A grade é a do Lucide de propósito. Oitenta e sete ícones dele continuam no aplicativo, e
+        um autoral fora da grade fica gordo ao lado de um <code>Plus</code>.
+      </p>
+    </div>
+
+    <div class="icones">
+      <div class="icone">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.5 5h13M5.5 5v14M5.5 19h13M5.5 12h6.5M12 12l6.5-3M12 12l6.5 3"/></svg>
+        <span>A marca, monocromática</span>
+      </div>
+      <div class="icone">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 7v3.6M4.6 10.6h14.8M4.6 10.6V15M12 10.6V15M19.4 10.6V15"/><g fill="currentColor" stroke="none"><circle cx="12" cy="5" r="2"/><circle cx="4.6" cy="17" r="2"/><circle cx="12" cy="17" r="2"/><circle cx="19.4" cy="17" r="2"/></g></svg>
+        <span>Árvore genealógica</span>
+      </div>
+      <div class="icone">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><g fill="currentColor" stroke="none"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></g></svg>
+        <span>Linha do tempo</span>
+      </div>
+      <div class="icone">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 12L5 6M12 12l7-6M12 12v7M5 6h14"/><g fill="currentColor" stroke="none"><circle cx="12" cy="12" r="2"/><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="12" cy="19" r="2"/></g></svg>
+        <span>Relações e conexões</span>
+      </div>
+      <div class="icone">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 12V7.4M12 12h3.9"/><circle cx="12" cy="12" r="1.9" fill="currentColor" stroke="none"/></svg>
+        <span>Acontecimento histórico</span>
+      </div>
+      <div class="icone">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="6.6" stroke-dasharray="3.1 3.3"/></svg>
+        <span>Pessoa desconhecida</span>
+      </div>
+    </div>
+
+    <div class="col">
+      <p>
+        O nó vazado fecha o vocabulário: neste desenho uma pessoa <em>é</em> um nó, e sem nome ele
+        não se preenche. É o tracejado usado uma vez só, com um significado só.
+      </p>
+      <p>
+        Some-se o ícone do aplicativo (o azulejo marinho tricolor) e a assinatura horizontal, e são
+        oito. Todos herdam <code>currentColor</code> — o mesmo arquivo serve aos quatro temas, sem
+        variante.
+      </p>
+
+      <h3>O que está no aplicativo agora</h3>
+      <p>
+        A árvore substituiu o <code>TreeDeciduous</code> em 11 arquivos, a linha do tempo trocou o
+        <code>Clock</code> em 4, as relações trocaram o <code>GitMerge</code> em 6, e o nó vazado
+        entrou no card do placeholder. O pacote do executável — <code>.ico</code>,
+        <code>.icns</code>, os PNGs e os nove <code>Square*Logo</code> — foi gerado a partir de um
+        SVG mestre: o <code>tauri icon</code> aceita SVG, então não fez falta rasterizador.
+      </p>
+      <p>
+        <code>npm run verificar</code>: 121 testes de frontend e 249 de domínio, todos passando.
+      </p>
+
+      <h3>O que deliberadamente não virou desenho</h3>
+      <p>
+        O plano de design <strong>não contém um único SVG</strong> — nenhuma tag
+        <code>&lt;svg&gt;</code>, nenhum <code>&lt;path&gt;</code>. Cada ícone dele é glifo Unicode
+        ou forma em CSS, e isso é escolha, não lacuna.
+      </p>
+      <ul>
+        <li>
+          <strong>Os estados da união</strong> (<code>⚭ ⚯ ⚮</code>) são notação genealógica,
+          impressa em livros há um século. São texto: imprimem com fidelidade no A4, acompanham o
+          corpo da fonte e são copiáveis. Virar anel desenhado é andar para trás.
+        </li>
+        <li>
+          <strong>Os selos de registro</strong> do card já estão resolvidos no plano como letras de
+          8&nbsp;px em quadrados de 13 — <code>F</code>, <code>D</code>, <code>R</code>,
+          <code>B</code>. A 13&nbsp;px uma silhueta facial vira borrão; a letra ainda diz qual
+          registro existe.
+        </li>
+        <li>
+          <strong>A trilha lateral de sete ferramentas</strong> supõe uma navegação que o
+          aplicativo não tem — hoje é barra superior mais painel de 384&nbsp;px.
+        </li>
+        <li>
+          <strong>Ícone de bandeja e favicon:</strong> não há bandeja no programa, e num aplicativo
+          de desktop o favicon só apareceria durante o desenvolvimento.
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section>
+    <span class="marcador m-erro">Correções ao que eu mesmo disse</span>
+    <h2>Quatro coisas que afirmei e depois desmenti no código</h2>
+
+    <div class="col">
+      <ul>
+        <li>
+          <strong>A paleta fixa dentro do aplicativo.</strong> Coloquei o azulejo marinho no splash
+          e no “Sobre”. A medição acima mostra que ele desaparece em dois dos quatro temas.
+        </li>
+        <li>
+          <strong>“<code>Users</code> vira o ícone de relações, em 8 arquivos.”</strong> Fui ver:
+          nos oito ele significa <em>pessoas</em> — contagem, fusão, família registrada —, não
+          rede. Trocar teria destruído significado. Pelo mesmo motivo o <code>Clock</code> do
+          histórico de ações ficou: ali é horário, não linha do tempo.
+        </li>
+        <li>
+          <strong>“Limpar as 184 cores é pré-requisito dos ícones.”</strong> Não é. Os ícones
+          herdam a cor que o local já define, então trocá-los não piora nada. A limpeza continua
+          necessária — só não bloqueia.
+        </li>
+        <li>
+          <strong>A linha do tempo com quatro nós.</strong> É o desenho do manual e está certo em
+          tamanho de apresentação, mas quase todo uso no aplicativo é de 14 a 20&nbsp;px, e ali a
+          folga entre nós cai abaixo de 1&nbsp;px. Entrou com três; o de quatro fica para
+          32&nbsp;px em diante.
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section>
+    <span class="marcador m-defeito">Achado à parte · risco de dado</span>
+    <h2>A troca de nome move a pasta do acervo, e nada migra</h2>
+
+    <div class="col">
+      <p>
+        Isto não é design, mas apareceu na auditoria e é sério o bastante para entrar aqui.
+      </p>
+      <p>
+        O identificador do aplicativo mudou de <code>com.arvore.genealogica</code> para
+        <code>com.elotempo.app</code>. Esse identificador <em>é</em> o nome da pasta onde o
+        <code>app_data_dir()</code> guarda o acervo e a mídia.
+      </p>
+    </div>
+
+    <div class="aviso">
+      <p>
+        Na sua máquina as duas pastas existem, cada uma com um <code>acervo.sqlite</code> de cerca
+        de 2&nbsp;MB, e a nova está em uso. Aparentemente o arquivo foi levado de uma para a outra.
+      </p>
+      <p>
+        Mas <strong>não há código que faça essa migração</strong>. Quem tivesse a versão anterior
+        instalada e atualizasse para o Elotempo abriria um acervo vazio, sem nenhum aviso — e
+        concluiria que perdeu tudo.
+      </p>
+      <p>
+        Como o programa ainda não foi publicado, isso custa pouco para resolver agora: na
+        abertura, se a pasta nova não tiver acervo e a antiga tiver, copiar e avisar.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section>
+    <span class="marcador m-aberto">Em aberto</span>
+    <h2>O que depende de decisão sua</h2>
+
+    <div class="pendencias">
+      <div class="pendencia">
+        <b>A assinatura em contorno</b>
+        <p>Converter o texto da Sora em <code>path</code> no SVG do logo. Resolve sozinho, sem efeito colateral.</p>
+      </div>
+      <div class="pendencia">
+        <b>A Sora no aplicativo</b>
+        <p>Embarcar como sexta família, ou deixá-la só no logo? Existe em <code>@fontsource</code>, então há caminho offline.</p>
+      </div>
+      <div class="pendencia">
+        <b>A tipografia dos temas</b>
+        <p>Restaurar a distinção serifado/sans que o plano pede, ou assumir Inter e tirar as quatro famílias não usadas do instalador? Hoje é o pior dos dois: paga o peso e não usa.</p>
+      </div>
+      <div class="pendencia">
+        <b>O segundo acento</b>
+        <p>Implementar <code>--acento2</code> nos quatro temas e passar a marca do splash, do “Sobre” e do desbloqueio a usá-lo. Quatro linhas, valores já escolhidos pelo plano.</p>
+      </div>
+      <div class="pendencia">
+        <b>As 184 cores soltas</b>
+        <p>A faxina que faz o planejamento de cor valer alguma coisa. Inclui consertar os 32 <code>dark:</code> que seguem o sistema operacional.</p>
+      </div>
+      <div class="pendencia">
+        <b>A migração da pasta de dados</b>
+        <p>Barato agora, caro depois de publicar.</p>
+      </div>
+      <div class="pendencia">
+        <b>O commit</b>
+        <p>A árvore de trabalho tem 7.224 linhas em 69 arquivos que não são deste trabalho — sete migrations, módulos inteiros. Commitar os ícones separado, tudo junto, ou você organiza antes?</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    As pranchas visuais dos ícones — gramática, os quatro de domínio, identidade, escopo e o
+    sistema de cor — ficam na prancheta do <em>Sistema de Ícones Elotempo</em>. Os arquivos de
+    trabalho estão em <code>Design/icones/</code>.
+  </footer>
+
+</div>

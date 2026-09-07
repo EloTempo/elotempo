@@ -16,12 +16,24 @@
  */
 
 import { useState } from 'react';
-import { Baby, HeartHandshake, Pencil, Trash2, Unlink, UserRoundPlus, X } from 'lucide-react';
-import { Button } from '../../../components/ui/Button';
+import {
+  Baby,
+  HeartHandshake,
+  Pencil,
+  Trash2,
+  Unlink,
+  User,
+  UserRoundPlus,
+  X,
+} from 'lucide-react';
+import { IconeRelacoes } from '../../../components/icons';
+import { Button, cn } from '../../../components/ui/Button';
 import { Input } from '../../../components/ui/Input';
 import { Modal } from '../../../components/ui/Modal';
 import { EscolherPessoa } from './EscolherPessoa';
 import { CasamentoDaUniao } from './CasamentoDaUniao';
+import { PerfilResumoPessoa } from '../../person/components/PerfilResumoPessoa';
+import { useI18n } from '../../../i18n/I18nContext';
 import {
   useConexoes,
   useAdicionarPais,
@@ -47,6 +59,9 @@ interface PainelConexoesProps {
   onFechar: () => void;
   /** Chamado depois que a pessoa é apagada, para a tela soltar a seleção. */
   onPessoaRemovida?: (id: string) => void;
+  onAbrirEdicao?: (id: string) => void;
+  onDefinirComoRaiz?: (id: string) => void;
+  isRaizAtual?: boolean;
 }
 
 const ESTADOS: Array<{ id: UnionStatus; rotulo: string }> = [
@@ -109,8 +124,13 @@ export function PainelConexoes({
   onSelecionarPessoa,
   onFechar,
   onPessoaRemovida,
+  onAbrirEdicao,
+  onDefinirComoRaiz,
+  isRaizAtual,
 }: PainelConexoesProps) {
+  const { t } = useI18n();
   const { data: conexoes, isLoading, error } = useConexoes(pessoaId);
+  const [aba, setAba] = useState<'perfil' | 'conexoes'>('perfil');
 
   const adicionarPais = useAdicionarPais();
   const adicionarConjuge = useAdicionarConjuge();
@@ -138,7 +158,7 @@ export function PainelConexoes({
   if (isLoading) {
     return (
       <aside className="w-80 flex-none border-l border-borda bg-sup p-4">
-        <p className="text-sm text-tinta3">Carregando conexões…</p>
+        <p className="text-sm text-tinta3">{t('comum', 'carregando')}</p>
       </aside>
     );
   }
@@ -252,37 +272,79 @@ export function PainelConexoes({
 
   return (
     <aside className="w-80 flex-none border-l border-borda bg-sup flex flex-col min-h-0">
-      <header className="flex items-start gap-2 p-3 border-b border-borda flex-none">
+      <header className="flex items-start gap-2 p-3 border-b border-borda flex-none bg-card">
         <div className="flex-1 min-w-0">
-          <span className="block font-num text-[10.5px] uppercase tracking-wider text-tinta3">
-            Conexões
+          <span className="block font-num text-[10px] uppercase tracking-wider text-tinta3 font-semibold">
+            {aba === 'perfil' && !pessoa.is_placeholder ? t('conexoes', 'tituloInformacoes') : t('conexoes', 'tituloGerenciar')}
           </span>
-          <h2 className="font-tit font-bold text-base text-tinta m-0 truncate">
+          <h2 className="font-tit font-bold text-base text-tinta m-0 truncate" title={nomeDe(pessoa)}>
             {nomeDe(pessoa)}
           </h2>
         </div>
-        {/* Exclusão fica no cabeçalho, não no fim da coluna: lá embaixo ela
-            some abaixo da dobra assim que a pessoa tem duas ou três uniões. */}
+        {/* Exclusão fica no cabeçalho */}
         <button
           type="button"
           onClick={() => setDialogo({ tipo: 'excluir-pessoa' })}
-          aria-label="Excluir esta pessoa"
-          title="Excluir esta pessoa"
-          className="text-tinta3 hover:text-fem p-1 rounded-raio-s hover:bg-card transition-colors flex-none"
+          aria-label={t('conexoes', 'excluirPessoa')}
+          title={t('conexoes', 'excluirPessoa')}
+          className="text-tinta3 hover:text-fem p-1 rounded-raio-s hover:bg-sup transition-colors flex-none cursor-pointer"
         >
           <Trash2 className="w-4 h-4" />
         </button>
         <button
           type="button"
           onClick={onFechar}
-          aria-label="Fechar painel"
-          className="text-tinta3 hover:text-tinta p-1 rounded-raio-s hover:bg-card transition-colors flex-none"
+          aria-label={t('comum', 'fechar')}
+          className="text-tinta3 hover:text-tinta p-1 rounded-raio-s hover:bg-sup transition-colors flex-none cursor-pointer"
         >
           <X className="w-4 h-4" />
         </button>
       </header>
 
-      <div className="flex-1 overflow-y-auto min-h-0 p-3 flex flex-col gap-5">
+      {/* Abas de Navegação: Informações Salvas vs Conexões Familiares */}
+      {!pessoa.is_placeholder && (
+        <div className="flex border-b border-borda bg-card flex-none">
+          <button
+            type="button"
+            onClick={() => setAba('perfil')}
+            className={cn(
+              "flex-1 py-2 text-xs font-semibold flex items-center justify-center gap-1.5 border-b-2 transition-colors cursor-pointer",
+              aba === 'perfil'
+                ? "border-acento text-tinta bg-sup/60 font-bold"
+                : "border-transparent text-tinta3 hover:text-tinta hover:bg-sup/30"
+            )}
+          >
+            <User className="w-3.5 h-3.5" />
+            <span>{t('perfil', 'informacoes')}</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setAba('conexoes')}
+            className={cn(
+              "flex-1 py-2 text-xs font-semibold flex items-center justify-center gap-1.5 border-b-2 transition-colors cursor-pointer",
+              aba === 'conexoes'
+                ? "border-acento text-tinta bg-sup/60 font-bold"
+                : "border-transparent text-tinta3 hover:text-tinta hover:bg-sup/30"
+            )}
+          >
+            <IconeRelacoes className="w-3.5 h-3.5" />
+            <span>{t('perfil', 'conexoes')}</span>
+          </button>
+        </div>
+      )}
+
+      {aba === 'perfil' && !pessoa.is_placeholder ? (
+        <PerfilResumoPessoa
+          pessoaId={pessoaId}
+          conexoes={conexoes}
+          onSelecionarPessoa={onSelecionarPessoa}
+          onAbrirEdicao={onAbrirEdicao ?? onSelecionarPessoa}
+          onAlternarParaConexoes={() => setAba('conexoes')}
+          onDefinirComoRaiz={onDefinirComoRaiz}
+          isRaizAtual={isRaizAtual}
+        />
+      ) : (
+        <div className="flex-1 overflow-y-auto min-h-0 p-3 flex flex-col gap-5">
         {erroAcao && (
           <div
             role="alert"
@@ -302,19 +364,19 @@ export function PainelConexoes({
         {/* ---------------- Pais ---------------- */}
         <section className="flex flex-col gap-2">
           <h3 className="font-num text-[10.5px] uppercase tracking-wider text-tinta3 m-0">
-            Pais
+            {t('perfil', 'pais')}
           </h3>
 
           {origem ? (
             <div className="flex flex-col gap-2">
               <Ficha
                 pessoa={origem.masculino}
-                papel="pai"
+                papel={t('perfil', 'pai')}
                 onAbrir={() => aoClicarEmRelacionado(origem.masculino)}
               />
               <Ficha
                 pessoa={origem.feminino}
-                papel="mãe"
+                papel={t('perfil', 'mae')}
                 onAbrir={() => aoClicarEmRelacionado(origem.feminino)}
               />
               {origem.filhos.length > 1 && (
@@ -330,7 +392,7 @@ export function PainelConexoes({
                 className="self-start text-[11px] text-tinta3 hover:text-fem transition-colors flex items-center gap-1 bg-transparent border-none cursor-pointer p-0"
               >
                 <Unlink className="w-3 h-3" />
-                Desvincular destes pais
+                {t('conexoes', 'desvincular')}
               </button>
             </div>
           ) : (
@@ -347,7 +409,7 @@ export function PainelConexoes({
                 disabled={adicionarPais.isPending}
               >
                 <UserRoundPlus className="w-4 h-4 mr-1" />
-                {adicionarPais.isPending ? 'Criando…' : 'Adicionar pais'}
+                {adicionarPais.isPending ? t('comum', 'carregando') : t('conexoes', 'adicionarPais')}
               </Button>
             </>
           )}
@@ -356,11 +418,11 @@ export function PainelConexoes({
         {/* ---------------- Uniões ---------------- */}
         <section className="flex flex-col gap-2">
           <h3 className="font-num text-[10.5px] uppercase tracking-wider text-tinta3 m-0">
-            Uniões
+            {t('perfil', 'conjuges')}
           </h3>
 
           {unioes.length === 0 && (
-            <p className="text-xs text-tinta3 m-0">Nenhuma união registrada.</p>
+            <p className="text-xs text-tinta3 m-0">{t('conexoes', 'semConexoes')}</p>
           )}
 
           {unioes.map((u) => {
@@ -369,7 +431,7 @@ export function PainelConexoes({
             <div key={u.id} className="flex flex-col gap-2 p-2.5 rounded-raio-s border border-borda bg-card">
               <Ficha
                 pessoa={conjuge}
-                papel={u.slot_da_pessoa === 'masculino' ? 'esposa' : 'marido'}
+                papel={u.slot_da_pessoa === 'masculino' ? t('perfil', 'esposa') : t('perfil', 'marido')}
                 onAbrir={() => aoClicarEmRelacionado(conjuge)}
               />
 
@@ -399,10 +461,12 @@ export function PainelConexoes({
                       <button
                         type="button"
                         onClick={() => aoClicarEmRelacionado(f)}
-                        className="w-full text-left text-xs text-tinta2 hover:text-tinta px-2 py-1 rounded-raio-s hover:bg-sup transition-colors flex items-center gap-1.5"
+                        className="w-full text-left px-2.5 py-1.5 rounded-raio-s border border-borda bg-card text-xs hover:border-acento transition-colors flex items-center justify-between group"
                       >
-                        <Baby className="w-3 h-3 flex-none text-tinta3" />
                         <span className="truncate">{nomeDe(f)}</span>
+                        <span className="text-[10px] text-tinta3 group-hover:text-tinta">
+                          {f.sexo === 'F' ? t('perfil', 'filha') : t('perfil', 'filho')}
+                        </span>
                       </button>
                     </li>
                   ))}
@@ -423,7 +487,7 @@ export function PainelConexoes({
                 }}
               >
                 <Baby className="w-4 h-4 mr-1" />
-                Adicionar filho
+                {t('conexoes', 'adicionarFilho')}
               </Button>
 
               <button
@@ -434,7 +498,7 @@ export function PainelConexoes({
                 className="self-start text-[11px] text-tinta3 hover:text-fem transition-colors flex items-center gap-1 bg-transparent border-none cursor-pointer p-0"
               >
                 <Trash2 className="w-3 h-3" />
-                Excluir esta união
+                {t('comum', 'excluir')}
               </button>
             </div>
             );
@@ -442,7 +506,7 @@ export function PainelConexoes({
 
           <Button size="sm" variant="secondary" onClick={() => setDialogo({ tipo: 'conjuge' })}>
             <HeartHandshake className="w-4 h-4 mr-1" />
-            Adicionar cônjuge
+            {t('conexoes', 'adicionarConjuge')}
           </Button>
 
           {unioes.length === 0 && (
@@ -460,19 +524,19 @@ export function PainelConexoes({
               }}
             >
               <Baby className="w-4 h-4 mr-1" />
-              Adicionar filho
+              {t('conexoes', 'adicionarFilho')}
             </Button>
           )}
         </section>
-
       </div>
+    )}
 
       {/* ---------------- Diálogos ---------------- */}
 
       <Modal
         isOpen={dialogo?.tipo === 'conjuge' || dialogo?.tipo === 'filho'}
         onClose={() => setDialogo(null)}
-        title={dialogo?.tipo === 'conjuge' ? 'Adicionar cônjuge' : 'Adicionar filho'}
+        title={dialogo?.tipo === 'conjuge' ? t('conexoes', 'adicionarConjuge') : t('conexoes', 'adicionarFilho')}
         className="max-w-xl"
       >
         {(dialogo?.tipo === 'conjuge' || dialogo?.tipo === 'filho') && (
@@ -591,7 +655,7 @@ export function PainelConexoes({
 
           <div className="flex justify-end gap-3 pt-3 border-t border-borda">
             <Button type="button" variant="ghost" onClick={() => setDialogo(null)}>
-              Cancelar
+              {t('comum', 'cancelar')}
             </Button>
             <Button
               type="button"
@@ -606,7 +670,7 @@ export function PainelConexoes({
                 })
               }
             >
-              {removerPessoa.isPending ? 'Excluindo…' : 'Excluir'}
+              {removerPessoa.isPending ? t('comum', 'carregando') : t('comum', 'excluir')}
             </Button>
           </div>
         </div>

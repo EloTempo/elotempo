@@ -1,5 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { criarPessoa, atualizarPessoa, criarEvento, buscarPessoas } from '../../../lib/api';
+import {
+  criarPessoa,
+  atualizarPessoa,
+  criarEvento,
+  buscarPessoas,
+  removerPessoa,
+  restaurarPessoa,
+} from '../../../lib/api';
+import { useHistorico } from '../../../contexts/HistoricoContext';
 import { TIPOS_EVENTO, type DataEscolhida } from '../../../types';
 
 /** Houve alguma escolha de data? Ano ou descrição bastam. */
@@ -25,6 +33,7 @@ function invalidarAcervo(queryClient: ReturnType<typeof useQueryClient>) {
  */
 export function useCriarPessoa() {
   const queryClient = useQueryClient();
+  const { registrarAcao } = useHistorico();
 
   return useMutation({
     mutationFn: async (dados: DadosPessoaForm) => {
@@ -35,6 +44,7 @@ export function useCriarPessoa() {
         minibiografia: dados.minibiografia || null,
         is_vivo: dados.is_vivo,
         foto_url: null,
+        tipo_tempo: dados.tipo_tempo ?? 'real',
       });
 
       // Só cria o evento quando há alguma data escolhida — um evento de
@@ -54,6 +64,27 @@ export function useCriarPessoa() {
           data: dados.falecimento,
         });
       }
+
+      registrarAcao({
+        descricao: `Criar ${dados.nome}`,
+        desfazer: async () => {
+          await removerPessoa(id);
+          invalidarAcervo(queryClient);
+        },
+        refazer: async () => {
+          await restaurarPessoa({
+            id,
+            nome: dados.nome,
+            sobrenome: dados.sobrenome || null,
+            sexo: dados.sexo,
+            minibiografia: dados.minibiografia || null,
+            is_vivo: dados.is_vivo,
+            is_placeholder: false,
+            foto_url: null,
+          });
+          invalidarAcervo(queryClient);
+        },
+      });
 
       return id;
     },

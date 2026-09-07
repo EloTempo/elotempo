@@ -1,0 +1,71 @@
+# FAMILIA: Trask (A Leste do Éden) — FICÇÃO (literatura americana)
+# CONFIABILIDADE geral: ficcao (NÃO misturar com dados reais)
+# FONTES: cânon "A Leste do Éden", de John Steinbeck; trad. A.B. Pinheiro de Lemos (Record)
+# FORMATO: um bloco por pessoa (ver _MODELO-PESSOA.txt)
+# NOTA: sem foto (direito autoral). Recria o conflito de Caim e Abel por gerações
+#       (Charles/Adam, depois Aron/Cal). Os gêmeos têm PATERNIDADE AMBÍGUA (Cathy
+#       teve relações com Charles). A família Hamilton é baseada nos parentes
+#       maternos REAIS de Steinbeck — ficção e genealogia real se cruzam.
+# ---
+
+# --- FAMÍLIA TRASK ---
+== Cyrus Trask ==
+nome_publico: Cyrus Trask
+relacoes: patriarca; pai de Adam e do meio-irmão Charles   # -> Parentesco
+fonte: cânon A Leste do Éden
+confiabilidade: ficcao
+
+== Adam Trask ==
+identidade: O irmão "bom"; muda-se para o vale do Salinas em busca de um novo começo.
+nome_publico: Adam Trask
+relacoes: filho de Cyrus; casa-se com Cathy Ames; pai (oficial) dos gêmeos Aron e Cal   # -> Parentesco
+fonte: cânon A Leste do Éden
+confiabilidade: ficcao
+
+== Charles Trask ==
+nome_publico: Charles Trask
+relacoes: meio-irmão de Adam; possível pai biológico dos gêmeos   # -> Parentesco [PATERNIDADE AMBÍGUA]
+fonte: cânon A Leste do Éden
+confiabilidade: ficcao
+
+== Cathy Ames ==
+identidade: Figura sombria do romance; abandona os filhos e assume identidade nova ("Kate").
+nome_publico: Cathy Ames
+mudanca_nome: passa a se chamar "Kate"
+relacoes: esposa de Adam; mãe de Aron e Cal   # -> Parentesco
+fonte: cânon A Leste do Éden
+confiabilidade: ficcao
+
+== Aron Trask ==
+identidade: O gêmeo idealista e puro (o "Abel").
+nome_publico: Aron Trask
+relacoes: filho de Adam e Cathy; gêmeo de Cal   # -> Parentesco
+fonte: cânon A Leste do Éden
+confiabilidade: ficcao
+
+== Cal Trask ==
+identidade: O gêmeo atormentado que luta contra a herança do mal (o "Caim").
+nome_publico: Caleb "Cal" Trask
+relacoes: filho de Adam e Cathy; gêmeo de Aron   # -> Parentesco
+fonte: cânon A Leste do Éden
+confiabilidade: ficcao
+
+# --- FAMÍLIA HAMILTON (baseada nos parentes reais de Steinbeck) ---
+== Samuel Hamilton ==
+identidade: Patriarca irlandês sábio e inventivo; contraponto luminoso aos Trask.
+nome_publico: Samuel Hamilton
+relacoes: patriarca dos Hamilton; baseado no avô materno real de Steinbeck   # -> Parentesco
+fonte: cânon A Leste do Éden   # personagem baseado em pessoa real
+confiabilidade: ficcao
+
+== Liza Hamilton ==
+nome_publico: Liza Hamilton
+relacoes: esposa de Samuel Hamilton   # -> Parentesco
+fonte: cânon A Leste do Éden
+confiabilidade: ficcao
+
+== Olive Hamilton ==
+nome_publico: Olive Hamilton
+relacoes: filha de Samuel e Liza; corresponde à mãe real do autor   # -> Parentesco
+fonte: cânon A Leste do Éden   # personagem baseado em pessoa real (mãe de Steinbeck)
+confiabilidade: ficcao

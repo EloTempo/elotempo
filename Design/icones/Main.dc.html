@@ -1,0 +1,168 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap">
+  <style>
+    body { margin: 0; font-family: 'Sora', 'Segoe UI', system-ui, sans-serif; }
+    a { color: #00A896; } a:hover { color: #0B1D3A; }
+    .lbl { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: #6B7280; font-weight: 500; }
+    .cap { font-size: 12.5px; line-height: 1.55; color: #55606E; }
+    .mono { font-family: ui-monospace, 'Cascadia Mono', 'DejaVu Sans Mono', monospace; }
+  </style>
+</helmet>
+
+<div style="width: 940px; height: 800px; box-sizing: border-box; background: #FBFCFD; color: #0B1D3A; display: flex; flex-direction: column;">
+
+  <!-- cabeçalho -->
+  <div style="display: flex; align-items: flex-end; justify-content: space-between; padding: 34px 40px 20px 40px; border-bottom: 1px solid #E3E9EF;">
+    <div style="display: flex; flex-direction: column; gap: 7px;">
+      <span class="lbl">Elotempo · sistema de ícones</span>
+      <span style="font-size: 30px; font-weight: 600; letter-spacing: -.02em; line-height: 1;">Gramática e grade</span>
+      <span class="cap" style="max-width: 520px;">A construção do logo já fixou o vocabulário. Falta escrevê-lo numa grade que conviva com os 87 ícones Lucide que permanecem no aplicativo.</span>
+    </div>
+    <span class="mono" style="font-size: 34px; color: #DCE3EA; font-weight: 300; line-height: 1;">01</span>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; flex-grow: 1;">
+
+    <!-- coluna: o problema da escala -->
+    <div style="padding: 26px 30px 26px 40px; border-right: 1px solid #E3E9EF; display: flex; flex-direction: column; gap: 20px;">
+      <span class="lbl">O ajuste que decide tudo</span>
+
+      <div style="display: flex; align-items: center; gap: 22px;">
+        <div style="display: flex; flex-direction: column; gap: 8px; align-items: center;">
+          <svg width="118" height="118" viewBox="0 0 400 340" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="0" y="0" width="400" height="340" fill="#F2F5F8"/>
+            <path d="M95 40V270" stroke="#2563EB" stroke-width="14"/>
+            <path d="M95 40H300" stroke="#00A896" stroke-width="14"/>
+            <path d="M95 155H205" stroke="#2563EB" stroke-width="14"/>
+            <path d="M205 155L300 120M205 155L300 190" stroke="#2563EB" stroke-width="14"/>
+            <path d="M95 270H300" stroke="#0B1D3A" stroke-width="14"/>
+            <g stroke="none">
+              <circle cx="95" cy="40" r="17" fill="#00A896"/><circle cx="300" cy="40" r="17" fill="#00A896"/>
+              <circle cx="95" cy="155" r="17" fill="#2563EB"/><circle cx="205" cy="155" r="17" fill="#2563EB"/>
+              <circle cx="300" cy="120" r="17" fill="#2563EB"/><circle cx="300" cy="190" r="17" fill="#2563EB"/>
+              <circle cx="95" cy="270" r="17" fill="#0B1D3A"/><circle cx="300" cy="270" r="17" fill="#0B1D3A"/>
+            </g>
+          </svg>
+          <span class="mono" style="font-size: 10.5px; color: #6B7280;">traço 14 · nó r17</span>
+        </div>
+
+        <span style="font-size: 20px; color: #C3CDD7; font-weight: 300;">→</span>
+
+        <div style="display: flex; flex-direction: column; gap: 8px; align-items: center;">
+          <div style="width: 118px; height: 118px; background: #F2F5F8; display: grid; place-items: center;">
+            <svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="#0B1D3A" stroke-width="{{traco}}" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5.5 5h13M5.5 5v14M5.5 19h13M5.5 12h6.5M12 12l6.5-3M12 12l6.5 3"/>
+            </svg>
+          </div>
+          <span class="mono" style="font-size: 10.5px; color: #6B7280;">traço {{traco}} · 24×24</span>
+        </div>
+      </div>
+
+      <p class="cap" style="margin: 0;">
+        A razão nó/traço do logo é <span class="mono">34 ÷ 14 ≈ 2,4</span>. Reduzir o desenho a 24&nbsp;px carrega essa proporção para um traço que o Lucide fixa em&nbsp;2 — o nó vira <span class="mono">r&nbsp;2</span>, exatamente o dobro do traço. É a única constante que precisa ser decorada.
+      </p>
+
+      <div style="border: 1px solid #E3E9EF; background: #FFFFFF; border-radius: 10px; padding: 16px 18px; display: flex; flex-direction: column; gap: 10px;">
+        <span class="lbl">Não escalar o logo</span>
+        <p class="cap" style="margin: 0;">
+          Reduzir o símbolo de 400&nbsp;px para 24 produz um traço de ~0,84 — invisível. E aumentá-lo para casar com o Lucide engorda o desenho. <strong style="color:#0B1D3A;font-weight:600;">Cada ícone é redesenhado na grade de 24</strong>, herdando a gramática, nunca a geometria.
+        </p>
+      </div>
+    </div>
+
+    <!-- coluna: as regras -->
+    <div style="padding: 26px 40px 26px 30px; display: flex; flex-direction: column; gap: 18px;">
+      <span class="lbl">As seis regras</span>
+
+      <div style="display: flex; flex-direction: column; gap: 11px;">
+        <div style="display: flex; gap: 12px; align-items: baseline;">
+          <span class="mono" style="font-size: 11px; color: #00A896; width: 16px; flex: none;">01</span>
+          <span class="cap"><span class="mono" style="color:#0B1D3A;">viewBox 0 0 24 24</span> · área viva de 2 a 22</span>
+        </div>
+        <div style="display: flex; gap: 12px; align-items: baseline;">
+          <span class="mono" style="font-size: 11px; color: #00A896; width: 16px; flex: none;">02</span>
+          <span class="cap">Traço <span class="mono" style="color:#0B1D3A;">{{traco}}</span>, constante — nunca varia dentro de um ícone</span>
+        </div>
+        <div style="display: flex; gap: 12px; align-items: baseline;">
+          <span class="mono" style="font-size: 11px; color: #00A896; width: 16px; flex: none;">03</span>
+          <span class="cap"><span class="mono" style="color:#0B1D3A;">linecap</span> e <span class="mono" style="color:#0B1D3A;">linejoin</span> arredondados, sempre</span>
+        </div>
+        <div style="display: flex; gap: 12px; align-items: baseline;">
+          <span class="mono" style="font-size: 11px; color: #00A896; width: 16px; flex: none;">04</span>
+          <span class="cap">Nó = círculo <strong style="color:#0B1D3A;font-weight:600;">cheio</strong>, <span class="mono" style="color:#0B1D3A;">r 2</span>. Pessoa ou acontecimento</span>
+        </div>
+        <div style="display: flex; gap: 12px; align-items: baseline;">
+          <span class="mono" style="font-size: 11px; color: #00A896; width: 16px; flex: none;">05</span>
+          <span class="cap">Nó <strong style="color:#0B1D3A;font-weight:600;">tracejado</strong> = slot sem nome. Único uso do tracejado</span>
+        </div>
+        <div style="display: flex; gap: 12px; align-items: baseline;">
+          <span class="mono" style="font-size: 11px; color: #00A896; width: 16px; flex: none;">06</span>
+          <span class="cap"><span class="mono" style="color:#0B1D3A;">stroke="currentColor"</span> e <span class="mono" style="color:#0B1D3A;">fill="currentColor"</span> nos nós — nenhuma cor fixa</span>
+        </div>
+      </div>
+
+      <div style="border-left: 3px solid #00A896; padding: 2px 0 2px 14px;">
+        <p class="cap" style="margin: 0;">
+          A regra 06 é a que protege o aplicativo. As três cores da marca significam <em>tempo</em>; dentro da árvore, azul já significa <em>masculino</em>. Ícone de domínio monocromático herdando a cor do tema não cria essa colisão.
+        </p>
+      </div>
+
+      <span class="lbl" style="margin-top: 4px;">A grade, em cima do desenho</span>
+      <div style="display: flex; gap: 14px; align-items: flex-start;">
+        <div style="position: relative; width: 132px; height: 132px; flex: none;">
+          <svg width="132" height="132" viewBox="0 0 24 24" style="position: absolute; inset: 0;">
+            <rect x="0" y="0" width="24" height="24" fill="#FFFFFF" stroke="#E3E9EF" stroke-width=".25"/>
+            <rect x="2" y="2" width="20" height="20" fill="none" stroke="#DCE9EA" stroke-width=".25"/>
+            <path d="M12 0v24M0 12h24" stroke="#EEF3F7" stroke-width=".25"/>
+          </svg>
+          <svg width="132" height="132" viewBox="0 0 24 24" fill="none" stroke="#0B1D3A" stroke-width="{{traco}}" stroke-linecap="round" stroke-linejoin="round" style="position: absolute; inset: 0;">
+            <path d="M12 7v3.6"/>
+            <path d="M4.6 10.6h14.8"/>
+            <path d="M4.6 10.6V15M12 10.6V15M19.4 10.6V15"/>
+            <g fill="#0B1D3A" stroke="none">
+              <circle cx="12" cy="5" r="2"/><circle cx="4.6" cy="17" r="2"/>
+              <circle cx="12" cy="17" r="2"/><circle cx="19.4" cy="17" r="2"/>
+            </g>
+          </svg>
+        </div>
+        <p class="cap" style="margin: 0; padding-top: 6px;">
+          Árvore genealógica na grade. O nó raiz encosta na haste, a barra distribui, cada queda encosta no filho. Nada flutua: em desenho de linha, folga vira sujeira aos 16&nbsp;px.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- rodapé -->
+  <div style="background: #0B1D3A; color: #FFFFFF; padding: 18px 40px; display: flex; align-items: center; justify-content: space-between;">
+    <span class="lbl" style="color: #7C8FA6;">Prova aos tamanhos reais</span>
+    <div style="display: flex; align-items: center; gap: 30px;">
+      <div style="display: flex; align-items: flex-end; gap: 13px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="{{traco}}" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v3.6M4.6 10.6h14.8M4.6 10.6V15M12 10.6V15M19.4 10.6V15"/><g fill="#FFFFFF" stroke="none"><circle cx="12" cy="5" r="2"/><circle cx="4.6" cy="17" r="2"/><circle cx="12" cy="17" r="2"/><circle cx="19.4" cy="17" r="2"/></g></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="{{traco}}" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v3.6M4.6 10.6h14.8M4.6 10.6V15M12 10.6V15M19.4 10.6V15"/><g fill="#FFFFFF" stroke="none"><circle cx="12" cy="5" r="2"/><circle cx="4.6" cy="17" r="2"/><circle cx="12" cy="17" r="2"/><circle cx="19.4" cy="17" r="2"/></g></svg>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="{{traco}}" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v3.6M4.6 10.6h14.8M4.6 10.6V15M12 10.6V15M19.4 10.6V15"/><g fill="#FFFFFF" stroke="none"><circle cx="12" cy="5" r="2"/><circle cx="4.6" cy="17" r="2"/><circle cx="12" cy="17" r="2"/><circle cx="19.4" cy="17" r="2"/></g></svg>
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="{{traco}}" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v3.6M4.6 10.6h14.8M4.6 10.6V15M12 10.6V15M19.4 10.6V15"/><g fill="#FFFFFF" stroke="none"><circle cx="12" cy="5" r="2"/><circle cx="4.6" cy="17" r="2"/><circle cx="12" cy="17" r="2"/><circle cx="19.4" cy="17" r="2"/></g></svg>
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="{{traco}}" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v3.6M4.6 10.6h14.8M4.6 10.6V15M12 10.6V15M19.4 10.6V15"/><g fill="#FFFFFF" stroke="none"><circle cx="12" cy="5" r="2"/><circle cx="4.6" cy="17" r="2"/><circle cx="12" cy="17" r="2"/><circle cx="19.4" cy="17" r="2"/></g></svg>
+      </div>
+      <span class="mono" style="font-size: 10.5px; color: #7C8FA6;">16 · 20 · 24 · 32 · 48</span>
+    </div>
+  </div>
+</div>
+</x-dc>
+
+<script data-dc-script data-props='{"traco":{"editor":"range","default":2,"min":1.5,"max":2.5,"step":0.25,"section":"Grade"}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { traco: this.props.traco ?? 2 };
+  }
+}
+</script>
+</body>
+</html>

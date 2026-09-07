@@ -1,0 +1,26 @@
+# FAMILIA: Dinastias 21–23 do Egito (Terceiro Período Intermediário)
+# CONFIABILIDADE geral: reconstruida-tradicional (ramificações complexas)
+# FONTES: egiptologia acadêmica
+# FORMATO: um bloco por pessoa (ver _MODELO-PESSOA.txt)
+# NOTA: período de linhagens paralelas e sobrepostas (Tânis, líbios) — cronologia
+#       especialmente disputada. Poucos vínculos firmes; expandir com cuidado.
+# ---
+
+== Psusennes I ==
+nome_publico: Psusennes I
+profissoes: faraó (21ª dinastia, Tânis)
+nacionalidades: Egito
+relacoes: um dos principais reis da 21ª dinastia   # -> Parentesco
+fonte: egiptologia
+confiabilidade: reconstruida-tradicional
+
+== Sheshonq I ==
+identidade: Fundador da 22ª dinastia (líbia); frequentemente associado ao "Shishak" bíblico.
+nome_publico: Sheshonq I
+profissoes: faraó (fundador da 22ª dinastia)
+nacionalidades: Egito
+relacoes: iniciou a linhagem líbia   # -> Parentesco
+fonte: egiptologia
+confiabilidade: reconstruida-tradicional
+
+# 23ª dinastia: reis paralelos aos da 22ª (Leontópolis etc.) — expandir.

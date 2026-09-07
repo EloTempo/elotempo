@@ -1,0 +1,60 @@
+# FAMILIA: Corleone (O Poderoso Chefão) — FICÇÃO
+# CONFIABILIDADE geral: ficcao (NÃO misturar com dados reais)
+# FONTES: cânon O Poderoso Chefão (romance de Mario Puzo; filmes)
+# FORMATO: um bloco por pessoa (ver _MODELO-PESSOA.txt)
+# NOTA: sem foto (direito autoral).
+# ---
+
+== Vito Corleone ==
+identidade: Patriarca; imigrante siciliano que funda a família mafiosa em Nova York.
+nome_publico: Vito Corleone
+nome_registro: Vito Andolini
+mudanca_nome: adotou "Corleone", nome da cidade natal na Sicília
+relacoes: casado com Carmela; pai de Sonny, Fredo, Michael e Connie   # -> Parentesco
+fonte: cânon O Poderoso Chefão
+confiabilidade: ficcao
+
+== Carmela Corleone ==
+nome_publico: Carmela Corleone
+relacoes: esposa de Vito; mãe dos quatro filhos   # -> Parentesco
+fonte: cânon O Poderoso Chefão
+confiabilidade: ficcao
+
+== Sonny Corleone ==
+nome_publico: Santino "Sonny" Corleone
+relacoes: filho mais velho de Vito; pai (ilegítimo) de Vincent Mancini   # -> Parentesco
+fonte: cânon O Poderoso Chefão
+confiabilidade: ficcao
+
+== Fredo Corleone ==
+nome_publico: Fredo Corleone
+relacoes: segundo filho de Vito   # -> Parentesco
+fonte: cânon O Poderoso Chefão
+confiabilidade: ficcao
+
+== Michael Corleone ==
+identidade: Filho caçula que se torna o sucessor de Vito à frente da família.
+nome_publico: Michael Corleone
+relacoes: filho de Vito; casado com Kay Adams; pai de Anthony e Mary   # -> Parentesco
+fonte: cânon O Poderoso Chefão
+confiabilidade: ficcao
+
+== Connie Corleone ==
+nome_publico: Constanzia "Connie" Corleone
+relacoes: filha de Vito   # -> Parentesco
+fonte: cânon O Poderoso Chefão
+confiabilidade: ficcao
+
+== Tom Hagen ==
+identidade: Consigliere da família; filho adotivo informal de Vito.
+nome_publico: Tom Hagen
+relacoes: criado por Vito como filho (sem laço de sangue)   # -> Parentesco
+fonte: cânon O Poderoso Chefão
+confiabilidade: ficcao
+
+== Vincent Mancini ==
+identidade: Filho ilegítimo de Sonny; assume a família na Parte III.
+nome_publico: Vincent Mancini (Corleone)
+relacoes: filho de Sonny; sobrinho de Michael   # -> Parentesco
+fonte: cânon O Poderoso Chefão
+confiabilidade: ficcao

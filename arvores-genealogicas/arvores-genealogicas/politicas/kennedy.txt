@@ -1,0 +1,236 @@
+# FAMILIA: Kennedy (EUA)
+# CONFIABILIDADE geral: documentada
+# FONTES: Wikipedia; Britannica; JFK Presidential Library; Biography.com
+# FORMATO: um bloco por pessoa (ver _MODELO-PESSOA.txt)
+# LGPD: dinastia com muitos vivos — incluídas apenas figuras públicas e dados
+#       públicos; cada pessoa viva está marcada "# LGPD: pessoa viva".
+# ---
+
+# --- AVÓS ---
+== Patrick Joseph Kennedy ==
+nome_publico: P. J. Kennedy
+apelidos: P. J.
+nascimento: 1858
+falecimento: 1929
+profissoes: comerciante; político (legislatura de Massachusetts)
+nacionalidades: EUA
+relacoes: pai de Joseph P. Kennedy Sr.; avô paterno de JFK   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== John Francis Fitzgerald ==
+identidade: Prefeito de Boston; patriarca materno dos Kennedy.
+nome_publico: John F. "Honey Fitz" Fitzgerald
+apelidos: Honey Fitz
+nascimento: 1863
+falecimento: 1950
+profissoes: político (prefeito de Boston; deputado)
+nacionalidades: EUA
+relacoes: pai de Rose; avô materno de JFK   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+# --- GERAÇÃO 1 — os patriarcas ---
+== Joseph P. Kennedy Sr. ==
+identidade: Empresário e investidor; embaixador dos EUA no Reino Unido e 1º presidente da SEC.
+nome_publico: Joseph P. Kennedy Sr.
+nascimento: 1888
+falecimento: 1969
+escolaridade: Universidade Harvard
+profissoes: empresário; investidor; diplomata
+nacionalidades: EUA
+foto: fotos/joseph-kennedy-sr.webp
+relacoes: casado (1914) com Rose Fitzgerald; nove filhos   # -> Parentesco
+fonte: Wikipedia; Britannica
+confiabilidade: documentada
+
+== Rose Fitzgerald Kennedy ==
+identidade: Matriarca dos Kennedy; filantropa, feita condessa papal (1951).
+nome_publico: Rose Fitzgerald Kennedy
+nome_registro: Rose Elizabeth Fitzgerald
+nascimento: 1890
+falecimento: 1995
+nacionalidades: EUA
+relacoes: filha de "Honey Fitz"; casada com Joseph Sr.; mãe de nove filhos   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+# --- GERAÇÃO 2 — os nove filhos ---
+== Joseph P. Kennedy Jr. ==
+nome_publico: Joseph P. Kennedy Jr.
+nascimento: 1915
+falecimento: 1944   # morto em ação na 2ª Guerra
+profissoes: militar (aviador naval)
+nacionalidades: EUA
+relacoes: primogênito de Joseph Sr. e Rose   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== John F. Kennedy ==
+identidade: 35º presidente dos EUA; assassinado em Dallas em 1963.
+nome_publico: John F. Kennedy
+nome_registro: John Fitzgerald Kennedy
+apelidos: Jack; JFK
+nascimento: 1917
+falecimento: 1963
+escolaridade: Universidade Harvard
+profissoes: político (presidente dos EUA); militar; escritor
+nacionalidades: EUA
+foto: fotos/john-f-kennedy.webp
+relacoes: filho de Joseph Sr. e Rose; casado (1953) com Jacqueline Bouvier   # -> Parentesco
+fonte: JFK Library; Wikipedia
+confiabilidade: documentada
+
+== Jacqueline Kennedy Onassis ==
+nome_publico: Jacqueline "Jackie" Kennedy
+nome_registro: Jacqueline Lee Bouvier
+mudanca_nome: Kennedy (casamento, 1953); Onassis (casamento, 1968)
+nascimento: 1929
+falecimento: 1994
+profissoes: editora; jornalista; primeira-dama
+nacionalidades: EUA
+relacoes: esposa de JFK; mãe de Caroline e John Jr.   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Rosemary Kennedy ==
+nome_publico: Rosemary Kennedy
+nome_registro: Rose Marie Kennedy
+nascimento: 1918
+falecimento: 2005
+nacionalidades: EUA
+relacoes: filha de Joseph Sr. e Rose   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Kathleen Kennedy ==
+nome_publico: Kathleen "Kick" Kennedy
+apelidos: Kick
+nascimento: 1920
+falecimento: 1948   # acidente aéreo
+nacionalidades: EUA
+relacoes: filha de Joseph Sr. e Rose   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Eunice Kennedy Shriver ==
+identidade: Fundadora das Olimpíadas Especiais (Special Olympics).
+nome_publico: Eunice Kennedy Shriver
+nascimento: 1921
+falecimento: 2009
+profissoes: ativista social
+nacionalidades: EUA
+relacoes: filha de Joseph Sr. e Rose; casada com Sargent Shriver; mãe de Maria Shriver   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Sargent Shriver ==
+nome_publico: Sargent Shriver
+nascimento: 1915
+falecimento: 2011
+profissoes: político; diplomata (1º diretor do Peace Corps)
+nacionalidades: EUA
+relacoes: marido de Eunice Kennedy   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Patricia Kennedy Lawford ==
+nome_publico: Patricia Kennedy Lawford
+nascimento: 1924
+falecimento: 2006
+nacionalidades: EUA
+relacoes: filha de Joseph Sr. e Rose   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Robert F. Kennedy ==
+identidade: Procurador-Geral e senador; candidato presidencial assassinado em 1968.
+nome_publico: Robert F. Kennedy
+nome_registro: Robert Francis Kennedy
+apelidos: Bobby; RFK
+nascimento: 1925
+falecimento: 1968
+profissoes: político (procurador-geral; senador)
+nacionalidades: EUA
+foto: fotos/robert-f-kennedy.webp
+relacoes: filho de Joseph Sr. e Rose; casado com Ethel Skakel; 11 filhos   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Ethel Skakel Kennedy ==
+nome_publico: Ethel Skakel Kennedy
+nascimento: 1928
+falecimento: 2024
+nacionalidades: EUA
+relacoes: esposa de Robert F. Kennedy   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Jean Kennedy Smith ==
+nome_publico: Jean Kennedy Smith
+nascimento: 1928
+falecimento: 2020
+profissoes: diplomata (embaixadora dos EUA na Irlanda)
+nacionalidades: EUA
+relacoes: filha de Joseph Sr. e Rose   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Edward M. Kennedy ==
+identidade: Senador por Massachusetts por quase 47 anos.
+nome_publico: Edward "Ted" Kennedy
+apelidos: Ted
+nascimento: 1932
+falecimento: 2009
+profissoes: político (senador)
+nacionalidades: EUA
+relacoes: caçula de Joseph Sr. e Rose; pai de Patrick J. Kennedy   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+# --- GERAÇÃO 3 — descendentes públicos (seleção) ---
+== Caroline Kennedy ==
+nome_publico: Caroline Kennedy
+nascimento: 1957
+profissoes: advogada; escritora; diplomata (embaixadora no Japão e na Austrália)
+nacionalidades: EUA
+relacoes: filha de JFK e Jacqueline   # -> Parentesco
+fonte: Wikipedia   # LGPD: pessoa viva
+confiabilidade: documentada
+
+== John F. Kennedy Jr. ==
+nome_publico: John F. Kennedy Jr.
+nascimento: 1960
+falecimento: 1999   # acidente aéreo
+profissoes: advogado; jornalista (revista George)
+nacionalidades: EUA
+relacoes: filho de JFK e Jacqueline   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Robert F. Kennedy Jr. ==
+nome_publico: Robert F. Kennedy Jr.
+nascimento: 1954
+profissoes: advogado ambiental; político
+nacionalidades: EUA
+relacoes: filho de Robert F. Kennedy e Ethel   # -> Parentesco
+fonte: Wikipedia   # LGPD: pessoa viva
+confiabilidade: documentada
+
+== Patrick J. Kennedy ==
+nome_publico: Patrick J. Kennedy
+nascimento: 1967
+profissoes: político (deputado federal, Rhode Island)
+nacionalidades: EUA
+relacoes: filho de Edward "Ted" Kennedy   # -> Parentesco
+fonte: Wikipedia   # LGPD: pessoa viva
+confiabilidade: documentada
+
+== Maria Shriver ==
+nome_publico: Maria Shriver
+nascimento: 1955
+profissoes: jornalista; escritora
+nacionalidades: EUA
+relacoes: filha de Eunice Kennedy Shriver e Sargent Shriver   # -> Parentesco
+fonte: Wikipedia   # LGPD: pessoa viva
+confiabilidade: documentada

@@ -1,0 +1,105 @@
+# FAMILIA: Klabin–Lafer (São Paulo) — imigração lituana
+# CONFIABILIDADE geral: documentada
+# FONTES: Wikipedia; USP-Pioneiros; Klabin (Centro de Memória); CPDOC-FGV;
+#         Arquivo Histórico Judaico Brasileiro
+# FORMATO: um bloco por pessoa (ver _MODELO-PESSOA.txt)
+# NOTA: família judaica de origem lituana (Pazelva/Želva). Klabin e Lafer são
+#       ramos entrelaçados por sangue e casamento (Miguel Lafer casou com a
+#       prima Nessel Klabin) — consanguinidade recorrente.
+# LGPD: descendentes vivos marcados "# LGPD: pessoa viva".
+# ---
+
+# --- GERAÇÃO 1 — o fundador ---
+== Maurício Freeman Klabin ==
+identidade: Imigrante lituano; fundou a Klabin Irmãos & Cia, origem da maior papeleira do Brasil.
+nome_publico: Maurício Freeman Klabin
+nome_registro: Moishe Elkana
+nascimento: 1860   # Pazelva/Želva (Lituânia), 1º de março
+falecimento: 1923  # Heidelberg (Alemanha), 21 de setembro
+profissoes: empresário (papel, tipografia, importação)
+nacionalidades: Lituânia; Brasil
+foto: fotos/mauricio-klabin.webp
+relacoes: casado com Bertha Osband; irmão de Nessel, Salomão e Hessel; fundou a KIC (1899)   # -> Parentesco
+fonte: Wikipedia; Klabin
+confiabilidade: documentada
+
+== Nessel Klabin ==
+nome_publico: Nessel Klabin
+nascimento: 1880
+falecimento: 1955
+nacionalidades: Lituânia; Brasil
+relacoes: irmã de Maurício; casou com o primo Miguel Lafer; mãe de Horácio Lafer   # -> Parentesco [CONSANGUINIDADE]
+fonte: klabin-lafer
+confiabilidade: documentada
+
+== Miguel Lafer ==
+nome_publico: Miguel Lafer
+nascimento: 1876
+falecimento: 1926   # São Paulo, 12 de fevereiro
+profissoes: empresário (cofundador da KIC)
+nacionalidades: Lituânia; Brasil
+relacoes: primo de Maurício; casado com a prima Nessel Klabin; pai de Horácio Lafer   # -> Parentesco [CONSANGUINIDADE]
+fonte: Wikipedia
+confiabilidade: documentada
+
+# --- GERAÇÃO 2 — os gestores ---
+== Wolff Klabin ==
+identidade: Dirigiu o grupo Klabin e, com Horácio Lafer, criou nos anos 1940 a primeira grande indústria de celulose do Brasil (Monte Alegre, PR).
+nome_publico: Wolff Klabin
+nome_registro: Wolff Kadischevitz
+mudanca_nome: adotou "Klabin" nos anos 1930
+nascimento: 1880
+falecimento: 1957
+profissoes: empresário
+nacionalidades: Lituânia; Brasil
+relacoes: sobrinho de Maurício (filho de Fanny Lafer); criado pelo tio Miguel Lafer   # -> Parentesco
+fonte: Wikipedia; USP-Pioneiros
+confiabilidade: documentada
+
+== Horácio Lafer ==
+identidade: Empresário e estadista; ministro da Fazenda (1951) e das Relações Exteriores (1959).
+nome_publico: Horácio Lafer
+nascimento: 1900   # São Paulo, 3 de maio
+falecimento: 1965
+escolaridade: Faculdade de Direito do Largo de São Francisco
+profissoes: empresário; político (ministro); cofundador da FIESP
+nacionalidades: Brasil
+idiomas: português; inglês; francês; alemão; ídiche; italiano; espanhol
+foto: fotos/horacio-lafer.webp
+relacoes: filho de Miguel Lafer e Nessel Klabin; casado com Maria Luísa "Mimi" Salles; pai de Sylvia e Graziela   # -> Parentesco
+fonte: Wikipedia; klabin-lafer
+confiabilidade: documentada
+
+# --- DESCENDENTES VIVOS (seleção) ---
+== Israel Klabin ==
+identidade: Engenheiro, ambientalista e ex-prefeito do Rio de Janeiro (1979–1980).
+nome_publico: Israel Klabin
+nascimento: 1926   # Rio de Janeiro, 20 de setembro
+profissoes: engenheiro civil; matemático; ambientalista; político
+nacionalidades: Brasil
+relacoes: da 3ª geração Klabin-Lafer   # -> Parentesco
+fonte: Wikipedia; CPDOC-FGV   # LGPD: pessoa viva
+confiabilidade: documentada
+
+== Celso Lafer ==
+identidade: Jurista e diplomata; ministro das Relações Exteriores (1992 e 2001–02); membro da ABL.
+nome_publico: Celso Lafer
+nascimento: 1941
+profissoes: jurista; professor (USP); político (ministro)
+nacionalidades: Brasil
+relacoes: da família Lafer-Klabin   # -> Parentesco
+fonte: Wikipedia   # LGPD: pessoa viva
+confiabilidade: documentada
+
+== Horácio Lafer Piva ==
+nome_publico: Horácio Lafer Piva
+nascimento: 1957
+profissoes: empresário (ex-presidente da FIESP)
+nacionalidades: Brasil
+relacoes: neto de Horácio Lafer (filho de Sylvia Lafer e Pedro Franco Piva)   # -> Parentesco
+fonte: klabin-lafer   # LGPD: pessoa viva
+confiabilidade: documentada
+
+# Ascendência (expandir): Leon Klabin e Sara (pais de Maurício); Zelman Lafer
+# (tio de Maurício, pai de Miguel). Demais gestores/irmãos: Salomão, Hessel e
+# Luiz Klabin; Samuel Klabin.

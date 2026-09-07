@@ -20,6 +20,8 @@ import {
 import { distribuirSlots } from '../slots';
 import type { ChildLinkType, PersonSummary, UnionStatus } from '../../../types';
 
+import { useHistorico } from '../../../contexts/HistoricoContext';
+
 function invalidarAcervo(queryClient: ReturnType<typeof useQueryClient>) {
   queryClient.invalidateQueries({ queryKey: ['arvore'] });
   queryClient.invalidateQueries({ queryKey: ['conexoes'] });
@@ -43,10 +45,25 @@ export function useConexoes(pessoaId: string | null) {
  */
 export function useAdicionarPais() {
   const queryClient = useQueryClient();
+  const { registrarAcao } = useHistorico();
+
   return useMutation({
     mutationFn: async (pessoaId: string) => {
       const uniaoId = await criarUniao(null, null, 'nao_informado');
       await anexarFilho(uniaoId, pessoaId, 'biologico');
+
+      registrarAcao({
+        descricao: 'Adicionar pais',
+        desfazer: async () => {
+          await removerUniao(uniaoId);
+          invalidarAcervo(queryClient);
+        },
+        refazer: async () => {
+          await anexarFilho(uniaoId, pessoaId, 'biologico');
+          invalidarAcervo(queryClient);
+        },
+      });
+
       return uniaoId;
     },
     onSuccess: () => invalidarAcervo(queryClient),
@@ -81,6 +98,8 @@ export function useAdicionarConjuge() {
  */
 export function useAdicionarFilho() {
   const queryClient = useQueryClient();
+  const { registrarAcao } = useHistorico();
+
   return useMutation({
     mutationFn: async (args: {
       uniaoId: string | null;
@@ -98,6 +117,20 @@ export function useAdicionarFilho() {
         );
       }
       await anexarFilho(uniaoId, args.filhoId, args.tipoVinculo);
+
+      const finalUniaoId = uniaoId;
+      registrarAcao({
+        descricao: 'Vincular filho',
+        desfazer: async () => {
+          await desvincularFilho(args.filhoId);
+          invalidarAcervo(queryClient);
+        },
+        refazer: async () => {
+          await anexarFilho(finalUniaoId, args.filhoId, args.tipoVinculo);
+          invalidarAcervo(queryClient);
+        },
+      });
+
       return uniaoId;
     },
     onSuccess: () => invalidarAcervo(queryClient),

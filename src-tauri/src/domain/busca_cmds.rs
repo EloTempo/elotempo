@@ -31,6 +31,12 @@ pub struct FiltrosBusca {
     /// `Some(true)` = só vivas; `Some(false)` = só falecidas; `None` = ambas.
     pub apenas_vivas: Option<bool>,
     pub incluir_placeholders: bool,
+    /// 'todos' | 'meus' | 'publicos'
+    pub origem: Option<String>,
+    /// Filtrar por árvore específica (para estatísticas e listas recortadas)
+    pub arvore_id: Option<String>,
+    /// Filtrar por categoria (ex.: 'Famílias Reais', 'Chefes de Estado', etc.)
+    pub categoria: Option<String>,
 }
 
 /// Um valor que existe no acervo, com quantas pessoas o têm.
@@ -59,6 +65,7 @@ fn colunas_do_no() -> String {
     format!(
         r#"
         p.id, p.nome, p.sobrenome, p.sexo, p.is_vivo, p.is_placeholder,
+        p.minibiografia,
         (SELECT e.ano_inicio FROM eventos e
           WHERE e.pessoa_id = p.id AND e.tipo_evento = '{nascimento}'
           ORDER BY e.ano_inicio LIMIT 1) AS ano_nascimento,
@@ -69,7 +76,12 @@ fn colunas_do_no() -> String {
         (p.foto_url IS NOT NULL AND p.foto_url <> '') AS tem_foto,
         (p.minibiografia IS NOT NULL AND p.minibiografia <> '') AS tem_biografia,
         EXISTS(SELECT 1 FROM documento_vinculos dv WHERE dv.pessoa_id = p.id) AS tem_documentos,
-        EXISTS(SELECT 1 FROM religioes_pessoa r WHERE r.pessoa_id = p.id) AS tem_religiao
+        EXISTS(SELECT 1 FROM religioes_pessoa r WHERE r.pessoa_id = p.id) AS tem_religiao,
+        p.is_publico,
+        p.categoria,
+        p.tipo_tempo,
+        (SELECT a.nome FROM arvore_membros am JOIN arvores a ON a.id = am.arvore_id WHERE am.pessoa_id = p.id LIMIT 1) AS arvore_nome,
+        (SELECT a.id FROM arvore_membros am JOIN arvores a ON a.id = am.arvore_id WHERE am.pessoa_id = p.id LIMIT 1) AS arvore_id
         "#,
         nascimento = tipos::NASCIMENTO,
         falecimento = tipos::FALECIMENTO,
@@ -77,32 +89,41 @@ fn colunas_do_no() -> String {
 }
 
 /// Valor a vincular, na ordem em que os `?` aparecem no SQL montado.
-enum Valor {
+#[derive(Debug, Clone)]
+pub enum Valor {
     Texto(String),
     Numero(i64),
 }
 
-#[tauri::command]
-pub async fn buscar_pessoas_filtrado(
-    filtros: FiltrosBusca,
-    limite: Option<i64>,
-    db: State<'_, SqlitePool>,
-) -> Resultado<Vec<PessoaNode>> {
-    buscar(&db, &filtros, limite.unwrap_or(200)).await
-}
-
-pub async fn buscar(
-    pool: &SqlitePool,
-    filtros: &FiltrosBusca,
-    limite: i64,
-) -> Resultado<Vec<PessoaNode>> {
-    let limite = limite.clamp(1, 1000);
-
+pub fn montar_condicoes(filtros: &FiltrosBusca) -> (Vec<String>, Vec<Valor>) {
     let mut condicoes: Vec<String> = Vec::new();
     let mut valores: Vec<Valor> = Vec::new();
 
     if !filtros.incluir_placeholders {
         condicoes.push("p.is_placeholder = 0".into());
+    }
+
+    match filtros.origem.as_deref() {
+        Some("meus") => condicoes.push("p.is_publico = 0".into()),
+        Some("publicos") => condicoes.push("p.is_publico = 1".into()),
+        _ => {}
+    }
+
+    if let Some(ref arv_id) = filtros.arvore_id {
+        if !arv_id.trim().is_empty() {
+            condicoes.push("p.id IN (SELECT am.pessoa_id FROM arvore_membros am WHERE am.arvore_id = ?)".into());
+            valores.push(Valor::Texto(arv_id.clone()));
+        }
+    }
+
+    if let Some(ref cat) = filtros.categoria {
+        if !cat.trim().is_empty() {
+            condicoes.push(
+                "(p.categoria = ? OR p.id IN (SELECT am.pessoa_id FROM arvore_membros am JOIN arvores a ON a.id = am.arvore_id WHERE a.categoria = ?))".into()
+            );
+            valores.push(Valor::Texto(cat.clone()));
+            valores.push(Valor::Texto(cat.clone()));
+        }
     }
 
     // Texto: alcança tudo que serve para achar uma pessoa pelo nome — o de
@@ -197,6 +218,27 @@ pub async fn buscar(
         condicoes.push("p.is_vivo = ?".into());
         valores.push(Valor::Numero(if vivas { 1 } else { 0 }));
     }
+
+    (condicoes, valores)
+}
+
+#[tauri::command]
+pub async fn buscar_pessoas_filtrado(
+    filtros: FiltrosBusca,
+    limite: Option<i64>,
+    db: State<'_, SqlitePool>,
+) -> Resultado<Vec<PessoaNode>> {
+    buscar(&db, &filtros, limite.unwrap_or(200)).await
+}
+
+pub async fn buscar(
+    pool: &SqlitePool,
+    filtros: &FiltrosBusca,
+    limite: i64,
+) -> Resultado<Vec<PessoaNode>> {
+    let limite = limite.clamp(1, 1000);
+
+    let (condicoes, valores) = montar_condicoes(filtros);
 
     let onde = if condicoes.is_empty() {
         String::new()
@@ -352,6 +394,7 @@ mod testes {
                 minibiografia: None,
                 is_vivo: vivo,
                 foto_url: None,
+                tipo_tempo: None,
             },
         )
         .await
@@ -528,6 +571,78 @@ mod testes {
         .unwrap();
         assert_eq!(falecidas.len(), 1);
         assert_eq!(falecidas[0].nome, "Falecida");
+    }
+
+    #[tokio::test]
+    async fn filtra_por_origem_meus_e_publicos() {
+        let pool = pool_de_teste().await;
+        let p_minha = pessoa(&pool, "Meu Parente", "Silva", true).await;
+        let p_pub = pessoa(&pool, "Figura Pública", "Histórica", false).await;
+
+        sqlx::query("UPDATE pessoas SET is_publico = 1 WHERE id = ?")
+            .bind(&p_pub)
+            .execute(&pool)
+            .await
+            .unwrap();
+
+        let todos = buscar(&pool, &FiltrosBusca { origem: Some("todos".into()), ..Default::default() }, 100)
+            .await
+            .unwrap();
+        assert_eq!(todos.len(), 2);
+
+        let meus = buscar(&pool, &FiltrosBusca { origem: Some("meus".into()), ..Default::default() }, 100)
+            .await
+            .unwrap();
+        assert_eq!(meus.len(), 1);
+        assert_eq!(meus[0].id, p_minha);
+        assert!(!meus[0].is_publico);
+
+        let publicos = buscar(&pool, &FiltrosBusca { origem: Some("publicos".into()), ..Default::default() }, 100)
+            .await
+            .unwrap();
+        assert_eq!(publicos.len(), 1);
+        assert_eq!(publicos[0].id, p_pub);
+        assert!(publicos[0].is_publico);
+    }
+
+    #[tokio::test]
+    async fn filtra_por_arvore_e_categoria() {
+        let pool = pool_de_teste().await;
+        let p1 = pessoa(&pool, "Membro Imperial", "Bragança", false).await;
+        let p2 = pessoa(&pool, "Presidente", "Vargas", false).await;
+
+        sqlx::query("INSERT INTO arvores (id, nome, categoria, is_publico) VALUES ('arv_imp', 'Família Imperial', 'Famílias Reais', 1)")
+            .execute(&pool)
+            .await
+            .unwrap();
+        sqlx::query("INSERT INTO arvores (id, nome, categoria, is_publico) VALUES ('arv_pres', 'Presidentes', 'Chefes de Estado', 1)")
+            .execute(&pool)
+            .await
+            .unwrap();
+
+        sqlx::query("INSERT INTO arvore_membros (arvore_id, pessoa_id) VALUES ('arv_imp', ?)")
+            .bind(&p1)
+            .execute(&pool)
+            .await
+            .unwrap();
+        sqlx::query("INSERT INTO arvore_membros (arvore_id, pessoa_id) VALUES ('arv_pres', ?)")
+            .bind(&p2)
+            .execute(&pool)
+            .await
+            .unwrap();
+
+        let apenas_imp = buscar(&pool, &FiltrosBusca { arvore_id: Some("arv_imp".into()), ..Default::default() }, 100)
+            .await
+            .unwrap();
+        assert_eq!(apenas_imp.len(), 1);
+        assert_eq!(apenas_imp[0].id, p1);
+        assert_eq!(apenas_imp[0].arvore_nome.as_deref(), Some("Família Imperial"));
+
+        let apenas_reais = buscar(&pool, &FiltrosBusca { categoria: Some("Famílias Reais".into()), ..Default::default() }, 100)
+            .await
+            .unwrap();
+        assert_eq!(apenas_reais.len(), 1);
+        assert_eq!(apenas_reais[0].id, p1);
     }
 
     /// Num acervo brasileiro quase todo nome tem acento, e ninguém digita

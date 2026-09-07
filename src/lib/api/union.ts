@@ -41,3 +41,14 @@ export const anexarFilho = (
 
 export const desvincularFilho = (pessoaId: string): Promise<void> =>
   chamar<void>('desvincular_filho', { pessoaId });
+
+export interface UniaoRestauracao {
+  id: string;
+  slot_masculino_id: string;
+  slot_feminino_id: string;
+  estado_vinculo: string;
+  nota?: string | null;
+}
+
+export const restaurarUniao = (uniao: UniaoRestauracao): Promise<string> =>
+  chamar<string>('restaurar_uniao', { uniao });

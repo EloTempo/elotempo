@@ -23,6 +23,8 @@ pub struct NovaPessoaDto {
     pub minibiografia: Option<String>,
     pub is_vivo: bool,
     pub foto_url: Option<String>,
+    #[serde(default)]
+    pub tipo_tempo: Option<String>,
 }
 
 #[tauri::command]
@@ -39,6 +41,7 @@ pub async fn criar_pessoa(
             minibiografia: nova.minibiografia,
             is_vivo: nova.is_vivo,
             foto_url: nova.foto_url,
+            tipo_tempo: nova.tipo_tempo,
         },
     )
     .await
@@ -161,4 +164,121 @@ pub async fn anexar_filho(
 #[tauri::command]
 pub async fn desvincular_filho(pessoa_id: String, db: State<'_, SqlitePool>) -> Resultado<()> {
     regras::desvincular_filho(&db, &pessoa_id).await
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct PessoaRestauracaoDto {
+    pub id: String,
+    pub nome: String,
+    pub sobrenome: Option<String>,
+    pub sexo: String,
+    pub minibiografia: Option<String>,
+    pub is_vivo: bool,
+    pub is_placeholder: bool,
+    pub foto_url: Option<String>,
+}
+
+#[tauri::command]
+pub async fn restaurar_pessoa(
+    pessoa: PessoaRestauracaoDto,
+    db: State<'_, SqlitePool>,
+) -> Resultado<String> {
+    sqlx::query(
+        "INSERT OR REPLACE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, foto_url)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+    )
+    .bind(&pessoa.id)
+    .bind(pessoa.nome.trim())
+    .bind(&pessoa.sobrenome)
+    .bind(&pessoa.sexo)
+    .bind(&pessoa.minibiografia)
+    .bind(pessoa.is_vivo)
+    .bind(pessoa.is_placeholder)
+    .bind(&pessoa.foto_url)
+    .execute(&*db)
+    .await?;
+
+    Ok(pessoa.id)
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UniaoRestauracaoDto {
+    pub id: String,
+    pub slot_masculino_id: String,
+    pub slot_feminino_id: String,
+    pub estado_vinculo: String,
+    pub nota: Option<String>,
+}
+
+#[tauri::command]
+pub async fn restaurar_uniao(
+    uniao: UniaoRestauracaoDto,
+    db: State<'_, SqlitePool>,
+) -> Resultado<String> {
+    sqlx::query(
+        "INSERT OR REPLACE INTO unioes (id, slot_masculino_id, slot_feminino_id, estado_vinculo, nota)
+         VALUES (?, ?, ?, ?, ?)",
+    )
+    .bind(&uniao.id)
+    .bind(&uniao.slot_masculino_id)
+    .bind(&uniao.slot_feminino_id)
+    .bind(&uniao.estado_vinculo)
+    .bind(&uniao.nota)
+    .execute(&*db)
+    .await?;
+
+    Ok(uniao.id)
+}
+
+#[cfg(test)]
+mod testes {
+    use super::*;
+
+    async fn pool_de_teste() -> SqlitePool {
+        let pool = SqlitePool::connect("sqlite::memory:").await.unwrap();
+        sqlx::migrate!("./migrations").run(&pool).await.unwrap();
+        pool
+    }
+
+    #[tokio::test]
+    async fn restaura_pessoa_com_id_identico() {
+        let pool = pool_de_teste().await;
+        let id_original = uuid::Uuid::new_v4().to_string();
+
+        let dto = PessoaRestauracaoDto {
+            id: id_original.clone(),
+            nome: "Joaquim".into(),
+            sobrenome: Some("Nabuco".into()),
+            sexo: "M".into(),
+            minibiografia: Some("Abolicionista brasileiro".into()),
+            is_vivo: false,
+            is_placeholder: false,
+            foto_url: None,
+        };
+
+        sqlx::query(
+            "INSERT OR REPLACE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, foto_url)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+        )
+        .bind(&dto.id)
+        .bind(&dto.nome)
+        .bind(&dto.sobrenome)
+        .bind(&dto.sexo)
+        .bind(&dto.minibiografia)
+        .bind(dto.is_vivo)
+        .bind(dto.is_placeholder)
+        .bind(&dto.foto_url)
+        .execute(&pool)
+        .await
+        .unwrap();
+
+        let lida: (String, String) = sqlx::query_as("SELECT id, nome FROM pessoas WHERE id = ?")
+            .bind(&id_original)
+            .fetch_one(&pool)
+            .await
+            .unwrap();
+
+        assert_eq!(lida.0, id_original);
+        assert_eq!(lida.1, "Joaquim");
+    }
 }

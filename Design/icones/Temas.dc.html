@@ -1,0 +1,125 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap">
+  <style>
+    body { margin: 0; font-family: 'Sora', 'Segoe UI', system-ui, sans-serif; }
+    a { color: #00A896; } a:hover { color: #0B1D3A; }
+    .lbl { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: #6B7280; font-weight: 500; }
+    .cap { font-size: 12.5px; line-height: 1.55; color: #55606E; }
+    .mono { font-family: ui-monospace, 'Cascadia Mono', 'DejaVu Sans Mono', monospace; }
+  </style>
+</helmet>
+
+<div style="width: 940px; height: 660px; box-sizing: border-box; background: #FBFCFD; color: #0B1D3A; display: flex; flex-direction: column;">
+
+  <div style="display: flex; align-items: flex-end; justify-content: space-between; padding: 34px 40px 20px 40px; border-bottom: 1px solid #E3E9EF;">
+    <div style="display: flex; flex-direction: column; gap: 7px;">
+      <span class="lbl">Elotempo · sistema de ícones</span>
+      <span style="font-size: 30px; font-weight: 600; letter-spacing: -.02em; line-height: 1;">Nos quatro temas</span>
+      <span class="cap" style="max-width: 570px;">Um arquivo por ícone, quatro aparências. Valores tirados do <span class="mono">globals.css</span> do projeto — nada aqui é aproximado.</span>
+    </div>
+    <span class="mono" style="font-size: 34px; color: #DCE3EA; font-weight: 300; line-height: 1;">05</span>
+  </div>
+
+  <div style="padding: 24px 40px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px;">
+
+    <!-- clássico claro -->
+    <div style="background: #e8e1d3; border: 1px solid #c8b99c; border-radius: 10px; overflow: hidden; display: flex; flex-direction: column;">
+      <div style="padding: 13px 15px; display: flex; flex-direction: column; gap: 3px; border-bottom: 1px solid #c8b99c;">
+        <span style="font-size: 12.5px; font-weight: 600; color: #241e16;">Clássico claro</span>
+        <span class="mono" style="font-size: 9.5px; color: #756651;">--acento #7a5c34</span>
+      </div>
+      <div style="padding: 16px 15px; display: flex; flex-direction: column; gap: 14px; background: #f8f3e8; flex-grow: 1;">
+        <div style="display: flex; gap: 12px; color: #7a5c34;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 5h13M5.5 5v14M5.5 19h13M5.5 12h6.5M12 12l6.5-3M12 12l6.5 3"/></svg>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v3.6M4.6 10.6h14.8M4.6 10.6V15M12 10.6V15M19.4 10.6V15"/><g fill="currentColor" stroke="none"><circle cx="12" cy="5" r="2"/><circle cx="4.6" cy="17" r="2"/><circle cx="12" cy="17" r="2"/><circle cx="19.4" cy="17" r="2"/></g></svg>
+        </div>
+        <div style="display: flex; gap: 12px; color: #544837;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16"/><g fill="currentColor" stroke="none"><circle cx="4" cy="12" r="2"/><circle cx="9.33" cy="12" r="2"/><circle cx="14.67" cy="12" r="2"/><circle cx="20" cy="12" r="2"/></g></svg>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12L5 6M12 12l7-6M12 12v7M5 6h14"/><g fill="currentColor" stroke="none"><circle cx="12" cy="12" r="2"/><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="12" cy="19" r="2"/></g></svg>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 12V7.4M12 12h3.9"/><circle cx="12" cy="12" r="1.9" fill="currentColor" stroke="none"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- clássico escuro -->
+    <div style="background: #26221c; border: 1px solid #463d31; border-radius: 10px; overflow: hidden; display: flex; flex-direction: column;">
+      <div style="padding: 13px 15px; display: flex; flex-direction: column; gap: 3px; border-bottom: 1px solid #463d31;">
+        <span style="font-size: 12.5px; font-weight: 600; color: #f5ede0;">Clássico escuro</span>
+        <span class="mono" style="font-size: 9.5px; color: #a39582;">--acento #d8c39a</span>
+      </div>
+      <div style="padding: 16px 15px; display: flex; flex-direction: column; gap: 14px; background: #2b261f; flex-grow: 1;">
+        <div style="display: flex; gap: 12px; color: #d8c39a;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 5h13M5.5 5v14M5.5 19h13M5.5 12h6.5M12 12l6.5-3M12 12l6.5 3"/></svg>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v3.6M4.6 10.6h14.8M4.6 10.6V15M12 10.6V15M19.4 10.6V15"/><g fill="currentColor" stroke="none"><circle cx="12" cy="5" r="2"/><circle cx="4.6" cy="17" r="2"/><circle cx="12" cy="17" r="2"/><circle cx="19.4" cy="17" r="2"/></g></svg>
+        </div>
+        <div style="display: flex; gap: 12px; color: #c4b6a4;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16"/><g fill="currentColor" stroke="none"><circle cx="4" cy="12" r="2"/><circle cx="9.33" cy="12" r="2"/><circle cx="14.67" cy="12" r="2"/><circle cx="20" cy="12" r="2"/></g></svg>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12L5 6M12 12l7-6M12 12v7M5 6h14"/><g fill="currentColor" stroke="none"><circle cx="12" cy="12" r="2"/><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="12" cy="19" r="2"/></g></svg>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 12V7.4M12 12h3.9"/><circle cx="12" cy="12" r="1.9" fill="currentColor" stroke="none"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- moderno claro -->
+    <div style="background: #eceef2; border: 1px solid #dfe3ea; border-radius: 10px; overflow: hidden; display: flex; flex-direction: column;">
+      <div style="padding: 13px 15px; display: flex; flex-direction: column; gap: 3px; border-bottom: 1px solid #dfe3ea;">
+        <span style="font-size: 12.5px; font-weight: 600; color: #0f1420;">Moderno claro</span>
+        <span class="mono" style="font-size: 9.5px; color: #6b7280;">--acento #2563eb</span>
+      </div>
+      <div style="padding: 16px 15px; display: flex; flex-direction: column; gap: 14px; background: #ffffff; flex-grow: 1;">
+        <div style="display: flex; gap: 12px; color: #2563eb;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 5h13M5.5 5v14M5.5 19h13M5.5 12h6.5M12 12l6.5-3M12 12l6.5 3"/></svg>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v3.6M4.6 10.6h14.8M4.6 10.6V15M12 10.6V15M19.4 10.6V15"/><g fill="currentColor" stroke="none"><circle cx="12" cy="5" r="2"/><circle cx="4.6" cy="17" r="2"/><circle cx="12" cy="17" r="2"/><circle cx="19.4" cy="17" r="2"/></g></svg>
+        </div>
+        <div style="display: flex; gap: 12px; color: #4b5563;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16"/><g fill="currentColor" stroke="none"><circle cx="4" cy="12" r="2"/><circle cx="9.33" cy="12" r="2"/><circle cx="14.67" cy="12" r="2"/><circle cx="20" cy="12" r="2"/></g></svg>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12L5 6M12 12l7-6M12 12v7M5 6h14"/><g fill="currentColor" stroke="none"><circle cx="12" cy="12" r="2"/><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="12" cy="19" r="2"/></g></svg>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 12V7.4M12 12h3.9"/><circle cx="12" cy="12" r="1.9" fill="currentColor" stroke="none"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- moderno escuro -->
+    <div style="background: #101319; border: 1px solid #242a35; border-radius: 10px; overflow: hidden; display: flex; flex-direction: column;">
+      <div style="padding: 13px 15px; display: flex; flex-direction: column; gap: 3px; border-bottom: 1px solid #242a35;">
+        <span style="font-size: 12.5px; font-weight: 600; color: #eef2f7;">Moderno escuro</span>
+        <span class="mono" style="font-size: 9.5px; color: #8a96a8;">--acento #5b8bf9</span>
+      </div>
+      <div style="padding: 16px 15px; display: flex; flex-direction: column; gap: 14px; background: #161a22; flex-grow: 1;">
+        <div style="display: flex; gap: 12px; color: #5b8bf9;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 5h13M5.5 5v14M5.5 19h13M5.5 12h6.5M12 12l6.5-3M12 12l6.5 3"/></svg>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v3.6M4.6 10.6h14.8M4.6 10.6V15M12 10.6V15M19.4 10.6V15"/><g fill="currentColor" stroke="none"><circle cx="12" cy="5" r="2"/><circle cx="4.6" cy="17" r="2"/><circle cx="12" cy="17" r="2"/><circle cx="19.4" cy="17" r="2"/></g></svg>
+        </div>
+        <div style="display: flex; gap: 12px; color: #a3adc0;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16"/><g fill="currentColor" stroke="none"><circle cx="4" cy="12" r="2"/><circle cx="9.33" cy="12" r="2"/><circle cx="14.67" cy="12" r="2"/><circle cx="20" cy="12" r="2"/></g></svg>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12L5 6M12 12l7-6M12 12v7M5 6h14"/><g fill="currentColor" stroke="none"><circle cx="12" cy="12" r="2"/><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="12" cy="19" r="2"/></g></svg>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 12V7.4M12 12h3.9"/><circle cx="12" cy="12" r="1.9" fill="currentColor" stroke="none"/></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding: 4px 40px 28px 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+    <div style="border-left: 3px solid #00A896; padding: 2px 0 2px 14px;">
+      <p class="cap" style="margin: 0;">
+        A marca do topo pega <span class="mono" style="color:#0B1D3A;">--acento</span>; os ícones de conteúdo pegam <span class="mono" style="color:#0B1D3A;">--tinta2</span>. Nenhum arquivo duplicado, nenhuma variante por tema.
+      </p>
+    </div>
+    <div style="background: #FFF7ED; border: 1px solid #FCD9A8; border-radius: 8px; padding: 13px 15px;">
+      <p class="cap" style="margin: 0; color: #7A4E12;">
+        <strong style="font-weight:600;">Pré-requisito.</strong> Há 184 cores fixas do Tailwind em 15 arquivos, e 32 usos de <span class="mono">dark:</span> que seguem o sistema operacional, não o tema. Ícone novo herdando cor num arquivo assim acerta um tema e erra três.
+      </p>
+    </div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

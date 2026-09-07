@@ -1,0 +1,179 @@
+# FAMILIA: Bush (EUA)
+# CONFIABILIDADE geral: documentada
+# FONTES: George W. Bush Presidential Library; Wikipedia; National Archives
+# FORMATO: um bloco por pessoa (ver _MODELO-PESSOA.txt)
+# NOTA: dois presidentes (um deles também vice); Barbara Pierce descende de um
+#       parente do 14º presidente, Franklin Pierce — elo cruzado entre dinastias.
+# LGPD: muitos membros vivos — apenas figuras públicas e dados públicos;
+#       vivos marcados "# LGPD: pessoa viva".
+# ---
+
+# --- ASCENDÊNCIA ---
+== Samuel P. Bush ==
+identidade: Industrial do aço; patriarca da dinastia Bush.
+nome_publico: Samuel P. Bush
+nome_registro: Samuel Prescott Bush
+nascimento: 1863
+falecimento: 1948
+profissoes: industrial (aço)
+nacionalidades: EUA
+relacoes: casado com Flora Sheldon; pai do senador Prescott Bush   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Prescott Bush ==
+identidade: Banqueiro e senador dos EUA por Connecticut.
+nome_publico: Prescott Bush
+nome_registro: Prescott Sheldon Bush
+nascimento: 1895
+falecimento: 1972
+escolaridade: Universidade Yale
+profissoes: banqueiro; político (senador)
+nacionalidades: EUA
+relacoes: filho de Samuel; casado (1921) com Dorothy Walker; pai de George H. W. Bush   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Dorothy Walker Bush ==
+nome_publico: Dorothy Walker Bush
+nascimento: 1901
+falecimento: 1992
+nacionalidades: EUA
+relacoes: filha de George Herbert Walker; esposa de Prescott; mãe de George H. W. Bush   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Marvin Pierce ==
+nome_publico: Marvin Pierce
+nascimento: 1893
+falecimento: 1969
+profissoes: executivo editorial (McCall Corporation)
+nacionalidades: EUA
+relacoes: pai de Barbara Pierce; ascendência ligada ao presidente Franklin Pierce   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+# --- GERAÇÃO 1 ---
+== George H. W. Bush ==
+identidade: 41º presidente dos EUA (e 43º vice-presidente); antes, diretor da CIA e embaixador na ONU.
+nome_publico: George H. W. Bush
+nome_registro: George Herbert Walker Bush
+nascimento: 1924
+falecimento: 2018
+escolaridade: Universidade Yale
+profissoes: político (presidente e vice dos EUA); militar (aviador naval)
+nacionalidades: EUA
+foto: fotos/george-hw-bush.webp
+relacoes: filho de Prescott e Dorothy; casado (1945) com Barbara Pierce; 6 filhos   # -> Parentesco
+fonte: George W. Bush Library; Wikipedia
+confiabilidade: documentada
+
+== Barbara Bush ==
+identidade: Primeira-dama; fundadora da Barbara Bush Foundation for Family Literacy.
+nome_publico: Barbara Bush
+nome_registro: Barbara Pierce
+nascimento: 1925
+falecimento: 2018
+nacionalidades: EUA
+relacoes: filha de Marvin Pierce; esposa de George H. W.; mãe de George W. e Jeb   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+# --- GERAÇÃO 2 — os seis filhos ---
+== George W. Bush ==
+identidade: 43º presidente dos EUA; antes, governador do Texas.
+nome_publico: George W. Bush
+nome_registro: George Walker Bush
+nascimento: 1946
+escolaridade: Universidade Yale; MBA por Harvard
+profissoes: político (presidente dos EUA; governador do Texas)
+nacionalidades: EUA
+foto: fotos/george-w-bush.webp
+relacoes: filho de George H. W. e Barbara; casado com Laura Welch; pai de Jenna e Barbara   # -> Parentesco
+fonte: George W. Bush Library; Wikipedia   # LGPD: pessoa viva
+confiabilidade: documentada
+
+== Laura Bush ==
+nome_publico: Laura Bush
+nome_registro: Laura Lane Welch
+nascimento: 1946
+profissoes: professora; bibliotecária; primeira-dama
+nacionalidades: EUA
+relacoes: esposa de George W. Bush   # -> Parentesco
+fonte: Wikipedia   # LGPD: pessoa viva
+confiabilidade: documentada
+
+== Pauline Robinson Bush ==
+nome_publico: Robin Bush
+nascimento: 1949
+falecimento: 1953   # leucemia, aos 3 anos
+relacoes: filha de George H. W. e Barbara   # -> Parentesco
+fonte: George W. Bush Library
+confiabilidade: documentada
+
+== Jeb Bush ==
+identidade: Governador da Flórida.
+nome_publico: Jeb Bush
+nome_registro: John Ellis Bush
+nascimento: 1953
+profissoes: político (governador da Flórida); empresário
+nacionalidades: EUA
+relacoes: filho de George H. W. e Barbara; casado com Columba; pai de George P. Bush   # -> Parentesco
+fonte: Wikipedia   # LGPD: pessoa viva
+confiabilidade: documentada
+
+== Neil Bush ==
+nome_publico: Neil Bush
+nascimento: 1955
+profissoes: empresário
+nacionalidades: EUA
+relacoes: filho de George H. W. e Barbara   # -> Parentesco
+fonte: Wikipedia   # LGPD: pessoa viva
+confiabilidade: documentada
+
+== Marvin Bush ==
+nome_publico: Marvin Bush
+nome_registro: Marvin Pierce Bush
+nascimento: 1956
+profissoes: empresário
+nacionalidades: EUA
+relacoes: filho de George H. W. e Barbara   # -> Parentesco
+fonte: Wikipedia   # LGPD: pessoa viva
+confiabilidade: documentada
+
+== Dorothy Bush Koch ==
+nome_publico: Dorothy "Doro" Bush Koch
+nascimento: 1959
+profissoes: escritora; filantropa
+nacionalidades: EUA
+relacoes: filha caçula de George H. W. e Barbara   # -> Parentesco
+fonte: Wikipedia   # LGPD: pessoa viva
+confiabilidade: documentada
+
+# --- GERAÇÃO 3 — netos públicos (seleção) ---
+== George P. Bush ==
+nome_publico: George P. Bush
+nascimento: 1976
+profissoes: político (comissário de terras do Texas)
+nacionalidades: EUA
+relacoes: filho de Jeb Bush   # -> Parentesco
+fonte: Wikipedia   # LGPD: pessoa viva
+confiabilidade: documentada
+
+== Jenna Bush Hager ==
+nome_publico: Jenna Bush Hager
+nascimento: 1981
+profissoes: jornalista; apresentadora; escritora
+nacionalidades: EUA
+relacoes: filha de George W. e Laura; irmã gêmea de Barbara   # -> Parentesco
+fonte: Wikipedia   # LGPD: pessoa viva
+confiabilidade: documentada
+
+== Barbara Pierce Bush ==
+nome_publico: Barbara Pierce Bush
+nascimento: 1981
+profissoes: ativista de saúde global
+nacionalidades: EUA
+relacoes: filha de George W. e Laura; irmã gêmea de Jenna   # -> Parentesco
+fonte: Wikipedia   # LGPD: pessoa viva
+confiabilidade: documentada

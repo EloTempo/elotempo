@@ -1,0 +1,78 @@
+# FAMILIA: 18ª Dinastia do Egito
+# CONFIABILIDADE geral: reconstruida-tradicional (cronologia debatida)
+# FONTES: egiptologia acadêmica; estudos de DNA (2010) da família de Tutancâmon
+# FORMATO: um bloco por pessoa (ver _MODELO-PESSOA.txt)
+# NOTA: datas aproximadas (cronologia egípcia em disputa). Consanguinidade intensa:
+#       exames de DNA indicam que Tutancâmon nasceu da união entre irmãos.
+# ---
+
+== Amosis I ==
+nome_publico: Amosis I (Ahmose)
+nascimento: cerca de 1560 a.C.
+profissoes: faraó (fundador da dinastia)
+nacionalidades: Egito
+relacoes: iniciou a 18ª dinastia   # -> Parentesco
+fonte: egiptologia
+confiabilidade: reconstruida-tradicional
+
+== Hatshepsut ==
+identidade: Uma das poucas mulheres a reinar como faraó, em prosperidade e grandes obras.
+nome_publico: Hatshepsut
+nascimento: cerca de 1507 a.C.
+falecimento: cerca de 1458 a.C.
+profissoes: faraó
+nacionalidades: Egito
+foto: fotos/hatshepsut.webp
+relacoes: filha de Tutmés I; corregente de Tutmés III   # -> Parentesco
+fonte: egiptologia
+confiabilidade: reconstruida-tradicional
+
+== Tutmés III ==
+identidade: Grande faraó guerreiro, expandiu o império ao máximo.
+nome_publico: Tutmés III
+falecimento: cerca de 1425 a.C.
+profissoes: faraó
+nacionalidades: Egito
+relacoes: sucessor de Hatshepsut   # -> Parentesco
+fonte: egiptologia
+confiabilidade: reconstruida-tradicional
+
+== Amenófis III ==
+nome_publico: Amenófis III
+falecimento: cerca de 1353 a.C.
+profissoes: faraó
+nacionalidades: Egito
+relacoes: casado com a rainha Tié; pai de Akhenaton   # -> Parentesco
+fonte: egiptologia
+confiabilidade: reconstruida-tradicional
+
+== Akhenaton ==
+identidade: Faraó que impôs o culto monoteísta a Aton e mudou a arte e a religião egípcias.
+nome_publico: Akhenaton (Amenófis IV)
+falecimento: cerca de 1336 a.C.
+profissoes: faraó
+nacionalidades: Egito
+foto: fotos/akhenaton.webp
+relacoes: filho de Amenófis III; casado com Nefertiti; pai de Tutancâmon (com uma irmã)   # -> Parentesco [CONSANGUINIDADE]
+fonte: egiptologia; DNA (2010)
+confiabilidade: reconstruida-tradicional
+
+== Nefertiti ==
+nome_publico: Nefertiti
+profissoes: rainha
+nacionalidades: Egito
+relacoes: esposa principal de Akhenaton   # -> Parentesco
+fonte: egiptologia
+confiabilidade: reconstruida-tradicional
+
+== Tutancâmon ==
+identidade: O "faraó menino"; célebre pela tumba quase intacta descoberta em 1922.
+nome_publico: Tutancâmon
+nascimento: cerca de 1341 a.C.
+falecimento: cerca de 1323 a.C.
+profissoes: faraó
+nacionalidades: Egito
+foto: fotos/tutancamon.webp
+relacoes: filho de Akhenaton e de uma irmã dele; casado com a meia-irmã Ankhesenamon   # -> Parentesco [CONSANGUINIDADE]
+fonte: egiptologia; DNA (2010)
+confiabilidade: reconstruida-tradicional

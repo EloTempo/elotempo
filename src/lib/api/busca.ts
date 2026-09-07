@@ -24,6 +24,12 @@ export interface FiltrosBusca {
   /** `true` = só vivas; `false` = só falecidas; `null` = ambas. */
   apenas_vivas?: boolean | null;
   incluir_placeholders: boolean;
+  /** 'todos' | 'meus' | 'publicos' */
+  origem?: 'todos' | 'meus' | 'publicos';
+  /** Filtrar por árvore específica (ex.: apenas Família Real) */
+  arvore_id?: string | null;
+  /** Filtrar por categoria (ex.: 'Famílias Reais', 'Chefes de Estado') */
+  categoria?: string | null;
 }
 
 export interface OpcaoDeFiltro {

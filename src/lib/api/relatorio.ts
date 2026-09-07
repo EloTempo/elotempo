@@ -65,5 +65,8 @@ export interface OpcoesRelatorio {
   incluir_placeholders: boolean;
 }
 
-export const montarRelatorio = (opcoes: OpcoesRelatorio): Promise<Relatorio> =>
-  chamar<Relatorio>('montar_relatorio', { opcoes });
+export const montarRelatorio = (
+  opcoes: OpcoesRelatorio,
+  ticketAutorizacao?: string | null,
+): Promise<Relatorio> =>
+  chamar<Relatorio>('montar_relatorio', { opcoes, ticketAutorizacao: ticketAutorizacao ?? null });

@@ -38,3 +38,17 @@ export const promoverPlaceholder = (
   sobrenome?: string | null,
 ): Promise<void> =>
   chamar<void>('promover_placeholder', { pessoaId, nome, sobrenome: sobrenome ?? null });
+
+export interface PessoaRestauracao {
+  id: string;
+  nome: string;
+  sobrenome?: string | null;
+  sexo: string;
+  minibiografia?: string | null;
+  is_vivo: boolean;
+  is_placeholder: boolean;
+  foto_url?: string | null;
+}
+
+export const restaurarPessoa = (pessoa: PessoaRestauracao): Promise<string> =>
+  chamar<string>('restaurar_pessoa', { pessoa });

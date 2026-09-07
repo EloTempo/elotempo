@@ -1,0 +1,104 @@
+# FAMILIA: Bach (dinastia musical da Turíngia)
+# CONFIABILIDADE geral: documentada
+# FONTES: Bach-Archiv Leipzig; Britannica; Wikipedia (Bach family); Encyclopedia.com
+# FORMATO: um bloco por pessoa (ver _MODELO-PESSOA.txt)
+# NOTA: J.S. Bach compilou a própria genealogia em 1735; C.P.E. Bach a continuou.
+# ---
+
+== Veit Bach ==
+identidade: Ancestral fundador da dinastia; padeiro que se fixou em Wechmar, na Turíngia.
+nome_publico: Veit (Vitus) Bach
+falecimento: 1619
+profissoes: padeiro; músico amador
+nacionalidades: Sacro Império (Turíngia)
+relacoes: patriarca da linhagem   # -> Parentesco
+fonte: Bach-Archiv; Wikipedia
+confiabilidade: documentada
+
+== Johann Ambrosius Bach ==
+nome_publico: Johann Ambrosius Bach
+nascimento: 1645
+falecimento: 1695
+profissoes: violinista; trompetista (músico da cidade de Eisenach)
+nacionalidades: Sacro Império (Turíngia)
+relacoes: pai de J.S. Bach; casado com Elisabeth Lämmerhirt   # -> Parentesco
+fonte: Britannica; Wikipedia
+confiabilidade: documentada
+
+== Johann Sebastian Bach ==
+identidade: Compositor e organista do Barroco; o membro mais célebre da família.
+nome_publico: Johann Sebastian Bach
+apelidos: JSB
+nascimento: 1685   # Eisenach, 21/31 de março
+falecimento: 1750  # Leipzig, 28 de julho
+profissoes: compositor; organista; mestre de capela; cantor de Leipzig
+nacionalidades: Sacro Império (Turíngia/Saxônia)
+foto: fotos/johann-sebastian-bach.webp
+relacoes: filho de Johann Ambrosius; casou (1707) com a prima de 2º grau Maria Barbara Bach e (1721) com Anna Magdalena Wilcke   # -> Parentesco [CONSANGUINIDADE]
+fonte: Britannica; Bach-Archiv
+confiabilidade: documentada
+
+== Maria Barbara Bach ==
+nome_publico: Maria Barbara Bach
+nascimento: 1684
+falecimento: 1720
+relacoes: 1ª esposa de J.S. Bach (prima de 2º grau); filha de Johann Michael Bach; mãe de W.F. e C.P.E.   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Anna Magdalena Bach ==
+nome_publico: Anna Magdalena Bach
+nome_registro: Anna Magdalena Wilcke
+nascimento: 1701
+falecimento: 1760
+profissoes: soprano
+relacoes: 2ª esposa de J.S. Bach; mãe de J.C.F. e J.C. Bach   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Wilhelm Friedemann Bach ==
+identidade: Compositor e organista; filho mais velho de J.S. Bach ("Bach de Halle").
+nome_publico: Wilhelm Friedemann Bach
+nascimento: 1710
+falecimento: 1784
+profissoes: compositor; organista
+relacoes: filho de J.S. Bach e Maria Barbara   # -> Parentesco
+fonte: Bach-Archiv; Wikipedia
+confiabilidade: documentada
+
+== Carl Philipp Emanuel Bach ==
+identidade: Compositor; no séc. XVIII chegou a ser mais famoso que o pai ("Bach de Berlim/Hamburgo").
+nome_publico: Carl Philipp Emanuel Bach
+apelidos: CPE Bach
+nascimento: 1714
+falecimento: 1788
+profissoes: compositor; cravista
+relacoes: filho de J.S. Bach e Maria Barbara; afilhado de Telemann   # -> Parentesco
+fonte: Wikipedia; Bach-Archiv
+confiabilidade: documentada
+
+== Johann Christoph Friedrich Bach ==
+nome_publico: Johann Christoph Friedrich Bach
+nascimento: 1732
+falecimento: 1795
+profissoes: compositor ("Bach de Bückeburg")
+relacoes: filho de J.S. Bach e Anna Magdalena   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Johann Christian Bach ==
+identidade: Compositor do Classicismo; atuou em Milão e Londres ("Bach de Londres").
+nome_publico: Johann Christian Bach
+apelidos: o "Bach inglês"
+nascimento: 1735
+falecimento: 1782
+profissoes: compositor; organista
+nacionalidades: Sacro Império; Inglaterra
+relacoes: filho caçula de J.S. Bach e Anna Magdalena; influenciou o jovem Mozart   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+# Parentes notáveis (expandir): Johann Christoph Bach (1642–1703, tio-avô);
+# Johann Michael Bach (1648–1694, tio-avô e sogro de JSB); Johann Ludwig Bach
+# (1677–1731, primo em 2º grau); Johann Bernhard Bach (1676–1749, primo).
+# Neto pintor: Johann Sebastian Bach (1748–1778), filho de C.P.E. Bach.

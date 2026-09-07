@@ -1,0 +1,83 @@
+# FAMILIA: Sousa Queirós (café paulista)
+# CONFIABILIDADE geral: documentada
+# FONTES: Silva Leme, Genealogia Paulistana (1903–05, vols. 3–4); Wikipedia;
+#         Acervo do Estado de SP; Instituto Ana Rosa
+# FORMATO: um bloco por pessoa (ver _MODELO-PESSOA.txt)
+# NOTA: grafia varia entre "Sousa" e "Souza" Queirós. Aliança-chave com os
+#       Vergueiro (casamento do Barão) e com os Pais de Barros.
+# ---
+
+# --- GERAÇÃO 1 — o patriarca ---
+== Luís Antônio de Sousa Queirós ==
+identidade: O "Brigadeiro Luís Antônio"; um dos maiores proprietários de terras de São Paulo e um dos homens mais ricos do Brasil.
+nome_publico: Brigadeiro Luís Antônio de Sousa Queirós
+apelidos: Brigadeiro Luís Antônio
+profissoes: cafeicultor; latifundiário
+nacionalidades: Brasil (Império)
+relacoes: casado com Genebra de Barros Leite; pai do Barão de Sousa Queirós, do Barão de Limeira e da Marquesa de Valença   # -> Parentesco
+fonte: Acervo SP; Esalq/USP   # datas a verificar em Silva Leme
+confiabilidade: documentada
+
+== Genebra de Barros Leite ==
+nome_publico: Genebra de Barros Leite
+nacionalidades: Brasil (Império)
+relacoes: esposa do Brigadeiro Luís Antônio   # -> Parentesco
+fonte: Acervo SP
+confiabilidade: documentada
+
+# --- ALIANÇA VERGUEIRO ---
+== Nicolau Pereira de Campos Vergueiro ==
+identidade: Senador Vergueiro; cafeicultor e político, pioneiro do trabalho imigrante na Fazenda Ibicaba.
+nome_publico: Senador Vergueiro
+nascimento: 1778   # Vale da Porca (Portugal), 20 de dezembro
+falecimento: 1859  # Rio de Janeiro, 17 de setembro
+profissoes: cafeicultor; político (senador)
+nacionalidades: Portugal; Brasil
+foto: fotos/senador-vergueiro.webp
+relacoes: sócio do Brigadeiro Luís Antônio; sogro do Barão de Sousa Queirós   # -> Parentesco
+fonte: Wikipedia; MAPA
+confiabilidade: documentada
+
+# --- GERAÇÃO 2 ---
+== Francisco Antônio de Sousa Queirós ==
+identidade: Barão de Sousa Queirós; senador do Império e cafeicultor; fundou o Instituto Ana Rosa (1874).
+nome_publico: Barão de Sousa Queirós
+nome_registro: Francisco Antônio de Sousa Queirós
+nascimento: cerca de 1806
+falecimento: 1891
+profissoes: cafeicultor; político (senador, 1849–1891)
+nacionalidades: Brasil (Império)
+relacoes: filho do Brigadeiro; casado com Antônia Eufrosina de Campos Vergueiro (filha do Senador Vergueiro); 13 filhos   # -> Parentesco
+fonte: Wikipedia   # baronato em 1874; datas de nascimento a confirmar em Silva Leme
+confiabilidade: documentada
+
+== Antônia Eufrosina de Campos Vergueiro ==
+nome_publico: Antônia Eufrosina Vergueiro
+nacionalidades: Brasil (Império)
+relacoes: filha do Senador Vergueiro; esposa do Barão de Sousa Queirós; mãe de 13 filhos   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Vicente de Sousa Queirós ==
+identidade: Barão de Limeira; cafeicultor e vereador.
+nome_publico: Barão de Limeira
+nome_registro: Vicente de Sousa Queirós
+profissoes: cafeicultor; político
+nacionalidades: Brasil (Império)
+relacoes: filho do Brigadeiro Luís Antônio; irmão do Barão de Sousa Queirós; 15 filhos   # -> Parentesco
+fonte: Acervo SP
+confiabilidade: documentada
+
+# --- GERAÇÃO 3 ---
+== Maria Angélica de Sousa Queirós ==
+identidade: Proprietária rural; grande latifundiária da região central de São Paulo.
+nome_publico: Maria Angélica de Sousa Queirós
+nascimento: 1842   # Rio Claro, 27 de outubro
+falecimento: 1929
+profissoes: proprietária rural
+nacionalidades: Brasil
+relacoes: filha do Barão de Sousa Queirós; casou (1862) com Francisco de Aguiar de Barros (filho do Barão de Itu)   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+# Os 13 filhos do Barão e os 15 do Barão de Limeira: expandir via Silva Leme (vols. 3–4).

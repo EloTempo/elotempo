@@ -15,7 +15,7 @@ import { Select } from '../../../components/ui/Select';
 import { Button } from '../../../components/ui/Button';
 import { ErroDoAcervo } from '../../../lib/api';
 import { CampoDeData } from '../../../components/ui/CampoDeData';
-import { DATA_VAZIA, type DataEscolhida, type Person, type Sex } from '../../../types';
+import { DATA_VAZIA, type DataEscolhida, type Person, type Sex, type TipoTempo } from '../../../types';
 
 export interface DadosPessoaForm {
   nome: string;
@@ -25,6 +25,7 @@ export interface DadosPessoaForm {
   minibiografia: string;
   nascimento: DataEscolhida;
   falecimento: DataEscolhida;
+  tipo_tempo: TipoTempo;
 }
 
 interface PersonFormProps {
@@ -61,6 +62,7 @@ export function PersonForm({ inicial, salvando, erro, onSalvar, onCancelar }: Pe
     minibiografia: '',
     nascimento: { ...DATA_VAZIA },
     falecimento: { ...DATA_VAZIA },
+    tipo_tempo: 'real',
   });
   const [erroLocal, setErroLocal] = useState<string | null>(null);
 
@@ -74,6 +76,7 @@ export function PersonForm({ inicial, salvando, erro, onSalvar, onCancelar }: Pe
       minibiografia: inicial.minibiografia ?? '',
       nascimento: inicial.nascimento ?? { ...DATA_VAZIA },
       falecimento: inicial.falecimento ?? { ...DATA_VAZIA },
+      tipo_tempo: (inicial.tipo_tempo as TipoTempo) ?? 'real',
     });
   }, [inicial]);
 
@@ -162,6 +165,63 @@ export function PersonForm({ inicial, salvando, erro, onSalvar, onCancelar }: Pe
           Para o que não cabe em lista — “na época da guerra” — use “Só sei descrever”.
         </p>
       </fieldset>
+
+      <div className="p-3.5 bg-fundo/40 rounded-raio-s border border-borda/70 space-y-2.5">
+        <label className="block text-sm font-semibold text-tinta2">
+          Natureza da Cronologia / Tempo
+        </label>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <label
+            className={`flex items-start gap-2.5 p-3 rounded-raio-s border cursor-pointer transition-all ${
+              dados.tipo_tempo === 'real'
+                ? 'bg-acento/10 border-acento/60 text-tinta font-medium ring-1 ring-acento/30'
+                : 'bg-card border-borda/80 text-tinta2 hover:border-borda hover:text-tinta'
+            }`}
+          >
+            <input
+              type="radio"
+              name="tipo_tempo"
+              value="real"
+              checked={dados.tipo_tempo === 'real'}
+              onChange={() => alterar('tipo_tempo', 'real')}
+              className="mt-0.5 text-acento focus:ring-acento/50"
+            />
+            <div>
+              <div className="text-xs font-bold text-tinta flex items-center gap-1.5">
+                <span>🌍 Tempo Real / Histórico</span>
+              </div>
+              <p className="text-[11px] text-tinta3 mt-0.5 leading-snug">
+                Pessoas da história real. Suporta conversão entre calendários (Gregoriano, Judaico AM, Romano AUC, Holoceno HE, Islâmico AH).
+              </p>
+            </div>
+          </label>
+
+          <label
+            className={`flex items-start gap-2.5 p-3 rounded-raio-s border cursor-pointer transition-all ${
+              dados.tipo_tempo === 'ficticio'
+                ? 'bg-purple-500/10 border-purple-500/60 text-tinta font-medium ring-1 ring-purple-500/30'
+                : 'bg-card border-borda/80 text-tinta2 hover:border-borda hover:text-tinta'
+            }`}
+          >
+            <input
+              type="radio"
+              name="tipo_tempo"
+              value="ficticio"
+              checked={dados.tipo_tempo === 'ficticio'}
+              onChange={() => alterar('tipo_tempo', 'ficticio')}
+              className="mt-0.5 text-purple-600 focus:ring-purple-500/50"
+            />
+            <div>
+              <div className="text-xs font-bold text-tinta flex items-center gap-1.5">
+                <span>✨ Tempo Fictício / Literário</span>
+              </div>
+              <p className="text-[11px] text-tinta3 mt-0.5 leading-snug">
+                Personagens de romances, ficção, mitologia, Tolkien, RPG ou fantasia. Opera em régua narrativa própria sem conversão terrestre.
+              </p>
+            </div>
+          </label>
+        </div>
+      </div>
 
       <div>
         <label

@@ -1,0 +1,114 @@
+# FAMILIA: Matarazzo (São Paulo) — imigração italiana
+# CONFIABILIDADE geral: documentada
+# FONTES: Wikipedia; MyHeritage; Italianismo; imprensa
+# FORMATO: um bloco por pessoa (ver _MODELO-PESSOA.txt)
+# NOTA: dinastia enorme (11 filhos, 30+ netos). Ciccillo, o da Bienal, era
+#       SOBRINHO do Conde e casou com Yolanda Penteado (elo com [[penteado]]).
+# LGPD: descendentes vivos marcados "# LGPD: pessoa viva".
+# ---
+
+# --- ASCENDÊNCIA ---
+== Costabile Matarazzo ==
+nome_publico: Costabile Matarazzo
+falecimento: 1873
+profissoes: médico; comerciante
+nacionalidades: Itália
+relacoes: pai do Conde Francesco Matarazzo   # -> Parentesco
+fonte: dnacidadania
+confiabilidade: documentada
+
+# --- GERAÇÃO 1 — o fundador ---
+== Francesco Matarazzo ==
+identidade: Imigrante italiano que fundou as Indústrias Reunidas Fábricas Matarazzo (IRFM), o maior conglomerado industrial da América Latina.
+nome_publico: Conde Francesco Matarazzo
+apelidos: o Conde Matarazzo
+nascimento: 1854   # Castellabate (Itália), 9 de março
+falecimento: 1937  # São Paulo, 10 de dezembro
+profissoes: industrial; empresário
+nacionalidades: Itália
+foto: fotos/conde-matarazzo.webp
+relacoes: casado com Filomena; 11 filhos; fundador da FIESP; conde por Vítor Emanuel III (1917)   # -> Parentesco
+fonte: Wikipedia; MyHeritage
+confiabilidade: documentada
+
+== Filomena Matarazzo ==
+nome_publico: Filomena Matarazzo
+nacionalidades: Itália
+relacoes: esposa do Conde Matarazzo; mãe dos 11 filhos   # -> Parentesco
+fonte: Italianismo
+confiabilidade: documentada
+
+# --- GERAÇÃO 2 ---
+== Francisco Matarazzo Júnior ==
+identidade: Filho e sucessor do fundador; comandou as IRFM por cerca de 40 anos.
+nome_publico: Francisco Matarazzo Júnior
+nascimento: cerca de 1900
+falecimento: 1977   # datas a confirmar
+profissoes: industrial
+nacionalidades: Brasil
+relacoes: filho do Conde; 5 filhos, entre eles Maria Pia (sucessora)   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Ermelino Matarazzo ==
+nome_publico: Ermelino Matarazzo
+profissoes: industrial (comendador)
+nacionalidades: Brasil
+relacoes: filho do Conde; morreu antes de suceder o pai   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Ciccillo Matarazzo ==
+identidade: Mecenas das artes; fundador da Bienal de São Paulo e do MAM-SP; ex-prefeito de Ubatuba.
+nome_publico: Ciccillo Matarazzo
+nome_registro: Francisco Matarazzo Sobrinho
+nascimento: 1898
+falecimento: 1977
+profissoes: industrial; mecenas; político (prefeito de Ubatuba, 1964–69)
+nacionalidades: Brasil
+foto: fotos/ciccillo-matarazzo.webp
+relacoes: SOBRINHO do Conde Francesco; casado com Yolanda Penteado (elo com [[penteado]])   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+# --- GERAÇÃO 3 ---
+== Maria Pia Matarazzo ==
+nome_publico: Maria Pia Matarazzo
+profissoes: empresária (sucessora nas IRFM)
+nacionalidades: Brasil
+relacoes: filha de Francisco Matarazzo Júnior; mãe do 3º Conde Matarazzo   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Francisco Matarazzo Pignatari ==
+identidade: Industrial e célebre bon vivant ("Baby" Pignatari).
+nome_publico: Baby Pignatari
+nome_registro: Francisco Matarazzo Pignatari
+nascimento: 1917
+falecimento: 1977
+profissoes: industrial (metalurgia)
+nacionalidades: Brasil
+relacoes: neto do Conde Matarazzo   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+# --- DESCENDENTES VIVOS (seleção) ---
+== José Eduardo Matarazzo Kalil ==
+nome_publico: José Eduardo Matarazzo Kalil
+profissoes: —
+nacionalidades: Brasil
+relacoes: filho de Maria Pia; detém o título de 3º Conde Matarazzo di Licosa   # -> Parentesco
+fonte: Wikipedia   # LGPD: pessoa viva
+confiabilidade: documentada
+
+== Eduardo Matarazzo Suplicy ==
+nome_publico: Eduardo Matarazzo Suplicy
+nascimento: 1941
+profissoes: economista; político (senador; vereador)
+nacionalidades: Brasil
+relacoes: descendente da família Matarazzo   # -> Parentesco  (grau exato a confirmar)
+fonte: Wikipedia   # LGPD: pessoa viva
+confiabilidade: documentada
+
+# Outros descendentes públicos (expandir com cautela LGPD): Andrea Matarazzo
+# (político), Jayme Monjardim (diretor de TV), Claudia Matarazzo.

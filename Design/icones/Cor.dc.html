@@ -1,0 +1,192 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap">
+  <style>
+    body { margin: 0; font-family: 'Sora', 'Segoe UI', system-ui, sans-serif; }
+    a { color: #00A896; } a:hover { color: #0B1D3A; }
+    .lbl { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: #6B7280; font-weight: 500; }
+    .cap { font-size: 12.5px; line-height: 1.55; color: #55606E; }
+    .mono { font-family: ui-monospace, 'Cascadia Mono', 'DejaVu Sans Mono', monospace; }
+    .cel { font-size: 12px; padding: 9px 12px; border-bottom: 1px solid #EAEFF4; }
+  </style>
+</helmet>
+
+<div style="width: 940px; height: 1020px; box-sizing: border-box; background: #FBFCFD; color: #0B1D3A; display: flex; flex-direction: column;">
+
+  <div style="display: flex; align-items: flex-end; justify-content: space-between; padding: 34px 40px 20px 40px; border-bottom: 1px solid #E3E9EF;">
+    <div style="display: flex; flex-direction: column; gap: 7px;">
+      <span class="lbl">Elotempo · sistema de ícones</span>
+      <span style="font-size: 30px; font-weight: 600; letter-spacing: -.02em; line-height: 1;">Onde a marca pode ter cor</span>
+      <span class="cap" style="max-width: 590px;">O aplicativo tem quatro temas e nenhum deles é a marca. Carregar a paleta fixa para dentro produz o estranhamento — e, nos temas escuros, um defeito medido.</span>
+    </div>
+    <span class="mono" style="font-size: 34px; color: #DCE3EA; font-weight: 300; line-height: 1;">07</span>
+  </div>
+
+  <!-- o defeito medido -->
+  <div style="padding: 22px 40px; border-bottom: 1px solid #E3E9EF; display: flex; flex-direction: column; gap: 14px;">
+    <span class="lbl">O que a medição mostra</span>
+
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px;">
+      <div style="border-radius: 9px; overflow: hidden; border: 1px solid #E3E9EF;">
+        <div style="background: #f8f3e8; padding: 16px; display: flex; align-items: center; justify-content: center;">
+          <svg width="44" height="44" viewBox="0 0 512 512"><rect width="512" height="512" rx="115" fill="#0B1D3A"/><g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="34"><path d="M170 130v252" stroke="#2563EB"/><path d="M170 130h180" stroke="#00A896"/><path d="M170 256h74" stroke="#2563EB"/><path d="M244 256l106-42M244 256l106 42" stroke="#2563EB"/><path d="M170 382h180" stroke="#E8EEF4"/></g></svg>
+        </div>
+        <div style="padding: 9px 11px; background: #FFFFFF;">
+          <span class="mono" style="font-size: 10.5px; display: block; color: #0B1D3A;">15,17:1</span>
+          <span class="cap" style="font-size: 10.5px;">clássico claro · legível, mas frio na sala</span>
+        </div>
+      </div>
+
+      <div style="border-radius: 9px; overflow: hidden; border: 1px solid #E3E9EF;">
+        <div style="background: #2b261f; padding: 16px; display: flex; align-items: center; justify-content: center;">
+          <svg width="44" height="44" viewBox="0 0 512 512"><rect width="512" height="512" rx="115" fill="#0B1D3A"/><g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="34"><path d="M170 130v252" stroke="#2563EB"/><path d="M170 130h180" stroke="#00A896"/><path d="M170 256h74" stroke="#2563EB"/><path d="M244 256l106-42M244 256l106 42" stroke="#2563EB"/><path d="M170 382h180" stroke="#E8EEF4"/></g></svg>
+        </div>
+        <div style="padding: 9px 11px; background: #FFF7ED;">
+          <span class="mono" style="font-size: 10.5px; display: block; color: #B45309; font-weight: 600;">1,12:1</span>
+          <span class="cap" style="font-size: 10.5px; color: #7A4E12;">clássico escuro · o quadrado some</span>
+        </div>
+      </div>
+
+      <div style="border-radius: 9px; overflow: hidden; border: 1px solid #E3E9EF;">
+        <div style="background: #ffffff; padding: 16px; display: flex; align-items: center; justify-content: center;">
+          <svg width="44" height="44" viewBox="0 0 512 512"><rect width="512" height="512" rx="115" fill="#0B1D3A"/><g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="34"><path d="M170 130v252" stroke="#2563EB"/><path d="M170 130h180" stroke="#00A896"/><path d="M170 256h74" stroke="#2563EB"/><path d="M244 256l106-42M244 256l106 42" stroke="#2563EB"/><path d="M170 382h180" stroke="#E8EEF4"/></g></svg>
+        </div>
+        <div style="padding: 9px 11px; background: #FFFFFF;">
+          <span class="mono" style="font-size: 10.5px; display: block; color: #0B1D3A;">16,79:1</span>
+          <span class="cap" style="font-size: 10.5px;">moderno claro · é a casa da marca</span>
+        </div>
+      </div>
+
+      <div style="border-radius: 9px; overflow: hidden; border: 1px solid #E3E9EF;">
+        <div style="background: #161a22; padding: 16px; display: flex; align-items: center; justify-content: center;">
+          <svg width="44" height="44" viewBox="0 0 512 512"><rect width="512" height="512" rx="115" fill="#0B1D3A"/><g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="34"><path d="M170 130v252" stroke="#2563EB"/><path d="M170 130h180" stroke="#00A896"/><path d="M170 256h74" stroke="#2563EB"/><path d="M244 256l106-42M244 256l106 42" stroke="#2563EB"/><path d="M170 382h180" stroke="#E8EEF4"/></g></svg>
+        </div>
+        <div style="padding: 9px 11px; background: #FFF7ED;">
+          <span class="mono" style="font-size: 10.5px; display: block; color: #B45309; font-weight: 600;">1,04:1</span>
+          <span class="cap" style="font-size: 10.5px; color: #7A4E12;">moderno escuro · o quadrado some</span>
+        </div>
+      </div>
+    </div>
+
+    <p class="cap" style="margin: 0;">
+      O marinho da marca contra o card dos temas escuros. Não é só desencontro de gosto: o azulejo vira um retângulo invisível com linhas coloridas flutuando. <strong style="color:#0B1D3A;font-weight:600;">Foi erro meu levar a paleta fixa para dentro do aplicativo.</strong>
+    </p>
+  </div>
+
+  <!-- a separação -->
+  <div style="padding: 22px 40px; border-bottom: 1px solid #E3E9EF; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px;">
+    <div style="background: #0B1D3A; color: #FFFFFF; border-radius: 10px; padding: 18px 20px; display: flex; flex-direction: column; gap: 12px;">
+      <span class="lbl" style="color: #7C8FA6;">Fora do aplicativo · paleta fixa</span>
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <svg width="46" height="46" viewBox="0 0 512 512"><rect width="512" height="512" rx="115" fill="#0B1D3A" stroke="#24395C" stroke-width="8"/><g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="30"><path d="M170 130v252" stroke="#2563EB"/><path d="M170 130h180" stroke="#00A896"/><path d="M170 256h74" stroke="#2563EB"/><path d="M244 256l106-42M244 256l106 42" stroke="#2563EB"/><path d="M170 382h180" stroke="#E8EEF4"/></g><g stroke="none"><circle cx="170" cy="130" r="33" fill="#00A896"/><circle cx="350" cy="130" r="33" fill="#00A896"/><circle cx="170" cy="256" r="33" fill="#2563EB"/><circle cx="244" cy="256" r="33" fill="#2563EB"/><circle cx="350" cy="214" r="33" fill="#2563EB"/><circle cx="350" cy="298" r="33" fill="#2563EB"/><circle cx="170" cy="382" r="33" fill="#E8EEF4"/><circle cx="350" cy="382" r="33" fill="#E8EEF4"/></g></svg>
+        <p class="cap" style="margin: 0; color: #B7C6D8;">
+          Ícone do <span class="mono" style="color:#E8EEF4;">.exe</span>, instalador, barra de tarefas, loja. Ali a marca não convive com tema nenhum — precisa ser sempre a mesma para ser reconhecida. <strong style="color:#FFFFFF;font-weight:600;">Não muda.</strong>
+        </p>
+      </div>
+    </div>
+
+    <div style="background: #FFFFFF; border: 2px solid #00A896; border-radius: 10px; padding: 18px 20px; display: flex; flex-direction: column; gap: 12px;">
+      <span class="lbl" style="color: #00A896;">Dentro do aplicativo · tokens</span>
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <div style="display: flex; gap: 8px; flex: none;">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M5.5 5h13M5.5 12h6.5M12 12l6.5-3M12 12l6.5 3" stroke="#00A896"/><path d="M5.5 5v14M5.5 19h13" stroke="#7a5c34"/></svg>
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M5.5 5h13M5.5 12h6.5M12 12l6.5-3M12 12l6.5 3" stroke="#0d9488"/><path d="M5.5 5v14M5.5 19h13" stroke="#2563eb"/></svg>
+        </div>
+        <p class="cap" style="margin: 0;">
+          Splash, “Sobre”, desbloqueio, cabeçalho. A mesma forma, nas cores da sala: <span class="mono" style="color:#0B1D3A;">--acento</span> e <span class="mono" style="color:#0B1D3A;">--acento2</span>.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- a peça que faltava -->
+  <div style="padding: 22px 40px; border-bottom: 1px solid #E3E9EF; display: flex; flex-direction: column; gap: 13px;">
+    <div style="display: flex; align-items: baseline; gap: 12px;">
+      <span class="lbl">A peça que faltava já estava escrita</span>
+      <span class="cap" style="font-size: 11.5px;">o plano de design especifica <span class="mono">--acento2</span> nos quatro temas — e nos quatro ele é verde-azulado</span>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px;">
+      <div style="background: #f8f3e8; border: 1px solid #c8b99c; border-radius: 9px; padding: 13px 15px; display: flex; flex-direction: column; gap: 9px;">
+        <span style="font-size: 11.5px; font-weight: 600; color: #241e16;">Clássico claro</span>
+        <div style="display: flex; gap: 7px; align-items: center;">
+          <span style="width: 22px; height: 22px; border-radius: 5px; background: #7a5c34; flex: none;"></span>
+          <span style="width: 22px; height: 22px; border-radius: 5px; background: #3d6b60; flex: none;"></span>
+          <span class="mono" style="font-size: 9.5px; color: #756651;">5,5:1</span>
+        </div>
+      </div>
+      <div style="background: #2b261f; border: 1px solid #463d31; border-radius: 9px; padding: 13px 15px; display: flex; flex-direction: column; gap: 9px;">
+        <span style="font-size: 11.5px; font-weight: 600; color: #f5ede0;">Clássico escuro</span>
+        <div style="display: flex; gap: 7px; align-items: center;">
+          <span style="width: 22px; height: 22px; border-radius: 5px; background: #d8c39a; flex: none;"></span>
+          <span style="width: 22px; height: 22px; border-radius: 5px; background: #84b3a4; flex: none;"></span>
+          <span class="mono" style="font-size: 9.5px; color: #a39582;">6,4:1</span>
+        </div>
+      </div>
+      <div style="background: #ffffff; border: 1px solid #dfe3ea; border-radius: 9px; padding: 13px 15px; display: flex; flex-direction: column; gap: 9px;">
+        <span style="font-size: 11.5px; font-weight: 600; color: #0f1420;">Moderno claro</span>
+        <div style="display: flex; gap: 7px; align-items: center;">
+          <span style="width: 22px; height: 22px; border-radius: 5px; background: #2563eb; flex: none;"></span>
+          <span style="width: 22px; height: 22px; border-radius: 5px; background: #0d9488; flex: none;"></span>
+          <span class="mono" style="font-size: 9.5px; color: #6b7280;">3,7:1</span>
+        </div>
+      </div>
+      <div style="background: #161a22; border: 1px solid #242a35; border-radius: 9px; padding: 13px 15px; display: flex; flex-direction: column; gap: 9px;">
+        <span style="font-size: 11.5px; font-weight: 600; color: #eef2f7;">Moderno escuro</span>
+        <div style="display: flex; gap: 7px; align-items: center;">
+          <span style="width: 22px; height: 22px; border-radius: 5px; background: #5b8bf9; flex: none;"></span>
+          <span style="width: 22px; height: 22px; border-radius: 5px; background: #2bbfab; flex: none;"></span>
+          <span class="mono" style="font-size: 9.5px; color: #8a96a8;">7,6:1</span>
+        </div>
+      </div>
+    </div>
+
+    <p class="cap" style="margin: 0;">
+      O verde-azulado da marca já tem tradução em cada tema — o plano a escreveu antes de o logo existir, e ninguém implementou. É `--acento2`, e no moderno claro ele é <span class="mono">#0d9488</span>, a um passo do <span class="mono">#00A896</span> do manual. Quatro linhas no <span class="mono">globals.css</span>.
+    </p>
+    <div style="border-left: 3px solid #FCD9A8; padding: 2px 0 2px 14px;">
+      <p class="cap" style="margin: 0;">
+        Uma ressalva medida: no clássico claro os dois acentos têm luminância quase igual (1,02:1 entre si). Lá a marca de duas cores lê pela <em>forma</em>, não pelo contraste — e por isso o símbolo pequeno do cabeçalho continua monocromático.
+      </p>
+    </div>
+  </div>
+
+  <!-- o quadro de significados -->
+  <div style="padding: 22px 40px 26px 40px; display: flex; flex-direction: column; gap: 13px; flex-grow: 1;">
+    <div style="display: flex; align-items: baseline; gap: 12px;">
+      <span class="lbl">A regra que faltava ao aplicativo</span>
+      <span style="font-size: 13px; font-weight: 600;">cada cor tem um significado, e nenhum significado tem duas cores</span>
+    </div>
+
+    <div style="border: 1px solid #E3E9EF; border-radius: 10px; overflow: hidden; background: #FFFFFF;">
+      <div style="display: grid; grid-template-columns: 1.3fr 1fr 1.5fr; background: #F4F7FA;">
+        <span class="cel lbl" style="border-bottom-color: #E3E9EF;">Significa</span>
+        <span class="cel lbl" style="border-bottom-color: #E3E9EF;">Token</span>
+        <span class="cel lbl" style="border-bottom-color: #E3E9EF;">Onde vale</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 1.3fr 1fr 1.5fr;">
+        <span class="cel">Sexo</span><span class="cel mono" style="font-size: 11px;">--masc · --fem</span><span class="cel" style="color:#55606E;">card da árvore, faixa de vida</span>
+        <span class="cel">Categoria de linha do tempo</span><span class="cel mono" style="font-size: 11px;">--lt-* (cinco)</span><span class="cel" style="color:#55606E;">gaveta e marcos</span>
+        <span class="cel">Ação, seleção, foco</span><span class="cel mono" style="font-size: 11px;">--acento</span><span class="cel" style="color:#55606E;">botões, seleção, links</span>
+        <span class="cel" style="background:#F1F8F7;">A marca, dentro</span><span class="cel mono" style="font-size: 11px; background:#F1F8F7;">--acento2 <span style="color:#00A896;">novo</span></span><span class="cel" style="color:#55606E; background:#F1F8F7;">splash, Sobre, desbloqueio</span>
+        <span class="cel" style="border-bottom: none;">A marca, fora</span><span class="cel mono" style="font-size: 11px; border-bottom: none;">paleta fixa</span><span class="cel" style="color:#55606E; border-bottom: none;">.exe, instalador, loja</span>
+      </div>
+    </div>
+
+    <div style="background: #FFF7ED; border: 1px solid #FCD9A8; border-radius: 9px; padding: 13px 16px;">
+      <p class="cap" style="margin: 0; color: #7A4E12;">
+        <strong style="font-weight:600;">O que quebra a regra hoje:</strong> 184 cores fixas do Tailwind em 15 arquivos — <span class="mono">text-emerald-400</span>, <span class="mono">bg-amber-500</span>, <span class="mono">text-stone-500</span> — que não significam nada e não acompanham o tema. Mais 32 usos de <span class="mono">dark:</span> que seguem o sistema operacional, não o tema escolhido. Enquanto elas existirem, não há planejamento de cor que se sustente.
+      </p>
+    </div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

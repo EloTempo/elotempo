@@ -89,6 +89,7 @@ export function EscolherPessoa({
       minibiografia: '',
       nascimento,
       falecimento: { ...DATA_VAZIA },
+      tipo_tempo: 'real',
     });
 
     onEscolher({

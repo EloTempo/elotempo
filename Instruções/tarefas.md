@@ -24,8 +24,14 @@ Cada fatia vertical entregue tem uma spec própria em `Instruções/fatias/`.
 | 07 | Linhas do tempo — a gaveta | `fatias/07-linhas-do-tempo-gaveta.md` |
 | 08 | Exportar GEDCOM 7.0 | `fatias/08-gedcom-exportacao.md` |
 | 09 | Importar GEDCOM 5.5.1 e 7.0 | `fatias/09-gedcom-importacao.md` |
+| 10 | Estúdio de linhas do tempo (autorais, participantes, vidas múltiplas, zoom semântico, impressão) | `fatias/10-estudio-linhas-do-tempo.md` |
+| 11 | Estatísticas e Demografia da Família (Seção 7) | `fatias/11-estatisticas-e-demografia.md` |
+| 12 | Múltiplas árvores nomeadas e conexões (Seção 5) | `fatias/12-multiplas-arvores.md` |
+| 13 | Visões auxiliares de ancestrais e descendentes, Ahnentafel e navegação | `fatias/13-visoes-auxiliares-e-navegacao.md` |
+| 14 | Sistema de desfazer e refazer (Undo/Redo) e histórico de ações | `fatias/14-undo-redo.md` |
+| 15 | Árvores públicas de referência, filtro Meus vs Públicos e ajuste de espaço | `fatias/15-arvores-publicas-e-acervo-referencia.md` |
 
-Os nove itens do MVP (seção 9) estão fechados.
+Os quinze itens do projeto estão fechados com sucesso.
 
 ---
 
@@ -106,13 +112,12 @@ painel de detalhe que os marcos de contexto têm.
 
 ---
 
-## Depois do MVP (seção 9), ainda não começado
+## Depois do MVP (seção 9)
 
-- **Estatísticas** (seção 7) com gráficos, e a opção de incluí-las no relatório.
-- **Múltiplas árvores nomeadas** (seção 5). As tabelas `arvores` e
-  `arvore_membros` existem desde a migration 004, sem nenhum comando nem tela.
-- **Undo/redo.**
-- **Visões auxiliares** de ancestrais e descendentes — sempre verticais.
+- **Estatísticas** (seção 7) com gráficos e recortes dinâmicos por filtro — **Entregue na Fatia 11**.
+- **Múltiplas árvores nomeadas** (seção 5) com seletor, gerenciador e troca de raiz — **Entregue na Fatia 12**.
+- **Visões auxiliares** de ancestrais e descendentes (sempre verticais) com Ahnentafel, controle de gerações e colapso de ramos — **Entregue na Fatia 13**.
+- **Undo/redo** com atalhos `Ctrl+Z`, `Ctrl+Y`, cabeçalho com ações reversíveis e histórico de sessão — **Entregue na Fatia 14**.
 
 ---
 

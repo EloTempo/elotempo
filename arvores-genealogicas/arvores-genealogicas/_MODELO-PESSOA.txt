@@ -1,0 +1,24 @@
+# MODELO DE PESSOA — um bloco por indivíduo, campos alinhados ao card do app.
+# Deixe vazio o que não souber (ou omita a linha). "cerca de" = data aproximada.
+# Formato = YAML: pode salvar como .txt ou .yaml (parse automático). Blocos
+# separados por linha começando com "== Nome ==".
+#
+# == Nome de referência ==
+# --- CAMPOS DO APP ---
+# identidade:      frase curta que resume quem é (vai no topo do card)
+# nome_publico:    como a pessoa é conhecida (aparece no card/busca)
+# nome_registro:   nome completo de certidão (costuma ser maior)
+# mudanca_nome:    se passou a se chamar outra coisa (ordem religiosa, casamento, arte...)
+# nascimento:      data (use "cerca de AAAA" quando aproximada; aceite "a.C.")
+# falecimento:     idem
+# apelidos:        separados por ";"
+# nacionalidades:  separadas por ";"
+# religioes:       separadas por ";"
+# escolaridade:    ex.: Faculdade de Direito de SP (1861)
+# profissoes:      separadas por ";"
+# idiomas:         separados por ";"
+# foto:            fotos/<slug>.webp   (gerar com converter-fotos.py)
+# --- METADADOS DE PESQUISA (não são campos do card) ---
+# relacoes:        parentescos em texto -> depois viram vínculos no "Parentesco"
+# fonte:           de onde veio a informação
+# confiabilidade:  documentada | reconstruida-tradicional | mista | ficcao

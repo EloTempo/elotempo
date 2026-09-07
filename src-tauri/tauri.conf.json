@@ -1,8 +1,8 @@
 {
-  "productName": "Arvore Genealogica",
-  "mainBinaryName": "arvore-genealogica",
-  "version": "0.1.0",
-  "identifier": "com.arvore.genealogica",
+  "productName": "EloTempo",
+  "mainBinaryName": "elotempo",
+  "version": "1.0.0",
+  "identifier": "com.elotempo.app",
   "build": {
     "beforeDevCommand": "npm run dev",
     "beforeBuildCommand": "npm run build",
@@ -14,12 +14,13 @@
     "windows": [
       {
         "label": "main",
-        "title": "Árvore Genealógica",
+        "title": "EloTempo",
         "width": 1280,
         "height": 860,
         "minWidth": 900,
         "minHeight": 600,
-        "resizable": true
+        "resizable": true,
+        "maximized": true
       }
     ],
     "security": {
@@ -33,7 +34,7 @@
   },
   "bundle": {
     "active": true,
-    "targets": ["msi", "nsis", "deb", "appimage", "dmg"],
+    "targets": ["msi", "nsis", "deb", "appimage"],
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
@@ -43,8 +44,41 @@
     ],
     "shortDescription": "Árvore genealógica offline, local-first, compatível com GEDCOM.",
     "longDescription": "Software desktop 100% offline para construir árvores genealógicas familiares sem limite de tamanho. Os dados residem apenas na sua máquina. Formato de trabalho SQLite, formato de transporte GEDCOM 7.0.",
-    "copyright": "Copyright © 2026 Gabriel Nascimento. Licenciado sob a MIT License.",
+    "copyright": "Copyright © 2026 Gabriel Nascimento. Licenciado sob a GNU General Public License v3.0 (GPLv3).",
     "category": "Utility",
-    "licenseFile": "../LICENSE"
+    "licenseFile": "../LICENSE",
+    "windows": {
+      "nsis": {
+        "installMode": "currentUser",
+        "languages": ["Portuguese", "English"],
+        "displayLanguageSelector": false
+      },
+      "wix": {
+        "language": "pt-BR"
+      }
+    },
+    "linux": {
+      "deb": {
+        "depends": [
+          "libwebkit2gtk-4.1-0 | libwebkit2gtk-4.0-37",
+          "libgtk-3-0",
+          "libayatana-appindicator3-1"
+        ],
+        "section": "utils",
+        "priority": "optional"
+      },
+      "appimage": {
+        "bundleMediaFramework": false
+      }
+    },
+    "fileAssociations": [
+      {
+        "ext": ["ged", "gedcom"],
+        "name": "GEDCOM Family Tree",
+        "description": "Arquivo de Genealogia GEDCOM",
+        "role": "Editor",
+        "mimeType": "application/x-gedcom"
+      }
+    ]
   }
 }

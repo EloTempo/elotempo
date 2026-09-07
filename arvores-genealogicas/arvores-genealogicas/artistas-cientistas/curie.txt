@@ -1,0 +1,113 @@
+# FAMILIA: Curie / Skłodowska–Joliot
+# CONFIABILIDADE geral: documentada
+# FONTES: NobelPrize.org; Wikipedia (Curie family); Encyclopedia.com; Britannica
+# FORMATO: um bloco por pessoa (ver _MODELO-PESSOA.txt)
+# NOTA: cinco prêmios Nobel na família (Marie ganhou duas vezes).
+# LGPD: há membros vivos (Hélène, Pierre Joliot) — apenas dados públicos.
+# ---
+
+== Marie Skłodowska-Curie ==
+identidade: Física e química; pioneira da radioatividade; única pessoa a ganhar o Nobel em duas ciências.
+nome_publico: Marie Curie
+nome_registro: Maria Salomea Skłodowska
+mudanca_nome: adotou "Curie" ao casar (1895)
+nascimento: 1867   # Varsóvia, 7 de novembro
+falecimento: 1934
+escolaridade: Universidade de Paris (Sorbonne)
+profissoes: física; química
+nacionalidades: Polônia; França
+idiomas: polonês; francês
+foto: fotos/marie-curie.webp
+relacoes: casada com Pierre Curie; mãe de Irène e Ève   # -> Parentesco
+fonte: NobelPrize.org; Britannica   # Nobel de Física 1903 (compart.) e de Química 1911
+confiabilidade: documentada
+
+== Pierre Curie ==
+identidade: Físico; co-descobridor da radioatividade, do polônio e do rádio.
+nome_publico: Pierre Curie
+nascimento: 1859
+falecimento: 1906   # morte em acidente de rua, Paris
+profissoes: físico
+nacionalidades: França
+foto: fotos/pierre-curie.webp
+relacoes: casado com Marie; irmão de Jacques Curie   # -> Parentesco
+fonte: Wikipedia; NobelPrize.org   # Nobel de Física 1903
+confiabilidade: documentada
+
+== Jacques Curie ==
+nome_publico: Jacques Curie
+nascimento: 1856
+falecimento: 1941
+profissoes: físico   # piezoeletricidade (com Pierre)
+relacoes: irmão de Pierre Curie   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Irène Joliot-Curie ==
+identidade: Física e química; descobriu a radioatividade artificial junto com o marido.
+nome_publico: Irène Joliot-Curie
+nome_registro: Irène Curie
+nascimento: 1897
+falecimento: 1956   # leucemia
+escolaridade: Universidade de Paris
+profissoes: física; química; política (subsecretária de Estado, 1936)
+nacionalidades: França
+foto: fotos/irene-joliot-curie.webp
+relacoes: filha de Marie e Pierre; casada (1926) com Frédéric Joliot; mãe de Hélène e Pierre   # -> Parentesco
+fonte: NobelPrize.org; Wikipedia   # Nobel de Química 1935
+confiabilidade: documentada
+
+== Frédéric Joliot-Curie ==
+nome_publico: Frédéric Joliot-Curie
+nome_registro: Jean Frédéric Joliot
+nascimento: 1900
+falecimento: 1958
+profissoes: físico; químico
+nacionalidades: França
+relacoes: casado com Irène (o casal adotou "Joliot-Curie")   # -> Parentesco
+fonte: Wikipedia   # Nobel de Química 1935
+confiabilidade: documentada
+
+== Ève Curie ==
+identidade: Jornalista, pianista e escritora; autora da biografia "Madame Curie".
+nome_publico: Ève Curie
+nascimento: 1904
+falecimento: 2007
+profissoes: jornalista; pianista; escritora
+nacionalidades: França; EUA
+relacoes: filha de Marie e Pierre; casada com Henry R. Labouisse   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Henry Richardson Labouisse ==
+nome_publico: Henry R. Labouisse
+nascimento: 1904
+falecimento: 1987
+profissoes: diplomata; diretor do UNICEF
+nacionalidades: EUA
+relacoes: marido de Ève Curie   # -> Parentesco  (recebeu o Nobel da Paz de 1965 em nome do UNICEF)
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Hélène Langevin-Joliot ==
+identidade: Física nuclear.
+nome_publico: Hélène Langevin-Joliot
+nome_registro: Hélène Joliot-Curie
+nascimento: 1927
+profissoes: física nuclear
+nacionalidades: França
+relacoes: filha de Irène e Frédéric; casada com Michel Langevin   # -> Parentesco
+fonte: Wikipedia   # LGPD: pessoa viva
+confiabilidade: documentada
+
+== Pierre Joliot ==
+nome_publico: Pierre Joliot
+nascimento: 1932
+profissoes: biólogo (fotossíntese)
+nacionalidades: França
+relacoes: filho de Irène e Frédéric   # -> Parentesco
+fonte: Wikipedia   # LGPD: pessoa viva
+confiabilidade: documentada
+
+# Ascendência polonesa (expandir): pai Władysław Skłodowski; irmãos de Marie —
+# Zofia, Józef, Bronisława (Bronya) Dłuska e Helena Skłodowska-Szalay.

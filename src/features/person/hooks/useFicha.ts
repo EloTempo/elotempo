@@ -42,7 +42,8 @@ import {
   removerDocumento,
   definirFotoPrincipal,
 } from '../../../lib/api';
-import type { NewDocument, NewPersonName } from '../../../types';
+import { useHistorico } from '../../../contexts/HistoricoContext';
+import type { NewDocument, NewPersonName, Person } from '../../../types';
 
 // ---------------------------------------------------------------------------
 // Pessoa e eventos
@@ -66,8 +67,27 @@ function invalidarPessoa(queryClient: ReturnType<typeof useQueryClient>, pessoaI
 
 export function useSalvarPessoa(pessoaId: string) {
   const queryClient = useQueryClient();
+  const { registrarAcao } = useHistorico();
+
   return useMutation({
-    mutationFn: atualizarPessoa,
+    mutationFn: async (novaPessoa: Person) => {
+      const anterior = queryClient.getQueryData<Person>(['pessoa', pessoaId]);
+      await atualizarPessoa(novaPessoa);
+
+      if (anterior) {
+        registrarAcao({
+          descricao: `Editar dados de ${novaPessoa.nome}`,
+          desfazer: async () => {
+            await atualizarPessoa(anterior);
+            invalidarPessoa(queryClient, pessoaId);
+          },
+          refazer: async () => {
+            await atualizarPessoa(novaPessoa);
+            invalidarPessoa(queryClient, pessoaId);
+          },
+        });
+      }
+    },
     onSuccess: () => invalidarPessoa(queryClient, pessoaId),
   });
 }

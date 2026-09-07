@@ -1,0 +1,130 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap">
+  <style>
+    body { margin: 0; font-family: 'Inter', system-ui, sans-serif; }
+    a { color: #2563eb; } a:hover { color: #0f1420; }
+    .marca { font-family: 'Sora', 'Inter', system-ui, sans-serif; }
+    .rot { font-family: 'Sora', system-ui, sans-serif; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; font-weight: 600; color: #6b7280; }
+    .nota { font-size: 12.5px; line-height: 1.55; color: #4b5563; }
+    .vago { background: #fdf2e3; color: #92400e; border: 1px dashed #d9a441; border-radius: 4px; padding: 0 5px; font-size: .92em; font-weight: 500; }
+  </style>
+</helmet>
+
+<div style="width: 940px; height: 820px; box-sizing: border-box; background: #f4f5f7; color: #0f1420; display: flex; flex-direction: column;">
+
+  <div style="padding: 32px 40px 18px 40px; border-bottom: 1px solid #dfe3ea; display: flex; flex-direction: column; gap: 8px;">
+    <span class="rot">Elotempo · site público</span>
+    <span class="marca" style="font-size: 29px; font-weight: 600; letter-spacing: -.025em; line-height: 1;">Apoiar e conversar</span>
+    <span class="nota" style="font-size: 13.5px; max-width: 68ch;">Uma faixa só, no pé da página — depois do download e depois do argumento. Nenhuma das duas pode competir com a ação principal: quem chegou até aqui já baixou, ou já decidiu que não vai.</span>
+  </div>
+
+  <!-- a faixa, como ficaria -->
+  <div style="padding: 24px 40px 20px 40px;">
+    <div style="border: 1px solid #dfe3ea; border-radius: 12px; background: #ffffff; padding: 26px 28px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px;">
+
+      <!-- PIX -->
+      <div style="display: flex; flex-direction: column; gap: 13px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4.6l7.4 7.4-7.4 7.4L4.6 12z"/></svg>
+          <span class="marca" style="font-size: 17px; font-weight: 600; letter-spacing: -.015em;">Ajude o projeto</span>
+        </div>
+        <span class="nota">O Elotempo é gratuito e continuará sendo. Se ele te for útil e você quiser ajudar a manter o desenvolvimento, dá para contribuir por PIX.</span>
+
+        <div style="display: flex; gap: 14px; align-items: center; padding-top: 2px;">
+          <div style="width: 88px; height: 88px; border: 1px solid #c3cad6; border-radius: 8px; background: #f8f9fb; display: grid; place-items: center; flex: none;">
+            <span style="font-size: 9px; color: #6b7280; text-align: center; line-height: 1.4;">QR<br>a gerar</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px; flex-grow: 1;">
+            <div style="border: 1px solid #c3cad6; border-radius: 8px; background: #f8f9fb; padding: 9px 12px; display: flex; align-items: center; gap: 9px;">
+              <span style="font-size: 12px; color: #4b5563; flex-grow: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><span class="vago">[CHAVE PIX ALEATÓRIA]</span></span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex: none;" aria-hidden="true"><rect x="8.5" y="8.5" width="11" height="11" rx="2"/><path d="M15.5 5.5h-9a2 2 0 0 0-2 2v9"/></svg>
+            </div>
+            <span style="font-size: 11.5px; color: #6b7280;">Gabriel Nascimento · qualquer valor</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- fórum -->
+      <div style="display: flex; flex-direction: column; gap: 13px; border-left: 1px solid #dfe3ea; padding-left: 28px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 6.5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H9l-4.5 4z"/></svg>
+          <span class="marca" style="font-size: 17px; font-weight: 600; letter-spacing: -.015em;">Fórum</span>
+          <span style="font-size: 10px; letter-spacing: .1em; text-transform: uppercase; font-weight: 600; color: #0d9488; border: 1px solid #0d9488; border-radius: 20px; padding: 2px 9px;">próximo projeto</span>
+        </div>
+        <span class="nota">Depois desta versão, o próximo trabalho é um fórum: um lugar para quem usa trocar experiências, mostrar as árvores e as linhas do tempo que está montando, e sugerir o que entra nas próximas versões.</span>
+        <span class="nota"><strong style="color: #0f1420;">Não há lista de espera nem cadastro.</strong> Quando abrir, o aviso sai aqui mesmo — e no repositório, que é onde o desenvolvimento acontece à vista.</span>
+        <div style="border: 1px solid #c3cad6; border-radius: 8px; padding: 10px 14px; display: flex; align-items: center; justify-content: center; gap: 8px; color: #0d9488; font-size: 13px; font-weight: 600; margin-top: auto;">
+          Abrir uma sugestão no GitHub
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 16L16 8M9.5 8H16v6.5"/></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- as decisões -->
+  <div style="padding: 4px 40px 28px 40px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 26px; flex-grow: 1;">
+
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <span class="rot">Sobre a chave PIX</span>
+
+      <div style="background: #fdf2e3; border: 1px solid #d9a441; border-radius: 10px; padding: 14px 17px; display: flex; flex-direction: column; gap: 8px;">
+        <span class="marca" style="font-size: 14px; font-weight: 600; color: #92400e;">Use uma chave aleatória</span>
+        <span class="nota" style="color: #92400e;">A chave fica numa página pública, para sempre, e é copiável por qualquer um. <strong>CPF, telefone e e-mail são dado pessoal seu</strong> — expostos ali, viram alvo de golpe e de spam, e não dá para voltar atrás.</span>
+        <span class="nota" style="color: #92400e;">A chave aleatória faz o mesmo trabalho, não revela nada sobre você, e pode ser trocada no banco se for preciso.</span>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 9px;">
+        <div style="display: flex; gap: 10px; align-items: baseline;">
+          <span style="width: 6px; height: 6px; border-radius: 50%; background: #2563eb; flex: none;"></span>
+          <span class="nota"><strong style="color: #0f1420;">Fica no pé, não no topo.</strong> Pedir dinheiro antes de entregar valor é o jeito mais rápido de perder o download.</span>
+        </div>
+        <div style="display: flex; gap: 10px; align-items: baseline;">
+          <span style="width: 6px; height: 6px; border-radius: 50%; background: #2563eb; flex: none;"></span>
+          <span class="nota"><strong style="color: #0f1420;">Sem valor sugerido, sem meta, sem barra de progresso.</strong> “Qualquer valor” tira o constrangimento; meta pública que não enche vira sinal de projeto parado.</span>
+        </div>
+        <div style="display: flex; gap: 10px; align-items: baseline;">
+          <span style="width: 6px; height: 6px; border-radius: 50%; background: #2563eb; flex: none;"></span>
+          <span class="nota"><strong style="color: #0f1420;">Diga que continua gratuito.</strong> Numa página com botão de doação, a pessoa precisa ler que o programa não vira pago depois.</span>
+        </div>
+      </div>
+
+      <span class="nota"><strong style="color: #0f1420;">A gerar:</strong> o QR do PIX, que codifica a mesma chave. Sai do próprio aplicativo do banco.</span>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <span class="rot">Sobre o fórum</span>
+
+      <div style="display: flex; flex-direction: column; gap: 9px;">
+        <div style="display: flex; gap: 10px; align-items: baseline;">
+          <span style="width: 6px; height: 6px; border-radius: 50%; background: #2563eb; flex: none;"></span>
+          <span class="nota"><strong style="color: #0f1420;">“Próximo projeto”, não “em breve”.</strong> Diz onde o trabalho vai, sem prometer data — e sem link falso. A mesma regra da linha do tempo do programa: nada entra como pronto antes de existir.</span>
+        </div>
+        <div style="display: flex; gap: 10px; align-items: baseline;">
+          <span style="width: 6px; height: 6px; border-radius: 50%; background: #2563eb; flex: none;"></span>
+          <span class="nota"><strong style="color: #0f1420;">O repositório segura o intervalo.</strong> Sugestão e relato de erro já têm onde ir hoje, e à vista de todos.</span>
+        </div>
+      </div>
+
+      <div style="background: #eef7f5; border: 1px solid #9cd3c9; border-radius: 10px; padding: 14px 17px; display: flex; flex-direction: column; gap: 8px;">
+        <span class="marca" style="font-size: 14px; font-weight: 600; color: #0d9488;">Decidido · a página não coleta nada</span>
+        <span class="nota">Sem cadastro, sem newsletter, sem campo de e-mail, sem cookie de rastreamento. Um “me avise quando abrir” seria a única coisa da página a guardar dado de alguém — e ela não vai ter.</span>
+        <span class="nota"><strong style="color: #0f1420;">A consequência é assumida:</strong> não há como avisar ninguém. Quem quiser acompanhar volta aqui ou olha o repositório. Num programa cujo argumento é “nada sai da sua máquina”, um formulário no site contradiria a coisa toda.</span>
+      </div>
+
+      <div style="border-top: 1px solid #dfe3ea; padding-top: 12px;">
+        <span class="nota"><strong style="color: #0f1420;">Onde o fórum vai morar</strong> também está em aberto: GitHub Discussions sai de graça e já fica junto do código; um fórum próprio dá mais liberdade e custa hospedagem e moderação.</span>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

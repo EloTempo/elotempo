@@ -1,0 +1,81 @@
+# FAMILIA: Franco (Espanha)
+# CONFIABILIDADE geral: documentada
+# FONTES: Wikipedia; imprensa espanhola
+# FORMATO: um bloco por pessoa (ver _MODELO-PESSOA.txt)
+# NOTA: uma única filha; a descendência segue pelos Martínez-Bordiú. O ducado de
+#       Franco foi revogado em 2022 pela Lei de Memória Democrática.
+# LGPD: descendentes vivos marcados.
+# ---
+
+== Francisco Franco ==
+identidade: Chefe de Estado e ditador da Espanha de 1939 até sua morte em 1975.
+nome_publico: Francisco Franco
+apelidos: Caudillo
+nascimento: 1892
+falecimento: 1975
+profissoes: militar; político (ditador)
+nacionalidades: Espanha
+foto: fotos/francisco-franco.webp
+relacoes: casado com Carmen Polo; uma filha, Carmen   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Carmen Polo ==
+nome_publico: Carmen Polo
+nascimento: 1900
+falecimento: 1988
+nacionalidades: Espanha
+relacoes: esposa de Franco; mãe de Carmen Franco   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Carmen Franco ==
+identidade: Filha única de Franco; 1ª Duquesa de Franco.
+nome_publico: Carmen Franco y Polo
+nascimento: 1926
+falecimento: 2017
+nacionalidades: Espanha
+relacoes: filha de Franco; casou com Cristóbal Martínez-Bordiú; sete filhos   # -> Parentesco
+fonte: Wikipedia   # há tese (Paul Preston) de que seria filha biológica do irmão de Franco, Ramón — não confirmada
+confiabilidade: documentada
+
+== Cristóbal Martínez-Bordiú ==
+nome_publico: Cristóbal Martínez-Bordiú
+nascimento: 1922
+falecimento: 1998
+profissoes: cirurgião (fez o 1º transplante de coração da Espanha, 1968)
+nacionalidades: Espanha
+relacoes: genro de Franco; Marquês de Villaverde   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Carmen Martínez-Bordiú ==
+nome_publico: Carmen Martínez-Bordiú
+nascimento: 1951
+profissoes: aristocrata
+nacionalidades: Espanha
+relacoes: neta mais velha de Franco; foi casada com Alfonso de Borbón, Duque de Cádiz   # -> Parentesco
+fonte: Wikipedia   # LGPD: pessoa viva; ducado de Franco (2018) revogado em 2022
+confiabilidade: documentada
+
+== Francis Franco ==
+nome_publico: Francis Franco
+nome_registro: Francisco Martínez-Bordiú y Franco
+nascimento: 1954
+profissoes: aristocrata; empresário
+nacionalidades: Espanha
+relacoes: neto de Franco; Marquês de Villaverde   # -> Parentesco
+fonte: Wikipedia   # LGPD: pessoa viva
+confiabilidade: documentada
+
+== Luis Alfonso de Borbón ==
+identidade: Bisneto de Franco; pretendente legitimista ("Louis XX") ao trono francês.
+nome_publico: Luis Alfonso de Borbón
+nascimento: 1974
+nacionalidades: Espanha; França
+relacoes: filho de Carmen Martínez-Bordiú e Alfonso de Borbón; bisneto de Franco (elo com [[bourbon]])   # -> Parentesco
+fonte: Wikipedia   # LGPD: pessoa viva
+confiabilidade: documentada
+
+# Demais netos (evitam publicidade; expandir com cautela LGPD): Mariola, Merry,
+# Arancha, José Cristóbal e Jaime Martínez-Bordiú.

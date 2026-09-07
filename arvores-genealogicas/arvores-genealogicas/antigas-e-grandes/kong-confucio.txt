@@ -1,0 +1,105 @@
+# FAMILIA: Kong (Confúcio) — a maior árvore genealógica documentada do mundo
+# CONFIABILIDADE geral: documentada (linhagem principal registrada há 2.500+ anos)
+# FONTES: Guinness World Records; Wikipedia (Family tree of Confucius); casa Kong
+# FORMATO: um bloco por pessoa (ver _MODELO-PESSOA.txt)
+# NOTA: +2 milhões de nomes e 80+ gerações. Título Duque Yansheng (desde 1055) até
+#       1935; depois "Oficial Sacrificial a Confúcio". LGPD: descendentes vivos.
+# ---
+
+# --- ASCENDÊNCIA ---
+== Shuliang He ==
+nome_publico: Shuliang He
+falecimento: cerca de 548 a.C.
+profissoes: oficial militar
+nacionalidades: Estado de Lu (China)
+relacoes: pai de Confúcio (morreu quando ele tinha 3 anos)   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Yan Zhengzai ==
+nome_publico: Yan Zhengzai
+relacoes: mãe de Confúcio   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+# --- GERAÇÃO 1 — o Sábio ---
+== Confúcio ==
+identidade: Filósofo chinês; fundador do confucionismo e ancestral da linhagem documentada mais longa da história.
+nome_publico: Confúcio
+nome_registro: Kong Qiu (Kongzi)
+nascimento: 551 a.C.
+falecimento: 479 a.C.
+profissoes: filósofo; professor; funcionário
+nacionalidades: Estado de Lu (China)
+foto: fotos/confucio.webp
+relacoes: casado com Qiguan; pai de Kong Li   # -> Parentesco
+fonte: Guinness; Wikipedia
+confiabilidade: documentada
+
+== Kong Li ==
+nome_publico: Kong Li (Boyu)
+nascimento: 532 a.C.
+falecimento: 483 a.C.
+relacoes: filho de Confúcio (faleceu antes do pai)   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Kong Ji ==
+identidade: Filósofo; a ele se atribui a "Doutrina do Meio" (Zhongyong).
+nome_publico: Kong Ji (Zisi)
+nascimento: cerca de 483 a.C.
+falecimento: cerca de 402 a.C.
+profissoes: filósofo
+nacionalidades: China
+relacoes: neto de Confúcio   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+# ===== salto de ~74 gerações (linha principal contínua; expandir) =====
+== Kong Lingyi ==
+nome_publico: Kong Lingyi
+nascimento: 1872
+falecimento: 1919
+profissoes: nobre (Duque Yansheng, 76ª geração)
+nacionalidades: China
+relacoes: pai de Kung Te-cheng   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Kung Te-cheng ==
+identidade: 77ª geração; último Duque Yansheng e primeiro Oficial Sacrificial a Confúcio.
+nome_publico: Kung Te-cheng
+nome_registro: Kong Decheng
+nascimento: 1920
+falecimento: 2008
+profissoes: nobre; acadêmico; político (Taiwan)
+nacionalidades: China; Taiwan
+relacoes: 77º descendente na linha principal; avô de Kung Tsui-chang   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Kung Wei-yi ==
+nome_publico: Kung Wei-yi
+nascimento: 1939
+falecimento: 1989
+relacoes: 78ª geração; filho de Kung Te-cheng (faleceu antes do pai)   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Kung Tsui-chang ==
+identidade: 79ª geração; atual Oficial Sacrificial a Confúcio (Taiwan).
+nome_publico: Kung Tsui-chang
+nome_registro: Kong Chui-chang
+nascimento: 1975
+profissoes: representante cerimonial da linhagem; professor honorário
+nacionalidades: Taiwan
+relacoes: neto de Kung Te-cheng; pai de Kong Yu-jen   # -> Parentesco
+fonte: Wikipedia   # LGPD: pessoa viva
+confiabilidade: documentada
+
+== Kong Yu-jen ==
+nome_publico: Kong Yu-jen
+nascimento: 2006
+relacoes: 80ª geração; filho de Kung Tsui-chang   # -> Parentesco
+fonte: Wikipedia   # LGPD: pessoa viva
+confiabilidade: documentada

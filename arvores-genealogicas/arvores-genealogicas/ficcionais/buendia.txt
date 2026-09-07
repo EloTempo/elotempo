@@ -1,0 +1,103 @@
+# FAMILIA: Buendía (Cem Anos de Solidão) — FICÇÃO (bônus latino-americano)
+# CONFIABILIDADE geral: ficcao (NÃO misturar com dados reais)
+# FONTES: cânon "Cem Anos de Solidão", de Gabriel García Márquez; trad. Eliane Zagury (Record)
+# FORMATO: um bloco por pessoa (ver _MODELO-PESSOA.txt)
+# NOTA: sem foto (direito autoral). Sete gerações. O ARQUÉTIPO dos seus temas:
+#       nomes repetidos (vários José Arcadio e Aureliano), adoção (Rebeca),
+#       filhos ilegítimos e consanguinidade que ABRE e FECHA a saga (os fundadores
+#       são primos; o último nasce de tia e sobrinho, com cauda de porco).
+# ---
+
+# --- 1ª GERAÇÃO — fundadores ---
+== José Arcadio Buendía ==
+identidade: Fundador de Macondo; visionário obcecado por alquimia.
+nome_publico: José Arcadio Buendía
+relacoes: casado com a prima Úrsula Iguarán   # -> Parentesco [CONSANGUINIDADE]
+fonte: cânon Cem Anos de Solidão
+confiabilidade: ficcao
+
+== Úrsula Iguarán ==
+identidade: Matriarca longeva; teme a maldição do incesto (um filho com cauda de porco).
+nome_publico: Úrsula Iguarán
+relacoes: prima e esposa de José Arcadio Buendía   # -> Parentesco [CONSANGUINIDADE]
+fonte: cânon Cem Anos de Solidão
+confiabilidade: ficcao
+
+# --- 2ª GERAÇÃO ---
+== José Arcadio ==
+nome_publico: José Arcadio (filho)
+relacoes: filho dos fundadores; casa-se com a irmã adotiva Rebeca   # -> Parentesco [CONSANGUINIDADE]
+fonte: cânon Cem Anos de Solidão
+confiabilidade: ficcao
+
+== Coronel Aureliano Buendía ==
+identidade: Líder rebelde; teve 17 filhos, todos chamados Aureliano.
+nome_publico: Coronel Aureliano Buendía
+relacoes: filho dos fundadores; pai de Aureliano José e dos "17 Aurelianos"   # -> Parentesco
+fonte: cânon Cem Anos de Solidão
+confiabilidade: ficcao
+
+== Amaranta ==
+nome_publico: Amaranta
+relacoes: filha dos fundadores; morre solteira   # -> Parentesco
+fonte: cânon Cem Anos de Solidão
+confiabilidade: ficcao
+
+== Rebeca ==
+nome_publico: Rebeca
+relacoes: filha ADOTIVA dos fundadores; casa-se com José Arcadio (filho)   # -> Parentesco
+fonte: cânon Cem Anos de Solidão
+confiabilidade: ficcao
+
+# --- 3ª GERAÇÃO ---
+== Arcadio ==
+nome_publico: Arcadio
+relacoes: filho ilegítimo de José Arcadio (filho) com Pilar Ternera; casado com Santa Sofía de la Piedad   # -> Parentesco
+fonte: cânon Cem Anos de Solidão
+confiabilidade: ficcao
+
+== Aureliano Segundo ==
+nome_publico: Aureliano Segundo
+relacoes: filho de Arcadio; gêmeo de José Arcadio Segundo; casado com Fernanda del Carpio   # -> Parentesco
+fonte: cânon Cem Anos de Solidão
+confiabilidade: ficcao
+
+== José Arcadio Segundo ==
+nome_publico: José Arcadio Segundo
+relacoes: filho de Arcadio; gêmeo de Aureliano Segundo   # -> Parentesco
+fonte: cânon Cem Anos de Solidão
+confiabilidade: ficcao
+
+# --- 4ª/5ª GERAÇÃO ---
+== Fernanda del Carpio ==
+nome_publico: Fernanda del Carpio
+relacoes: esposa de Aureliano Segundo; mãe de Meme, José Arcadio e Amaranta Úrsula   # -> Parentesco
+fonte: cânon Cem Anos de Solidão
+confiabilidade: ficcao
+
+== Meme ==
+nome_publico: Renata Remedios "Meme"
+relacoes: filha de Aureliano Segundo e Fernanda; mãe do (ilegítimo) Aureliano Babilonia, com Mauricio Babilonia   # -> Parentesco
+fonte: cânon Cem Anos de Solidão
+confiabilidade: ficcao
+
+== Amaranta Úrsula ==
+nome_publico: Amaranta Úrsula
+relacoes: filha caçula de Aureliano Segundo e Fernanda; casada com Gastón   # -> Parentesco
+fonte: cânon Cem Anos de Solidão
+confiabilidade: ficcao
+
+# --- 6ª/7ª GERAÇÃO — o fecho ---
+== Aureliano Babilonia ==
+identidade: Decifra os pergaminhos de Melquíades que previam o destino da família.
+nome_publico: Aureliano Babilonia
+relacoes: filho ilegítimo de Meme; apaixona-se pela tia Amaranta Úrsula   # -> Parentesco [CONSANGUINIDADE]
+fonte: cânon Cem Anos de Solidão
+confiabilidade: ficcao
+
+== Aureliano (o último) ==
+identidade: A criança com cauda de porco que cumpre a profecia e encerra a linhagem.
+nome_publico: Aureliano (o último)
+relacoes: filho de Aureliano Babilonia com a tia Amaranta Úrsula   # -> Parentesco [CONSANGUINIDADE]
+fonte: cânon Cem Anos de Solidão
+confiabilidade: ficcao

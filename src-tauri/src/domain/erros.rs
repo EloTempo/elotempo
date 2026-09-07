@@ -12,6 +12,8 @@ pub enum ErroDominio {
     PessoaNaoEncontrada(String),
     /// A união referenciada não existe no acervo.
     UniaoNaoEncontrada(String),
+    /// A árvore referenciada não existe no acervo.
+    ArvoreNaoEncontrada(String),
 
     /// Seção 3: "exatamente um slot masculino e um feminino".
     SlotIncompativel {
@@ -49,6 +51,12 @@ pub enum ErroDominio {
     /// Valor fora do domínio permitido (sexo, tipo de vínculo, etc.).
     ValorInvalido { campo: String, valor: String },
 
+    /// Ação bloqueada por falta de autorização ou senha incorreta.
+    AcessoNegado(String),
+
+    /// Falha de validação de dados de entrada.
+    Validacao(String),
+
     /// Falha vinda do SQLite. Nunca carrega SQL nem dado do usuário.
     Persistencia(String),
 }
@@ -59,6 +67,7 @@ impl fmt::Display for ErroDominio {
         match self {
             PessoaNaoEncontrada(id) => write!(f, "Pessoa não encontrada ({id})"),
             UniaoNaoEncontrada(id) => write!(f, "União não encontrada ({id})"),
+            ArvoreNaoEncontrada(id) => write!(f, "Árvore não encontrada ({id})"),
             SlotIncompativel { slot, sexo, .. } => write!(
                 f,
                 "O slot {slot} não aceita uma pessoa de sexo '{sexo}'. \
@@ -81,6 +90,8 @@ impl fmt::Display for ErroDominio {
             ValorInvalido { campo, valor } => {
                 write!(f, "Valor inválido para {campo}: '{valor}'")
             }
+            AcessoNegado(msg) => write!(f, "Acesso negado: {msg}"),
+            Validacao(msg) => write!(f, "Erro de validação: {msg}"),
             Persistencia(msg) => write!(f, "Erro ao acessar o acervo: {msg}"),
         }
     }
@@ -94,12 +105,15 @@ impl ErroDominio {
         match self {
             PessoaNaoEncontrada(_) => "PessoaNaoEncontrada",
             UniaoNaoEncontrada(_) => "UniaoNaoEncontrada",
+            ArvoreNaoEncontrada(_) => "ArvoreNaoEncontrada",
             SlotIncompativel { .. } => "SlotIncompativel",
             FilhoJaTemUniao { .. } => "FilhoJaTemUniao",
             CicloGenealogico { .. } => "CicloGenealogico",
             SexoTravadoPorUniao { .. } => "SexoTravadoPorUniao",
             PessoaEmUso { .. } => "PessoaEmUso",
             ValorInvalido { .. } => "ValorInvalido",
+            AcessoNegado(_) => "AcessoNegado",
+            Validacao(_) => "Validacao",
             Persistencia(_) => "Persistencia",
         }
     }

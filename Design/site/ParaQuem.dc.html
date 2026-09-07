@@ -1,0 +1,141 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap">
+  <style>
+    body { margin: 0; font-family: 'Inter', system-ui, sans-serif; }
+    a { color: #2563eb; } a:hover { color: #0f1420; }
+    .marca { font-family: 'Sora', 'Inter', system-ui, sans-serif; }
+    .rot { font-family: 'Sora', system-ui, sans-serif; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; font-weight: 600; color: #6b7280; }
+    .nota { font-size: 12.5px; line-height: 1.55; color: #4b5563; }
+    .cartao { border: 1px solid #dfe3ea; border-radius: 12px; background: #ffffff; padding: 20px; display: flex; flex-direction: column; gap: 11px; }
+  </style>
+</helmet>
+
+<div style="width: 940px; height: 900px; box-sizing: border-box; background: #f4f5f7; color: #0f1420; display: flex; flex-direction: column;">
+
+  <div style="padding: 32px 40px 18px 40px; border-bottom: 1px solid #dfe3ea; display: flex; flex-direction: column; gap: 8px;">
+    <span class="rot">Elotempo · site público</span>
+    <span class="marca" style="font-size: 29px; font-weight: 600; letter-spacing: -.025em; line-height: 1;">Para quem é, e o que sai no papel</span>
+    <span class="nota" style="font-size: 13.5px; max-width: 68ch;">Duas seções que substituem a antiga “três razões”. Dizer “qualquer pessoa pode usar” sozinho é vago — quatro públicos com <strong>quatro motivos diferentes</strong>, cada um apontando um recurso que existe, diz muito mais.</span>
+  </div>
+
+  <!-- para quem -->
+  <div style="padding: 22px 40px 18px 40px; display: flex; flex-direction: column; gap: 13px;">
+    <div style="display: flex; align-items: baseline; gap: 12px;">
+      <span class="rot" style="color: #2563eb;">Seção · para quem é</span>
+      <span class="nota" style="font-size: 11.5px;">é código aberto: usar não custa nada e não depende de permissão</span>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px;">
+
+      <div class="cartao">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 7v3.6M4.6 10.6h14.8M4.6 10.6V15M12 10.6V15M19.4 10.6V15"/><g fill="#2563eb" stroke="none"><circle cx="12" cy="5" r="2"/><circle cx="4.6" cy="17" r="2"/><circle cx="12" cy="17" r="2"/><circle cx="19.4" cy="17" r="2"/></g></svg>
+          <span class="marca" style="font-size: 16px; font-weight: 600; letter-spacing: -.015em;">Famílias</span>
+        </div>
+        <span class="nota">O acervo de casa: fotos, documentos, os nomes que a pessoa teve ao longo da vida. E quando falta um nome, o desconhecido vira um nó de verdade — os filhos ficam pendurados nele até alguém lembrar.</span>
+      </div>
+
+      <div class="cartao">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><g fill="#2563eb" stroke="none"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></g></svg>
+          <span class="marca" style="font-size: 16px; font-weight: 600; letter-spacing: -.015em;">Professores</span>
+        </div>
+        <span class="nota">História do Brasil, moeda, presidentes e tecnologias ao lado de uma vida. É a aula de história com um exemplo que é do próprio aluno — e as linhas de contexto vêm prontas, dentro do programa.</span>
+      </div>
+
+      <div class="cartao">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19.5V6a2 2 0 0 1 2-2h11v16H7a2 2 0 0 0-2 2z"/><path d="M9 8.5h5.5M9 12h5.5"/></svg>
+          <span class="marca" style="font-size: 16px; font-weight: 600; letter-spacing: -.015em;">Estudantes</span>
+        </div>
+        <span class="nota">Trabalho de escola que sai pronto em A4: a árvore, a ficha de cada pessoa, ou um trecho de linha do tempo com os marcos do período estudado.</span>
+      </div>
+
+      <div class="cartao">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.2"/><path d="M15.4 15.4L20 20"/></svg>
+          <span class="marca" style="font-size: 16px; font-weight: 600; letter-spacing: -.015em;">Pesquisadores</span>
+        </div>
+        <span class="nota">GEDCOM 5.5.1 e 7.0 nos dois sentidos, busca por dez critérios combinados, e sem limite de tamanho. O acervo é um arquivo seu — não fica preso a serviço nenhum.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- impressão -->
+  <div style="padding: 6px 40px 24px 40px; display: flex; flex-direction: column; gap: 13px; flex-grow: 1;">
+    <div style="display: flex; align-items: baseline; gap: 12px;">
+      <span class="rot" style="color: #2563eb;">Seção · o que sai no papel</span>
+      <span class="nota" style="font-size: 11.5px;">o único lugar da página onde mostrar vale mais que contar</span>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 200px 200px minmax(0, 1fr); gap: 18px; align-items: start;">
+
+      <!-- folha: árvore -->
+      <div style="background: #ffffff; border: 1px solid #c3cad6; border-radius: 4px; padding: 16px 14px; display: flex; flex-direction: column; gap: 11px; box-shadow: 0 1px 2px rgba(15,20,32,.06), 0 8px 20px rgba(15,20,32,.06); aspect-ratio: 210 / 297;">
+        <div style="display: flex; flex-direction: column; gap: 3px;">
+          <div style="width: 60%; height: 6px; background: #0f1420; border-radius: 2px;"></div>
+          <div style="width: 40%; height: 4px; background: #c3cad6; border-radius: 2px;"></div>
+        </div>
+        <div style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 7px;">
+          <div style="width: 54px; height: 15px; border: 1px solid #4b5563; border-radius: 3px;"></div>
+          <div style="width: 1px; height: 9px; background: #4b5563;"></div>
+          <div style="width: 108px; height: 1px; background: #4b5563;"></div>
+          <div style="display: flex; gap: 9px;">
+            <div style="width: 42px; height: 15px; border: 1px solid #4b5563; border-radius: 3px;"></div>
+            <div style="width: 42px; height: 15px; border: 1px solid #4b5563; border-radius: 3px;"></div>
+          </div>
+        </div>
+        <span style="font-size: 8.5px; color: #6b7280; text-align: center;">a árvore, em A4</span>
+      </div>
+
+      <!-- folha: linha do tempo -->
+      <div style="background: #ffffff; border: 1px solid #c3cad6; border-radius: 4px; padding: 16px 14px; display: flex; flex-direction: column; gap: 11px; box-shadow: 0 1px 2px rgba(15,20,32,.06), 0 8px 20px rgba(15,20,32,.06); aspect-ratio: 210 / 297;">
+        <div style="display: flex; flex-direction: column; gap: 3px;">
+          <div style="width: 66%; height: 6px; background: #0f1420; border-radius: 2px;"></div>
+          <div style="width: 34%; height: 4px; background: #c3cad6; border-radius: 2px;"></div>
+        </div>
+        <div style="flex-grow: 1; display: flex; flex-direction: column; gap: 13px; justify-content: center;">
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            <div style="position: relative; height: 9px;">
+              <div style="position: absolute; left: 0; right: 0; top: 4px; height: 1px; background: #c3cad6;"></div>
+              <div style="position: absolute; left: 8%; top: 0; width: 2px; height: 9px; background: #1d4ed8;"></div>
+              <div style="position: absolute; left: 36%; top: 0; width: 2px; height: 9px; background: #1d4ed8;"></div>
+              <div style="position: absolute; left: 68%; top: 0; width: 2px; height: 9px; background: #1d4ed8;"></div>
+            </div>
+            <div style="position: relative; height: 8px;">
+              <div style="position: absolute; left: 12%; width: 58%; top: 1px; height: 6px; border-radius: 3px; background: #2563eb; opacity: .8;"></div>
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 3px;">
+            <div style="width: 100%; height: 3px; background: #eceef2; border-radius: 2px;"></div>
+            <div style="width: 88%; height: 3px; background: #eceef2; border-radius: 2px;"></div>
+            <div style="width: 94%; height: 3px; background: #eceef2; border-radius: 2px;"></div>
+          </div>
+        </div>
+        <span style="font-size: 8.5px; color: #6b7280; text-align: center;">o trecho escolhido, com os marcos</span>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 11px; padding-top: 4px;">
+        <span class="nota"><strong style="color: #0f1420;">Imprima o que quiser, no recorte que quiser.</strong> A árvore inteira ou o ramo de uma pessoa; a ficha completa de cada um; e qualquer trecho de linha do tempo — o período que interessa, com os marcos daquela época.</span>
+        <span class="nota">O relatório sai nos três modos: só a hierarquia, só o texto, ou os dois juntos. Com opção de ocultar pessoas vivas, quebrar por geração e levar as miniaturas.</span>
+        <div style="border-left: 3px solid #0d9488; padding: 2px 0 2px 13px;">
+          <span class="nota">Vale destacar porque é a saída que <em>não depende do programa continuar existindo</em>. Papel na gaveta atravessa mudança de computador, de formato e de empresa.</span>
+        </div>
+        <div style="border: 1px dashed #d9a441; background: #fdf2e3; border-radius: 8px; padding: 11px 14px;">
+          <span class="nota" style="color: #92400e;"><strong>Precisa ser feito:</strong> duas capturas reais de PDF gerado pelo programa. Estas folhas são maquete — mostrar impressão com desenho falso é justamente o que tira a credibilidade da promessa.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>
