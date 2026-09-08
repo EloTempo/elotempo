@@ -10,6 +10,9 @@ import {
   converterAnoDoCalendarioParaGregoriano,
   obterNumeroAnoNoCalendario,
   obterSufixoAnoNoCalendario,
+  formatarDataNoCalendario,
+  formatarDataPrecisaNoCalendario,
+  descreverDataComDetalhes,
 } from './calendarios';
 
 describe('Módulo de Calendários e Cronologias', () => {
@@ -179,6 +182,96 @@ describe('Módulo de Calendários e Cronologias', () => {
       expect(obterSufixoAnoNoCalendario(2026, 'romano')).toBe('AUC');
       expect(obterSufixoAnoNoCalendario(2026, 'holoceno')).toBe('HE');
       expect(obterSufixoAnoNoCalendario(2026, 'islamico')).toBe('AH');
+    });
+  });
+
+  describe('Formatação de Datas Completas e Sub-Anuais em Múltiplos Calendários', () => {
+    it('formata datas no Calendário Judaico com nome de mês hebraico (ex: Adar)', () => {
+      // 8 de Março de 2026
+      const resCompleto = formatarDataNoCalendario(
+        { ano: 2026, mes: 3, dia: 8 },
+        'judaico',
+        'real',
+        'completo',
+      );
+      expect(resCompleto).toContain('Adar');
+      expect(resCompleto).toContain('5786 AM');
+
+      const resMesAno = formatarDataNoCalendario(
+        { ano: 2026, mes: 3, dia: 8 },
+        'judaico',
+        'real',
+        'mesAno',
+      );
+      expect(resMesAno).toBe('Adar de 5786 AM');
+
+      const resDiaMes = formatarDataNoCalendario(
+        { ano: 2026, mes: 3, dia: 8 },
+        'judaico',
+        'real',
+        'diaMes',
+      );
+      expect(resDiaMes).toContain('Adar');
+    });
+
+    it('formata datas no Calendário Islâmico com nome de mês lunar (ex: Ramadan)', () => {
+      // 8 de Março de 2026
+      const resCompleto = formatarDataNoCalendario(
+        { ano: 2026, mes: 3, dia: 8 },
+        'islamico',
+        'real',
+        'completo',
+      );
+      expect(resCompleto).toContain('Ramadan');
+      expect(resCompleto).toContain('1447 AH');
+    });
+
+    it('formata datas no Calendário Romano (AUC) e Holoceno (HE)', () => {
+      const resRomano = formatarDataNoCalendario(
+        { ano: 2026, mes: 3, dia: 8 },
+        'romano',
+        'real',
+        'completo',
+      );
+      expect(resRomano).toBe('8 de Março de 2779 AUC');
+
+      const resHoloceno = formatarDataNoCalendario(
+        { ano: 2026, mes: 3, dia: 8 },
+        'holoceno',
+        'real',
+        'completo',
+      );
+      expect(resHoloceno).toBe('8 de Março de 12026 HE');
+    });
+
+    it('formatarDataPrecisaNoCalendario adapta a saída de acordo com o zoom visível', () => {
+      // 8 de março de 2026 ~ 2026.18
+      const anoCont = 2026.18;
+
+      // Zoom Macro (> 2.5 anos visíveis): apenas ano
+      expect(formatarDataPrecisaNoCalendario(anoCont, 50, 'judaico')).toBe('5786 AM');
+      expect(formatarDataPrecisaNoCalendario(anoCont, 50, 'romano')).toBe('2779 AUC');
+
+      // Zoom Médio (entre 0.35 e 2.5 anos visíveis): mês e ano
+      expect(formatarDataPrecisaNoCalendario(anoCont, 1.2, 'judaico')).toBe('Adar de 5786 AM');
+      expect(formatarDataPrecisaNoCalendario(anoCont, 1.2, 'romano')).toBe('Março de 2779 AUC');
+
+      // Zoom Micro (<= 0.35 anos visíveis): data completa
+      const dataJudaicaMicro = formatarDataPrecisaNoCalendario(anoCont, 0.1, 'judaico');
+      expect(dataJudaicaMicro).toContain('Adar');
+      expect(dataJudaicaMicro).toContain('5786 AM');
+    });
+
+    it('descreverDataComDetalhes inclui referência gregoriana informativa', () => {
+      const anoCont = 2026.18;
+      const descJudaico = descreverDataComDetalhes(anoCont, 0.1, 'judaico');
+      expect(descJudaico.principal).toContain('Adar');
+      expect(descJudaico.secundario).toContain('equiv.');
+      expect(descJudaico.secundario).toContain('Março de 2026');
+
+      const descGregoriano = descreverDataComDetalhes(anoCont, 0.1, 'gregoriano');
+      expect(descGregoriano.principal).toContain('Março de 2026');
+      expect(descGregoriano.secundario).toBeUndefined();
     });
   });
 });

@@ -52,7 +52,7 @@
   :root[data-tema="classico-escuro"] {
     --mesa: #171410; --bg: #211d18; --sup: #26221c; --card: #2b261f; --card2: #332d25;
     --borda: #463d31; --borda2: #5d5140; --tinta: #f5ede0; --tinta2: #c4b6a4; --tinta3: #a39582;
-    --linha: #6f6046; --masc: #8fbcdc; --fem: #e07a94; --anel: #b9a074;
+    --linha: #4e4231; --masc: #8fbcdc; --fem: #e07a94; --anel: #61533c;
     --acento: #d8c39a; --acento-tinta: #221e18;
     --acento2: #84b3a4; --acento2-tinta: #171410;
     --chip: #332d25;
@@ -96,7 +96,7 @@
   :root[data-tema="moderno-escuro"] {
     --mesa: #06080c; --bg: #0b0d12; --sup: #101319; --card: #161a22; --card2: #1c212b;
     --borda: #242a35; --borda2: #333b49; --tinta: #eef2f7; --tinta2: #a3adc0; --tinta3: #8a96a8;
-    --linha: #2e3542; --masc: #5b8bf9; --fem: #fb3b73; --anel: #5c6673;
+    --linha: #2e3542; --masc: #5b8bf9; --fem: #fb3b73; --anel: #444e5d;
     --acento: #5b8bf9; --acento-tinta: #0b0d12;
     --acento2: #2bbfab; --acento2-tinta: #06080c;
     --chip: #1c212b;

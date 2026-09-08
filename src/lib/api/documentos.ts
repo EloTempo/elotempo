@@ -29,6 +29,10 @@ export const definirFotoPrincipal = (
 ): Promise<void> =>
   chamar<void>('definir_foto_principal', { pessoaId, documentoId });
 
+/** Abre o arquivo diretamente no aplicativo padrão do sistema operacional (leitor de PDF, visualizador de fotos, etc.). */
+export const abrirDocumentoNoSistema = (caminhoRelativo: string): Promise<void> =>
+  chamar<void>('abrir_documento_no_sistema', { caminhoRelativo });
+
 /**
  * Abre o seletor de arquivo do sistema.
  *
@@ -49,6 +53,42 @@ export async function escolherArquivo(): Promise<string | null> {
 
   if (typeof escolhido === 'string') return escolhido;
   return null;
+}
+
+/**
+ * Abre o seletor de imagens do sistema focado especificamente em fotografias/retratos.
+ */
+export async function escolherFoto(): Promise<string | null> {
+  const escolhido = await open({
+    multiple: false,
+    directory: false,
+    filters: [
+      {
+        name: 'Fotografias e Imagens',
+        extensions: ['jpg', 'jpeg', 'png', 'webp', 'gif', 'bmp'],
+      },
+      { name: 'Todos os arquivos', extensions: ['*'] },
+    ],
+  });
+
+  if (typeof escolhido === 'string') return escolhido;
+  return null;
+}
+
+/**
+ * Anexa a fotografia ao acervo e a define imediatamente como retrato principal da pessoa.
+ */
+export async function definirFotoDaPessoa(
+  pessoaId: string,
+  caminhoOrigem: string,
+): Promise<string> {
+  const docId = await anexarDocumento({
+    pessoa_id: pessoaId,
+    caminho_origem: caminhoOrigem,
+    titulo: 'Retrato de perfil',
+  });
+  await definirFotoPrincipal(pessoaId, docId);
+  return docId;
 }
 
 /**

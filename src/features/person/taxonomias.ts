@@ -148,3 +148,48 @@ export function rotuloDoTipo(tipo: string): string {
   if (conhecido) return conhecido.rotulo;
   return tipo.charAt(0).toLocaleUpperCase('pt-BR') + tipo.slice(1);
 }
+
+/** Formata o código de país em gentílico em português com bandeira. */
+export function obterRotuloNacionalidade(
+  paisId?: string | null,
+  sexo?: string
+): { flag: string; texto: string } | null {
+  if (!paisId) return null;
+  const map: Record<string, { flag: string; m: string; f: string }> = {
+    br: { flag: '🇧🇷', m: 'Brasileiro', f: 'Brasileira' },
+    pt: { flag: '🇵🇹', m: 'Português', f: 'Portuguesa' },
+    it: { flag: '🇮🇹', m: 'Italiano', f: 'Italiana' },
+    es: { flag: '🇪🇸', m: 'Espanhol', f: 'Espanhola' },
+    de: { flag: '🇩🇪', m: 'Alemão', f: 'Alemã' },
+    jp: { flag: '🇯🇵', m: 'Japonês', f: 'Japonesa' },
+    fr: { flag: '🇫🇷', m: 'Francês', f: 'Francesa' },
+    gb: { flag: '🇬🇧', m: 'Britânico', f: 'Britânica' },
+    us: { flag: '🇺🇸', m: 'Norte-Americano', f: 'Norte-Americana' },
+    ar: { flag: '🇦🇷', m: 'Argentino', f: 'Argentina' },
+    uy: { flag: '🇺🇾', m: 'Uruguaio', f: 'Uruguaia' },
+    py: { flag: '🇵🇾', m: 'Paraguaio', f: 'Paraguaia' },
+    pl: { flag: '🇵🇱', m: 'Polonês', f: 'Polonesa' },
+    ru: { flag: '🇷🇺', m: 'Russo', f: 'Russa' },
+    ua: { flag: '🇺🇦', m: 'Ucraniano', f: 'Ucraniana' },
+    lb: { flag: '🇱🇧', m: 'Libanês', f: 'Libanesa' },
+    sy: { flag: '🇸🇾', m: 'Sírio', f: 'Síria' },
+    ch: { flag: '🇨🇭', m: 'Suíço', f: 'Suíça' },
+    at: { flag: '🇦🇹', m: 'Austríaco', f: 'Austríaca' },
+    nl: { flag: '🇳🇱', m: 'Holandês', f: 'Holandesa' },
+  };
+
+  const item = map[paisId.toLowerCase()];
+  if (item) {
+    return { flag: item.flag, texto: sexo === 'F' ? item.f : item.m };
+  }
+
+  const flag =
+    paisId.length === 2
+      ? paisId
+          .toUpperCase()
+          .replace(/./g, (c) => String.fromCodePoint(127397 + c.charCodeAt(0)))
+      : '🌐';
+
+  return { flag, texto: paisId.toUpperCase() };
+}
+

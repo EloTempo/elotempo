@@ -51,7 +51,7 @@ export interface OpcoesDeFiltro {
 
 export const buscarPessoasFiltrado = (
   filtros: FiltrosBusca,
-  limite = 200,
+  limite = 5000,
 ): Promise<PersonNode[]> => chamar<PersonNode[]>('buscar_pessoas_filtrado', { filtros, limite });
 
 /**

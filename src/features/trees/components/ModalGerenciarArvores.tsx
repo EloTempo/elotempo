@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   Check,
@@ -31,6 +31,8 @@ interface ModalGerenciarArvoresProps {
   onClose: () => void;
   arvoreAtivaId: string | null;
   onSelecionarArvore: (arvore: ArvoreInfo) => void;
+  iniciarComCriacao?: boolean;
+  abaInicial?: 'publicas' | 'pessoais' | 'todas';
 }
 
 export function ModalGerenciarArvores({
@@ -38,6 +40,8 @@ export function ModalGerenciarArvores({
   onClose,
   arvoreAtivaId,
   onSelecionarArvore,
+  iniciarComCriacao = false,
+  abaInicial = 'publicas',
 }: ModalGerenciarArvoresProps) {
   const { t } = useI18n();
   const { executarComGatekeeper } = useGatekeeper();
@@ -51,10 +55,34 @@ export function ModalGerenciarArvores({
   const [raizPessoaId, setRaizPessoaId] = useState<string | null>(null);
   const [buscaPessoa, setBuscaPessoa] = useState('');
   const [buscaArvore, setBuscaArvore] = useState('');
-  const [abaFiltro, setAbaFiltro] = useState<'publicas' | 'pessoais' | 'todas'>('publicas');
+  const [abaFiltro, setAbaFiltro] = useState<'publicas' | 'pessoais' | 'todas'>(abaInicial);
   const [pessoaEscolhida, setPessoaEscolhida] = useState<{ id: string; nome: string } | null>(null);
   const [erroForm, setErroForm] = useState<string | null>(null);
   const [confirmarExclusaoId, setConfirmarExclusaoId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      if (iniciarComCriacao) {
+        setNome('');
+        setDescricao('');
+        setCategoria('');
+        setPais('');
+        setPeriodo('');
+        setRaizPessoaId(null);
+        setPessoaEscolhida(null);
+        setBuscaPessoa('');
+        setErroForm(null);
+        setEditando('nova');
+      }
+      if (abaInicial) {
+        setAbaFiltro(abaInicial);
+      }
+    } else {
+      setEditando(null);
+      setErroForm(null);
+      setConfirmarExclusaoId(null);
+    }
+  }, [isOpen, iniciarComCriacao, abaInicial]);
 
   const { data: arvores, isLoading } = useQuery({
     queryKey: ['arvores'],
@@ -72,8 +100,10 @@ export function ModalGerenciarArvores({
     mutationFn: criarArvore,
     onSuccess: (nova) => {
       qc.invalidateQueries({ queryKey: ['arvores'] });
+      qc.invalidateQueries({ queryKey: ['pessoas-arvore-timeline'] });
       setEditando(null);
       onSelecionarArvore(nova);
+      onClose();
     },
     onError: (err: any) => setErroForm(err.message || 'Erro ao criar árvore'),
   });
@@ -82,6 +112,7 @@ export function ModalGerenciarArvores({
     mutationFn: atualizarArvore,
     onSuccess: (atualizada) => {
       qc.invalidateQueries({ queryKey: ['arvores'] });
+      qc.invalidateQueries({ queryKey: ['pessoas-arvore-timeline'] });
       setEditando(null);
       if (arvoreAtivaId === atualizada.id) {
         onSelecionarArvore(atualizada);
@@ -94,6 +125,7 @@ export function ModalGerenciarArvores({
     mutationFn: ({ id, ticket }: { id: string; ticket?: string | null }) => deletarArvore(id, ticket),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['arvores'] });
+      qc.invalidateQueries({ queryKey: ['pessoas-arvore-timeline'] });
       setConfirmarExclusaoId(null);
     },
     onError: (err: any) => setErroForm(err.message || 'Erro ao excluir árvore'),
@@ -134,7 +166,7 @@ export function ModalGerenciarArvores({
     setErroForm(null);
     const n = nome.trim();
     if (!n) {
-      setErroForm('O nome da árvore é obrigatório.');
+      setErroForm(t('arvore', 'nomeObrigatorio'));
       return;
     }
 
@@ -164,13 +196,12 @@ export function ModalGerenciarArvores({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="Gerenciar Árvores Genealógicas"
+      title={t('topo', 'gerenciadorArvores')}
       className="max-w-2xl"
     >
       <div className="flex flex-col gap-4">
         <p className="text-xs text-tinta2 m-0 leading-relaxed">
-          Cada árvore representa uma <strong>visão nomeada e enraizada</strong> do acervo comum.
-          Pessoas e uniões podem pertencer a várias árvores ao mesmo tempo. Excluir uma árvore remove apenas a visão, preservando todos os parentes intactos no banco de dados.
+          {t('arvore', 'descricaoGerenciar')}
         </p>
 
         {/* Formulário de Criação / Edição */}
@@ -182,7 +213,7 @@ export function ModalGerenciarArvores({
             <div className="flex items-center justify-between border-b border-borda/60 pb-2">
               <h4 className="font-semibold text-sm text-tinta flex items-center gap-1.5 m-0">
                 <IconeArvore className="w-4 h-4 text-acento" />
-                {editando === 'nova' ? 'Nova Árvore' : `Editar "${editando.nome}"`}
+                {editando === 'nova' ? t('arvore', 'criarNovaArvore') : `${t('comum', 'editar')} "${editando.nome}"`}
               </h4>
               <button
                 type="button"
@@ -200,9 +231,9 @@ export function ModalGerenciarArvores({
             )}
 
             <div className="flex flex-col gap-1">
-              <label className="text-xs font-semibold text-tinta">Nome da árvore *</label>
+              <label className="text-xs font-semibold text-tinta">{t('arvore', 'nomeArvoreLabel')}</label>
               <Input
-                placeholder="Ex.: Família Silva, Ramo Materno, Linhagem Real..."
+                placeholder={t('arvore', 'nomeArvorePlaceholder')}
                 value={nome}
                 onChange={(e) => setNome(e.target.value)}
                 required
@@ -211,9 +242,9 @@ export function ModalGerenciarArvores({
             </div>
 
             <div className="flex flex-col gap-1">
-              <label className="text-xs font-semibold text-tinta">Descrição (opcional)</label>
+              <label className="text-xs font-semibold text-tinta">{t('arvore', 'descricaoLabel')}</label>
               <textarea
-                placeholder="Breve anotação sobre o foco ou origem desta árvore..."
+                placeholder={t('arvore', 'descricaoPlaceholder')}
                 value={descricao}
                 onChange={(e) => setDescricao(e.target.value)}
                 rows={2}
@@ -223,27 +254,27 @@ export function ModalGerenciarArvores({
 
             <div className="grid grid-cols-3 gap-2">
               <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-tinta">Categoria</label>
+                <label className="text-xs font-semibold text-tinta">{t('arvore', 'categoriaLabel')}</label>
                 <Input
-                  placeholder="Ex.: Famílias Reais"
+                  placeholder={t('arvore', 'categoriaPlaceholder')}
                   value={categoria}
                   onChange={(e) => setCategoria(e.target.value)}
                 />
               </div>
 
               <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-tinta">País</label>
+                <label className="text-xs font-semibold text-tinta">{t('arvore', 'paisLabel')}</label>
                 <Input
-                  placeholder="Ex.: Brasil"
+                  placeholder={t('arvore', 'paisPlaceholder')}
                   value={pais}
                   onChange={(e) => setPais(e.target.value)}
                 />
               </div>
 
               <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-tinta">Período / Época</label>
+                <label className="text-xs font-semibold text-tinta">{t('arvore', 'periodoLabel')}</label>
                 <Input
-                  placeholder="Ex.: Século XIX"
+                  placeholder={t('arvore', 'periodoPlaceholder')}
                   value={periodo}
                   onChange={(e) => setPeriodo(e.target.value)}
                 />
@@ -253,7 +284,7 @@ export function ModalGerenciarArvores({
             {/* Seleção da Pessoa Raiz */}
             <div className="flex flex-col gap-1 relative">
               <label className="text-xs font-semibold text-tinta">
-                Pessoa Raiz (foco inicial da árvore)
+                {t('arvore', 'pessoaRaizLabel')}
               </label>
 
               {pessoaEscolhida ? (
@@ -269,7 +300,7 @@ export function ModalGerenciarArvores({
                       setRaizPessoaId(null);
                     }}
                     className="text-tinta3 hover:text-fem p-0.5"
-                    title="Remover raiz"
+                    title={t('arvore', 'removerRaizTitle')}
                   >
                     <X className="w-3.5 h-3.5" />
                   </button>
@@ -277,7 +308,7 @@ export function ModalGerenciarArvores({
               ) : (
                 <div className="relative">
                   <Input
-                    placeholder="Digite o nome da pessoa para buscar no acervo..."
+                    placeholder={t('arvore', 'buscarPessoaRaizPlaceholder')}
                     value={buscaPessoa}
                     onChange={(e) => setBuscaPessoa(e.target.value)}
                   />
@@ -314,14 +345,14 @@ export function ModalGerenciarArvores({
                 size="sm"
                 onClick={() => setEditando(null)}
               >
-                Cancelar
+                {t('comum', 'cancelar')}
               </Button>
               <Button
                 type="submit"
                 size="sm"
                 disabled={criarMut.isPending || atualizarMut.isPending}
               >
-                {criarMut.isPending || atualizarMut.isPending ? 'Salvando...' : 'Salvar Árvore'}
+                {criarMut.isPending || atualizarMut.isPending ? t('comum', 'carregando') : t('comum', 'salvar')}
               </Button>
             </div>
           </form>
@@ -334,7 +365,7 @@ export function ModalGerenciarArvores({
               <div className="relative flex-1">
                 <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-tinta3" />
                 <Input
-                  placeholder="Filtrar árvores por nome, país, época ou categoria..."
+                  placeholder={t('arvore', 'filtrarArvoresPlaceholder')}
                   value={buscaArvore}
                   onChange={(e) => setBuscaArvore(e.target.value)}
                   className="pl-8 text-xs py-1 h-8"
@@ -342,7 +373,7 @@ export function ModalGerenciarArvores({
               </div>
               <Button size="sm" onClick={iniciarCriacao} className="flex-none">
                 <Plus className="w-3.5 h-3.5 mr-1" />
-                Nova Árvore
+                {t('arvore', 'novaArvoreMenu')}
               </Button>
             </div>
 
@@ -357,7 +388,7 @@ export function ModalGerenciarArvores({
                     : 'bg-card border border-borda text-tinta2 hover:text-tinta hover:bg-sup'
                 }`}
               >
-                <span>🏛️ Públicas</span>
+                <span>🏛️ {t('arvore', 'publicas')}</span>
                 <span>({arvores?.filter((a) => a.is_publico).length ?? 0})</span>
               </button>
               <button
@@ -369,7 +400,7 @@ export function ModalGerenciarArvores({
                     : 'bg-card border border-borda text-tinta2 hover:text-tinta hover:bg-sup'
                 }`}
               >
-                Minhas ({arvores?.filter((a) => !a.is_publico).length ?? 0})
+                {t('arvore', 'minhas')} ({arvores?.filter((a) => !a.is_publico).length ?? 0})
               </button>
               <button
                 type="button"
@@ -380,7 +411,7 @@ export function ModalGerenciarArvores({
                     : 'bg-card border border-borda text-tinta2 hover:text-tinta hover:bg-sup'
                 }`}
               >
-                Todas ({arvores?.length ?? 0})
+                {t('arvore', 'todas')} ({arvores?.length ?? 0})
               </button>
             </div>
           </div>
@@ -389,7 +420,7 @@ export function ModalGerenciarArvores({
         {/* Lista de Árvores Cadastradas */}
         <div className="flex flex-col gap-2 max-h-80 overflow-y-auto">
           {isLoading && (
-            <p className="p-4 text-center text-xs text-tinta3">Carregando árvores...</p>
+            <p className="p-4 text-center text-xs text-tinta3">{t('comum', 'carregando')}</p>
           )}
 
           {arvores
@@ -434,12 +465,12 @@ export function ModalGerenciarArvores({
                         </span>
                         {a.is_publico && (
                           <span className="px-1.5 py-0.2 text-[10px] font-semibold rounded bg-acento/10 text-acento border border-acento/20 flex items-center gap-1">
-                            🏛️ Referência Histórica
+                            🏛️ {t('arvore', 'referenciaHistoricaBadge')}
                           </span>
                         )}
                         {isAtiva && (
                           <span className="px-1.5 py-0.2 text-[10px] font-bold rounded-full bg-acento text-acento-tinta">
-                            Ativa
+                            {t('arvore', 'ativaBadge')}
                           </span>
                         )}
                       </div>
@@ -468,10 +499,10 @@ export function ModalGerenciarArvores({
                         )}
                         <span className="flex items-center gap-1">
                           <User className="w-3 h-3 text-acento" />
-                          Raiz: <strong className="text-tinta2">{a.raiz_pessoa_nome || 'Não definida'}</strong>
+                          {t('arvore', 'raiz')}: <strong className="text-tinta2">{a.raiz_pessoa_nome || t('arvore', 'raizNaoDefinida')}</strong>
                         </span>
                         {a.total_membros > 0 && (
-                          <span>· {a.total_membros} membros vinculados</span>
+                          <span>· {a.total_membros} {t('arvore', 'membrosVinculados')}</span>
                         )}
                       </div>
                     </div>
@@ -487,10 +518,10 @@ export function ModalGerenciarArvores({
                           onSelecionarArvore(a);
                           onClose();
                         }}
-                        title="Ativar e visualizar esta árvore"
+                        title={t('arvore', 'ativarTitle')}
                       >
                         <Check className="w-3.5 h-3.5 mr-1" />
-                        Ativar
+                        {t('arvore', 'ativar')}
                       </Button>
                     )}
 
@@ -498,7 +529,7 @@ export function ModalGerenciarArvores({
                       type="button"
                       onClick={() => iniciarEdicao(a)}
                       className="p-1.5 text-tinta3 hover:text-tinta rounded hover:bg-sup cursor-pointer transition-colors"
-                      title="Editar árvore"
+                      title={t('arvore', 'editarArvoreTitle')}
                     >
                       <Edit2 className="w-4 h-4" />
                     </button>
@@ -508,7 +539,7 @@ export function ModalGerenciarArvores({
                         type="button"
                         onClick={() => setConfirmarExclusaoId(isConfirmando ? null : a.id)}
                         className="p-1.5 text-tinta3 hover:text-fem rounded hover:bg-sup cursor-pointer transition-colors"
-                        title="Excluir árvore"
+                        title={t('arvore', 'excluirArvoreTitle')}
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -521,7 +552,7 @@ export function ModalGerenciarArvores({
                   <div className="p-2.5 rounded bg-fem/10 border border-fem/20 flex items-center justify-between gap-2 text-xs text-fem mt-1">
                     <div className="flex items-center gap-1.5">
                       <AlertTriangle className="w-4 h-4 flex-none" />
-                      <span>Excluir apenas esta visão? Nenhum parente será apagado.</span>
+                      <span>{t('arvore', 'excluirVisaoAviso')}</span>
                     </div>
                     <div className="flex items-center gap-1.5">
                       <button
@@ -530,14 +561,14 @@ export function ModalGerenciarArvores({
                         disabled={deletarMut.isPending}
                         className="px-2 py-1 rounded bg-fem text-white font-semibold hover:bg-fem/90 cursor-pointer"
                       >
-                        Confirmar
+                        {t('comum', 'confirmar')}
                       </button>
                       <button
                         type="button"
                         onClick={() => setConfirmarExclusaoId(null)}
                         className="px-2 py-1 rounded bg-sup text-tinta hover:bg-sup/80 cursor-pointer"
                       >
-                        Cancelar
+                        {t('comum', 'cancelar')}
                       </button>
                     </div>
                   </div>

@@ -18,20 +18,20 @@ import {
   BookOpen,
   Bookmark,
   Calendar,
+  CalendarPlus,
   Check,
   ChevronDown,
   ChevronUp,
+  Clock,
   Compass,
   Edit3,
   Eye,
   EyeOff,
+  Layers,
   Magnet,
   MapPin,
   Maximize2,
   Plus,
-  Printer,
-  Scissors,
-  Sparkles,
   Trash2,
   User,
   UserPlus,
@@ -40,7 +40,7 @@ import {
   ZoomIn,
   ZoomOut,
 } from 'lucide-react';
-import { IconeLinhaTempo, IconeRelacoes } from '../../../components/icons';
+import { IconeLinhaTempo, IconeMedicaoTemporal, IconeRelacoes } from '../../../components/icons';
 import {
   listarLinhasDeContexto,
   buscarMarcos,
@@ -60,11 +60,12 @@ import {
 import { obterArvore } from '../../../lib/api/arvores';
 import {
   CALENDARIOS,
-  descreverAnoComDetalhes,
   formatarAnoNoCalendario,
   converterAnoDoCalendarioParaGregoriano,
   obterNumeroAnoNoCalendario,
   obterSufixoAnoNoCalendario,
+  formatarDataPrecisaNoCalendario,
+  descreverDataComDetalhes,
   type InfoCalendario,
   type TipoCalendario,
 } from '../../../lib/calendarios';
@@ -78,13 +79,16 @@ import { EditorMarco } from './EditorMarco';
 import { DialogoImprimirLinhaTempo } from './DialogoImprimirLinhaTempo';
 import { ModalCompararVidas } from './ModalCompararVidas';
 import { ModalCatalogoLinhasContexto } from './ModalCatalogoLinhasContexto';
+import { ModalAdicionarEventoVida } from './ModalAdicionarEventoVida';
 import { useI18n } from '../../../i18n/I18nContext';
+import { dataParaAnoContinuo } from '../../../lib/precisionTime';
 import {
   reordenarLista,
   ordenarIdsPorAno,
   sincronizarOrdemVidas,
   calcularFatiaVisivelBarra,
   calcularGridBlender,
+  converterDataParaAnoFracionario,
   agruparMarcosPessoaisProximos,
   calcularSubLanesContexto,
 } from '../ordenacaoTrilhas';
@@ -106,7 +110,14 @@ const ALTURA_MINIMA = 240;
 const ALTURA_INICIAL = 260;
 
 const LARGURA_SIDEBAR_PADRAO = 224; // Largura padrão inicial (redimensionável)
-const ANO_CORRENTE = new Date().getFullYear();
+// Data atual sincronizada em alta precisão diretamente com o Sistema Operacional
+const AGORA_SO = new Date();
+const ANO_CORRENTE = AGORA_SO.getFullYear();
+const HOJE_CONTINUO = dataParaAnoContinuo(
+  AGORA_SO.getFullYear(),
+  AGORA_SO.getMonth() + 1,
+  AGORA_SO.getDate()
+);
 const ESPACO_ENTRE_ROTULOS = 100;
 
 export function marcosComRotulo(
@@ -177,13 +188,36 @@ const COR_MARCADOR_MAP: Record<string, string> = {
   ciano: '#06b6d4',
 };
 
+export interface MedicaoTemporal {
+  de: number;
+  ate: number;
+  rotuloDe?: string;
+  rotuloAte?: string;
+}
+
+export function calcularDistanciaFormatada(anoA: number, anoB: number): string {
+  const diff = Math.abs(anoB - anoA);
+  const anos = Math.floor(diff);
+  const frac = diff - anos;
+  if (frac < 0.02) {
+    return anos === 1 ? '1 ano' : `${anos} anos`;
+  }
+  const meses = Math.floor(frac * 12);
+  const dias = Math.round(((frac * 12) - meses) * 30.4375);
+  const partes: string[] = [];
+  if (anos > 0) partes.push(anos === 1 ? '1 ano' : `${anos} anos`);
+  if (meses > 0) partes.push(meses === 1 ? '1 mês' : `${meses} meses`);
+  if (dias > 0 && anos < 5) partes.push(dias === 1 ? '1 dia' : `${dias} dias`);
+  return partes.length > 0 ? partes.join(', ') : `${anos} anos`;
+}
+
 export function GavetaLinhaTempo({
   pessoaSelecionadaId,
   arvoreAtivaId = null,
   onDestacar,
   onAbrirFicha,
   onAbrirParentesco,
-  onAbrirImpressao,
+  onAbrirImpressao: _onAbrirImpressao,
   aberta: propsAberta,
   onToggleAberta,
 }: GavetaLinhaTempoProps) {
@@ -208,7 +242,13 @@ export function GavetaLinhaTempo({
 
   // Inicia com altura suficiente para exibir Vidas na Árvore e Linhas de Contexto
   const [altura, setAltura] = useState(ALTURA_INICIAL);
-  const [modoAltura, setModoAltura] = useState<'compacto' | 'expandido'>('compacto');
+  const [modoAltura, setModoAltura] = useState<'compacto' | 'expandido'>(() => {
+    try {
+      const salva = localStorage.getItem('timeline-modo-altura');
+      if (salva === 'compacto' || salva === 'expandido') return salva;
+    } catch {}
+    return 'expandido';
+  });
 
   // Altura customizada das trilhas quando em modo expandido
   const [alturaTrilhaCustom, setAlturaTrilhaCustom] = useState<number>(64);
@@ -240,6 +280,7 @@ export function GavetaLinhaTempo({
   const alturaInicialTrilha = useRef(0);
 
   const menuCalendarioRef = useRef<HTMLDivElement>(null);
+  const menuMedicaoRef = useRef<HTMLDivElement>(null);
 
   const [calendarioAtivo, setCalendarioAtivo] = useState<TipoCalendario>(() => {
     try {
@@ -268,6 +309,7 @@ export function GavetaLinhaTempo({
       return () => document.removeEventListener('mousedown', fechar);
     }
   }, [mostraMenuCalendario]);
+
 
   const iniciarRedimensionamentoSidebar = useCallback(
     (e: React.MouseEvent) => {
@@ -410,11 +452,26 @@ export function GavetaLinhaTempo({
   const [mostrarDialogoImprimir, setMostrarDialogoImprimir] = useState(false);
   const [modalCompararAberto, setModalCompararAberto] = useState(false);
 
-  // Recorte Temporal para Impressão Acadêmica (In/Out Marks delimitados pelo usuário)
-  // Inicia sempre neutro (sem marcadores de início/fim pré-fixados)
-  const [regiaoImpressao, setRegiaoImpressao] = useState<{ de: number; ate: number } | null>(null);
+  // Ferramenta de Medição de Distância Temporal (Compasso / Intervalo de Marcos e Eventos)
+  const [medicaoDistancia, setMedicaoDistancia] = useState<MedicaoTemporal | null>(null);
+  const [modoMedicaoDistancia, setModoMedicaoDistancia] = useState(false);
 
-  const [modoMarcacaoImpressao, setModoMarcacaoImpressao] = useState(false);
+  useEffect(() => {
+    const fechar = (e: MouseEvent) => {
+      if (menuMedicaoRef.current && !menuMedicaoRef.current.contains(e.target as Node)) {
+        setModoMedicaoDistancia(false);
+      }
+    };
+    if (modoMedicaoDistancia) {
+      document.addEventListener('mousedown', fechar);
+      return () => document.removeEventListener('mousedown', fechar);
+    }
+  }, [modoMedicaoDistancia]);
+
+  // Retrocompatibilidade para relatórios/impressão
+  const regiaoImpressao = useMemo(() => {
+    return medicaoDistancia ? { de: Math.min(medicaoDistancia.de, medicaoDistancia.ate), ate: Math.max(medicaoDistancia.de, medicaoDistancia.ate) } : null;
+  }, [medicaoDistancia]);
 
   // Marcadores e Anotações
   const [modalMarcadorAberto, setModalMarcadorAberto] = useState(false);
@@ -476,8 +533,10 @@ export function GavetaLinhaTempo({
   );
   const alturaTotal = Math.min(alturaMaximaPermitida, altura + alturaPainelAdicional);
 
-  const [escala, setEscala] = useState<number>(escalaInicial);
+  const [escala] = useState<number>(escalaInicial);
   const [modalCatalogoAberto, setModalCatalogoAberto] = useState(false);
+  const [modalEventoVidaAberto, setModalEventoVidaAberto] = useState(false);
+  const [pessoaAlvoEventoVida, setPessoaAlvoEventoVida] = useState<string | null>(null);
   const [buscaParticipanteRapido, setBuscaParticipanteRapido] = useState('');
   const [pessoaSelecionadaRapida, setPessoaSelecionadaRapida] = useState<PersonNode | null>(null);
   const [papelRapido, setPapelRapido] = useState('');
@@ -485,11 +544,6 @@ export function GavetaLinhaTempo({
   const [linhaEditando, setLinhaEditando] = useState<string | 'nova' | null>(null);
   const [marcoEditando, setMarcoEditando] = useState<Marco | 'novo' | null>(null);
   const [linhaAlvoMarco, setLinhaAlvoMarco] = useState<string | null>(null);
-
-  const [vivosInfo, setVivosInfo] = useState<{
-    ids: string[];
-    sem_data_de_nascimento: number;
-  } | null>(null);
 
   const qc = useQueryClient();
 
@@ -504,6 +558,12 @@ export function GavetaLinhaTempo({
     queryKey: ['marcadores-linha-tempo'],
     queryFn: () => listarMarcadores(),
     enabled: aberta,
+  });
+
+  const { data: arvoreAtual } = useQuery({
+    queryKey: ['arvore-info', arvoreAtivaId],
+    queryFn: () => (arvoreAtivaId ? obterArvore(arvoreAtivaId) : null),
+    enabled: !!arvoreAtivaId,
   });
 
   // Busca membros da árvore ativa para alimentar automaticamente a comparação na linha do tempo
@@ -549,8 +609,13 @@ export function GavetaLinhaTempo({
   // Exibe todas as pessoas da árvore ativa quando uma árvore estiver selecionada
   const todasVidasIds = useMemo(() => {
     let baseIds: string[] = [];
-    if (arvoreAtivaId && pessoasDaArvore && pessoasDaArvore.length > 0) {
-      baseIds = baseOrdenada.map((p) => p.id);
+    if (arvoreAtivaId) {
+      if (pessoasDaArvore && pessoasDaArvore.length > 0) {
+        baseIds = baseOrdenada.map((p) => p.id);
+      } else if (arvoreAtual?.raiz_pessoa_id) {
+        baseIds = [arvoreAtual.raiz_pessoa_id];
+      }
+      // Quando há árvore ativa selecionada, baseIds nunca cai em pessoaSelecionadaId da árvore anterior
     } else if (pessoaSelecionadaId) {
       baseIds = [pessoaSelecionadaId];
     }
@@ -564,6 +629,7 @@ export function GavetaLinhaTempo({
     arvoreAtivaId,
     pessoasDaArvore,
     baseOrdenada,
+    arvoreAtual?.raiz_pessoa_id,
     pessoaSelecionadaId,
     vidasExtras,
     vidasRemovidas,
@@ -740,7 +806,12 @@ export function GavetaLinhaTempo({
 
   const mRemoverParticipante = useMutation({
     mutationFn: (id: string) => removerParticipante(id),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['marco-participantes', marcoAberto?.id] }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['marco-participantes', marcoAberto?.id] });
+      qc.invalidateQueries({ queryKey: ['linha-pessoal'] });
+      qc.refetchQueries({ queryKey: ['linha-pessoal'] });
+      qc.invalidateQueries({ queryKey: ['participacoes-pessoa'] });
+    },
   });
 
   const mToggleVisibilidade = useMutation({
@@ -749,6 +820,8 @@ export function GavetaLinhaTempo({
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['marco-participantes', marcoAberto?.id] });
       qc.invalidateQueries({ queryKey: ['linha-pessoal'] });
+      qc.refetchQueries({ queryKey: ['linha-pessoal'] });
+      qc.invalidateQueries({ queryKey: ['participacoes-pessoa'] });
     },
   });
 
@@ -764,77 +837,58 @@ export function GavetaLinhaTempo({
   // ---------------------------------------------------------------
   const [janela, setJanela] = useState({ de: 1850, ate: 2030 });
 
-  const marcarInicioRecorte = useCallback(
-    (ano?: number) => {
-      const alvo = ano ?? agulhaAno;
-      setRegiaoImpressao((atual) => {
-        if (!atual) {
-          const anoFim = Math.max(alvo + 20, Math.round(janela.ate));
-          return { de: alvo, ate: anoFim };
-        }
-        if (alvo >= atual.ate) {
-          return { de: alvo, ate: alvo + 10 };
-        }
-        return { de: alvo, ate: atual.ate };
-      });
-    },
-    [agulhaAno, janela.ate],
-  );
-
-  const marcarFimRecorte = useCallback(
-    (ano?: number) => {
-      const alvo = ano ?? agulhaAno;
-      setRegiaoImpressao((atual) => {
-        if (!atual) {
-          const anoIni = Math.min(alvo - 20, Math.round(janela.de));
-          return { de: anoIni, ate: alvo };
-        }
-        if (alvo <= atual.de) {
-          return { de: alvo - 10, ate: alvo };
-        }
-        return { de: atual.de, ate: alvo };
-      });
-    },
-    [agulhaAno, janela.de],
-  );
-
-  const limparRecorte = useCallback(() => {
-    setRegiaoImpressao(null);
+  // ---------------------------------------------------------------
+  // Ferramenta de Medição de Distância Temporal (Compasso / Intervalo)
+  // ---------------------------------------------------------------
+  const definirPontoMedicao = useCallback((ano: number, rotulo?: string) => {
+    setMedicaoDistancia((atual) => {
+      if (!atual || atual.de === atual.ate) {
+        return { de: ano, ate: ano, rotuloDe: rotulo, rotuloAte: rotulo };
+      }
+      if (ano < atual.de) {
+        return { de: ano, ate: atual.de, rotuloDe: rotulo, rotuloAte: atual.rotuloDe };
+      } else {
+        return { de: atual.de, ate: ano, rotuloDe: atual.rotuloDe, rotuloAte: rotulo };
+      }
+    });
+    setModoMedicaoDistancia(true);
   }, []);
 
-  const enquadrarRecorte = useCallback(() => {
-    if (!regiaoImpressao) return;
-    const span = regiaoImpressao.ate - regiaoImpressao.de;
-    const margem = Math.max(2, Math.round(span * 0.1));
-    setJanela({ de: regiaoImpressao.de - margem, ate: regiaoImpressao.ate + margem });
-  }, [regiaoImpressao]);
+  const marcarPontoA = useCallback((ano?: number, rotulo?: string) => {
+    const alvo = ano ?? agulhaAno;
+    setMedicaoDistancia((atual) => {
+      if (!atual) return { de: alvo, ate: alvo, rotuloDe: rotulo };
+      if (alvo > atual.ate) return { de: atual.ate, ate: alvo, rotuloDe: atual.rotuloAte, rotuloAte: rotulo };
+      return { ...atual, de: alvo, rotuloDe: rotulo };
+    });
+    setModoMedicaoDistancia(true);
+  }, [agulhaAno]);
 
-  // Atalhos de Teclado: 'M' para criar marcador, 'I' para Início do recorte, 'O' para Fim do recorte
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (!aberta) return;
-      if (
-        e.target instanceof HTMLInputElement ||
-        e.target instanceof HTMLTextAreaElement ||
-        e.target instanceof HTMLSelectElement
-      ) {
-        return;
-      }
-      if (e.key === 'm' || e.key === 'M') {
-        e.preventDefault();
-        setMarcadorParaEditar(null);
-        setModalMarcadorAberto(true);
-      } else if (e.key === 'i' || e.key === 'I') {
-        e.preventDefault();
-        marcarInicioRecorte();
-      } else if (e.key === 'o' || e.key === 'O') {
-        e.preventDefault();
-        marcarFimRecorte();
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [aberta, marcarInicioRecorte, marcarFimRecorte]);
+  const marcarPontoB = useCallback((ano?: number, rotulo?: string) => {
+    const alvo = ano ?? agulhaAno;
+    setMedicaoDistancia((atual) => {
+      if (!atual) return { de: alvo, ate: alvo, rotuloAte: rotulo };
+      if (alvo < atual.de) return { de: alvo, ate: atual.de, rotuloDe: rotulo, rotuloAte: atual.rotuloDe };
+      return { ...atual, ate: alvo, rotuloAte: rotulo };
+    });
+    setModoMedicaoDistancia(true);
+  }, [agulhaAno]);
+
+  const limparMedicao = useCallback(() => {
+    setMedicaoDistancia(null);
+  }, []);
+
+  const enquadrarMedicao = useCallback(() => {
+    if (!medicaoDistancia) return;
+    const menor = Math.min(medicaoDistancia.de, medicaoDistancia.ate);
+    const maior = Math.max(medicaoDistancia.de, medicaoDistancia.ate);
+    const span = Math.max(1, maior - menor);
+    const margem = Math.max(2, Math.round(span * 0.15));
+    setJanela({ de: menor - margem, ate: maior + margem });
+  }, [medicaoDistancia]);
+
+
+
 
   const enquadrarVida = useCallback((alvo?: LinhaPessoal) => {
     if (alvo?.ano_nascimento) {
@@ -909,12 +963,6 @@ export function GavetaLinhaTempo({
       enquadrarVida();
     }
   }, [arvoreAtivaId, pessoasDaArvore, pessoaSelecionadaId, linhaPessoalPrincipal, enquadrarVida]);
-
-  const { data: arvoreAtual } = useQuery({
-    queryKey: ['arvore-info', arvoreAtivaId],
-    queryFn: () => (arvoreAtivaId ? obterArvore(arvoreAtivaId) : null),
-    enabled: !!arvoreAtivaId,
-  });
 
   const ehFicticio = useMemo(() => {
     return arvoreAtual?.tipo_tempo === 'ficticio';
@@ -1040,20 +1088,30 @@ export function GavetaLinhaTempo({
   const larguraCanvas = Math.max(700, larguraPalco - larguraSidebar);
 
   const posicaoDoAno = useMemo(() => {
-    const span = Math.max(1, janela.ate - janela.de);
+    const span = Math.max(0.0001, janela.ate - janela.de);
     return (ano: number) => ((ano - janela.de) / span) * larguraCanvas;
   }, [janela, larguraCanvas]);
 
   const anoDaPosicao = useMemo(() => {
-    const span = Math.max(1, janela.ate - janela.de);
+    const span = Math.max(0.0001, janela.ate - janela.de);
     return (x: number) => janela.de + (x / Math.max(1, larguraCanvas)) * span;
   }, [janela, larguraCanvas]);
 
-  // Divisões principais (Major ticks) e secundárias (Minor subdivisions) estilo Blender Timeline
-  const { marcasDoEixo, marcasSecundarias } = useMemo(() => {
-    const grid = calcularGridBlender({ de: janela.de, ate: janela.ate });
-    return { marcasDoEixo: grid.marcasPrincipais, marcasSecundarias: grid.marcasSecundarias };
-  }, [janela]);
+  // Divisões principais (Major ticks), secundárias (Minor subdivisions) e terciárias (Sub-minor / Meses) estilo Blender Timeline
+  const { marcasDoEixo, marcasSecundarias, marcasTerciarias, rotulosGrid } = useMemo(() => {
+    const grid = calcularGridBlender({
+      de: janela.de,
+      ate: janela.ate,
+      calendario: calendarioAtivo,
+      tipoTempo: ehFicticio ? 'ficticio' : 'real',
+    });
+    return {
+      marcasDoEixo: grid.marcasPrincipais,
+      marcasSecundarias: grid.marcasSecundarias,
+      marcasTerciarias: grid.marcasTerciarias,
+      rotulosGrid: grid.rotulos,
+    };
+  }, [janela, calendarioAtivo, ehFicticio]);
 
   // ---------------------------------------------------------------
   // Zoom e Deslocamento do Eixo
@@ -1062,16 +1120,37 @@ export function GavetaLinhaTempo({
     (fator: number, ancoraX?: number) => {
       setJanela((atual) => {
         const span = atual.ate - atual.de;
-        const proporcao = ancoraX != null ? ancoraX / Math.max(1, larguraCanvas) : 0.5;
-        const anoNaAncora = atual.de + proporcao * span;
-        const novoSpan = Math.max(3, Math.min(30000, span * fator));
+        const agulhaVisivel = agulhaAno >= atual.de && agulhaAno <= atual.ate;
+
+        let anoNaAncora: number;
+        let proporcao: number;
+
+        if (ancoraX != null) {
+          proporcao = Math.max(0.02, Math.min(0.98, ancoraX / Math.max(1, larguraCanvas)));
+          anoNaAncora = atual.de + proporcao * span;
+        } else if (agulhaVisivel) {
+          // Ancorar na agulha temporal!
+          anoNaAncora = agulhaAno;
+          const proporcaoReal = (agulhaAno - atual.de) / span;
+          // Preserva a posição exata da agulha na tela, mas garantindo margem de 15% a 80%
+          // para que informações e eventos à direita da agulha nunca fiquem espremidos ou cortados.
+          proporcao = Math.max(0.15, Math.min(0.80, proporcaoReal));
+        } else {
+          // Se a agulha não está no viewport, o zoom a traz exatamente para o centro
+          anoNaAncora = agulhaAno;
+          proporcao = 0.5;
+        }
+
+        const novoSpan = Math.max(0.01, Math.min(30000, span * fator));
+        const novoDe = anoNaAncora - novoSpan * proporcao;
+        const novoAte = anoNaAncora + novoSpan * (1 - proporcao);
         return {
-          de: Math.round(anoNaAncora - novoSpan * proporcao),
-          ate: Math.round(anoNaAncora + novoSpan * (1 - proporcao)),
+          de: Number(novoDe.toFixed(4)),
+          ate: Number(novoAte.toFixed(4)),
         };
       });
     },
-    [larguraCanvas],
+    [larguraCanvas, agulhaAno],
   );
 
   const deslocar = useCallback(
@@ -1079,7 +1158,12 @@ export function GavetaLinhaTempo({
       setJanela((atual) => {
         const span = atual.ate - atual.de;
         const anos = (pixels / Math.max(1, larguraCanvas)) * span;
-        return { de: Math.round(atual.de + anos), ate: Math.round(atual.ate + anos) };
+        const novoDe = atual.de + anos;
+        const novoAte = atual.ate + anos;
+        return {
+          de: Number(novoDe.toFixed(4)),
+          ate: Number(novoAte.toFixed(4)),
+        };
       });
     },
     [larguraCanvas],
@@ -1090,19 +1174,43 @@ export function GavetaLinhaTempo({
   const arrastou = useRef(false);
 
   useEffect(() => {
+    let rafId: number | null = null;
+    let pendenteJanela: { de: number; ate: number } | null = null;
+
     const mover = (e: MouseEvent) => {
       if (!arrastandoEixo.current) return;
       const deltaPixels = e.clientX - arrastoInicio.current.mouseX;
       if (Math.abs(deltaPixels) > 2) arrastou.current = true;
       const span = arrastoInicio.current.janelaAte - arrastoInicio.current.janelaDe;
       const deltaAnos = (deltaPixels / Math.max(1, larguraCanvas)) * span;
-      setJanela({
-        de: Math.round(arrastoInicio.current.janelaDe - deltaAnos),
-        ate: Math.round(arrastoInicio.current.janelaAte - deltaAnos),
-      });
+      const novoDe = arrastoInicio.current.janelaDe - deltaAnos;
+      const novoAte = arrastoInicio.current.janelaAte - deltaAnos;
+
+      pendenteJanela = {
+        de: Number(novoDe.toFixed(4)),
+        ate: Number(novoAte.toFixed(4)),
+      };
+
+      if (rafId === null) {
+        rafId = requestAnimationFrame(() => {
+          if (pendenteJanela) {
+            setJanela(pendenteJanela);
+          }
+          rafId = null;
+        });
+      }
     };
+
     const soltar = () => {
       if (arrastandoEixo.current) {
+        if (rafId !== null) {
+          cancelAnimationFrame(rafId);
+          rafId = null;
+        }
+        if (pendenteJanela) {
+          setJanela(pendenteJanela);
+          pendenteJanela = null;
+        }
         arrastandoEixo.current = false;
         document.body.style.cursor = '';
         document.body.style.userSelect = '';
@@ -1111,13 +1219,53 @@ export function GavetaLinhaTempo({
         }, 50);
       }
     };
+
     window.addEventListener('mousemove', mover);
     window.addEventListener('mouseup', soltar);
     return () => {
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+      }
       window.removeEventListener('mousemove', mover);
       window.removeEventListener('mouseup', soltar);
     };
   }, [larguraCanvas]);
+
+  // Atalhos de Teclado: 'M' marcador, 'I' início recorte, 'O' fim recorte, '+' aproximar (zoom in), '-' afastar (zoom out)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!aberta) return;
+      if (
+        e.target instanceof HTMLInputElement ||
+        e.target instanceof HTMLTextAreaElement ||
+        e.target instanceof HTMLSelectElement
+      ) {
+        return;
+      }
+      if (e.key === 'm' || e.key === 'M') {
+        e.preventDefault();
+        setMarcadorParaEditar(null);
+        setModalMarcadorAberto(true);
+      } else if (e.key === 'i' || e.key === 'I') {
+        e.preventDefault();
+        marcarPontoA();
+      } else if (e.key === 'o' || e.key === 'O') {
+        e.preventDefault();
+        marcarPontoB();
+      } else if (e.key === 'd' || e.key === 'D') {
+        e.preventDefault();
+        setModoMedicaoDistancia((prev) => !prev);
+      } else if (e.key === '+' || e.key === '=') {
+        e.preventDefault();
+        aplicarZoom(0.7);
+      } else if (e.key === '-' || e.key === '_') {
+        e.preventDefault();
+        aplicarZoom(1.4);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [aberta, marcarPontoA, marcarPontoB, aplicarZoom]);
 
   // ---------------------------------------------------------------
   // Alça de Redimensionamento da Gaveta
@@ -1174,6 +1322,10 @@ export function GavetaLinhaTempo({
       arrastou.current = false;
       return;
     }
+    if (modoMedicaoDistancia && m.ano_inicio != null) {
+      definirPontoMedicao(m.ano_inicio, m.titulo);
+      return;
+    }
     trilhaAlvoScrollRef.current = { tipo: 'contexto', id: m.linha_id };
     setEventoPessoalAberto(null);
     setMarcoAberto(m);
@@ -1181,7 +1333,6 @@ export function GavetaLinhaTempo({
       try {
         const r = await quemEstavaVivo(m.ano_inicio, m.ano_fim ?? null);
         onDestacar(r.ids);
-        setVivosInfo(r);
       } catch {
         onDestacar(null);
       }
@@ -1190,7 +1341,6 @@ export function GavetaLinhaTempo({
 
   const fecharMarco = () => {
     setMarcoAberto(null);
-    setVivosInfo(null);
     onDestacar(null);
   };
 
@@ -1203,6 +1353,10 @@ export function GavetaLinhaTempo({
       arrastou.current = false;
       return;
     }
+    if (modoMedicaoDistancia && marco.ano != null) {
+      definirPontoMedicao(marco.ano, `${marco.titulo} (${pessoaNome})`);
+      return;
+    }
     trilhaAlvoScrollRef.current = { tipo: 'pessoal', id: pessoaId };
     setMarcoAberto(null);
     setEventoPessoalAberto({ pessoaNome, pessoaId, marco });
@@ -1210,7 +1364,6 @@ export function GavetaLinhaTempo({
       try {
         const r = await quemEstavaVivo(marco.ano, marco.ano);
         onDestacar(r.ids);
-        setVivosInfo(r);
       } catch {
         onDestacar(null);
       }
@@ -1219,7 +1372,6 @@ export function GavetaLinhaTempo({
 
   const fecharEventoPessoal = () => {
     setEventoPessoalAberto(null);
-    setVivosInfo(null);
     onDestacar(null);
   };
 
@@ -1237,14 +1389,34 @@ export function GavetaLinhaTempo({
   const pontosSnap = useMemo(() => {
     const anos = new Set<number>();
     for (const lp of linhasPessoais) {
-      if (lp.ano_nascimento != null) anos.add(lp.ano_nascimento);
-      if (lp.ano_falecimento != null) anos.add(lp.ano_falecimento);
+      const nascFrac = converterDataParaAnoFracionario(
+        lp.ano_nascimento,
+        lp.data_nascimento_texto,
+        lp.mes_nascimento,
+        lp.dia_nascimento,
+      );
+      if (nascFrac != null) anos.add(nascFrac);
+      else if (lp.ano_nascimento != null) anos.add(lp.ano_nascimento);
+
+      const falecFrac = converterDataParaAnoFracionario(
+        lp.ano_falecimento,
+        lp.data_falecimento_texto,
+        lp.mes_falecimento,
+        lp.dia_falecimento,
+      );
+      if (falecFrac != null) anos.add(falecFrac);
+      else if (lp.ano_falecimento != null) anos.add(lp.ano_falecimento);
+
       for (const m of lp.marcos) {
-        if (m.ano != null) anos.add(m.ano);
+        const mFrac = converterDataParaAnoFracionario(m.ano, m.data_texto, m.mes, m.dia);
+        if (mFrac != null) anos.add(mFrac);
+        else if (m.ano != null) anos.add(m.ano);
       }
     }
     for (const m of marcos ?? []) {
-      if (m.ano_inicio != null) anos.add(m.ano_inicio);
+      const iniFrac = converterDataParaAnoFracionario(m.ano_inicio, m.data_periodo_texto);
+      if (iniFrac != null) anos.add(iniFrac);
+      else if (m.ano_inicio != null) anos.add(m.ano_inicio);
       if (m.ano_fim != null) anos.add(m.ano_fim);
     }
     for (const mk of marcadoresTimeline) {
@@ -1269,7 +1441,7 @@ export function GavetaLinhaTempo({
   const [inputAnoTexto, setInputAnoTexto] = useState<string>(() =>
     String(
       obterNumeroAnoNoCalendario(
-        agulhaAno,
+        Math.floor(agulhaAno),
         calendarioAtivo,
         ehFicticio ? 'ficticio' : 'real'
       )
@@ -1279,7 +1451,7 @@ export function GavetaLinhaTempo({
     setInputAnoTexto(
       String(
         obterNumeroAnoNoCalendario(
-          agulhaAno,
+          Math.floor(agulhaAno),
           calendarioAtivo,
           ehFicticio ? 'ficticio' : 'real'
         )
@@ -1311,13 +1483,13 @@ export function GavetaLinhaTempo({
     return marcos.filter((m) => {
       if (m.ano_inicio == null) return false;
       if (m.ano_fim != null) return agulhaAno >= m.ano_inicio && agulhaAno <= m.ano_fim;
-      return m.ano_inicio === agulhaAno;
+      return Math.round(m.ano_inicio) === Math.round(agulhaAno);
     });
   }, [agulhaAno, marcos]);
 
   // Marcador customizado do usuário anotado neste ano
   const marcadorNaAgulha = useMemo(() => {
-    return marcadoresTimeline.find((mk) => mk.ano === agulhaAno) ?? null;
+    return marcadoresTimeline.find((mk) => Math.abs(mk.ano - agulhaAno) < 0.005) ?? null;
   }, [agulhaAno, marcadoresTimeline]);
 
   // Contagem de pessoas vivas/contemporâneas no ano da agulha
@@ -1325,7 +1497,7 @@ export function GavetaLinhaTempo({
     return linhasPessoais.filter((lp) => {
       if (!lp.ano_nascimento) return false;
       const idade = agulhaAno - lp.ano_nascimento;
-      const falec = lp.ano_falecimento ?? (lp.is_vivo ? ANO_CORRENTE : null);
+      const falec = lp.ano_falecimento ?? (lp.is_vivo ? HOJE_CONTINUO : null);
       return idade >= 0 && (falec == null || agulhaAno <= falec);
     }).length;
   }, [linhasPessoais, agulhaAno]);
@@ -1350,11 +1522,14 @@ export function GavetaLinhaTempo({
 
   const posicionarAgulhaEmX = useCallback(
     (canvasX: number) => {
-      let anoFinal = Math.round(anoDaPosicao(canvasX));
+      let anoFinal =
+        spanAnos >= 3
+          ? Math.round(anoDaPosicao(canvasX))
+          : Number(anoDaPosicao(canvasX).toFixed(5));
       if (snapAtivo && pontosSnap.length > 0) {
         let menorDist = Infinity;
         let melhorAno: number | null = null;
-        const RAIO_SNAP_PX = 14;
+        const RAIO_SNAP_PX = 18;
 
         for (const ano of pontosSnap) {
           const posX = posicaoDoAno(ano);
@@ -1370,7 +1545,7 @@ export function GavetaLinhaTempo({
       }
       setAgulhaAno(anoFinal);
     },
-    [anoDaPosicao, posicaoDoAno, snapAtivo, pontosSnap],
+    [anoDaPosicao, posicaoDoAno, snapAtivo, pontosSnap, spanAnos],
   );
 
   useEffect(() => {
@@ -1484,541 +1659,583 @@ export function GavetaLinhaTempo({
         <div className="w-10 h-0.5 rounded-full bg-borda2" />
       </div>
 
-      {/* Toolbar Principal NLE */}
-      <div className="flex items-center gap-2 px-3 py-1.5 border-b border-borda flex-none flex-wrap bg-card shadow-2xs z-40">
-        <div className="flex items-center gap-2 mr-1">
-          <IconeLinhaTempo className="w-4 h-4 text-acento flex-none" />
-          <span className="font-semibold text-xs text-tinta hidden sm:inline">
-            Linha do Tempo
-          </span>
+      {/* Barra de Ferramentas Superior Alinhada com a Estrutura de Trilhas */}
+      <div className="flex-none flex items-stretch border-b border-borda bg-card shadow-2xs z-40 select-none min-h-[42px]">
+        {/* Bloco 1: Identidade da Linha do Tempo & Informações Claras (Largura idêntica à coluna de Trilhas) */}
+        <div
+          className="flex-none px-3 py-1 border-r-2 border-borda/80 bg-card flex items-center justify-between gap-2 shadow-2xs select-none overflow-hidden"
+          style={{ width: larguraSidebar }}
+        >
+          <div className="flex items-center gap-2 min-w-0">
+            <span className="p-1 rounded bg-acento/10 text-acento flex-none">
+              <IconeLinhaTempo className="w-4 h-4" />
+            </span>
+            <div className="flex flex-col min-w-0">
+              <span className="font-bold text-xs text-tinta whitespace-nowrap leading-tight">
+                {t('linhaTempo', 'titulo')}
+              </span>
+              {linhaPessoalPrincipal ? (
+                <span
+                  className="text-[10.5px] text-tinta3 truncate font-medium leading-tight max-w-full"
+                  title={`Pessoa em foco: ${linhaPessoalPrincipal.nome}`}
+                >
+                  {linhaPessoalPrincipal.nome}
+                </span>
+              ) : (
+                <span className="text-[10px] text-tinta3 font-medium leading-tight whitespace-nowrap">
+                  {linhasPessoais.length + ativas.length} trilhas
+                </span>
+              )}
+            </div>
+          </div>
         </div>
 
-        {/* Widget Compacto de Posição da Agulha Temporal */}
-        <div
-          className="flex items-center gap-1 px-1.5 py-0.5 rounded-raio-s bg-rose-500/10 border border-rose-500/25 text-rose-700 dark:text-rose-300 text-xs font-num shadow-2xs mr-1"
-          title={`Agulha Temporal: ano no calendário ${CALENDARIOS[calendarioAtivo].rotuloCurto}. Digite o ano e tecle Enter para centralizar, ou use ◀ / ▶`}
-        >
-          <span className="text-[9px] uppercase font-sans tracking-tight opacity-75 font-semibold select-none">
-            Ano:
-          </span>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              const num = parseInt(inputAnoTexto, 10);
-              if (!isNaN(num)) {
-                const anoGreg = converterAnoDoCalendarioParaGregoriano(
-                  num,
-                  calendarioAtivo,
-                  ehFicticio ? 'ficticio' : 'real'
-                );
-                centralizarNoAno(anoGreg);
-              }
-            }}
-            className="flex items-center m-0 p-0"
-          >
-            <input
-              type="text"
-              value={inputAnoTexto}
-              onChange={(e) => setInputAnoTexto(e.target.value)}
-              onBlur={() => {
-                const num = parseInt(inputAnoTexto, 10);
-                if (!isNaN(num)) {
-                  const anoGreg = converterAnoDoCalendarioParaGregoriano(
-                    num,
+        {/* Bloco 2: Ferramentas da Linha do Tempo (A partir da Divisória, sobre o Canvas da Timeline) */}
+        <div className="flex-1 min-w-0 px-2.5 py-1 flex items-center justify-between gap-1.5 overflow-visible">
+          {/* Sub-bloco Esquerda: Ações de Conteúdo (+ Comparar, + Evento, + Marcador, Linhas de Contexto) */}
+          <div className="flex items-center gap-1 bg-sup/60 p-0.5 rounded-raio-s border border-borda/60 shrink-0">
+            {/* Botão "+ Comparar Vida" */}
+            <button
+              type="button"
+              onClick={() => setModalCompararAberto(true)}
+              className="h-7 px-2 rounded-raio-s border border-borda/80 hover:border-acento bg-card hover:bg-card2 text-tinta hover:text-acento flex items-center gap-1 cursor-pointer transition-all shadow-2xs text-xs font-semibold whitespace-nowrap"
+              title={t('linhaTempo', 'compararVidasModal')}
+            >
+              <UserPlus className="w-3.5 h-3.5 text-acento flex-none" />
+              <span>{t('linhaTempo', 'compararBtn')}</span>
+            </button>
+
+            {/* Botão "+ Evento de Vida" */}
+            <button
+              type="button"
+              onClick={() => {
+                setPessoaAlvoEventoVida(null);
+                setModalEventoVidaAberto(true);
+              }}
+              className="h-7 px-2 rounded-raio-s border border-borda/80 hover:border-purple-500/60 bg-card hover:bg-card2 text-tinta hover:text-purple-600 dark:hover:text-purple-400 flex items-center gap-1 cursor-pointer transition-all shadow-2xs text-xs font-semibold whitespace-nowrap"
+              title={t('linhaTempo', 'eventoBtnTitle')}
+            >
+              <CalendarPlus className="w-3.5 h-3.5 text-purple-500 flex-none" />
+              <span>{t('linhaTempo', 'eventoBtn')}</span>
+            </button>
+
+            {/* Botão "+ Marcador (M)" */}
+            <button
+              type="button"
+              onClick={() => {
+                setMarcadorParaEditar(null);
+                setModalMarcadorAberto(true);
+              }}
+              className="h-7 px-2 rounded-raio-s border border-borda/80 hover:border-amber-500/60 bg-card hover:bg-card2 text-tinta hover:text-amber-600 dark:hover:text-amber-400 flex items-center gap-1 cursor-pointer transition-all shadow-2xs text-xs font-semibold whitespace-nowrap"
+              title={t('linhaTempo', 'marcadorBtnTitle')}
+            >
+              <Bookmark className="w-3.5 h-3.5 text-amber-500 flex-none" />
+              <span>{t('linhaTempo', 'marcadorBtn')}</span>
+              <kbd className="hidden lg:inline text-[9px] text-tinta3 font-mono px-1 py-0.2 bg-sup rounded border border-borda/60 leading-none">M</kbd>
+            </button>
+
+            {/* Botão "Linhas de Contexto..." */}
+            <button
+              type="button"
+              onClick={() => setModalCatalogoAberto(true)}
+              className="h-7 px-2 rounded-raio-s border border-borda/80 hover:border-acento bg-card hover:bg-card2 text-tinta hover:text-acento flex items-center gap-1 cursor-pointer transition-all shadow-2xs text-xs font-medium whitespace-nowrap"
+              title={t('linhaTempo', 'contextoBtnTitle')}
+            >
+              <Layers className="w-3.5 h-3.5 text-acento flex-none" />
+              <span>{t('linhaTempo', 'contextoBtn')}</span>
+              {ativas.length > 0 && (
+                <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-acento text-acento-tinta font-bold leading-none">
+                  {ativas.length}
+                </span>
+              )}
+            </button>
+          </div>
+
+          {/* Sub-bloco Centro: O ANO (Destaque Principal e Centralizado na Linha do Tempo) */}
+          <div className="flex items-center justify-center gap-1.5 shrink-0 mx-auto">
+            {/* Widget Principal do Ano com Borda de Destaque */}
+            <div
+              className="flex items-center h-7 gap-1 px-1.5 rounded-raio-s bg-card border-2 border-acento/30 dark:border-acento/40 hover:border-acento transition-colors text-xs font-num shadow-xs"
+              title={`Agulha Temporal: ano no calendário ${CALENDARIOS[calendarioAtivo].rotuloCurto}. Digite o ano e tecle Enter para centralizar, ou use ◀ / ▶`}
+            >
+              <button
+                type="button"
+                onClick={() => {
+                  const atualCal = obterNumeroAnoNoCalendario(
+                    agulhaAno,
                     calendarioAtivo,
                     ehFicticio ? 'ficticio' : 'real'
                   );
-                  if (anoGreg !== agulhaAno) {
+                  const novoCal = atualCal - 1;
+                  const novoGreg = converterAnoDoCalendarioParaGregoriano(
+                    novoCal,
+                    calendarioAtivo,
+                    ehFicticio ? 'ficticio' : 'real'
+                  );
+                  setAgulhaAno(novoGreg);
+                  setInputAnoTexto(String(novoCal));
+                }}
+                className="w-4 h-5 flex items-center justify-center hover:bg-sup text-tinta3 hover:text-tinta rounded text-[10px] cursor-pointer select-none"
+                title="Recuar 1 ano"
+              >
+                ◀
+              </button>
+
+              <span className="text-[10px] uppercase font-sans tracking-tight text-tinta3 font-bold select-none">
+                Ano:
+              </span>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const num = parseInt(inputAnoTexto, 10);
+                  if (!isNaN(num)) {
+                    const anoGreg = converterAnoDoCalendarioParaGregoriano(
+                      num,
+                      calendarioAtivo,
+                      ehFicticio ? 'ficticio' : 'real'
+                    );
                     centralizarNoAno(anoGreg);
-                  } else {
-                    setInputAnoTexto(String(num));
                   }
-                } else {
-                  setInputAnoTexto(
-                    String(
-                      obterNumeroAnoNoCalendario(
-                        agulhaAno,
+                }}
+                className="flex items-center m-0 p-0"
+              >
+                <input
+                  type="text"
+                  size={4}
+                  value={inputAnoTexto}
+                  onChange={(e) => setInputAnoTexto(e.target.value)}
+                  onBlur={() => {
+                    const num = parseInt(inputAnoTexto, 10);
+                    if (!isNaN(num)) {
+                      const anoGreg = converterAnoDoCalendarioParaGregoriano(
+                        num,
                         calendarioAtivo,
                         ehFicticio ? 'ficticio' : 'real'
-                      )
-                    )
+                      );
+                      if (anoGreg !== agulhaAno) {
+                        centralizarNoAno(anoGreg);
+                      } else {
+                        setInputAnoTexto(String(num));
+                      }
+                    } else {
+                      setInputAnoTexto(
+                        String(
+                          obterNumeroAnoNoCalendario(
+                            agulhaAno,
+                            calendarioAtivo,
+                            ehFicticio ? 'ficticio' : 'real'
+                          )
+                        )
+                      );
+                    }
+                  }}
+                  className="w-13 text-center bg-sup hover:bg-sup focus:bg-sup border border-borda focus:border-acento rounded-xs font-num font-bold text-xs text-tinta px-0.5 py-0 outline-none transition-all cursor-text shadow-2xs"
+                  title={`Ano no calendário ${CALENDARIOS[calendarioAtivo].rotuloCurto}. Digite o ano e pressione Enter para centralizar`}
+                  aria-label="Ano da agulha temporal"
+                />
+              </form>
+
+              {/* Sufixo informativo do calendário (ex: AM, AUC, HE, a.C.) */}
+              {calendarioAtivo !== 'gregoriano' && (
+                <span className="text-[10px] font-bold font-num text-tinta2 select-none -ml-0.5">
+                  {obterSufixoAnoNoCalendario(agulhaAno, calendarioAtivo, ehFicticio ? 'ficticio' : 'real')}
+                </span>
+              )}
+
+              <button
+                type="button"
+                onClick={() => {
+                  const atualCal = obterNumeroAnoNoCalendario(
+                    agulhaAno,
+                    calendarioAtivo,
+                    ehFicticio ? 'ficticio' : 'real'
                   );
-                }
-              }}
-              className="w-13 text-center bg-card/80 hover:bg-card focus:bg-card border border-rose-500/30 focus:border-rose-600 rounded-xs font-num font-bold text-[11px] text-rose-700 dark:text-rose-300 px-0.5 py-0 outline-none transition-all cursor-text shadow-2xs"
-              title={`Ano no calendário ${CALENDARIOS[calendarioAtivo].rotuloCurto}. Digite o ano e pressione Enter para centralizar`}
-              aria-label="Ano da agulha temporal"
-            />
-          </form>
-          {/* Sufixo informativo do calendário (ex: AM, AUC, HE, a.C.) */}
-          {calendarioAtivo !== 'gregoriano' && (
-            <span className="text-[9px] font-bold font-num opacity-75 select-none -ml-0.5">
-              {obterSufixoAnoNoCalendario(agulhaAno, calendarioAtivo, ehFicticio ? 'ficticio' : 'real')}
-            </span>
-          )}
-          <div className="flex items-center gap-0.2 ml-0.5">
+                  const novoCal = atualCal + 1;
+                  const novoGreg = converterAnoDoCalendarioParaGregoriano(
+                    novoCal,
+                    calendarioAtivo,
+                    ehFicticio ? 'ficticio' : 'real'
+                  );
+                  setAgulhaAno(novoGreg);
+                  setInputAnoTexto(String(novoCal));
+                }}
+                className="w-4 h-5 flex items-center justify-center hover:bg-sup text-tinta3 hover:text-tinta rounded text-[10px] cursor-pointer select-none"
+                title="Avançar 1 ano"
+              >
+                ▶
+              </button>
+            </div>
+
+            {/* Botão de Atalho: Ir para Hoje (Sincronizado com SO) */}
             <button
               type="button"
               onClick={() => {
-                const atualCal = obterNumeroAnoNoCalendario(
-                  agulhaAno,
-                  calendarioAtivo,
-                  ehFicticio ? 'ficticio' : 'real'
-                );
-                const novoCal = atualCal - 1;
-                const novoGreg = converterAnoDoCalendarioParaGregoriano(
-                  novoCal,
-                  calendarioAtivo,
-                  ehFicticio ? 'ficticio' : 'real'
-                );
-                setAgulhaAno(novoGreg);
-                setInputAnoTexto(String(novoCal));
+                setAgulhaAno(HOJE_CONTINUO);
+                centralizarNoAno(HOJE_CONTINUO);
               }}
-              className="px-0.5 py-0 hover:bg-rose-500/20 rounded text-[9px] cursor-pointer select-none"
-              title="Recuar 1 ano"
+              className="flex items-center h-7 gap-1.5 px-2 rounded-raio-s text-xs font-semibold bg-sup/80 hover:bg-sup text-tinta hover:text-acento border border-borda hover:border-acento/50 transition-all cursor-pointer shadow-2xs select-none"
+              title={`Centralizar na data de Hoje do SO (${formatarDataPrecisaNoCalendario(HOJE_CONTINUO, 0.1, calendarioAtivo, ehFicticio ? 'ficticio' : 'real')})`}
             >
-              ◀
+              <Clock className="w-3.5 h-3.5 text-acento" />
+              <span>Hoje</span>
             </button>
+
+            {/* Botão Guia Temporal */}
             <button
               type="button"
               onClick={() => {
-                const atualCal = obterNumeroAnoNoCalendario(
-                  agulhaAno,
-                  calendarioAtivo,
-                  ehFicticio ? 'ficticio' : 'real'
-                );
-                const novoCal = atualCal + 1;
-                const novoGreg = converterAnoDoCalendarioParaGregoriano(
-                  novoCal,
-                  calendarioAtivo,
-                  ehFicticio ? 'ficticio' : 'real'
-                );
-                setAgulhaAno(novoGreg);
-                setInputAnoTexto(String(novoCal));
+                setGuiaTemporalAberto((prev) => {
+                  const novo = !prev;
+                  if (novo && (agulhaAno < janela.de || agulhaAno > janela.ate)) {
+                    centralizarNoAno(agulhaAno);
+                  }
+                  return novo;
+                });
               }}
-              className="px-0.5 py-0 hover:bg-rose-500/20 rounded text-[9px] cursor-pointer select-none"
-              title="Avançar 1 ano"
+              className={cn(
+                'flex items-center h-7 gap-1.5 px-2 rounded-raio-s text-xs font-semibold transition-all cursor-pointer shadow-2xs select-none border',
+                guiaTemporalAberto
+                  ? 'bg-acento text-acento-tinta border-acento shadow-xs'
+                  : 'bg-sup/80 hover:bg-sup text-tinta hover:text-acento border-borda hover:border-acento/50'
+              )}
+              title="Abrir ou fechar o Guia Temporal com idades e acontecimentos deste ano"
             >
-              ▶
-            </button>
-          </div>
-        </div>
-
-        {/* Botão Guia Temporal (Alternar Popover de Inspeção do Ano) */}
-        <button
-          type="button"
-          onClick={() => {
-            setGuiaTemporalAberto((prev) => {
-              const novo = !prev;
-              if (novo && (agulhaAno < janela.de || agulhaAno > janela.ate)) {
-                centralizarNoAno(agulhaAno);
-              }
-              return novo;
-            });
-          }}
-          className={cn(
-            'flex items-center gap-1.5 px-2.5 py-1 rounded-raio-s text-xs font-semibold transition-all cursor-pointer shadow-2xs mr-1 select-none',
-            guiaTemporalAberto
-              ? 'bg-rose-600 text-white shadow-xs border border-rose-700'
-              : 'bg-rose-500/10 hover:bg-rose-500/20 text-rose-700 dark:text-rose-300 border border-rose-500/25'
-          )}
-          title="Abrir ou fechar o Guia Temporal com idades e acontecimentos deste ano"
-        >
-          <Compass className="w-3.5 h-3.5" />
-          <span>{t('linhaTempo', 'guiaTemporal')}</span>
-        </button>
-
-        {/* Seletor de Calendário Intercambiável ou Badge de Tempo Fictício */}
-        {ehFicticio ? (
-          <div
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-raio-s text-xs font-semibold bg-purple-500/10 text-purple-700 dark:text-purple-300 border border-purple-500/30 select-none mr-1"
-            title="Esta árvore opera em Cronologia Narrativa própria (Fictícia / Literária). Não há conversão para calendários terrestres reais."
-          >
-            <span>✨</span>
-            <span>Tempo Fictício</span>
-          </div>
-        ) : (
-          <div className="relative mr-1" ref={menuCalendarioRef}>
-            <button
-              type="button"
-              onClick={() => setMostraMenuCalendario((prev) => !prev)}
-              className="flex items-center gap-1.5 px-2.5 py-1 rounded-raio-s text-xs font-semibold bg-card hover:bg-sup text-tinta border border-borda transition-all cursor-pointer shadow-2xs select-none"
-              title="Alternar entre sistemas de calendário reais intercambiáveis"
-            >
-              <Calendar className="w-3.5 h-3.5 text-acento" />
-              <span>{CALENDARIOS[calendarioAtivo].rotuloCurto}</span>
-              <ChevronDown className="w-3 h-3 text-tinta3" />
+              <Compass className="w-3.5 h-3.5" />
+              <span>Guia</span>
             </button>
 
-            {mostraMenuCalendario && (
-              <div className="absolute top-full left-0 mt-1.5 w-48 bg-card border border-borda rounded-raio shadow-2xl p-1 z-50 flex flex-col gap-0.5 animate-in fade-in zoom-in-95 duration-100">
-                <div className="px-2 py-1 text-[10px] font-bold text-tinta3 uppercase tracking-wider border-b border-borda/60 mb-0.5 select-none">
-                  Calendários
-                </div>
-                {(Object.values(CALENDARIOS) as InfoCalendario[]).map((cal) => (
-                  <div key={cal.id} className="relative group">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setCalendarioAtivo(cal.id);
-                        setMostraMenuCalendario(false);
-                      }}
-                      className={cn(
-                        'w-full flex items-center justify-between px-2.5 py-1.5 rounded-raio-s transition-colors cursor-pointer border text-xs text-left select-none',
-                        calendarioAtivo === cal.id
-                          ? 'bg-acento/10 text-acento font-semibold border-acento/30'
-                          : 'hover:bg-sup text-tinta border-transparent'
-                      )}
-                    >
-                      <span>{cal.rotuloCurto}</span>
-                      {calendarioAtivo === cal.id && (
-                        <Check className="w-3.5 h-3.5 text-acento flex-none" />
-                      )}
-                    </button>
+            {/* Seletor de Calendário Intercambiável ou Badge de Tempo Fictício */}
+            {ehFicticio ? (
+              <div
+                className="flex items-center h-7 gap-1 px-2 rounded-raio-s text-xs font-semibold bg-sup text-tinta2 border border-borda select-none"
+                title="Esta árvore opera em Cronologia Narrativa própria (Fictícia / Literária). Não há conversão para calendários terrestres reais."
+              >
+                <span>✨</span>
+                <span>Fictício</span>
+              </div>
+            ) : (
+              <div className="relative" ref={menuCalendarioRef}>
+                <button
+                  type="button"
+                  onClick={() => setMostraMenuCalendario((prev) => !prev)}
+                  className="flex items-center h-7 gap-1 px-2 rounded-raio-s text-xs font-semibold bg-sup/80 hover:bg-sup text-tinta border border-borda hover:border-borda2 transition-all cursor-pointer shadow-2xs select-none"
+                  title="Alternar entre sistemas de calendário reais intercambiáveis"
+                >
+                  <Calendar className="w-3.5 h-3.5 text-acento" />
+                  <span>{CALENDARIOS[calendarioAtivo].rotuloCurto}</span>
+                  <ChevronDown className="w-3 h-3 text-tinta3" />
+                </button>
 
-                    {/* Balão flutuante com a explicação rica do calendário ao passar o mouse */}
-                    <div className="absolute left-full top-0 ml-2 w-64 p-3 bg-card border border-acento/40 rounded-raio shadow-2xl hidden group-hover:flex flex-col gap-1.5 z-50 pointer-events-none animate-in fade-in zoom-in-95 duration-100">
-                      <div className="flex items-center justify-between border-b border-borda/60 pb-1">
-                        <span className="font-bold text-xs text-tinta">{cal.nome}</span>
-                        <span className="text-[10px] font-mono text-acento bg-acento/10 px-1.5 py-0.5 rounded font-bold">
-                          {cal.rotuloCurto}
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-tinta2 leading-relaxed">{cal.descricao}</p>
-                      <div className="text-[10px] text-tinta3 font-mono bg-sup/80 px-2 py-1 rounded border border-borda/40 mt-0.5">
-                        <span className="font-semibold text-tinta2">Exemplos: </span>{cal.exemplo}
-                      </div>
+                {mostraMenuCalendario && (
+                  <div className="absolute top-full left-0 mt-1.5 w-48 bg-card border border-borda rounded-raio shadow-2xl p-1 z-50 flex flex-col gap-0.5 animate-in fade-in zoom-in-95 duration-100">
+                    <div className="px-2 py-1 text-[10px] font-bold text-tinta3 uppercase tracking-wider border-b border-borda/60 mb-0.5 select-none">
+                      Calendários
                     </div>
+                    {(Object.values(CALENDARIOS) as InfoCalendario[]).map((cal) => (
+                      <div key={cal.id} className="relative group">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setCalendarioAtivo(cal.id);
+                            setMostraMenuCalendario(false);
+                          }}
+                          className={cn(
+                            'w-full text-left px-2 py-1.5 rounded text-xs flex items-center justify-between cursor-pointer transition-colors',
+                            calendarioAtivo === cal.id
+                              ? 'bg-acento/15 text-acento font-bold'
+                              : 'text-tinta hover:bg-sup'
+                          )}
+                        >
+                          <div>
+                            <div className="font-semibold text-xs leading-tight">{cal.nome}</div>
+                            <div className="text-[10px] text-tinta3">{cal.rotuloCurto}</div>
+                          </div>
+                          {calendarioAtivo === cal.id && (
+                            <Check className="w-3.5 h-3.5 text-acento flex-none" />
+                          )}
+                        </button>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                )}
               </div>
             )}
           </div>
-        )}
 
-        {/* Grupo de Ações de Criação e Abertura */}
-        <div className="flex items-center gap-1.5 flex-1 min-w-0 flex-wrap">
-          {/* Botão "+ Comparar Vida" */}
-          <button
-            type="button"
-            onClick={() => setModalCompararAberto(true)}
-            className="px-2.5 py-1 rounded-raio-s border border-acento/60 bg-acento/10 hover:bg-acento text-acento hover:text-acento-tinta flex items-center gap-1.5 cursor-pointer transition-all shadow-2xs text-xs font-semibold"
-            title={t('linhaTempo', 'compararVidasModal')}
-          >
-            <UserPlus className="w-3.5 h-3.5" />
-            <span>{t('linhaTempo', 'compararVida')}</span>
-          </button>
+          {/* Sub-bloco Direita: Exibição, Medição Temporal & Janela */}
+          <div className="flex items-center gap-1.5 shrink-0">
+            {/* Pod de Exibição das Trilhas */}
+            <div className="flex items-center gap-1 bg-sup/60 p-0.5 rounded-raio-s border border-borda/60">
+              {/* Modo de Altura de Trilha */}
+              <div className="flex items-center h-6 rounded-xs bg-card p-0.5 text-xs">
+                <button
+                  type="button"
+                  onClick={() => setModoAltura('compacto')}
+                  className={cn(
+                    'h-full px-1.5 rounded-2xs text-[10px] font-semibold transition-colors cursor-pointer flex items-center',
+                    modoAltura === 'compacto' ? 'bg-sup text-acento shadow-2xs font-bold' : 'text-tinta3 hover:text-tinta'
+                  )}
+                  title="Visualização compacta das trilhas (ver mais em menos espaço)"
+                >
+                  {t('linhaTempo', 'modoCompacto')}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setModoAltura('expandido')}
+                  className={cn(
+                    'h-full px-1.5 rounded-2xs text-[10px] font-semibold transition-colors cursor-pointer flex items-center',
+                    modoAltura === 'expandido' ? 'bg-sup text-acento shadow-2xs font-bold' : 'text-tinta3 hover:text-tinta'
+                  )}
+                  title="Visualização expandida com todos os chips e detalhes"
+                >
+                  {t('linhaTempo', 'modoExpandido')}
+                </button>
+              </div>
 
-          {/* Botão "+ Linhas de Contexto..." que abre o Catálogo Amplo */}
-          <button
-            type="button"
-            onClick={() => setModalCatalogoAberto(true)}
-            className="px-2.5 py-1 rounded-raio-s border border-dashed border-borda hover:border-acento text-tinta2 hover:text-acento bg-sup flex items-center gap-1.5 cursor-pointer transition-colors text-xs font-medium"
-            title="Abrir Catálogo de Linhas de Contexto Histórico"
-          >
-            <Compass className="w-3.5 h-3.5 text-acento" />
-            <span>Linhas de Contexto...</span>
-            {ativas.length > 0 && (
-              <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-acento text-acento-tinta font-bold">
-                {ativas.length}
-              </span>
-            )}
-          </button>
+              {/* Snap Magnético */}
+              <button
+                type="button"
+                onClick={() => {
+                  setSnapAtivo((prev) => {
+                    const proximo = !prev;
+                    try {
+                      localStorage.setItem('timeline-snap', String(proximo));
+                    } catch {}
+                    return proximo;
+                  });
+                }}
+                title={
+                  snapAtivo
+                    ? t('linhaTempo', 'snapTooltipLigado')
+                    : t('linhaTempo', 'snapTooltipDesligado')
+                }
+                className={cn(
+                  'h-6 px-1.5 rounded-xs text-[10px] transition-colors cursor-pointer border flex items-center gap-1 shadow-2xs',
+                  snapAtivo
+                    ? 'bg-acento/10 text-acento border-acento/40 font-semibold'
+                    : 'bg-card text-tinta3 hover:text-tinta border-borda/60'
+                )}
+              >
+                <Magnet className={cn('w-3 h-3', snapAtivo ? 'text-acento' : 'text-tinta3')} />
+                <span className="hidden xl:inline">{snapAtivo ? t('linhaTempo', 'snapLigado') : t('linhaTempo', 'snapDesligado')}</span>
+              </button>
 
-          {/* Botão "+ Marcador (M)" */}
-          <button
-            type="button"
-            onClick={() => {
-              setMarcadorParaEditar(null);
-              setModalMarcadorAberto(true);
-            }}
-            className="px-2.5 py-1 rounded-raio-s border border-amber-500/50 bg-amber-500/10 hover:bg-amber-500 hover:text-white text-amber-600 dark:text-amber-400 flex items-center gap-1.5 cursor-pointer transition-all shadow-2xs text-xs font-semibold"
-            title="Adicionar marcador / anotação no tempo (Atalho: tecla M)"
-          >
-            <Bookmark className="w-3.5 h-3.5" />
-            <span>{t('linhaTempo', 'adicionarMarcador')}</span>
-            <span className="text-[10px] opacity-75 font-mono">M</span>
-          </button>
-        </div>
+              {/* Seletor de Densidade */}
+              <div
+                className="flex items-center h-6 text-xs text-tinta2 gap-0.5 px-1.5 rounded-xs bg-card border border-borda/60 transition-colors shadow-2xs"
+                title={t('linhaTempo', 'densidade')}
+              >
+                <select
+                  value={densidadeModo}
+                  onChange={(e) => setDensidadeModo(e.target.value as any)}
+                  className="text-[10px] bg-transparent border-none text-tinta font-semibold focus:outline-none cursor-pointer pr-0.5"
+                >
+                  <option value="auto">{t('linhaTempo', 'densidadeAuto')}</option>
+                  <option value="alta">{t('linhaTempo', 'densidadeAlta')}</option>
+                  <option value="media">{t('linhaTempo', 'densidadeMedia')}</option>
+                  <option value="detalhe">{t('linhaTempo', 'densidadeDetalhe')}</option>
+                </select>
+              </div>
 
-        {/* Grupo de Controles de Modo, Visualização e Zoom */}
-        <div className="flex items-center gap-1.5 flex-none ml-auto">
-          {/* Controle de Altura de Trilha (Compacto vs Expandido) */}
-          <div className="flex items-center rounded-raio-s border border-borda bg-sup p-0.5 text-xs">
-            <button
-              type="button"
-              onClick={() => setModoAltura('compacto')}
-              className={cn(
-                'px-2 py-0.5 rounded text-[11px] font-semibold transition-colors cursor-pointer',
-                modoAltura === 'compacto' ? 'bg-card text-acento shadow-2xs' : 'text-tinta3 hover:text-tinta'
-              )}
-              title="Visualização compacta das trilhas (ver mais em menos espaço)"
-            >
-              {t('linhaTempo', 'modoCompacto')}
-            </button>
-            <button
-              type="button"
-              onClick={() => setModoAltura('expandido')}
-              className={cn(
-                'px-2 py-0.5 rounded text-[11px] font-semibold transition-colors cursor-pointer',
-                modoAltura === 'expandido' ? 'bg-card text-acento shadow-2xs' : 'text-tinta3 hover:text-tinta'
-              )}
-              title="Visualização expandida com todos os chips e detalhes"
-            >
-              {t('linhaTempo', 'modoExpandido')}
-            </button>
-          </div>
+              {/* Alternar Marcos Ocultos */}
+              <button
+                type="button"
+                onClick={() => setMostrarOcultos(!mostrarOcultos)}
+                title={t('linhaTempo', 'mostrarOcultos')}
+                className={cn(
+                  'w-6 h-6 flex items-center justify-center rounded-xs text-xs transition-colors cursor-pointer border shadow-2xs',
+                  mostrarOcultos
+                    ? 'bg-acento/10 text-acento border-acento/40'
+                    : 'bg-card text-tinta3 hover:text-tinta border-borda/60'
+                )}
+              >
+                {mostrarOcultos ? <Eye className="w-3 h-3" /> : <EyeOff className="w-3 h-3" />}
+              </button>
+            </div>
 
-          <span className="w-px h-4 bg-borda mx-0.5" aria-hidden />
+            <div className="w-px h-5 bg-borda flex-none mx-0.5" aria-hidden />
 
-          {/* Snap Magnético */}
-          <button
-            type="button"
-            onClick={() => {
-              setSnapAtivo((prev) => {
-                const proximo = !prev;
-                try {
-                  localStorage.setItem('timeline-snap', String(proximo));
-                } catch {}
-                return proximo;
-              });
-            }}
-            title={
-              snapAtivo
-                ? t('linhaTempo', 'snapTooltipLigado')
-                : t('linhaTempo', 'snapTooltipDesligado')
-            }
-            className={cn(
-              'flex items-center gap-1 px-2 py-1 rounded-raio-s text-xs transition-colors cursor-pointer border',
-              snapAtivo
-                ? 'bg-acento/15 text-acento border-acento/40 font-semibold shadow-2xs'
-                : 'text-tinta3 hover:text-tinta hover:bg-sup border-transparent'
-            )}
-          >
-            <Magnet className={cn('w-3.5 h-3.5', snapAtivo ? 'text-acento' : 'text-tinta3')} />
-            <span>{snapAtivo ? t('linhaTempo', 'snapLigado') : t('linhaTempo', 'snapDesligado')}</span>
-          </button>
+            {/* Ferramenta de Medição de Distância Temporal */}
+            <div className="relative flex items-center" ref={menuMedicaoRef}>
+              <button
+                type="button"
+                onClick={() => setModoMedicaoDistancia((prev) => !prev)}
+                title={
+                  medicaoDistancia
+                    ? `${t('linhaTempo', 'distanciaTemporal')}: Δ ${calcularDistanciaFormatada(medicaoDistancia.de, medicaoDistancia.ate)}`
+                    : t('linhaTempo', 'distanciaTemporalTooltip')
+                }
+                className={cn(
+                  'h-7 px-2 rounded-raio-s text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer border shadow-2xs',
+                  medicaoDistancia
+                    ? 'bg-sky-500/15 border-sky-500 text-sky-600 dark:text-sky-300 font-bold'
+                    : modoMedicaoDistancia
+                    ? 'bg-acento text-acento-tinta border-acento'
+                    : 'bg-sup/80 hover:bg-sup text-tinta3 hover:text-tinta border-borda'
+                )}
+              >
+                <IconeMedicaoTemporal className="w-3.5 h-3.5" />
+                <span className="font-num text-[11px] whitespace-nowrap">
+                  {medicaoDistancia
+                    ? `Δ ${calcularDistanciaFormatada(medicaoDistancia.de, medicaoDistancia.ate)}`
+                    : t('linhaTempo', 'medirDistancia')}
+                </span>
+              </button>
 
-          {/* Toggle Mostrar Ocultos */}
-          <button
-            type="button"
-            onClick={() => setMostrarOcultos(!mostrarOcultos)}
-            title={t('linhaTempo', 'mostrarOcultos')}
-            className={cn(
-              'p-1.5 rounded-raio-s text-xs transition-colors cursor-pointer',
-              mostrarOcultos ? 'bg-sup text-acento border border-acento/40' : 'text-tinta3 hover:text-tinta hover:bg-sup'
-            )}
-          >
-            {mostrarOcultos ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
-          </button>
+              {modoMedicaoDistancia && (
+                <div
+                  ref={menuMedicaoRef}
+                  className="absolute top-full right-0 mt-1.5 z-50 w-64 p-2.5 rounded-raio-s bg-card border border-borda shadow-xl text-xs flex flex-col gap-2 animate-in fade-in zoom-in-95 duration-100"
+                >
+                  {/* Cabeçalho Compacto */}
+                  <div className="flex items-center justify-between border-b border-borda/70 pb-1">
+                    <span className="font-bold text-xs text-tinta flex items-center gap-1.5">
+                      <IconeMedicaoTemporal className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />
+                      {t('linhaTempo', 'distanciaTemporal')}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setModoMedicaoDistancia(false)}
+                      className="p-0.5 text-tinta3 hover:text-tinta rounded-xs cursor-pointer"
+                      title={t('comum', 'fechar')}
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </div>
 
-          {/* Zoom Semântico */}
-          <div
-            className="flex items-center text-xs text-tinta2 gap-1 px-1.5 py-0.5 rounded-raio-s bg-sup border border-borda shadow-xs"
-            title={t('linhaTempo', 'densidade')}
-          >
-            <span className="text-[11px] text-tinta3 font-sans">{t('linhaTempo', 'marcos')}:</span>
-            <select
-              value={densidadeModo}
-              onChange={(e) => setDensidadeModo(e.target.value as any)}
-              className="text-xs bg-transparent border-none text-tinta font-semibold focus:outline-none cursor-pointer"
-            >
-              <option value="auto">{t('linhaTempo', 'densidadeAuto')}</option>
-              <option value="alta">{t('linhaTempo', 'densidadeAlta')}</option>
-              <option value="media">{t('linhaTempo', 'densidadeMedia')}</option>
-              <option value="detalhe">{t('linhaTempo', 'densidadeDetalhe')}</option>
-            </select>
-          </div>
+                  {/* Informações Essenciais */}
+                  {medicaoDistancia ? (
+                    <div className="flex flex-col gap-1 text-[11px]">
+                      {/* Delta em destaque */}
+                      <div className="flex items-baseline justify-between px-2 py-1 rounded bg-sky-500/10 border border-sky-500/25">
+                        <span className="text-[10px] font-semibold text-tinta3">{t('linhaTempo', 'deltaTotal')}:</span>
+                        <span className="font-bold font-num text-sky-600 dark:text-sky-400">
+                          {calcularDistanciaFormatada(medicaoDistancia.de, medicaoDistancia.ate)}
+                        </span>
+                      </div>
 
-          {/* Recorte Temporal de Impressão (Marcações In / Out) */}
-          <div className="relative flex items-center">
-            <button
-              type="button"
-              onClick={() => setModoMarcacaoImpressao((prev) => !prev)}
-              title={
-                regiaoImpressao
-                  ? `Recorte de Impressão: ${formatarAnoAtual(regiaoImpressao.de)} a ${formatarAnoAtual(regiaoImpressao.ate)}. Clique para gerenciar (Teclas I e O).`
-                  : 'Delimitar início e fim da linha do tempo para impressão acadêmica (Teclas I e O)'
-              }
-              className={cn(
-                'px-2 py-1 rounded-raio-s text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer border',
-                regiaoImpressao
-                  ? 'bg-emerald-500/15 border-emerald-500 text-emerald-600 dark:text-emerald-400 font-bold'
-                  : modoMarcacaoImpressao
-                  ? 'bg-sup border-acento text-acento'
-                  : 'border-transparent text-tinta3 hover:text-tinta hover:bg-sup'
-              )}
-            >
-              <Scissors className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline font-num text-[11px]">
-                {regiaoImpressao
-                  ? `${formatarAnoAtual(regiaoImpressao.de)}–${formatarAnoAtual(regiaoImpressao.ate)}`
-                  : 'Recorte'}
-              </span>
-            </button>
-
-            {modoMarcacaoImpressao && (
-              <div className="absolute top-full right-0 mt-1 z-50 w-72 p-3 rounded-raio-m bg-card border border-borda shadow-xl text-xs flex flex-col gap-2.5">
-                <div className="flex items-center justify-between border-b border-borda pb-1.5">
-                  <span className="font-bold text-tinta flex items-center gap-1.5">
-                    <Scissors className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                    Recorte de Impressão ABNT
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => setModoMarcacaoImpressao(false)}
-                    className="p-1 text-tinta3 hover:text-tinta rounded-xs"
-                  >
-                    <X className="w-3 h-3" />
-                  </button>
-                </div>
-
-                <div className="text-[11px] text-tinta2 leading-relaxed">
-                  {regiaoImpressao ? (
-                    <div className="p-2 rounded bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-200">
-                      <strong>Recorte ativo:</strong> {formatarAnoAtual(regiaoImpressao.de)} a{' '}
-                      {formatarAnoAtual(regiaoImpressao.ate)} ({regiaoImpressao.ate - regiaoImpressao.de} anos)
+                      {/* Pontos A e B */}
+                      <div className="px-1 py-0.5 flex flex-col gap-0.5 text-tinta2">
+                        <div className="flex items-center justify-between">
+                          <span className="font-semibold text-sky-600 dark:text-sky-400">{t('linhaTempo', 'pontoA')}:</span>
+                          <span className="font-num truncate max-w-[160px]" title={medicaoDistancia.rotuloDe || undefined}>
+                            {formatarDataPrecisaNoCalendario(medicaoDistancia.de, spanAnos, calendarioAtivo, ehFicticio ? 'ficticio' : 'real')}
+                            {medicaoDistancia.rotuloDe && <span className="text-tinta3 font-sans"> ({medicaoDistancia.rotuloDe})</span>}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="font-semibold text-sky-600 dark:text-sky-400">{t('linhaTempo', 'pontoB')}:</span>
+                          <span className="font-num truncate max-w-[160px]" title={medicaoDistancia.rotuloAte || undefined}>
+                            {formatarDataPrecisaNoCalendario(medicaoDistancia.ate, spanAnos, calendarioAtivo, ehFicticio ? 'ficticio' : 'real')}
+                            {medicaoDistancia.rotuloAte && <span className="text-tinta3 font-sans"> ({medicaoDistancia.rotuloAte})</span>}
+                          </span>
+                        </div>
+                        {linhaPessoalPrincipal?.ano_nascimento && (
+                          <div className="flex items-center justify-between text-[10px] text-tinta3 pt-0.5 border-t border-borda/40 mt-0.5">
+                            <span>{t('linhaTempo', 'idade')}:</span>
+                            <span className="font-num">
+                              {Math.max(0, Math.floor(medicaoDistancia.de - linhaPessoalPrincipal.ano_nascimento))}a → {Math.max(0, Math.floor(medicaoDistancia.ate - linhaPessoalPrincipal.ano_nascimento))}a
+                            </span>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   ) : (
-                    <div className="p-2 rounded bg-sup border border-borda text-tinta3">
-                      Nenhum recorte ativo. A impressão usará a janela visível ou toda a vida.
+                    <div className="py-2 text-center text-[11px] text-tinta3">
+                      {t('linhaTempo', 'nenhumPontoMarcado')}
+                    </div>
+                  )}
+
+                  {/* Ações Rápidas */}
+                  <div className="grid grid-cols-2 gap-1 pt-1 border-t border-borda/60">
+                    <button
+                      type="button"
+                      onClick={() => marcarPontoA()}
+                      className="px-1.5 py-1 rounded-xs bg-sup hover:bg-card2 border border-borda font-semibold text-[10.5px] text-tinta flex items-center justify-center gap-1 cursor-pointer transition-colors"
+                      title={`Marcar Ponto A no ano da agulha: ${formatarAnoAtual(agulhaAno)}`}
+                    >
+                      <span>{t('linhaTempo', 'fixarA')}</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => marcarPontoB()}
+                      className="px-1.5 py-1 rounded-xs bg-sup hover:bg-card2 border border-borda font-semibold text-[10.5px] text-tinta flex items-center justify-center gap-1 cursor-pointer transition-colors"
+                      title={`Marcar Ponto B no ano da agulha: ${formatarAnoAtual(agulhaAno)}`}
+                    >
+                      <span>{t('linhaTempo', 'fixarB')}</span>
+                    </button>
+                  </div>
+
+                  {medicaoDistancia && (
+                    <div className="flex items-center gap-1">
+                      <button
+                        type="button"
+                        onClick={enquadrarMedicao}
+                        className="flex-1 px-1.5 py-0.5 rounded-xs bg-sup hover:bg-card2 border border-borda text-[10px] font-medium text-tinta cursor-pointer transition-colors"
+                      >
+                        {t('linhaTempo', 'enquadrar')}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={limparMedicao}
+                        className="px-2 py-0.5 rounded-xs hover:bg-rose-500/10 text-rose-600 dark:text-rose-400 text-[10px] font-medium cursor-pointer transition-colors"
+                      >
+                        {t('linhaTempo', 'limpar')}
+                      </button>
                     </div>
                   )}
                 </div>
+              )}
+            </div>
 
-                <div className="grid grid-cols-2 gap-1.5">
-                  <button
-                    type="button"
-                    onClick={() => marcarInicioRecorte()}
-                    className="px-2 py-1.5 rounded-raio-s bg-sup hover:bg-card2 border border-borda font-semibold text-[11px] text-tinta flex items-center justify-center gap-1 cursor-pointer"
-                    title={`Marcar início no ano da agulha: ${formatarAnoAtual(agulhaAno)}`}
-                  >
-                    <span>[ Início (I)</span>
-                    <span className="font-num text-tinta3 text-[10px]">({formatarAnoAtual(agulhaAno)})</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => marcarFimRecorte()}
-                    className="px-2 py-1.5 rounded-raio-s bg-sup hover:bg-card2 border border-borda font-semibold text-[11px] text-tinta flex items-center justify-center gap-1 cursor-pointer"
-                    title={`Marcar fim no ano da agulha: ${formatarAnoAtual(agulhaAno)}`}
-                  >
-                    <span>Fim (O) ]</span>
-                    <span className="font-num text-tinta3 text-[10px]">({formatarAnoAtual(agulhaAno)})</span>
-                  </button>
-                </div>
+            <div className="w-px h-5 bg-borda flex-none mx-0.5" aria-hidden />
 
-                {regiaoImpressao && (
-                  <div className="flex items-center gap-1.5 pt-1 border-t border-borda">
-                    <button
-                      type="button"
-                      onClick={enquadrarRecorte}
-                      className="flex-1 px-2 py-1 rounded-raio-s bg-sup hover:bg-card2 border border-borda text-[10.5px] font-medium text-tinta cursor-pointer"
-                    >
-                      Enquadrar na Tela
-                    </button>
-                    <button
-                      type="button"
-                      onClick={limparRecorte}
-                      className="px-2 py-1 rounded-raio-s hover:bg-rose-500/10 text-rose-600 dark:text-rose-400 text-[10.5px] font-medium cursor-pointer"
-                    >
-                      Limpar
-                    </button>
-                  </div>
-                )}
-
-                <div className="text-[10px] text-tinta3 bg-sup/50 p-1.5 rounded border border-borda/40">
-                  💡 <strong>Atalhos:</strong> Use as teclas <kbd className="px-1 py-0.5 bg-card border rounded font-mono">I</kbd> e <kbd className="px-1 py-0.5 bg-card border rounded font-mono">O</kbd> para marcar o início e fim no ano da agulha.
-                </div>
+            {/* Pod de Navegação de Janela */}
+            <div className="flex items-center gap-1">
+              {/* Zoom In/Out */}
+              <div className="flex items-center h-7 rounded-raio-s border border-borda bg-sup/80 p-0.5 text-xs shadow-2xs">
+                <button
+                  type="button"
+                  onClick={() => aplicarZoom(1.4)}
+                  title={t('linhaTempo', 'zoomOutTitle')}
+                  className="w-6 h-full flex items-center justify-center rounded-xs text-tinta2 hover:text-tinta hover:bg-card transition-colors cursor-pointer"
+                >
+                  <ZoomOut className="w-3.5 h-3.5" />
+                </button>
+                <div className="w-px h-3 bg-borda mx-0.5" />
+                <button
+                  type="button"
+                  onClick={() => aplicarZoom(0.7)}
+                  title={t('linhaTempo', 'zoomInTitle')}
+                  className="w-6 h-full flex items-center justify-center rounded-xs text-tinta2 hover:text-tinta hover:bg-card transition-colors cursor-pointer"
+                >
+                  <ZoomIn className="w-3.5 h-3.5" />
+                </button>
               </div>
-            )}
+
+              {/* Enquadrar Vida */}
+              {linhaPessoalPrincipal?.ano_nascimento && (
+                <button
+                  type="button"
+                  onClick={() => enquadrarVida()}
+                  title={t('linhaTempo', 'enquadrarVidaTitle', { nome: linhaPessoalPrincipal.nome })}
+                  className="w-7 h-7 flex items-center justify-center rounded-raio-s bg-sup/80 hover:bg-sup text-tinta border border-borda hover:border-acento transition-colors cursor-pointer shadow-2xs"
+                >
+                  <Maximize2 className="w-3.5 h-3.5" />
+                </button>
+              )}
+
+              {/* Recolher Gaveta */}
+              <button
+                type="button"
+                onClick={() => setAberta(false)}
+                aria-label={t('linhaTempo', 'recolherGaveta')}
+                className="w-7 h-7 flex items-center justify-center rounded-raio-s bg-sup/80 hover:bg-sup text-tinta3 hover:text-tinta border border-borda hover:border-borda2 transition-colors cursor-pointer shadow-2xs"
+              >
+                <ChevronDown className="w-4 h-4" />
+              </button>
+            </div>
           </div>
-
-          {/* Imprimir */}
-          <button
-            type="button"
-            onClick={() => {
-              const dadosImpressao: DadosImpressaoTimeline = {
-                linhasPessoais,
-                linhasContexto: linhas ?? [],
-                linhasAtivasIds: ativas,
-                marcos: marcos ?? [],
-                coresPersonalizadas,
-                janelaAtual: janela,
-                regiaoImpressao,
-                calendarioAtivo,
-                arvoreTitulo: arvoreAtual?.nome,
-                visibilidadeTrilhas,
-              };
-              if (onAbrirImpressao) onAbrirImpressao(dadosImpressao);
-              else setMostrarDialogoImprimir(true);
-            }}
-            title={t('linhaTempo', 'imprimir')}
-            className="p-1.5 rounded-raio-s text-tinta3 hover:text-tinta hover:bg-sup transition-colors cursor-pointer"
-          >
-            <Printer className="w-3.5 h-3.5 text-acento" />
-          </button>
-
-          <span className="w-px h-4 bg-borda mx-0.5" aria-hidden />
-
-          {/* Zoom In/Out e Escala */}
-          <button
-            type="button"
-            onClick={() => aplicarZoom(1.4)}
-            title="Afastar (ver mais anos / zoom out)"
-            className="p-1.5 rounded-raio-s text-tinta2 hover:text-tinta hover:bg-sup transition-colors cursor-pointer"
-          >
-            <ZoomOut className="w-4 h-4" />
-          </button>
-          <button
-            type="button"
-            onClick={() => aplicarZoom(0.7)}
-            title="Aproximar (ver menos anos / zoom in)"
-            className="p-1.5 rounded-raio-s text-tinta2 hover:text-tinta hover:bg-sup transition-colors cursor-pointer"
-          >
-            <ZoomIn className="w-4 h-4" />
-          </button>
-          <button
-            type="button"
-            onClick={() =>
-              setEscala((e) => ESCALAS[Math.max(0, ESCALAS.indexOf(e) - 1)] ?? e)
-            }
-            disabled={escala <= ESCALAS[0]}
-            title="Diminuir tamanho do texto"
-            className="px-1.5 py-0.5 rounded text-[11px] font-num text-tinta2 hover:text-tinta hover:bg-sup transition-colors disabled:opacity-30"
-          >
-            A−
-          </button>
-          <button
-            type="button"
-            onClick={() =>
-              setEscala((e) => ESCALAS[Math.min(ESCALAS.length - 1, ESCALAS.indexOf(e) + 1)] ?? e)
-            }
-            disabled={escala >= ESCALAS[ESCALAS.length - 1]}
-            title="Aumentar tamanho do texto"
-            className="px-1.5 py-0.5 rounded text-[13px] font-num font-bold text-tinta2 hover:text-tinta hover:bg-sup transition-colors disabled:opacity-30"
-          >
-            A+
-          </button>
-          {linhaPessoalPrincipal?.ano_nascimento && (
-            <button
-              type="button"
-              onClick={() => enquadrarVida()}
-              title={`Enquadrar a vida de ${linhaPessoalPrincipal.nome}`}
-              className="p-1.5 rounded-raio-s text-tinta2 hover:text-tinta hover:bg-sup transition-colors"
-            >
-              <Maximize2 className="w-4 h-4" />
-            </button>
-          )}
-
-{/* Recolher Gaveta */}
-          <button
-            type="button"
-            onClick={() => setAberta(false)}
-            aria-label="Recolher a gaveta"
-            className="p-1.5 rounded-raio-s text-tinta3 hover:text-tinta hover:bg-sup transition-colors"
-          >
-            <ChevronDown className="w-4 h-4" />
-          </button>
         </div>
       </div>
 
@@ -2051,9 +2268,9 @@ export function GavetaLinhaTempo({
         }}
         onMouseMove={(e) => {
           if (arrastandoEixo.current) {
-            setCursorX(null);
-            setCursorAno(null);
-            setEstaSnappado(false);
+            setCursorX((ant) => (ant !== null ? null : ant));
+            setCursorAno((ant) => (ant !== null ? null : ant));
+            setEstaSnappado((ant) => (ant ? false : ant));
             return;
           }
           const caixa = palcoRef.current?.getBoundingClientRect();
@@ -2062,21 +2279,24 @@ export function GavetaLinhaTempo({
 
           // Se estiver sobre a coluna de cabeçalhos, esconde a linha de cursor
           if (x < larguraSidebar) {
-            setCursorX(null);
-            setCursorAno(null);
-            setEstaSnappado(false);
+            setCursorX((ant) => (ant !== null ? null : ant));
+            setCursorAno((ant) => (ant !== null ? null : ant));
+            setEstaSnappado((ant) => (ant ? false : ant));
             return;
           }
 
           const canvasX = x - larguraSidebar;
-          let anoFinal = Math.round(anoDaPosicao(canvasX));
+          let anoFinal =
+            spanAnos >= 3
+              ? Math.round(anoDaPosicao(canvasX))
+              : Number(anoDaPosicao(canvasX).toFixed(5));
           let xFinal = canvasX;
           let snappou = false;
 
           if (snapAtivo && pontosSnap.length > 0) {
             let menorDist = Infinity;
             let melhorAno: number | null = null;
-            const RAIO_SNAP_PX = 14;
+            const RAIO_SNAP_PX = 18;
 
             for (const ano of pontosSnap) {
               const posX = posicaoDoAno(ano);
@@ -2107,9 +2327,10 @@ export function GavetaLinhaTempo({
           const caixa = palcoRef.current?.getBoundingClientRect();
           const x = caixa ? e.clientX - caixa.left - larguraSidebar : larguraCanvas / 2;
           if (e.ctrlKey || e.metaKey) {
-            // Ctrl + Scroll: Zoom in / Zoom out exclusivo
+            // Ctrl + Scroll: Zoom in / Zoom out ancorado na agulha
             e.preventDefault();
-            aplicarZoom(e.deltaY > 0 ? 1.15 : 0.87, x);
+            const agulhaVisivel = agulhaAno >= janela.de && agulhaAno <= janela.ate;
+            aplicarZoom(e.deltaY > 0 ? 1.15 : 0.87, agulhaVisivel ? undefined : x);
           } else if (e.altKey || e.shiftKey || Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
             // Alt + Scroll ou Shift + Scroll ou rolagem lateral: navegação horizontal pura (sem zoom e sem scroll vertical)
             e.preventDefault();
@@ -2146,9 +2367,9 @@ export function GavetaLinhaTempo({
             className="flex-none bg-card border-r-2 border-borda/80 px-2.5 flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-tinta3 shadow-xs relative select-none"
             style={{ width: larguraSidebar }}
           >
-            <span>Trilhas</span>
+            <span>{t('linhaTempo', 'trilhasHeader')}</span>
             <span className="font-num text-[9px] opacity-75">
-              {linhasPessoais.length + ativas.length} ativas
+              {linhasPessoais.length + ativas.length} {t('linhaTempo', 'ativas')}
             </span>
             {/* Alça do Splitter Vertical na Régua Superior */}
             <div
@@ -2165,7 +2386,12 @@ export function GavetaLinhaTempo({
             onClick={(e) => {
               const caixa = e.currentTarget.getBoundingClientRect();
               const canvasX = e.clientX - caixa.left;
-              posicionarAgulhaEmX(canvasX);
+              if (modoMedicaoDistancia) {
+                const anoClicado = anoDaPosicao(canvasX);
+                definirPontoMedicao(anoClicado);
+              } else {
+                posicionarAgulhaEmX(canvasX);
+              }
             }}
             onMouseDown={(e) => {
               if ((e.target as HTMLElement).closest('button')) return;
@@ -2176,57 +2402,89 @@ export function GavetaLinhaTempo({
               document.body.style.cursor = 'ew-resize';
             }}
           >
-            {/* Subdivisões Secundárias na Régua */}
-            {marcasSecundarias.map((ano) => (
+            {/* Subdivisões Terciárias na Régua (Meses / Frações - entalhes finos) */}
+            {marcasTerciarias.map((val) => (
               <div
-                key={`regua-sub-${ano}`}
-                className="absolute bottom-0 h-2 border-l border-borda/60 pointer-events-none"
-                style={{ left: posicaoDoAno(ano) }}
+                key={`regua-terc-${val}`}
+                className="absolute bottom-0 h-1.5 border-l opacity-40 pointer-events-none"
+                style={{ left: posicaoDoAno(val), borderColor: 'var(--borda)' }}
               />
             ))}
 
-            {/* Faixa Sombreada da Região de Impressão na Régua */}
-            {regiaoImpressao && (
-              <div
-                className="absolute top-0 bottom-0 bg-emerald-500/15 border-y border-emerald-500/40 pointer-events-none z-10"
-                style={{
-                  left: Math.min(posicaoDoAno(regiaoImpressao.de), posicaoDoAno(regiaoImpressao.ate)),
-                  width: Math.max(2, Math.abs(posicaoDoAno(regiaoImpressao.ate) - posicaoDoAno(regiaoImpressao.de))),
-                }}
-              />
-            )}
+            {/* Subdivisões Secundárias na Régua (Anos Intermediários / Trimestres) */}
+            {marcasSecundarias.map((ano) => {
+              const ehMeioDecada = Math.abs(ano % 5) === 0;
+              return (
+                <div
+                  key={`regua-sub-${ano}`}
+                  className={cn(
+                    'absolute bottom-0 pointer-events-none border-l',
+                    ehMeioDecada ? 'h-3.5 opacity-80' : 'h-2.5 opacity-60'
+                  )}
+                  style={{ left: posicaoDoAno(ano), borderColor: 'var(--borda)' }}
+                />
+              );
+            })}
 
-            {/* Marcadores de Início e Fim do Recorte na Régua */}
-            {regiaoImpressao && (
+            {/* Faixa Sombreada e Caliper da Medição de Distância na Régua */}
+            {medicaoDistancia && (
               <>
                 <div
+                  className="absolute top-0 bottom-0 bg-sky-500/15 border-y border-sky-500/40 pointer-events-none z-10"
+                  style={{
+                    left: Math.min(posicaoDoAno(medicaoDistancia.de), posicaoDoAno(medicaoDistancia.ate)),
+                    width: Math.max(2, Math.abs(posicaoDoAno(medicaoDistancia.ate) - posicaoDoAno(medicaoDistancia.de))),
+                  }}
+                />
+
+                {/* Caliper / Cota de Distância Centralizada na Régua */}
+                {Math.abs(posicaoDoAno(medicaoDistancia.ate) - posicaoDoAno(medicaoDistancia.de)) >= 36 && (
+                  <div
+                    className="absolute top-1/2 -translate-y-1/2 z-25 flex items-center pointer-events-none select-none"
+                    style={{
+                      left: Math.min(posicaoDoAno(medicaoDistancia.de), posicaoDoAno(medicaoDistancia.ate)),
+                      width: Math.max(2, Math.abs(posicaoDoAno(medicaoDistancia.ate) - posicaoDoAno(medicaoDistancia.de))),
+                    }}
+                  >
+                    <div className="w-1.5 h-3.5 border-l-2 border-sky-500 rounded-l-xs" />
+                    <div className="flex-1 h-px bg-sky-500/70 relative flex items-center justify-center">
+                      <span className="bg-card/95 px-1.5 py-0.5 rounded text-[10px] font-num font-bold text-sky-600 dark:text-sky-300 border border-sky-500/40 shadow-xs whitespace-nowrap">
+                        Δ {calcularDistanciaFormatada(medicaoDistancia.de, medicaoDistancia.ate)}
+                      </span>
+                    </div>
+                    <div className="w-1.5 h-3.5 border-r-2 border-sky-500 rounded-r-xs" />
+                  </div>
+                )}
+
+                {/* Marcadores de Ponto A e Ponto B na Régua */}
+                <div
                   className="absolute top-0 bottom-0 z-35 flex flex-col items-end select-none pointer-events-auto cursor-pointer"
-                  style={{ left: posicaoDoAno(regiaoImpressao.de) }}
+                  style={{ left: posicaoDoAno(medicaoDistancia.de) }}
                   onClick={(e) => {
                     e.stopPropagation();
-                    setModoMarcacaoImpressao(true);
+                    setModoMedicaoDistancia(true);
                   }}
-                  title={`Início do Recorte: ${formatarAnoAtual(regiaoImpressao.de)} (Clique para gerenciar)`}
+                  title={`Ponto A: ${formatarDataPrecisaNoCalendario(medicaoDistancia.de, spanAnos, calendarioAtivo, ehFicticio ? 'ficticio' : 'real')}${medicaoDistancia.rotuloDe ? ` (${medicaoDistancia.rotuloDe})` : ''}`}
                 >
-                  <div className="bg-emerald-600 hover:bg-emerald-500 text-white font-num font-bold text-[9px] px-1.5 py-0.5 rounded-l-xs shadow-md flex items-center gap-0.5 border border-emerald-700 whitespace-nowrap transform -translate-x-full">
-                    <span>[ Início: {formatarAnoAtual(regiaoImpressao.de)}</span>
+                  <div className="bg-sky-600 hover:bg-sky-500 text-white font-num font-bold text-[9px] px-1.5 py-0.5 rounded-l-xs shadow-md flex items-center gap-0.5 border border-sky-700 whitespace-nowrap transform -translate-x-full">
+                    <span>[ A: {formatarAnoAtual(medicaoDistancia.de)}</span>
                   </div>
-                  <div className="w-0.5 h-full bg-emerald-600 shadow-xs" />
+                  <div className="w-0.5 h-full bg-sky-600 shadow-xs" />
                 </div>
 
                 <div
                   className="absolute top-0 bottom-0 z-35 flex flex-col items-start select-none pointer-events-auto cursor-pointer"
-                  style={{ left: posicaoDoAno(regiaoImpressao.ate) }}
+                  style={{ left: posicaoDoAno(medicaoDistancia.ate) }}
                   onClick={(e) => {
                     e.stopPropagation();
-                    setModoMarcacaoImpressao(true);
+                    setModoMedicaoDistancia(true);
                   }}
-                  title={`Fim do Recorte: ${formatarAnoAtual(regiaoImpressao.ate)} (Clique para gerenciar)`}
+                  title={`Ponto B: ${formatarDataPrecisaNoCalendario(medicaoDistancia.ate, spanAnos, calendarioAtivo, ehFicticio ? 'ficticio' : 'real')}${medicaoDistancia.rotuloAte ? ` (${medicaoDistancia.rotuloAte})` : ''}`}
                 >
-                  <div className="bg-emerald-600 hover:bg-emerald-500 text-white font-num font-bold text-[9px] px-1.5 py-0.5 rounded-r-xs shadow-md flex items-center gap-0.5 border border-emerald-700 whitespace-nowrap">
-                    <span>Fim: {formatarAnoAtual(regiaoImpressao.ate)} ]</span>
+                  <div className="bg-sky-600 hover:bg-sky-500 text-white font-num font-bold text-[9px] px-1.5 py-0.5 rounded-r-xs shadow-md flex items-center gap-0.5 border border-sky-700 whitespace-nowrap">
+                    <span>B: {formatarAnoAtual(medicaoDistancia.ate)} ]</span>
                   </div>
-                  <div className="w-0.5 h-full bg-emerald-600 shadow-xs" />
+                  <div className="w-0.5 h-full bg-sky-600 shadow-xs" />
                 </div>
               </>
             )}
@@ -2235,12 +2493,28 @@ export function GavetaLinhaTempo({
             {marcasDoEixo.map((ano) => (
               <span
                 key={ano}
-                className="absolute top-0 font-num text-[10px] text-tinta3 border-l-2 border-borda h-full pl-1 pointer-events-none whitespace-nowrap select-none flex items-center"
+                className="absolute top-0 font-num text-[10px] text-tinta3 font-medium border-l-2 border-borda h-full pl-1 pointer-events-none whitespace-nowrap select-none flex items-center z-10"
                 style={{ left: posicaoDoAno(ano) }}
               >
-                {formatarAnoAtual(ano)}
+                <span className="bg-sup/90 px-0.5 rounded-xs">
+                  {rotulosGrid?.get(ano) ?? formatarAnoAtual(Math.round(ano))}
+                </span>
               </span>
             ))}
+
+            {/* Marcador de Alta Precisão: Hoje (Data do Sistema Operacional) */}
+            {janela.de <= HOJE_CONTINUO && HOJE_CONTINUO <= janela.ate && (
+              <div
+                className="absolute top-0 bottom-0 pointer-events-none z-25 flex flex-col items-center select-none"
+                style={{ left: posicaoDoAno(HOJE_CONTINUO), transform: 'translateX(-50%)' }}
+                title={`Hoje: ${formatarDataPrecisaNoCalendario(HOJE_CONTINUO, 0.1, calendarioAtivo, ehFicticio ? 'ficticio' : 'real')}`}
+              >
+                <div className="bg-emerald-600 text-white font-num font-bold text-[8.5px] px-1.5 py-0.2 rounded-xs shadow-xs uppercase tracking-wider flex items-center gap-0.5 border border-emerald-700">
+                  <span>Hoje</span>
+                </div>
+                <div className="w-0.5 flex-1 bg-emerald-500/80 shadow-xs" />
+              </div>
+            )}
 
             {/* Marcadores Temporais na Régua (Bandeiras / Pins) */}
             {marcadoresTimeline.map((mk) => {
@@ -2282,11 +2556,11 @@ export function GavetaLinhaTempo({
                 arrastandoAgulha.current = true;
                 document.body.style.cursor = 'ew-resize';
               }}
-              title={`Agulha Temporal: ${formatarAnoAtual(agulhaAno)} (Clique para abrir/fechar o Guia Temporal ou arraste)`}
+              title={`Agulha Temporal: ${formatarDataPrecisaNoCalendario(agulhaAno, spanAnos, calendarioAtivo, ehFicticio ? 'ficticio' : 'real')} (Clique para abrir/fechar o Guia Temporal ou arraste)`}
             >
               <div className="bg-rose-600 hover:bg-rose-500 text-white font-num font-bold text-[10px] px-2 py-0.5 rounded-t-xs shadow-md flex items-center gap-1 border border-rose-700">
                 <span className="text-[9px]">📍</span>
-                <span>{formatarAnoAtual(agulhaAno)}</span>
+                <span>{formatarDataPrecisaNoCalendario(agulhaAno, spanAnos, calendarioAtivo, ehFicticio ? 'ficticio' : 'real')}</span>
               </div>
               <div className="w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[4px] border-t-rose-600" />
             </div>
@@ -2300,12 +2574,12 @@ export function GavetaLinhaTempo({
                     'absolute top-0.5 pointer-events-none z-30 transform -translate-x-1/2 px-2 py-0.5 rounded-b-xs font-num font-bold text-[10.5px] shadow-md whitespace-nowrap select-none flex items-center gap-1 border',
                     estaSnappado
                       ? 'bg-amber-600 text-white border-amber-700 ring-1 ring-amber-400/50'
-                      : 'bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900 border-neutral-950 dark:border-neutral-200'
+                      : 'bg-card text-tinta border-borda shadow-md'
                   )}
                   style={{ left: cursorX }}
                 >
                   {estaSnappado && <span className="text-[9px]">🧲</span>}
-                  <span>{formatarAnoAtual(cursorAno)}</span>
+                  <span>{formatarDataPrecisaNoCalendario(cursorAno, spanAnos, calendarioAtivo, ehFicticio ? 'ficticio' : 'real')}</span>
                 </div>
               )}
           </div>
@@ -2324,35 +2598,53 @@ export function GavetaLinhaTempo({
                 style={{ left: larguraSidebar, width: larguraCanvas }}
                 aria-hidden
               >
+                {/* Nível 3: Linhas Terciárias no Fundo das Vidas (Meses / Frações - delicadas e pontilhadas) */}
+                {marcasTerciarias.map((val) => (
+                  <div
+                    key={`grade-terc-vidas-${val}`}
+                    className="absolute top-0 bottom-0 border-l border-dotted opacity-30 pointer-events-none"
+                    style={{ left: posicaoDoAno(val), borderColor: 'var(--borda)' }}
+                  />
+                ))}
+                {/* Nível 2: Linhas Secundárias no Fundo das Vidas (Anos Intermediários Não Numerados - linha sólida sutil e nítida) */}
                 {marcasSecundarias.map((ano) => (
                   <div
                     key={`grade-sub-vidas-${ano}`}
-                    className="absolute top-0 bottom-0 border-l border-dotted border-borda/25 dark:border-borda/20"
-                    style={{ left: posicaoDoAno(ano) }}
+                    className="absolute top-0 bottom-0 border-l border-solid opacity-45 pointer-events-none"
+                    style={{ left: posicaoDoAno(ano), borderColor: 'var(--borda)' }}
                   />
                 ))}
+                {/* Nível 1: Linhas Principais no Fundo das Vidas (Anos Numerados - tracejada de destaque) */}
                 {marcasDoEixo.map((ano) => (
                   <div
                     key={`grade-vidas-${ano}`}
-                    className="absolute top-0 bottom-0 border-l border-dashed border-borda/60 dark:border-borda/45"
-                    style={{ left: posicaoDoAno(ano) }}
+                    className="absolute top-0 bottom-0 border-l border-dashed opacity-65 pointer-events-none"
+                    style={{ left: posicaoDoAno(ano), borderColor: 'var(--borda2)' }}
                   />
                 ))}
-                {/* Destaque da Região de Impressão nas Vidas */}
-                {regiaoImpressao && (
+                {/* Destaque da Região de Medição Temporal nas Vidas */}
+                {medicaoDistancia && (
                   <div
-                    className="absolute top-0 bottom-0 border-x border-dashed border-emerald-500/40 bg-emerald-500/[0.04] pointer-events-none"
+                    className="absolute top-0 bottom-0 border-x border-dashed border-sky-500/40 bg-sky-500/[0.05] pointer-events-none"
                     style={{
-                      left: Math.min(posicaoDoAno(regiaoImpressao.de), posicaoDoAno(regiaoImpressao.ate)),
-                      width: Math.max(2, Math.abs(posicaoDoAno(regiaoImpressao.ate) - posicaoDoAno(regiaoImpressao.de))),
+                      left: Math.min(posicaoDoAno(medicaoDistancia.de), posicaoDoAno(medicaoDistancia.ate)),
+                      width: Math.max(2, Math.abs(posicaoDoAno(medicaoDistancia.ate) - posicaoDoAno(medicaoDistancia.de))),
                     }}
+                  />
+                )}
+                {/* Linha Vertical de Hoje no Fundo das Vidas (Sincronizada com SO) */}
+                {janela.de <= HOJE_CONTINUO && HOJE_CONTINUO <= janela.ate && (
+                  <div
+                    key="linha-hoje-vidas"
+                    className="absolute top-0 bottom-0 border-l-2 border-dashed border-emerald-500/70 pointer-events-none z-1"
+                    style={{ left: posicaoDoAno(HOJE_CONTINUO) }}
                   />
                 )}
               </div>
 
               {/* Camada Vertical de Agulha Fixa, Marcadores e Cursor Fantasma */}
               <div
-                className="absolute top-5 bottom-0 pointer-events-none overflow-hidden z-30"
+                className="absolute top-5 bottom-0 pointer-events-none overflow-hidden z-5"
                 style={{ left: larguraSidebar, width: larguraCanvas }}
                 aria-hidden
               >
@@ -2376,7 +2668,7 @@ export function GavetaLinhaTempo({
                       'absolute top-0 bottom-0 transition-colors',
                       estaSnappado
                         ? 'border-l-2 border-dashed border-amber-500 shadow-xs'
-                        : 'border-l border-dashed border-neutral-600/60 dark:border-neutral-300/60'
+                        : 'border-l border-dashed border-borda2/60'
                     )}
                     style={{ left: cursorX }}
                   />
@@ -2398,10 +2690,10 @@ export function GavetaLinhaTempo({
                       type="button"
                       onClick={ordenarPorAnoNascimento}
                       className="text-[8.5px] lowercase font-medium text-tinta3 hover:text-acento transition-colors flex items-center gap-0.5 cursor-pointer px-1 py-0.5 rounded hover:bg-sup"
-                      title="Ordenar trilhas cronologicamente por ano de nascimento"
+                      title={t('linhaTempo', 'ordenarPorAnoTitle')}
                     >
                       <ArrowUpDown className="w-2.5 h-2.5" />
-                      <span>por ano</span>
+                      <span>{t('linhaTempo', 'porAno')}</span>
                     </button>
                     <span className="font-num text-[9px] opacity-75">{linhasPessoais.length}</span>
                   </div>
@@ -2415,7 +2707,7 @@ export function GavetaLinhaTempo({
                   className="flex items-center group/vazio-vidas cursor-pointer transition-colors hover:bg-acento/[0.04] border-b border-borda/40 select-none"
                   style={{ height: 38 }}
                   onClick={() => setModalCompararAberto(true)}
-                  title="Clique para adicionar uma pessoa da árvore à linha do tempo"
+                  title={t('linhaTempo', 'compararVidasModal')}
                 >
                   {/* Sidebar do Placeholder */}
                   <div
@@ -2426,7 +2718,7 @@ export function GavetaLinhaTempo({
                       <div className="w-5 h-5 rounded-full border border-dashed border-borda flex items-center justify-center group-hover/vazio-vidas:border-acento group-hover/vazio-vidas:bg-acento/10">
                         <Plus className="w-3 h-3 text-tinta3 group-hover/vazio-vidas:text-acento" />
                       </div>
-                      <span>Adicionar vida na árvore</span>
+                      <span>{t('linhaTempo', 'adicionarVidaArvore')}</span>
                     </div>
                   </div>
 
@@ -2437,7 +2729,7 @@ export function GavetaLinhaTempo({
                   >
                     <div className="flex items-center gap-2 text-[11px] text-tinta3/70 group-hover/vazio-vidas:text-acento/90 transition-colors font-medium select-none">
                       <UserPlus className="w-3.5 h-3.5 text-acento/60" />
-                      <span>+ Clique aqui ou em "+ Comparar Vida" para adicionar pessoas da árvore</span>
+                      <span>{t('linhaTempo', 'cliqueParaAdicionarVidas')}</span>
                     </div>
                   </div>
                 </div>
@@ -2448,11 +2740,11 @@ export function GavetaLinhaTempo({
                 const estaArrastando = idArrastando === lp.pessoa_id;
                 const posicaoDrop = dropAlvo?.id === lp.pessoa_id ? dropAlvo.posicao : null;
                 const nasceu = lp.ano_nascimento;
-                const terminou = lp.ano_falecimento ?? (lp.is_vivo ? ANO_CORRENTE : null);
-                const anosTotais = nasceu != null && terminou != null ? Math.max(0, terminou - nasceu) : null;
+                const terminou = lp.ano_falecimento ?? (lp.is_vivo ? HOJE_CONTINUO : null);
+                const anosTotais = nasceu != null && terminou != null ? Math.max(0, Math.floor(terminou - nasceu)) : null;
                 const subtitulo = nasceu
-                  ? `${nasceu} – ${lp.ano_falecimento ?? (lp.is_vivo ? 'hoje' : '?')} (${anosTotais ?? '?'}a)`
-                  : 'sem data';
+                  ? `${formatarAnoAtual(nasceu)} – ${lp.ano_falecimento != null ? formatarAnoAtual(lp.ano_falecimento) : lp.is_vivo ? t('linhaTempo', 'hoje') : '?'} (${anosTotais ?? '?'}a)`
+                  : t('linhaTempo', 'semData');
 
                 const alturaEfetiva = obterAlturaTrilha(lp.pessoa_id);
                 const menuAberto = idMenuCorAberto === lp.pessoa_id;
@@ -2507,6 +2799,10 @@ export function GavetaLinhaTempo({
                         onToggleVisibilidade={() => toggleVisibilidadeTrilha(lp.pessoa_id)}
                         onFocar={() => enquadrarVida(lp)}
                         onAbrirFicha={onAbrirFicha ? () => onAbrirFicha(lp.pessoa_id) : undefined}
+                        onAdicionarEvento={() => {
+                          setPessoaAlvoEventoVida(lp.pessoa_id);
+                          setModalEventoVidaAberto(true);
+                        }}
                         onRemover={() => removerVida(lp.pessoa_id)}
                       />
                     </div>
@@ -2531,6 +2827,7 @@ export function GavetaLinhaTempo({
                           onAbrirMarco={abrirMarco}
                           onAbrirEventoPessoal={abrirEventoPessoal}
                           onFocar={() => enquadrarVida(lp)}
+                          onPosicionarAgulha={posicionarAgulhaEmX}
                           formatarAno={formatarAnoAtual}
                         />
                       )}
@@ -2599,35 +2896,53 @@ export function GavetaLinhaTempo({
                 style={{ left: larguraSidebar, width: larguraCanvas }}
                 aria-hidden
               >
+                {/* Nível 3: Linhas Terciárias no Fundo do Contexto (Meses / Frações) */}
+                {marcasTerciarias.map((val) => (
+                  <div
+                    key={`grade-terc-contexto-${val}`}
+                    className="absolute top-0 bottom-0 border-l border-dotted opacity-30 pointer-events-none"
+                    style={{ left: posicaoDoAno(val), borderColor: 'var(--borda)' }}
+                  />
+                ))}
+                {/* Nível 2: Linhas Secundárias no Fundo do Contexto (Anos Intermediários Não Numerados) */}
                 {marcasSecundarias.map((ano) => (
                   <div
                     key={`grade-sub-contexto-${ano}`}
-                    className="absolute top-0 bottom-0 border-l border-dotted border-borda/25 dark:border-borda/20"
-                    style={{ left: posicaoDoAno(ano) }}
+                    className="absolute top-0 bottom-0 border-l border-solid opacity-45 pointer-events-none"
+                    style={{ left: posicaoDoAno(ano), borderColor: 'var(--borda)' }}
                   />
                 ))}
+                {/* Nível 1: Linhas Principais no Fundo do Contexto (Anos Numerados) */}
                 {marcasDoEixo.map((ano) => (
                   <div
                     key={`grade-contexto-${ano}`}
-                    className="absolute top-0 bottom-0 border-l border-dashed border-borda/60 dark:border-borda/45"
-                    style={{ left: posicaoDoAno(ano) }}
+                    className="absolute top-0 bottom-0 border-l border-dashed opacity-65 pointer-events-none"
+                    style={{ left: posicaoDoAno(ano), borderColor: 'var(--borda2)' }}
                   />
                 ))}
-                {/* Destaque da Região de Impressão no Contexto */}
-                {regiaoImpressao && (
+                {/* Destaque da Região de Medição Temporal no Contexto */}
+                {medicaoDistancia && (
                   <div
-                    className="absolute top-0 bottom-0 border-x border-dashed border-emerald-500/40 bg-emerald-500/[0.04] pointer-events-none"
+                    className="absolute top-0 bottom-0 border-x border-dashed border-sky-500/40 bg-sky-500/[0.05] pointer-events-none"
                     style={{
-                      left: Math.min(posicaoDoAno(regiaoImpressao.de), posicaoDoAno(regiaoImpressao.ate)),
-                      width: Math.max(2, Math.abs(posicaoDoAno(regiaoImpressao.ate) - posicaoDoAno(regiaoImpressao.de))),
+                      left: Math.min(posicaoDoAno(medicaoDistancia.de), posicaoDoAno(medicaoDistancia.ate)),
+                      width: Math.max(2, Math.abs(posicaoDoAno(medicaoDistancia.ate) - posicaoDoAno(medicaoDistancia.de))),
                     }}
+                  />
+                )}
+                {/* Linha Vertical de Hoje no Fundo do Contexto (Sincronizada com SO) */}
+                {janela.de <= HOJE_CONTINUO && HOJE_CONTINUO <= janela.ate && (
+                  <div
+                    key="linha-hoje-contexto"
+                    className="absolute top-0 bottom-0 border-l-2 border-dashed border-emerald-500/70 pointer-events-none z-1"
+                    style={{ left: posicaoDoAno(HOJE_CONTINUO) }}
                   />
                 )}
               </div>
 
               {/* Camada Vertical de Agulha Fixa, Marcadores e Cursor Fantasma */}
               <div
-                className="absolute top-0 bottom-0 pointer-events-none overflow-hidden z-30"
+                className="absolute top-0 bottom-0 pointer-events-none overflow-hidden z-5"
                 style={{ left: larguraSidebar, width: larguraCanvas }}
                 aria-hidden
               >
@@ -2651,7 +2966,7 @@ export function GavetaLinhaTempo({
                       'absolute top-0 bottom-0 transition-colors',
                       estaSnappado
                         ? 'border-l-2 border-dashed border-amber-500 shadow-xs'
-                        : 'border-l border-dashed border-neutral-600/60 dark:border-neutral-300/60'
+                        : 'border-l border-dashed border-borda2/60'
                     )}
                     style={{ left: cursorX }}
                   />
@@ -2744,12 +3059,37 @@ export function GavetaLinhaTempo({
                             setJanela({ de: linha.ano_min - margem, ate: linha.ano_max + margem });
                           }
                         }}
+                        onAdicionarMarco={() => {
+                          setLinhaAlvoMarco(linhaId);
+                          setMarcoEditando('novo');
+                        }}
+                        onConfigurar={() => setLinhaEditando(linhaId)}
                         onRemover={() => alternarLinha(linhaId)}
                       />
                     </div>
 
                     {/* Raia Temporal de Contexto */}
                     <div className="flex-1 relative h-full overflow-hidden">
+                      {visivel && posicionados.length === 0 && (
+                        <div className="h-full flex items-center px-4 gap-3">
+                          <span className="text-xs text-tinta3 italic select-none">
+                            Esta linha de contexto ainda não possui marcos cadastrados.
+                          </span>
+                          {!linha?.is_bloqueada && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setLinhaAlvoMarco(linhaId);
+                                setMarcoEditando('novo');
+                              }}
+                              className="px-2.5 py-1 text-xs bg-acento/10 hover:bg-acento text-acento hover:text-acento-tinta font-semibold rounded-raio-s border border-acento/40 flex items-center gap-1.5 cursor-pointer transition-colors shadow-2xs"
+                            >
+                              <Plus className="w-3.5 h-3.5" />
+                              <span>+ Adicionar primeiro marco</span>
+                            </button>
+                          )}
+                        </div>
+                      )}
                       {visivel &&
                         posicionados.map(({ marco, subLane, temRotulo, x, intervalo, larguraBarra }) => {
                           const ehSelecionado = marcoAberto?.id === marco.id;
@@ -2767,7 +3107,7 @@ export function GavetaLinhaTempo({
                                 e.stopPropagation();
                                 abrirMarco(marco);
                               }}
-                              className="absolute z-10 flex items-center gap-1 group text-left cursor-pointer border-none bg-transparent p-0"
+                              className="absolute z-20 flex items-center gap-1 group text-left cursor-pointer border-none bg-transparent p-0"
                               style={{ left: x, top: topOffset }}
                               title={`${marco.titulo} (${marco.data_periodo_texto})${marco.descricao ? `\n\n${marco.descricao}` : ''}`}
                             >
@@ -2790,10 +3130,10 @@ export function GavetaLinhaTempo({
                               ) : temRotulo ? (
                                 <div
                                   className={cn(
-                                    'px-1.5 py-0.5 rounded-raio-s text-[11px] font-sans transition-all flex items-center gap-1 max-w-[240px] truncate shadow-xs border',
+                                    'px-1.5 py-0.5 rounded-raio-s text-[11px] font-sans transition-all flex items-center gap-1 max-w-[240px] truncate shadow-xs border bg-card',
                                     ehSelecionado
                                       ? 'bg-acento text-acento-tinta font-bold ring-2 ring-acento/40 shadow-sm border-acento z-20'
-                                      : 'bg-card/95 hover:bg-card border-borda/80 hover:border-acento hover:shadow-xs text-tinta z-10'
+                                      : 'hover:bg-card2 border-borda/80 hover:border-acento hover:shadow-xs text-tinta z-10'
                                   )}
                                   style={{
                                     borderLeftWidth: ehSelecionado ? undefined : 3,
@@ -2850,10 +3190,10 @@ export function GavetaLinhaTempo({
             <div className="flex items-center gap-1.5 min-w-0 flex-1">
               <span className="font-tit font-bold text-tinta text-[15px] tracking-wide flex items-center gap-1.5 flex-wrap">
                 <span>📍</span>
-                <span>{descreverAnoComDetalhes(agulhaAno, calendarioAtivo, ehFicticio ? 'ficticio' : 'real').principal}</span>
-                {descreverAnoComDetalhes(agulhaAno, calendarioAtivo, ehFicticio ? 'ficticio' : 'real').secundario && (
+                <span>{descreverDataComDetalhes(agulhaAno, spanAnos, calendarioAtivo, ehFicticio ? 'ficticio' : 'real').principal}</span>
+                {descreverDataComDetalhes(agulhaAno, spanAnos, calendarioAtivo, ehFicticio ? 'ficticio' : 'real').secundario && (
                   <span className="text-[10.5px] font-normal text-tinta3 font-sans">
-                    ({descreverAnoComDetalhes(agulhaAno, calendarioAtivo, ehFicticio ? 'ficticio' : 'real').secundario})
+                    ({descreverDataComDetalhes(agulhaAno, spanAnos, calendarioAtivo, ehFicticio ? 'ficticio' : 'real').secundario})
                   </span>
                 )}
               </span>
@@ -2933,8 +3273,8 @@ export function GavetaLinhaTempo({
                       </div>
                     );
                   }
-                  const idade = agulhaAno - lp.ano_nascimento;
-                  const falec = lp.ano_falecimento ?? (lp.is_vivo ? ANO_CORRENTE : null);
+                  const idade = Math.floor(agulhaAno - lp.ano_nascimento);
+                  const falec = lp.ano_falecimento ?? (lp.is_vivo ? HOJE_CONTINUO : null);
                   const vivo = idade >= 0 && (falec == null || agulhaAno <= falec);
 
                   return (
@@ -2953,14 +3293,16 @@ export function GavetaLinhaTempo({
                       </div>
                       <span className="flex-none font-num text-[11px]">
                         {idade < 0 ? (
-                          <span className="text-tinta3 font-medium text-[10.5px]">nasce em {Math.abs(idade)}a</span>
+                          <span className="text-tinta3 font-medium text-[10.5px]">
+                            nasce em {Math.ceil(Math.abs(agulhaAno - lp.ano_nascimento))}a
+                          </span>
                         ) : vivo ? (
                           <span className="text-emerald-700 dark:text-emerald-300 font-bold bg-emerald-500/15 px-1.5 py-0.2 rounded border border-emerald-600/30 text-[10.5px]">
                             {idade} {t('arvore', 'anos')}
                           </span>
                         ) : (
                           <span className="text-tinta3 font-medium text-[10.5px]">
-                            faleceu aos {falec ? falec - lp.ano_nascimento : '?'}a
+                            faleceu aos {falec != null ? Math.floor(falec - lp.ano_nascimento) : '?'}a
                           </span>
                         )}
                       </span>
@@ -3115,24 +3457,12 @@ export function GavetaLinhaTempo({
                       <Users className="w-4 h-4 text-acento" />
                       Quem Viveu Esta Época
                     </span>
-
-                    {vivosInfo && (
-                      <span
-                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30 shadow-2xs"
-                        title={`${vivosInfo.ids.length} pessoas cadastradas na árvore estavam vivas nesta época`}
-                      >
-                        <Sparkles className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                        {vivosInfo.ids.length}{' '}
-                        {vivosInfo.ids.length === 1 ? 'familiar vivo' : 'familiares vivos'} na árvore
-                      </span>
-                    )}
                   </div>
 
                   {/* Lista de Participantes Vinculados */}
                   <div className="flex-1 overflow-y-auto max-h-[86px] py-1.5 flex flex-wrap gap-1.5 items-start content-start scrollbar-fino">
                     {participantesMarco && participantesMarco.length > 0 ? (
                       participantesMarco.map((p) => {
-                        const bloqueada = linhaDoMarcoExibido?.is_bloqueada;
                         return (
                           <div
                             key={p.id}
@@ -3150,39 +3480,37 @@ export function GavetaLinhaTempo({
                               </span>
                             )}
 
-                            {!bloqueada && (
-                              <div className="flex items-center gap-1 ml-1.5 pl-1.5 border-l border-borda">
-                                <button
-                                  type="button"
-                                  title={
-                                    p.visivel_na_pessoa
-                                      ? 'Visível na biografia (clique para ocultar)'
-                                      : 'Oculto da biografia (clique para mostrar)'
-                                  }
-                                  onClick={() =>
-                                    mToggleVisibilidade.mutate({
-                                      id: p.id,
-                                      visivel: !p.visivel_na_pessoa,
-                                    })
-                                  }
-                                  className="p-0.5 hover:text-acento transition-colors cursor-pointer"
-                                >
-                                  {p.visivel_na_pessoa ? (
-                                    <Eye className="w-3.5 h-3.5" />
-                                  ) : (
-                                    <EyeOff className="w-3.5 h-3.5" />
-                                  )}
-                                </button>
-                                <button
-                                  type="button"
-                                  title="Remover participante"
-                                  onClick={() => mRemoverParticipante.mutate(p.id)}
-                                  className="p-0.5 hover:text-fem transition-colors cursor-pointer"
-                                >
-                                  <X className="w-3.5 h-3.5" />
-                                </button>
-                              </div>
-                            )}
+                            <div className="flex items-center gap-1 ml-1.5 pl-1.5 border-l border-borda">
+                              <button
+                                type="button"
+                                title={
+                                  p.visivel_na_pessoa
+                                    ? 'Visível na biografia (clique para ocultar)'
+                                    : 'Oculto da biografia (clique para mostrar)'
+                                }
+                                onClick={() =>
+                                  mToggleVisibilidade.mutate({
+                                    id: p.id,
+                                    visivel: !p.visivel_na_pessoa,
+                                  })
+                                }
+                                className="p-0.5 hover:text-acento transition-colors cursor-pointer"
+                              >
+                                {p.visivel_na_pessoa ? (
+                                  <Eye className="w-3.5 h-3.5" />
+                                ) : (
+                                  <EyeOff className="w-3.5 h-3.5" />
+                                )}
+                              </button>
+                              <button
+                                type="button"
+                                title="Remover participante"
+                                onClick={() => mRemoverParticipante.mutate(p.id)}
+                                className="p-0.5 hover:text-fem transition-colors cursor-pointer"
+                              >
+                                <X className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
                           </div>
                         );
                       })
@@ -3194,7 +3522,7 @@ export function GavetaLinhaTempo({
                   </div>
 
                   {/* Rodapé da Coluna 2: Adicionar Participante Rápido */}
-                  {linhaDoMarcoExibido && !linhaDoMarcoExibido.is_bloqueada && (
+                  {linhaDoMarcoExibido && (
                     <div className="pt-2 border-t border-borda/50 flex items-center gap-2">
                       {pessoaSelecionadaRapida ? (
                         <div className="flex items-center gap-2 w-full">
@@ -3213,14 +3541,20 @@ export function GavetaLinhaTempo({
                             onKeyDown={(e) => {
                               if (e.key === 'Enter') {
                                 e.preventDefault();
+                                const pId = pessoaSelecionadaRapida.id;
                                 adicionarParticipante({
                                   marco_id: marcoExibido.id,
-                                  pessoa_id: pessoaSelecionadaRapida.id,
+                                  pessoa_id: pId,
                                   papel: papelRapido.trim() || null,
                                   visivel_na_pessoa: true,
                                 }).then(() => {
                                   qc.invalidateQueries({ queryKey: ['marco-participantes', marcoExibido.id] });
                                   qc.invalidateQueries({ queryKey: ['linha-pessoal'] });
+                                  qc.refetchQueries({ queryKey: ['linha-pessoal'] });
+                                  qc.invalidateQueries({ queryKey: ['participacoes-pessoa'] });
+                                  qc.invalidateQueries({ queryKey: ['eventos'] });
+                                  setVidasExtras((prev) => (prev.includes(pId) ? prev : [...prev, pId]));
+                                  setVidasRemovidas((prev) => prev.filter((id) => id !== pId));
                                   setPessoaSelecionadaRapida(null);
                                   setPapelRapido('');
                                 });
@@ -3232,14 +3566,20 @@ export function GavetaLinhaTempo({
                           <button
                             type="button"
                             onClick={() => {
+                              const pId = pessoaSelecionadaRapida.id;
                               adicionarParticipante({
                                 marco_id: marcoExibido.id,
-                                pessoa_id: pessoaSelecionadaRapida.id,
+                                pessoa_id: pId,
                                 papel: papelRapido.trim() || null,
                                 visivel_na_pessoa: true,
                               }).then(() => {
                                 qc.invalidateQueries({ queryKey: ['marco-participantes', marcoExibido.id] });
                                 qc.invalidateQueries({ queryKey: ['linha-pessoal'] });
+                                qc.refetchQueries({ queryKey: ['linha-pessoal'] });
+                                qc.invalidateQueries({ queryKey: ['participacoes-pessoa'] });
+                                qc.invalidateQueries({ queryKey: ['eventos'] });
+                                setVidasExtras((prev) => (prev.includes(pId) ? prev : [...prev, pId]));
+                                setVidasRemovidas((prev) => prev.filter((id) => id !== pId));
                                 setPessoaSelecionadaRapida(null);
                                 setPapelRapido('');
                               });
@@ -3440,16 +3780,6 @@ export function GavetaLinhaTempo({
                       <Users className="w-4 h-4 text-acento" />
                       Contemporâneos na Árvore
                     </span>
-
-                    {vivosInfo && (
-                      <span
-                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30 shadow-2xs"
-                        title={`${vivosInfo.ids.length} pessoas da árvore estavam vivas em ${eventoExibido.marco.ano}`}
-                      >
-                        <Sparkles className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                        {vivosInfo.ids.length} vivos em {eventoExibido.marco.ano}
-                      </span>
-                    )}
                   </div>
 
                   <div className="flex-1 py-2 flex flex-col justify-center gap-2.5">
@@ -3522,8 +3852,15 @@ export function GavetaLinhaTempo({
           }
           onClose={() => setLinhaEditando(null)}
           onSuccess={(id) => {
+            const eraNova = linhaEditando === 'nova';
             setLinhaEditando(null);
-            if (id && !ativas.includes(id)) setAtivas((a) => [...a, id]);
+            if (id) {
+              if (!ativas.includes(id)) setAtivas((a) => [...a, id]);
+              if (eraNova) {
+                setLinhaAlvoMarco(id);
+                setMarcoEditando('novo');
+              }
+            }
           }}
         />
       )}
@@ -3605,6 +3942,26 @@ export function GavetaLinhaTempo({
         onCriarNovaLinha={() => setLinhaEditando('nova')}
         onDesativarTodas={() => setAtivas([])}
       />
+
+      {/* Modal para Adicionar Evento de Vida com Linha de Contexto */}
+      <ModalAdicionarEventoVida
+        aberto={modalEventoVidaAberto}
+        aoFechar={() => {
+          setModalEventoVidaAberto(false);
+          setPessoaAlvoEventoVida(null);
+        }}
+        pessoaIdInicial={pessoaAlvoEventoVida ?? pessoaSelecionadaId ?? linhasPessoais[0]?.pessoa_id}
+        pessoasDisponiveis={(pessoasDaArvore ?? []).map((p) => ({
+          id: p.id,
+          nome: p.nome,
+          sobrenome: p.sobrenome,
+          ano_nascimento: p.ano_nascimento,
+          ano_falecimento: p.ano_falecimento,
+          is_vivo: p.is_vivo,
+        }))}
+        linhasContexto={linhas ?? []}
+        linhasAtivasIds={ativas}
+      />
     </div>
   );
 }
@@ -3614,6 +3971,12 @@ function iconeDoEvento(tipo: string): string {
   if (t.includes('nasc')) return '⭐';
   if (t.includes('batism')) return '💧';
   if (t.includes('casam') || t.includes('uni')) return '💍';
+  if (t.includes('resid') || t.includes('mudan')) return '🏠';
+  if (t.includes('educ') || t.includes('format') || t.includes('gradua')) return '🎓';
+  if (t.includes('prof') || t.includes('ocup') || t.includes('carreir')) return '💼';
+  if (t.includes('milit') || t.includes('combat') || t.includes('guerra')) return '⚔️';
+  if (t.includes('imigr') || t.includes('emigr')) return '🚢';
+  if (t.includes('viag')) return '✈️';
   if (t.includes('falec') || t.includes('óbit')) return '✝';
   if (t.includes('sepult') || t.includes('enterro')) return '🏛️';
   return '📍';
@@ -3633,6 +3996,7 @@ function FaixaDaVida({
   onAbrirMarco,
   onAbrirEventoPessoal,
   onFocar,
+  onPosicionarAgulha,
   formatarAno: formatarAnoProp,
 }: {
   linha: LinhaPessoal;
@@ -3645,16 +4009,43 @@ function FaixaDaVida({
   onAbrirMarco: (m: Marco) => void;
   onAbrirEventoPessoal?: (pessoaNome: string, pessoaId: string, marco: MarcoPessoal) => void;
   onFocar?: () => void;
+  onPosicionarAgulha?: (canvasX: number) => void;
   formatarAno?: (ano: number | null | undefined) => string;
 }) {
   const formatarAnoFn = formatarAnoProp ?? formatarAno;
   const nasceu = linha.ano_nascimento;
-  const terminou = linha.ano_falecimento ?? (linha.is_vivo ? ANO_CORRENTE : null);
+  const terminou = linha.ano_falecimento ?? (linha.is_vivo ? HOJE_CONTINUO : null);
   const corEfetiva = cor ?? corDaPessoa(linha.sexo);
-  const anosTotais = nasceu != null && terminou != null ? Math.max(0, terminou - nasceu) : null;
+  const anosTotais = nasceu != null && terminou != null ? Math.max(0, Math.floor(terminou - nasceu)) : null;
 
-  const x0 = nasceu != null ? posicaoDoAno(nasceu) : null;
-  const x1 = terminou != null ? posicaoDoAno(terminou) : x0 != null ? x0 + 16 : null;
+  const anoNascContinuo = useMemo(() => {
+    if (linha.ano_nascimento == null) return null;
+    return (
+      converterDataParaAnoFracionario(
+        linha.ano_nascimento,
+        linha.data_nascimento_texto,
+        linha.mes_nascimento,
+        linha.dia_nascimento,
+      ) ?? linha.ano_nascimento
+    );
+  }, [linha.ano_nascimento, linha.data_nascimento_texto, linha.mes_nascimento, linha.dia_nascimento]);
+
+  const anoFalecContinuo = useMemo(() => {
+    if (linha.ano_falecimento == null) {
+      return linha.is_vivo ? HOJE_CONTINUO : null;
+    }
+    return (
+      converterDataParaAnoFracionario(
+        linha.ano_falecimento,
+        linha.data_falecimento_texto,
+        linha.mes_falecimento,
+        linha.dia_falecimento,
+      ) ?? linha.ano_falecimento
+    );
+  }, [linha.ano_falecimento, linha.data_falecimento_texto, linha.mes_falecimento, linha.dia_falecimento, linha.is_vivo]);
+
+  const x0 = anoNascContinuo != null ? posicaoDoAno(anoNascContinuo) : null;
+  const x1 = anoFalecContinuo != null ? posicaoDoAno(anoFalecContinuo) : x0 != null ? x0 + 16 : null;
   const larguraBarra = x0 != null && x1 != null ? Math.max(12, x1 - x0) : 0;
 
   // Interseção da barra com a tela visível (Viewport-Aware Sticky Label)
@@ -3675,7 +4066,6 @@ function FaixaDaVida({
   const topClipe = compacto ? (altura - alturaClipe) / 2 : 6;
 
   const marcosValidos = useMemo(() => {
-    if (compacto || larguraBarra < 35) return [];
     return linha.marcos.filter((m) => {
       if (m.ano == null) return false;
       const tipo = (m.tipo ?? '').toLowerCase();
@@ -3685,16 +4075,16 @@ function FaixaDaVida({
       if (m.is_participacao && !m.visivel_na_pessoa && !mostrarOcultos) return false;
       return true;
     });
-  }, [compacto, larguraBarra, linha.marcos, mostrarOcultos]);
+  }, [linha.marcos, mostrarOcultos]);
 
   const gruposMarcos = useMemo(() => {
     return agruparMarcosPessoaisProximos(
       marcosValidos,
       posicaoDoAno,
-      65,
-      altura >= 72 ? 2 : 1,
+      compacto ? 28 : 65,
+      compacto ? 1 : (altura >= 72 ? 2 : 1),
     );
-  }, [marcosValidos, posicaoDoAno, altura]);
+  }, [marcosValidos, posicaoDoAno, altura, compacto]);
 
   return (
     <div className="relative w-full h-full select-none overflow-hidden">
@@ -3708,7 +4098,7 @@ function FaixaDaVida({
             height: alturaClipe,
             top: topClipe,
             backgroundColor: corEfetiva,
-            opacity: 0.92,
+            opacity: 1,
           }}
           onClick={onFocar}
           title={`${linha.nome}: ${nasceu != null ? formatarAnoFn(nasceu) : ''} – ${
@@ -3722,13 +4112,15 @@ function FaixaDaVida({
           {/* Início: Ano de Nascimento (oculto se barra for estreita ou já ultrapassou a borda para evitar sobreposição) */}
           <span className="text-[10px] font-num font-bold text-white tracking-wide select-none drop-shadow-xs flex items-center gap-0.5 z-20">
             <span>★</span>
-            {!estendeParaEsquerda && larguraBarra >= 140 && <span>{formatarAnoFn(nasceu)}</span>}
+            {!estendeParaEsquerda && larguraBarra >= 140 && (
+              <span>{linha.data_nascimento_texto && larguraBarra >= 220 ? linha.data_nascimento_texto : formatarAnoFn(nasceu)}</span>
+            )}
           </span>
 
           {/* Nome e Idade: Rótulo Centralizado e Aderente ao Viewport (Sticky) com Anticolisão */}
           {barraNaTela && (
             <div
-              className="absolute pointer-events-none flex items-center justify-center whitespace-nowrap z-10 select-none"
+              className="absolute pointer-events-none flex items-center justify-center whitespace-nowrap z-20 select-none"
               style={{
                 left: Math.max(
                   larguraBarra >= 140 ? 55 : 22,
@@ -3738,7 +4130,7 @@ function FaixaDaVida({
                 maxWidth: Math.max(45, larguraVisivel - (larguraBarra >= 140 ? 70 : 34)),
               }}
             >
-              <span className="text-[10.5px] font-semibold text-white truncate px-1.5 py-0.5 rounded-xs drop-shadow-md bg-black/40 backdrop-blur-[1px] border border-white/20 flex items-center gap-1">
+              <span className="text-[10.5px] font-semibold text-white truncate px-1.5 py-0.5 rounded-xs drop-shadow-md bg-black/75 border border-white/20 flex items-center gap-1">
                 {estendeParaEsquerda && (
                   <span className="text-[9px] opacity-80" title={`Nasceu em ${formatarAnoFn(nasceu)}`}>
                     ◀ {formatarAnoFn(nasceu)}
@@ -3763,136 +4155,152 @@ function FaixaDaVida({
           {/* Fim: Ano de Falecimento ou Hoje (oculto se barra for estreita ou ultrapassou borda) */}
           <span className="text-[10px] font-num font-bold text-white tracking-wide select-none drop-shadow-xs flex items-center gap-0.5 z-20">
             {!estendeParaDireita && larguraBarra >= 140 && (
-              <span>{linha.ano_falecimento != null ? formatarAnoFn(linha.ano_falecimento) : 'hoje'}</span>
+              <span>
+                {linha.ano_falecimento != null
+                  ? (linha.data_falecimento_texto && larguraBarra >= 220 ? linha.data_falecimento_texto : formatarAnoFn(linha.ano_falecimento))
+                  : 'hoje'}
+              </span>
             )}
             <span>{linha.is_vivo ? '●' : '✝'}</span>
           </span>
         </div>
       )}
 
-      {/* Eventos da Vida e Participações (Zona inferior dedicada sem colisão com a barra de vida) */}
-      {!compacto &&
-        gruposMarcos.map((grupo, idx) => {
-          const topPos = altura >= 72
-            ? (grupo.subLane === 1 ? 52 : 32)
-            : (grupo.subLane === 1 ? Math.min(altura - 22, 44) : 32);
+      {/* Linha guia pontilhada se a pessoa não tiver ano de nascimento */}
+      {x0 == null && (
+        <div
+          className="absolute inset-x-0 h-[1px] border-b border-dashed border-borda/40 pointer-events-none"
+          style={{ top: topClipe + alturaClipe / 2 }}
+        />
+      )}
 
-          const proximoX = idx < gruposMarcos.length - 1 ? gruposMarcos[idx + 1].x : Infinity;
-          const espacoAteProximo = proximoX - grupo.x;
+      {/* Eventos da Vida e Participações */}
+      {gruposMarcos.map((grupo, idx) => {
+        const topPos = compacto
+          ? Math.max(14, altura - 22)
+          : altura >= 72
+          ? (grupo.subLane === 1 ? 52 : 32)
+          : (grupo.subLane === 1 ? Math.min(altura - 22, 44) : 32);
 
-          if (grupo.isCluster) {
-            const primeiro = grupo.itens[0];
-            const idadeNoEvento = nasceu != null ? grupo.ano - nasceu : null;
-            const idadeTexto = idadeNoEvento != null && idadeNoEvento >= 0 ? `${idadeNoEvento}a` : null;
-            const isAberto = clusterAbertoId === grupo.id;
-            const temEspacoRotuloCluster = espacoAteProximo >= 115;
-            const temEspacoAnoCluster = espacoAteProximo >= 55;
+        const proximoX = idx < gruposMarcos.length - 1 ? gruposMarcos[idx + 1].x : Infinity;
+        const espacoAteProximo = proximoX - grupo.x;
 
-            return (
-              <div
-                key={grupo.id}
-                className="absolute flex flex-col items-center z-20"
-                style={{ left: grupo.x, transform: 'translateX(-50%)', top: topPos }}
-              >
-                <button
-                  type="button"
-                  onClick={() => setClusterAbertoId((atual) => (atual === grupo.id ? null : grupo.id))}
-                  title={`${grupo.ano} (${grupo.itens.length} marcos):\n${grupo.itens
-                    .map((m) => `• ${m.is_participacao ? m.titulo ?? m.tipo : m.tipo}: ${m.data_texto ?? m.ano}`)
-                    .join('\n')}`}
-                  className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-raio-s border shadow-2xs transition-all bg-card/95 border-acento/80 hover:border-acento hover:bg-acento/10 hover:shadow-xs hover:scale-105 select-none cursor-pointer whitespace-nowrap"
-                >
-                  <span className="text-[10px] select-none">👑</span>
-                  {temEspacoAnoCluster && (
-                    <span className="font-num text-[10px] font-semibold text-acento">
-                      {grupo.ano}
-                    </span>
-                  )}
-                  {temEspacoRotuloCluster && (
-                    <span className="font-sans text-[10px] font-medium text-tinta max-w-[85px] truncate">
-                      {primeiro.titulo ?? primeiro.tipo}
-                    </span>
-                  )}
-                  <span className="font-num text-[9px] font-bold bg-acento/15 text-acento px-1 rounded-full">
-                    +{grupo.itens.length - 1}
-                  </span>
-                  {temEspacoRotuloCluster && idadeTexto && (
-                    <span className="font-num text-[9px] font-bold text-acento opacity-90 pl-0.5">
-                      {idadeTexto}
-                    </span>
-                  )}
-                  <span className="text-[8px] text-tinta3">▾</span>
-                </button>
-
-                {/* Dropdown Menu do Cluster de Marcos Coincidentes */}
-                {isAberto && (
-                  <div
-                    className="absolute top-full mt-1 w-64 bg-card border border-borda shadow-xl rounded-raio-s p-1.5 z-50 flex flex-col gap-1 text-left select-none animate-in fade-in zoom-in-95 duration-100"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <div className="text-[10px] font-bold text-tinta px-1 pb-1 border-b border-borda/60 flex items-center justify-between">
-                      <span>{grupo.ano} · {grupo.itens.length} marcos históricos</span>
-                      <button
-                        type="button"
-                        onClick={() => setClusterAbertoId(null)}
-                        className="text-tinta3 hover:text-tinta text-[11px] p-0.5"
-                      >
-                        ✕
-                      </button>
-                    </div>
-                    <div className="max-h-48 overflow-y-auto flex flex-col gap-0.5">
-                      {grupo.itens.map((m, idxItem) => {
-                        const rotulo = m.is_participacao ? (m.titulo ?? m.tipo) : m.tipo;
-                        return (
-                          <button
-                            key={`${m.tipo}-${idxItem}`}
-                            type="button"
-                            className="flex items-center justify-between gap-1 p-1 hover:bg-sup/60 rounded text-left text-[10px] transition-colors cursor-pointer"
-                            onMouseDown={(e) => e.stopPropagation()}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setClusterAbertoId(null);
-                              if (onAbrirEventoPessoal) {
-                                onAbrirEventoPessoal(linha.nome, linha.pessoa_id, m);
-                              } else if (m.is_participacao) {
-                                onAbrirMarco({
-                                  id: `part-${idxItem}`,
-                                  linha_id: '',
-                                  titulo: m.titulo ?? 'Participação',
-                                  data_periodo_texto: m.data_texto ?? String(m.ano),
-                                  descricao: m.papel ? `Papel: ${m.papel}` : null,
-                                  ano_inicio: m.ano,
-                                  ano_fim: m.ano,
-                                });
-                              }
-                            }}
-                          >
-                            <div className="flex items-center gap-1.5 min-w-0">
-                              <span className="text-[10px]">{m.is_participacao ? '👥' : iconeDoEvento(m.tipo)}</span>
-                              <span className="font-medium text-tinta truncate">{rotulo}</span>
-                            </div>
-                            <span className="font-num text-[9px] text-tinta3 flex-none">{m.data_texto ?? m.ano}</span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                )}
-              </div>
-            );
-          }
-
-          // Marco Único
-          const m = grupo.itens[0];
-          const isOculta = m.is_participacao && !m.visivel_na_pessoa;
-          const idadeNoEvento = nasceu != null && m.ano != null ? m.ano - nasceu : null;
+        if (grupo.isCluster) {
+          const primeiro = grupo.itens[0];
+          const idadeNoEvento = nasceu != null ? Math.floor(grupo.ano - nasceu) : null;
           const idadeTexto = idadeNoEvento != null && idadeNoEvento >= 0 ? `${idadeNoEvento}a` : null;
-          const rotulo = m.is_participacao ? (m.titulo ?? m.tipo) : m.tipo;
+          const isAberto = clusterAbertoId === grupo.id;
+          const temEspacoRotuloCluster = !compacto && espacoAteProximo >= 115;
+          const temEspacoAnoCluster = !compacto && espacoAteProximo >= 55;
 
-          // Regra Simples: Se houver espaço para mostrar o texto completo sem interferir no marco seguinte, mostra.
-          // Se não houver espaço suficiente para o texto completo, exibe apenas o pino/ícone do marco.
-          const larguraTextoCompleto = Math.ceil(rotulo.length * 6.8 + (idadeTexto ? 22 : 0) + 36);
-          const temEspacoParaTexto = espacoAteProximo >= (larguraTextoCompleto + 8);
+          return (
+            <div
+              key={grupo.id}
+              className="absolute flex flex-col items-start z-20"
+              style={{ left: Math.round(grupo.x), top: topPos }}
+            >
+              <button
+                type="button"
+                onClick={() => {
+                  onPosicionarAgulha?.(grupo.x);
+                  setClusterAbertoId((atual) => (atual === grupo.id ? null : grupo.id));
+                }}
+                title={`${grupo.ano} (${grupo.itens.length} marcos):\n${grupo.itens
+                  .map((m) => `• ${m.is_participacao ? m.titulo ?? m.tipo : m.tipo}: ${m.data_texto ?? m.ano}`)
+                  .join('\n')}`}
+                className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-raio-s border shadow-2xs transition-all bg-card border-acento/80 hover:border-acento hover:bg-card2 hover:shadow-xs hover:scale-105 select-none cursor-pointer whitespace-nowrap"
+              >
+                <span className="text-[10px] select-none">👑</span>
+                {temEspacoAnoCluster && (
+                  <span className="font-num text-[10px] font-semibold text-acento">
+                    {grupo.ano}
+                  </span>
+                )}
+                {temEspacoRotuloCluster && (
+                  <span className="font-sans text-[10px] font-medium text-tinta max-w-[85px] truncate">
+                    {primeiro.titulo ?? primeiro.tipo}
+                  </span>
+                )}
+                <span className="font-num text-[9px] font-bold bg-acento/15 text-acento px-1 rounded-full">
+                  +{grupo.itens.length - 1}
+                </span>
+                {temEspacoRotuloCluster && idadeTexto && (
+                  <span className="font-num text-[9px] font-bold text-acento opacity-90 pl-0.5">
+                    {idadeTexto}
+                  </span>
+                )}
+                <span className="text-[8px] text-tinta3">▾</span>
+              </button>
+
+              {/* Dropdown Menu do Cluster de Marcos Coincidentes */}
+              {isAberto && (
+                <div
+                  className="absolute top-full mt-1 w-64 bg-card border border-borda shadow-xl rounded-raio-s p-1.5 z-50 flex flex-col gap-1 text-left select-none animate-in fade-in zoom-in-95 duration-100"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="text-[10px] font-bold text-tinta px-1 pb-1 border-b border-borda/60 flex items-center justify-between">
+                    <span>{grupo.ano} · {grupo.itens.length} marcos históricos</span>
+                    <button
+                      type="button"
+                      onClick={() => setClusterAbertoId(null)}
+                      className="text-tinta3 hover:text-tinta text-[11px] p-0.5"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                  <div className="max-h-48 overflow-y-auto flex flex-col gap-0.5">
+                    {grupo.itens.map((m, idxItem) => {
+                      const rotulo = m.is_participacao ? (m.titulo ?? m.tipo) : m.tipo;
+                      return (
+                        <button
+                          key={`${m.tipo}-${idxItem}`}
+                          type="button"
+                          className="flex items-center justify-between gap-1 p-1 hover:bg-sup/60 rounded text-left text-[10px] transition-colors cursor-pointer"
+                          onMouseDown={(e) => e.stopPropagation()}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onPosicionarAgulha?.(grupo.x);
+                            setClusterAbertoId(null);
+                            if (onAbrirEventoPessoal) {
+                              onAbrirEventoPessoal(linha.nome, linha.pessoa_id, m);
+                            } else if (m.is_participacao) {
+                              onAbrirMarco({
+                                id: `part-${idxItem}`,
+                                linha_id: '',
+                                titulo: m.titulo ?? 'Participação',
+                                data_periodo_texto: m.data_texto ?? String(m.ano),
+                                descricao: m.papel ? `Papel: ${m.papel}` : null,
+                                ano_inicio: m.ano,
+                                ano_fim: m.ano,
+                              });
+                            }
+                          }}
+                        >
+                          <div className="flex items-center gap-1.5 min-w-0">
+                            <span className="text-[10px]">{m.is_participacao ? '👥' : iconeDoEvento(m.tipo)}</span>
+                            <span className="font-medium text-tinta truncate">{rotulo}</span>
+                          </div>
+                          <span className="font-num text-[9px] text-tinta3 flex-none">{m.data_texto ?? m.ano}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        }
+
+        // Marco Único
+        const m = grupo.itens[0];
+        const isOculta = m.is_participacao && !m.visivel_na_pessoa;
+        const idadeNoEvento = nasceu != null && m.ano != null ? Math.floor(m.ano - nasceu) : null;
+        const idadeTexto = idadeNoEvento != null && idadeNoEvento >= 0 ? `${idadeNoEvento}a` : null;
+        const rotulo = m.is_participacao ? (m.titulo ?? m.tipo) : m.tipo;
+
+        // Regra: Se compacto, exibe sempre pino/ícone. Se expandido e com espaço, exibe texto.
+        const larguraTextoCompleto = Math.ceil(rotulo.length * 6.8 + (idadeTexto ? 22 : 0) + 36);
+        const temEspacoParaTexto = !compacto && espacoAteProximo >= (larguraTextoCompleto + 8);
 
           return (
             <div
@@ -3900,8 +4308,12 @@ function FaixaDaVida({
               role="button"
               tabIndex={0}
               onMouseDown={(e) => e.stopPropagation()}
-              className="absolute flex flex-col items-center group cursor-pointer z-10"
-              style={{ left: grupo.x, transform: 'translateX(-50%)', top: topPos }}
+              className="absolute flex flex-col items-start group cursor-pointer z-20"
+              style={{
+                left: Math.round(grupo.x),
+                transform: temEspacoParaTexto ? undefined : 'translateX(-50%)',
+                top: topPos,
+              }}
               title={[
                 m.is_participacao
                   ? `Participação: ${m.titulo ?? m.tipo}`
@@ -3919,6 +4331,7 @@ function FaixaDaVida({
                 .join(' · ')}
               onClick={(e) => {
                 e.stopPropagation();
+                onPosicionarAgulha?.(grupo.x);
                 if (onAbrirEventoPessoal) {
                   onAbrirEventoPessoal(linha.nome, linha.pessoa_id, m);
                 } else if (m.is_participacao) {
@@ -3937,12 +4350,12 @@ function FaixaDaVida({
               {temEspacoParaTexto ? (
                 /* Chip Completo com Rótulo e Ícone */
                 <div
-                  className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-raio-s border shadow-2xs transition-all group-hover:scale-105 group-hover:shadow-xs whitespace-nowrap ${
+                  className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-raio-s border shadow-2xs transition-all group-hover:scale-105 group-hover:shadow-xs whitespace-nowrap bg-card ${
                     m.is_participacao
                       ? isOculta
-                        ? 'border-dashed border-tinta3/40 bg-card/60 text-tinta3 opacity-50 line-through'
-                        : 'border-acento/60 bg-acento/10 text-acento group-hover:border-acento group-hover:bg-acento/20'
-                      : 'border-borda/80 bg-card/95 text-tinta group-hover:border-acento'
+                        ? 'border-dashed border-tinta3/40 text-tinta3 opacity-50 line-through'
+                        : 'border-acento/70 text-acento group-hover:border-acento group-hover:bg-card2'
+                      : 'border-borda/80 text-tinta group-hover:border-acento'
                   }`}
                 >
                   <span className="text-[10px] select-none flex-none">
@@ -3951,6 +4364,11 @@ function FaixaDaVida({
                   <span className="font-sans text-[10px] font-medium whitespace-nowrap">
                     {rotulo}
                   </span>
+                  {m.data_texto && espacoAteProximo >= (larguraTextoCompleto + 55) && (
+                    <span className="font-num text-[9px] text-tinta3 font-normal opacity-85">
+                      · {m.data_texto}
+                    </span>
+                  )}
                   {idadeTexto && (
                     <span className="font-num text-[9px] font-bold text-acento opacity-90 pl-0.5 flex-none">
                       {idadeTexto}
@@ -3960,12 +4378,12 @@ function FaixaDaVida({
               ) : (
                 /* Pino/Ícone Compacto sem Texto (apenas indicador pontual) */
                 <div
-                  className={`inline-flex items-center justify-center w-5 h-5 rounded-full border shadow-2xs transition-all group-hover:scale-125 group-hover:shadow-xs select-none ${
+                  className={`inline-flex items-center justify-center w-5 h-5 rounded-full border shadow-2xs transition-all group-hover:scale-125 group-hover:shadow-xs select-none bg-card ${
                     m.is_participacao
                       ? isOculta
-                        ? 'border-dashed border-tinta3/40 bg-card/60 text-tinta3 opacity-50'
-                        : 'border-acento/60 bg-acento/15 text-acento group-hover:border-acento group-hover:bg-acento/30'
-                      : 'border-borda/80 bg-card/95 text-tinta group-hover:border-acento group-hover:text-acento'
+                        ? 'border-dashed border-tinta3/40 text-tinta3 opacity-50'
+                        : 'border-acento/70 text-acento group-hover:border-acento group-hover:bg-card2'
+                      : 'border-borda/80 text-tinta group-hover:border-acento group-hover:text-acento'
                   }`}
                 >
                   <span className="text-[10px] leading-none">

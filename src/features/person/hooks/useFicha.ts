@@ -41,6 +41,9 @@ import {
   anexarDocumento,
   removerDocumento,
   definirFotoPrincipal,
+  listarParticipacoesPessoa,
+  removerParticipante,
+  toggleVisibilidadeParticipacao,
 } from '../../../lib/api';
 import { useHistorico } from '../../../contexts/HistoricoContext';
 import type { NewDocument, NewPersonName, Person } from '../../../types';
@@ -128,6 +131,45 @@ export function useRemoverEvento(pessoaId: string) {
   return useMutation({
     mutationFn: removerEvento,
     onSuccess: () => invalidarEventos(queryClient, pessoaId),
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Participações em Marcos e Linhas de Contexto
+// ---------------------------------------------------------------------------
+
+export function useParticipacoesPessoa(pessoaId: string | null) {
+  return useQuery({
+    queryKey: ['participacoes-pessoa', pessoaId],
+    queryFn: () => (pessoaId ? listarParticipacoesPessoa(pessoaId) : Promise.resolve([])),
+    enabled: !!pessoaId,
+  });
+}
+
+export function useToggleVisibilidadeParticipacao(pessoaId: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, visivel }: { id: string; visivel: boolean }) =>
+      toggleVisibilidadeParticipacao(id, visivel),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['participacoes-pessoa', pessoaId] });
+      queryClient.invalidateQueries({ queryKey: ['linha-pessoal'] });
+      queryClient.invalidateQueries({ queryKey: ['linha-pessoal', pessoaId] });
+      queryClient.invalidateQueries({ queryKey: ['marco-participantes'] });
+    },
+  });
+}
+
+export function useRemoverParticipacao(pessoaId: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => removerParticipante(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['participacoes-pessoa', pessoaId] });
+      queryClient.invalidateQueries({ queryKey: ['linha-pessoal'] });
+      queryClient.invalidateQueries({ queryKey: ['linha-pessoal', pessoaId] });
+      queryClient.invalidateQueries({ queryKey: ['marco-participantes'] });
+    },
   });
 }
 

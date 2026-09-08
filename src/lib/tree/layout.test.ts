@@ -326,6 +326,57 @@ describe('calcularLayout', () => {
     expect(sobrepoe(primeira, segunda)).toBe(false);
   });
 
+  it('posiciona segundo cônjuge sem filhos adjacente ao parceiro e sem anel flutuante distante', () => {
+    // Cenário D. Pedro I: pais no topo, 1ª união com Leopoldina (4 filhos), 2ª união com Marquesa de Santos (sem filhos)
+    const nodes = [
+      pessoa('avo_m', 'M', 1767),
+      pessoa('avo_f', 'F', 1775),
+      pessoa('pai', 'M', 1798),
+      pessoa('esposa1', 'F', 1797),
+      pessoa('esposa2', 'F', 1797),
+      pessoa('filho1', 'F', 1819),
+      pessoa('filho2', 'F', 1822),
+      pessoa('filho3', 'F', 1824),
+      pessoa('filho4', 'M', 1825),
+      pessoa('irmao', 'M', 1802),
+    ];
+    const unions = [
+      uniao('u_pais', 'avo_m', 'avo_f'),
+      uniao('u1', 'pai', 'esposa1'),
+      uniao('u2', 'pai', 'esposa2'),
+    ];
+    const filhos: Array<[string, string]> = [
+      ['u_pais', 'pai'],
+      ['u_pais', 'irmao'],
+      ['u1', 'filho1'],
+      ['u1', 'filho2'],
+      ['u1', 'filho3'],
+      ['u1', 'filho4'],
+    ];
+
+    const r = calcularLayout(grafo(nodes, unions, filhos));
+
+    const pai = r.pessoas.find((p) => p.id === 'pai')!;
+    const esposa1 = r.pessoas.find((p) => p.id === 'esposa1')!;
+    const esposa2 = r.pessoas.find((p) => p.id === 'esposa2')!;
+    const anel2 = r.unioes.find((u) => u.id === 'u2')!;
+
+    expect(esposa1).toBeDefined();
+    // Esposa 2 fica adjacente ao pai (no lado livre), sem ser jogada para depois dos 4 filhos
+    const distPaiEsposa2 = Math.abs(esposa2.x - pai.x);
+    expect(distPaiEsposa2).toBeLessThanOrEqual(METRICAS.larguraNo * 2 + METRICAS.espacoCasal);
+
+    // O anel da união 2 fica exatamente centralizado entre o pai e a esposa 2
+    expect(anel2.x).toBeCloseTo((pai.x + esposa2.x) / 2, 1);
+
+    // Ninguém se sobrepõe
+    for (let i = 0; i < r.pessoas.length; i++) {
+      for (let j = i + 1; j < r.pessoas.length; j++) {
+        expect(sobrepoe(r.pessoas[i], r.pessoas[j])).toBe(false);
+      }
+    }
+  });
+
   it('termina mesmo se o grafo chegar com um ciclo', () => {
     // Um import GEDCOM defeituoso pode trazer isto. O layout não é o lugar
     // de corrigir o dado, mas travar a interface não é opção.

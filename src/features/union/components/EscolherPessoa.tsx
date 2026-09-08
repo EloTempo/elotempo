@@ -37,8 +37,6 @@ interface EscolherPessoaProps {
 const OPCOES_SEXO = [
   { value: 'M', label: 'Masculino' },
   { value: 'F', label: 'Feminino' },
-  { value: 'X', label: 'Não-binário / outro' },
-  { value: 'U', label: 'Desconhecido' },
 ];
 
 function mensagemDeErro(erro: unknown): string | null {
@@ -63,8 +61,11 @@ export function EscolherPessoa({
   // apaga ou troca sem cerimônia.
   const [nome, setNome] = useState('');
   const [sobrenome, setSobrenome] = useState(sobrenomeSugerido);
-  const [sexo, setSexo] = useState<Sex>('U');
+  const [sexo, setSexo] = useState<Sex>('M');
   const [nascimento, setNascimento] = useState<DataEscolhida>({ ...DATA_VAZIA });
+  const [falecimento, setFalecimento] = useState<DataEscolhida>({ ...DATA_VAZIA });
+  const [statusVital, setStatusVital] = useState<'vivo' | 'falecido' | 'pendente'>('pendente');
+  const [modalConfirmarStatusAberto, setModalConfirmarStatusAberto] = useState(false);
   const [erroLocal, setErroLocal] = useState<string | null>(null);
   const criar = useCriarPessoa();
 
@@ -73,22 +74,17 @@ export function EscolherPessoa({
   const { data: pessoas, isLoading } = usePessoas(busca);
   const candidatos = (pessoas ?? []).filter((p) => !excluir.includes(p.id));
 
-  const criarEEscolher = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!nome.trim()) {
-      setErroLocal('O nome é obrigatório.');
-      return;
-    }
-    setErroLocal(null);
+  const temData = (d: DataEscolhida): boolean => d.ano != null || !!d.texto_livre?.trim();
 
+  const submeterComStatus = async (isVivo: boolean, dataFalecimento?: DataEscolhida) => {
     const id = await criar.mutateAsync({
       nome: nome.trim(),
       sobrenome: sobrenome.trim(),
       sexo,
-      is_vivo: false,
+      is_vivo: isVivo,
       minibiografia: '',
       nascimento,
-      falecimento: { ...DATA_VAZIA },
+      falecimento: isVivo ? { ...DATA_VAZIA } : (dataFalecimento ?? falecimento),
       tipo_tempo: 'real',
     });
 
@@ -99,6 +95,36 @@ export function EscolherPessoa({
       sexo,
       is_placeholder: false,
     });
+  };
+
+  const criarEEscolher = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!nome.trim()) {
+      setErroLocal('O nome é obrigatório.');
+      return;
+    }
+    setErroLocal(null);
+
+    // 1. Se informou data de falecimento, é falecida com certeza
+    if (temData(falecimento)) {
+      await submeterComStatus(false, falecimento);
+      return;
+    }
+
+    // 2. Se marcou explicitamente como viva
+    if (statusVital === 'vivo') {
+      await submeterComStatus(true);
+      return;
+    }
+
+    // 3. Se marcou explicitamente como falecida (mesmo sem data exata de morte)
+    if (statusVital === 'falecido') {
+      await submeterComStatus(false);
+      return;
+    }
+
+    // 4. Se não marcou (pendente), pergunta antes de concluir!
+    setModalConfirmarStatusAberto(true);
   };
 
   const mensagem = erroLocal ?? mensagemDeErro(erro) ?? mensagemDeErro(criar.error);
@@ -174,6 +200,51 @@ export function EscolherPessoa({
             />
           </div>
 
+          {/* Situação Vital */}
+          <div className="flex flex-col gap-1.5 p-3 rounded-raio-s bg-sup/40 border border-borda">
+            <span className="text-xs font-semibold text-tinta">Situação Vital</span>
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setStatusVital('vivo');
+                  setFalecimento({ ...DATA_VAZIA });
+                }}
+                className={`py-2 px-3 rounded-raio-s text-xs font-medium border flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                  statusVital === 'vivo'
+                    ? 'bg-emerald-500/15 text-emerald-800 dark:text-emerald-200 border-emerald-500/50 font-bold ring-1 ring-emerald-500/30'
+                    : 'bg-card text-tinta2 border-borda hover:border-borda2 hover:text-tinta'
+                }`}
+              >
+                <span>🌱</span> Pessoa viva
+              </button>
+              <button
+                type="button"
+                onClick={() => setStatusVital('falecido')}
+                className={`py-2 px-3 rounded-raio-s text-xs font-medium border flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                  statusVital === 'falecido'
+                    ? 'bg-stone-500/15 text-stone-800 dark:text-stone-200 border-stone-500/50 font-bold ring-1 ring-stone-500/30'
+                    : 'bg-card text-tinta2 border-borda hover:border-borda2 hover:text-tinta'
+                }`}
+              >
+                <span>🕊️</span> Pessoa falecida
+              </button>
+            </div>
+
+            {statusVital === 'falecido' && (
+              <div className="mt-2 pt-2 border-t border-borda/50">
+                <CampoDeData
+                  rotulo="Falecimento (opcional)"
+                  valor={falecimento}
+                  aoMudar={(novaData) => {
+                    setFalecimento(novaData);
+                    setStatusVital('falecido');
+                  }}
+                />
+              </div>
+            )}
+          </div>
+
           <p className="text-xs text-tinta3 m-0">
             Só o nome é obrigatório. O resto dá para completar depois, na ficha da pessoa.
           </p>
@@ -238,6 +309,64 @@ export function EscolherPessoa({
             <Button type="button" variant="ghost" onClick={onCancelar}>
               Cancelar
             </Button>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de Confirmação quando o status vital não foi especificado */}
+      {modalConfirmarStatusAberto && (
+        <div className="fixed inset-0 z-[90] flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
+          <div
+            className="absolute inset-0"
+            onClick={() => setModalConfirmarStatusAberto(false)}
+            aria-hidden
+          />
+          <div className="relative w-full max-w-md bg-card rounded-raio border border-borda shadow-sombra p-5 flex flex-col gap-4">
+            <div>
+              <h4 className="font-tit font-bold text-base text-tinta m-0">
+                {nome.trim()} está viva ou falecida?
+              </h4>
+              <p className="text-sm text-tinta2 mt-1.5 mb-0 leading-relaxed">
+                Você preencheu o cadastro sem indicar a situação vital. Para garantir que os símbolos e cálculos da árvore fiquem corretos, confirme:
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-2.5">
+              <button
+                type="button"
+                disabled={ocupado}
+                onClick={async () => {
+                  setModalConfirmarStatusAberto(false);
+                  await submeterComStatus(true);
+                }}
+                className="w-full py-3 px-4 rounded-raio-s bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-800 dark:text-emerald-200 border border-emerald-500/40 text-sm font-semibold flex items-center justify-center gap-2 transition-colors cursor-pointer"
+              >
+                <span>🌱</span> É uma Pessoa Viva
+              </button>
+
+              <button
+                type="button"
+                disabled={ocupado}
+                onClick={async () => {
+                  setModalConfirmarStatusAberto(false);
+                  await submeterComStatus(false);
+                }}
+                className="w-full py-3 px-4 rounded-raio-s bg-stone-500/10 hover:bg-stone-500/20 text-stone-800 dark:text-stone-200 border border-stone-500/40 text-sm font-semibold flex items-center justify-center gap-2 transition-colors cursor-pointer"
+              >
+                <span>🕊️</span> É uma Pessoa Falecida
+              </button>
+            </div>
+
+            <div className="flex justify-end pt-1 border-t border-borda/40">
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => setModalConfirmarStatusAberto(false)}
+              >
+                Voltar e editar
+              </Button>
+            </div>
           </div>
         </div>
       )}

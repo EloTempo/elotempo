@@ -7,21 +7,23 @@
  * diretos para editar a ficha completa ou gerenciar conexões.
  */
 
+import { useState } from 'react';
 import {
   Calendar,
   ChevronRight,
+  Compass,
   Crown,
   Globe,
   MapPin,
   Pencil,
   Sparkles,
-  User,
   Users,
 } from 'lucide-react';
 import { IconeRelacoes } from '../../../components/icons';
 import { Button } from '../../../components/ui/Button';
-import { ImagemDoAcervo } from '../../../components/ui/ImagemDoAcervo';
-import { usePessoa, useEventos, nacionalidades, usePaises } from '../hooks/useFicha';
+import { FotoPerfilPessoa } from './FotoPerfilPessoa';
+import { usePessoa, useEventos, useParticipacoesPessoa, nacionalidades, usePaises } from '../hooks/useFicha';
+import { ModalAdicionarEventoVida } from '../../timeline/components/ModalAdicionarEventoVida';
 import { formatarAno } from '../../../lib/tree/layout';
 import { useI18n } from '../../../i18n/I18nContext';
 import {
@@ -106,6 +108,8 @@ export function PerfilResumoPessoa({
   const { data: eventos, isLoading: carregandoEventos } = useEventos(pessoaId);
   const { data: listaNacionalidades } = nacionalidades.useLista(pessoaId);
   const { data: paises } = usePaises();
+  const { data: participacoes } = useParticipacoesPessoa(pessoaId);
+  const [modalEventoVidaAberto, setModalEventoVidaAberto] = useState(false);
 
   if (carregandoPessoa || carregandoEventos) {
     return (
@@ -173,48 +177,47 @@ export function PerfilResumoPessoa({
     <div className="flex-1 overflow-y-auto min-h-0 p-3 flex flex-col gap-4">
       {/* 1. Cabeçalho de Identificação */}
       <div className="flex items-start gap-3 p-3 rounded-raio bg-card border border-borda shadow-xs">
-        <div className="w-16 h-16 rounded-raio-s bg-chip flex-none grid place-items-center overflow-hidden border border-borda2 shadow-2xs">
-          <ImagemDoAcervo
-            caminhoRelativo={pessoa.foto_url}
-            alt=""
-            className="w-full h-full object-cover"
-            alternativo={<User className="w-8 h-8 text-tinta3" />}
-          />
-        </div>
+        <FotoPerfilPessoa
+          pessoaId={pessoa.id}
+          fotoUrl={pessoa.foto_url}
+          nome={nomeCompleto}
+          tamanho="md"
+          mostrarBotaoTexto={true}
+        />
 
-        <div className="flex-1 min-w-0 flex flex-col gap-1">
+        <div className="flex-1 min-w-0 flex flex-col justify-center gap-1.5">
           <div className="flex items-center gap-1.5 flex-wrap">
             {isRaizAtual && (
-              <span className="inline-flex items-center gap-1 text-[9.5px] font-bold px-1.5 py-0.2 rounded bg-amber-500/15 text-amber-900 dark:text-amber-200 border border-amber-500/30">
+              <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-900 dark:text-amber-200 border border-amber-500/30">
                 <Crown className="w-2.5 h-2.5" /> Raiz
               </span>
             )}
             {pessoa.categoria && (
-              <span className="text-[9.5px] font-semibold px-1.5 py-0.2 rounded bg-sup text-tinta2 border border-borda">
+              <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-sup text-tinta2 border border-borda">
                 {pessoa.categoria}
               </span>
             )}
             {pessoa.is_publico && (
-              <span className="text-[9px] font-semibold px-1 py-0.2 rounded bg-sup text-tinta3 border border-borda/60">
+              <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded bg-sup text-tinta3 border border-borda/60">
                 Público
               </span>
             )}
           </div>
 
-          <h3 className="font-tit font-bold text-base text-tinta leading-snug m-0 break-words">
+          <h3 className="font-tit font-bold text-base text-tinta leading-tight m-0 break-words">
             {nomeCompleto || 'Sem nome'}
           </h3>
 
-          <div className="flex items-center gap-1.5 text-xs text-tinta2 font-num font-medium">
-            <span>
+          <div className="flex items-center gap-2 flex-wrap text-xs text-tinta2 font-num font-medium leading-normal pt-0.5">
+            <span className="whitespace-nowrap">
               {anoNascFmt ? `★ ${anoNascFmt}` : '★ s/d'}
               {anoFalecFmt ? ` · ✝ ${anoFalecFmt}` : pessoa.is_vivo ? ' (vivo)' : ' · ✝'}
             </span>
             {idadeAoFalecer != null && (
-              <span className="text-tinta3 font-normal">({idadeAoFalecer} anos)</span>
+              <span className="text-tinta3 font-normal whitespace-nowrap">({idadeAoFalecer} anos)</span>
             )}
             {idadeAtual != null && (
-              <span className="text-emerald-700 dark:text-emerald-400 font-bold font-sans text-[11px]">
+              <span className="text-emerald-700 dark:text-emerald-400 font-bold font-sans text-[11px] whitespace-nowrap">
                 ({idadeAtual} anos)
               </span>
             )}
@@ -307,6 +310,59 @@ export function PerfilResumoPessoa({
         ) : (
           <p className="text-tinta3 italic text-[11px] m-0">
             {t('perfil', 'semMinibiografia')}
+          </p>
+        )}
+      </div>
+
+      {/* 3.1 Participações em Linhas de Contexto e Marcos Históricos */}
+      <div className="flex flex-col gap-2 p-3 rounded-raio bg-card border border-borda shadow-xs text-xs">
+        <div className="flex items-center justify-between">
+          <span className="text-[10.5px] uppercase font-bold text-tinta3 tracking-wider flex items-center gap-1">
+            <Compass className="w-3 h-3 text-acento" /> Participações Históricas ({participacoes?.length ?? 0})
+          </span>
+          <button
+            type="button"
+            onClick={() => setModalEventoVidaAberto(true)}
+            className="text-[10.5px] text-acento hover:underline font-semibold cursor-pointer"
+          >
+            + Vincular
+          </button>
+        </div>
+
+        {participacoes && participacoes.length > 0 ? (
+          <div className="flex flex-col gap-1.5 max-h-48 overflow-y-auto pr-0.5">
+            {participacoes.map((part) => (
+              <div
+                key={part.id}
+                className="p-2 rounded-raio-s border border-borda bg-sup/40 flex flex-col gap-1 hover:border-acento/40 transition-colors"
+              >
+                <div className="flex items-center justify-between gap-1">
+                  <span className="font-semibold text-tinta text-[11.5px] truncate">
+                    {part.titulo}
+                  </span>
+                  <span className="font-num text-[10px] text-acento font-bold flex-none">
+                    {part.data_periodo_texto || part.ano_inicio}
+                  </span>
+                </div>
+                <div className="flex items-center gap-1.5 text-[10.5px] text-tinta2 flex-wrap">
+                  <span className="px-1.5 py-0.2 rounded bg-card border border-borda text-[9.5px]">
+                    {part.linha_titulo}
+                  </span>
+                  {part.papel && (
+                    <span className="text-tinta3">
+                      Papel: <strong className="text-tinta2 font-medium">{part.papel}</strong>
+                    </span>
+                  )}
+                  {!part.visivel_na_pessoa && (
+                    <span className="text-[9.5px] text-fem italic">(oculto na bio)</span>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-tinta3 italic text-[11px] m-0">
+            Nenhuma participação em marcos ou linhas de contexto vinculada.
           </p>
         )}
       </div>
@@ -449,6 +505,14 @@ export function PerfilResumoPessoa({
           </Button>
         )}
       </div>
+
+      {modalEventoVidaAberto && (
+        <ModalAdicionarEventoVida
+          aberto={modalEventoVidaAberto}
+          aoFechar={() => setModalEventoVidaAberto(false)}
+          pessoaIdInicial={pessoaId}
+        />
+      )}
     </div>
   );
 }

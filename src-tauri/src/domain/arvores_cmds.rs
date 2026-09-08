@@ -60,42 +60,139 @@ pub struct AtualizarArvoreInput {
     pub tipo_tempo: Option<String>,
 }
 
-/// Garante que haja pelo menos uma árvore no banco se o acervo estiver iniciado.
-pub async fn garantir_arvore_padrao(pool: &SqlitePool) -> Resultado<()> {
-    let contagem: (i64,) = sqlx::query_as("SELECT COUNT(*) FROM arvores")
-        .fetch_one(pool)
+/// Sincroniza todos os membros conectados pelo grafo familiar e pessoas pessoais na árvore.
+pub async fn sincronizar_membros_arvore(
+    pool: &SqlitePool,
+    arvore_id: &str,
+    raiz_pessoa_id: Option<&str>,
+) -> Resultado<()> {
+    if let Some(rid) = raiz_pessoa_id {
+        // 1. Insere a própria raiz
+        sqlx::query(
+            "INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
+             VALUES (?, ?, NULL)",
+        )
+        .bind(arvore_id)
+        .bind(rid)
+        .execute(pool)
         .await?;
 
-    if contagem.0 == 0 {
-        // Encontra a primeira pessoa não placeholder para servir de raiz, se houver
-        let primeira: Option<(String,)> = sqlx::query_as(
-            "SELECT id FROM pessoas WHERE is_placeholder = 0 ORDER BY data_criacao ASC LIMIT 1",
+        // 2. Insere todos os membros conectados recursivamente no grafo familiar
+        let sql_conexos = r#"
+            INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
+            WITH RECURSIVE conexos(id) AS (
+                SELECT ?1
+                UNION
+                -- Pais
+                SELECT u.slot_masculino_id FROM conexos c
+                JOIN uniao_filhos uf ON uf.pessoa_id = c.id
+                JOIN unioes u ON u.id = uf.uniao_id
+                WHERE u.slot_masculino_id IS NOT NULL
+                UNION
+                SELECT u.slot_feminino_id FROM conexos c
+                JOIN uniao_filhos uf ON uf.pessoa_id = c.id
+                JOIN unioes u ON u.id = uf.uniao_id
+                WHERE u.slot_feminino_id IS NOT NULL
+                UNION
+                -- Filhos
+                SELECT uf.pessoa_id FROM conexos c
+                JOIN unioes u ON u.slot_masculino_id = c.id OR u.slot_feminino_id = c.id
+                JOIN uniao_filhos uf ON uf.uniao_id = u.id
+                UNION
+                -- Cônjuges
+                SELECT u.slot_masculino_id FROM conexos c
+                JOIN unioes u ON u.slot_feminino_id = c.id
+                WHERE u.slot_masculino_id IS NOT NULL
+                UNION
+                SELECT u.slot_feminino_id FROM conexos c
+                JOIN unioes u ON u.slot_masculino_id = c.id
+                WHERE u.slot_feminino_id IS NOT NULL
+            )
+            SELECT ?2, id, NULL FROM conexos WHERE id IS NOT NULL;
+        "#;
+        let _ = sqlx::query(sql_conexos)
+            .bind(rid)
+            .bind(arvore_id)
+            .execute(pool)
+            .await;
+    }
+
+    // Se a árvore for pessoal (is_publico = 0), inclui também quaisquer outras pessoas
+    // pessoais cadastradas no acervo, garantindo que membros criados fiquem acessíveis
+    let eh_publica: Option<(bool,)> = sqlx::query_as("SELECT is_publico FROM arvores WHERE id = ?")
+        .bind(arvore_id)
+        .fetch_optional(pool)
+        .await?;
+
+    if let Some((false,)) = eh_publica {
+        let _ = sqlx::query(
+            "INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
+             SELECT ?, id, NULL FROM pessoas WHERE is_publico = 0 AND is_placeholder = 0",
+        )
+        .bind(arvore_id)
+        .execute(pool)
+        .await;
+    }
+
+    Ok(())
+}
+
+/// Garante que haja pelo menos uma árvore pessoal no banco se o acervo contiver dados.
+pub async fn garantir_arvore_padrao(pool: &SqlitePool) -> Resultado<()> {
+    // 1. Sincroniza membros de todas as árvores pessoais existentes
+    let arvores_pessoais: Vec<(String, Option<String>)> = sqlx::query_as(
+        "SELECT id, raiz_pessoa_id FROM arvores WHERE is_publico = 0",
+    )
+    .fetch_all(pool)
+    .await?;
+
+    for (arv_id, raiz_opt) in &arvores_pessoais {
+        let _ = sincronizar_membros_arvore(pool, arv_id, raiz_opt.as_deref()).await;
+    }
+
+    // 2. Se não houver árvores pessoais, verifica se há pessoas pessoais cadastradas
+    if arvores_pessoais.is_empty() {
+        let primeira: Option<(String, String, Option<String>)> = sqlx::query_as(
+            "SELECT id, nome, sobrenome FROM pessoas WHERE is_placeholder = 0 AND is_publico = 0 ORDER BY data_criacao ASC LIMIT 1",
         )
         .fetch_optional(pool)
         .await?;
 
-        let arvore_id = uuid::Uuid::new_v4().to_string();
-        let raiz_id = primeira.map(|p| p.0);
+        if let Some((pid, nome, sobrenome)) = primeira {
+            let arvore_id = uuid::Uuid::new_v4().to_string();
+            let nome_arvore = match sobrenome {
+                Some(ref s) if !s.trim().is_empty() => format!("Família {}", s.trim()),
+                _ => format!("Árvore de {}", nome.trim()),
+            };
 
-        sqlx::query(
-            "INSERT INTO arvores (id, nome, descricao, raiz_pessoa_id)
-             VALUES (?, 'Árvore Principal', 'Árvore genealógica principal do acervo', ?)",
-        )
-        .bind(&arvore_id)
-        .bind(&raiz_id)
-        .execute(pool)
-        .await?;
-
-        if let Some(ref rid) = raiz_id {
-            let _ = sqlx::query(
-                "INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-                 VALUES (?, ?, NULL)",
+            sqlx::query(
+                "INSERT INTO arvores (id, nome, descricao, raiz_pessoa_id, is_publico)
+                 VALUES (?, ?, 'Árvore genealógica pessoal', ?, 0)",
             )
             .bind(&arvore_id)
-            .bind(rid)
+            .bind(&nome_arvore)
+            .bind(&pid)
             .execute(pool)
-            .await;
+            .await?;
+
+            let _ = sincronizar_membros_arvore(pool, &arvore_id, Some(&pid)).await;
         }
+    }
+
+    // 3. Fallback genérico caso nem árvores públicas nem pessoas existam (acervo 100% novo)
+    let contagem_total: (i64,) = sqlx::query_as("SELECT COUNT(*) FROM arvores")
+        .fetch_one(pool)
+        .await?;
+
+    if contagem_total.0 == 0 {
+        let arvore_id = uuid::Uuid::new_v4().to_string();
+        sqlx::query(
+            "INSERT INTO arvores (id, nome, descricao, is_publico)
+             VALUES (?, 'Árvore Principal', 'Árvore genealógica principal do acervo', 0)",
+        )
+        .bind(&arvore_id)
+        .execute(pool)
+        .await?;
     }
 
     Ok(())
@@ -211,8 +308,8 @@ pub async fn criar(pool: &SqlitePool, dados: NovaArvoreInput) -> Resultado<Arvor
     let tipo_tempo = dados.tipo_tempo.as_deref().unwrap_or("real");
 
     sqlx::query(
-        "INSERT INTO arvores (id, nome, descricao, raiz_pessoa_id, categoria, pais, periodo, tipo_tempo)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+        "INSERT INTO arvores (id, nome, descricao, raiz_pessoa_id, categoria, pais, periodo, tipo_tempo, is_publico)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0)",
     )
     .bind(&id)
     .bind(nome)
@@ -225,16 +322,7 @@ pub async fn criar(pool: &SqlitePool, dados: NovaArvoreInput) -> Resultado<Arvor
     .execute(pool)
     .await?;
 
-    if let Some(ref rid) = dados.raiz_pessoa_id {
-        let _ = sqlx::query(
-            "INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-             VALUES (?, ?, NULL)",
-        )
-        .bind(&id)
-        .bind(rid)
-        .execute(pool)
-        .await;
-    }
+    sincronizar_membros_arvore(pool, &id, dados.raiz_pessoa_id.as_deref()).await?;
 
     obter(pool, &id).await
 }
@@ -288,16 +376,7 @@ pub async fn atualizar(pool: &SqlitePool, dados: AtualizarArvoreInput) -> Result
     .execute(pool)
     .await?;
 
-    if let Some(ref rid) = dados.raiz_pessoa_id {
-        let _ = sqlx::query(
-            "INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-             VALUES (?, ?, NULL)",
-        )
-        .bind(&dados.id)
-        .bind(rid)
-        .execute(pool)
-        .await;
-    }
+    sincronizar_membros_arvore(pool, &dados.id, dados.raiz_pessoa_id.as_deref()).await?;
 
     obter(pool, &dados.id).await
 }
@@ -384,14 +463,7 @@ pub async fn definir_raiz(
     .execute(pool)
     .await?;
 
-    let _ = sqlx::query(
-        "INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-         VALUES (?, ?, NULL)",
-    )
-    .bind(arvore_id)
-    .bind(raiz_pessoa_id)
-    .execute(pool)
-    .await;
+    sincronizar_membros_arvore(pool, arvore_id, Some(raiz_pessoa_id)).await?;
 
     obter(pool, arvore_id).await
 }

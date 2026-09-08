@@ -59,7 +59,7 @@ import { type ModoVisaoArvore } from './components/tree/BarraControlesArvore';
 import { GavetaLinhaTempo } from './features/timeline/components/GavetaLinhaTempo';
 import type { DadosImpressaoTimeline } from './features/timeline/tiposImpressao';
 import { useCriarPessoa, usePessoas } from './features/person/hooks/usePessoas';
-import { buscarGrafoArvore, definirRaizArvore, type ArvoreInfo } from './lib/api';
+import { buscarGrafoArvore, definirRaizArvore, listarArvores, type ArvoreInfo } from './lib/api';
 import { useSeguranca, useGatekeeper, TelaDesbloqueio, ModalGerenciarSeguranca } from './features/security';
 
 type Tema = 'classico-claro' | 'classico-escuro' | 'moderno-claro' | 'moderno-escuro';
@@ -159,6 +159,9 @@ export default function App() {
     if (arvore.raiz_pessoa_id) {
       setRaizId(arvore.raiz_pessoa_id);
       setSelecionadaId(arvore.raiz_pessoa_id);
+    } else {
+      setRaizId(null);
+      setSelecionadaId(null);
     }
   };
 
@@ -418,7 +421,7 @@ export default function App() {
               {
                 id: 'estatisticas',
                 rotulo: t('topo', 'estatisticas'),
-                descricao: 'Demografia, faixas etárias, expectativa de vida e gráficos familiares',
+                descricao: t('topo', 'estatisticasDesc'),
                 icone: <BarChart3 className="w-4 h-4 text-acento" />,
                 onClick: () => setEstatisticasAbertas(true),
                 separadorApos: true,
@@ -426,7 +429,7 @@ export default function App() {
               {
                 id: 'fusao',
                 rotulo: t('topo', 'mesclarPessoas'),
-                descricao: 'Detectar duplicatas ou fundir dois registros no acervo',
+                descricao: t('topo', 'mesclarPessoasDesc'),
                 icone: <Users className="w-4 h-4 text-acento" />,
                 onClick: () => {
                   setPessoaInicialFusao(selecionadaId ?? raizId);
@@ -507,7 +510,7 @@ export default function App() {
           <Button
             size="sm"
             onClick={() => setFormAberto(true)}
-            title="Cadastrar uma nova pessoa no acervo (Ctrl+N)"
+            title={`${t('topo', 'novaPessoa')} (Ctrl+N)`}
             className="shadow-xs font-semibold"
           >
             <Plus className="w-4 h-4 mr-1" />
@@ -640,16 +643,13 @@ export default function App() {
             <div className="absolute inset-0 grid place-items-center p-8 text-center">
               <div className="max-w-md flex flex-col gap-3 items-center">
                 <IconeArvore className="w-10 h-10 text-tinta3" />
-                <h2 className="font-tit font-bold text-xl m-0">Comece pela pessoa mais nova</h2>
+                <h2 className="font-tit font-bold text-xl m-0">{t('arvore', 'comecePessoaMaisNova')}</h2>
                 <p className="text-sm text-tinta2 m-0 leading-relaxed">
-                  Cadastre você mesmo, ou o parente mais recente que conhecer, e vá subindo. Se
-                  não souber o nome de um dos pais, o programa cria um nó “desconhecido” no
-                  lugar — e você troca pelo nome real quando descobrir, sem perder os filhos já
-                  pendurados nele.
+                  {t('arvore', 'comecePessoaMaisNovaDesc')}
                 </p>
                 <Button onClick={() => setFormAberto(true)}>
                   <Plus className="w-4 h-4 mr-1" />
-                  Cadastrar a primeira pessoa
+                  {t('arvore', 'cadastrarPrimeiraPessoa')}
                 </Button>
               </div>
             </div>
@@ -689,7 +689,7 @@ export default function App() {
 
           {!acervoVazio && raizId && carregandoArvore && (
             <div className="absolute inset-0 grid place-items-center">
-              <span className="font-num text-sm text-tinta3">Montando a árvore…</span>
+              <span className="font-num text-sm text-tinta3">{t('arvore', 'montandoArvore')}</span>
             </div>
           )}
 
@@ -698,7 +698,7 @@ export default function App() {
               <p className="text-sm text-fem text-center max-w-sm">
                 {erroArvore instanceof Error
                   ? erroArvore.message
-                  : 'Não foi possível montar a árvore.'}
+                  : t('arvore', 'erroMontarArvore')}
               </p>
             </div>
           )}
@@ -871,7 +871,7 @@ export default function App() {
             onClick={() => setFichaAberta(null)}
             aria-hidden
           />
-          <div className="relative w-full max-w-4xl bg-card rounded-raio border border-borda shadow-sombra overflow-hidden">
+          <div className="relative w-full max-w-4xl xl:max-w-5xl bg-card rounded-raio border border-borda shadow-sombra overflow-hidden h-[85vh] max-h-[820px] flex flex-col">
             <PersonDetails
               pessoaId={fichaAberta}
               onFechar={() => setFichaAberta(null)}
@@ -909,7 +909,7 @@ export default function App() {
       <Modal
         isOpen={formAberto}
         onClose={() => setFormAberto(false)}
-        title="Cadastrar pessoa"
+        title={t('ficha', 'criarPessoa')}
         className="max-w-2xl"
       >
         <PersonForm
@@ -918,10 +918,21 @@ export default function App() {
           onCancelar={() => setFormAberto(false)}
           onSalvar={(dados) =>
             criar.mutate(dados, {
-              onSuccess: (id) => {
+              onSuccess: async (id) => {
                 setFormAberto(false);
                 setSelecionadaId(id);
                 if (!raizId) setRaizId(id);
+                qc.invalidateQueries({ queryKey: ['arvores'] });
+                qc.invalidateQueries({ queryKey: ['pessoas-arvore-timeline'] });
+                if (!arvoreAtivaId) {
+                  try {
+                    const lista = await listarArvores();
+                    const pessoal = lista.find((a) => !a.is_publico);
+                    if (pessoal) {
+                      handleSelecionarArvore(pessoal);
+                    }
+                  } catch {}
+                }
               },
             })
           }

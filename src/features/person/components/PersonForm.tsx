@@ -15,7 +15,9 @@ import { Select } from '../../../components/ui/Select';
 import { Button } from '../../../components/ui/Button';
 import { ErroDoAcervo } from '../../../lib/api';
 import { CampoDeData } from '../../../components/ui/CampoDeData';
-import { DATA_VAZIA, type DataEscolhida, type Person, type Sex, type TipoTempo } from '../../../types';
+import { SeletorDeLocal } from './SeletorDeLocal';
+import { DATA_VAZIA, type DataEscolhida, type Person, type Place, type Sex, type TipoTempo } from '../../../types';
+import { useI18n } from '../../../i18n/I18nContext';
 
 export interface DadosPessoaForm {
   nome: string;
@@ -26,6 +28,9 @@ export interface DadosPessoaForm {
   nascimento: DataEscolhida;
   falecimento: DataEscolhida;
   tipo_tempo: TipoTempo;
+  localNascimento?: Place | null;
+  rotuloHistoricoNascimento?: string | null;
+  nacionalidadePaisId?: string | null;
 }
 
 interface PersonFormProps {
@@ -39,13 +44,6 @@ interface PersonFormProps {
   onCancelar?: () => void;
 }
 
-const OPCOES_SEXO = [
-  { value: 'M', label: 'Masculino' },
-  { value: 'F', label: 'Feminino' },
-  { value: 'X', label: 'Não-binário / outro' },
-  { value: 'U', label: 'Desconhecido' },
-];
-
 function mensagemDeErro(erro: unknown): string | null {
   if (!erro) return null;
   if (erro instanceof ErroDoAcervo) return erro.message;
@@ -54,10 +52,15 @@ function mensagemDeErro(erro: unknown): string | null {
 }
 
 export function PersonForm({ inicial, salvando, erro, onSalvar, onCancelar }: PersonFormProps) {
+  const { t } = useI18n();
+  const opcoesSexo = [
+    { value: 'M', label: t('ficha', 'masculino') },
+    { value: 'F', label: t('ficha', 'feminino') },
+  ];
   const [dados, setDados] = useState<DadosPessoaForm>({
     nome: '',
     sobrenome: '',
-    sexo: 'U',
+    sexo: 'M',
     is_vivo: true,
     minibiografia: '',
     nascimento: { ...DATA_VAZIA },
@@ -86,7 +89,7 @@ export function PersonForm({ inicial, salvando, erro, onSalvar, onCancelar }: Pe
   const enviar = (e: React.FormEvent) => {
     e.preventDefault();
     if (!dados.nome.trim()) {
-      setErroLocal('O nome é obrigatório — é a única coisa que não dá para deixar em branco.');
+      setErroLocal(t('ficha', 'nomeObrigatorioErro'));
       return;
     }
     setErroLocal(null);
@@ -108,15 +111,15 @@ export function PersonForm({ inicial, salvando, erro, onSalvar, onCancelar }: Pe
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Input
-          label="Nome *"
-          placeholder="Ex: Joaquim"
+          label={`${t('ficha', 'nome')} *`}
+          placeholder={t('ficha', 'nomePlaceholder')}
           value={dados.nome}
           onChange={(e) => alterar('nome', e.target.value)}
           autoFocus
         />
         <Input
-          label="Sobrenome"
-          placeholder="Ex: Ferreira"
+          label={t('ficha', 'sobrenome')}
+          placeholder={t('ficha', 'sobrenomePlaceholder')}
           value={dados.sobrenome}
           onChange={(e) => alterar('sobrenome', e.target.value)}
         />
@@ -124,51 +127,99 @@ export function PersonForm({ inicial, salvando, erro, onSalvar, onCancelar }: Pe
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Select
-          label="Sexo"
+          label={t('ficha', 'sexo')}
           value={dados.sexo}
           onChange={(e) => alterar('sexo', e.target.value as Sex)}
-          options={OPCOES_SEXO}
+          options={opcoesSexo}
         />
 
-        <div className="flex items-end pb-1">
-          <label className="flex items-center gap-2 cursor-pointer text-sm font-semibold text-tinta2 hover:text-tinta transition-colors">
-            <input
-              type="checkbox"
-              className="rounded border-borda text-acento focus:ring-acento/50"
-              checked={dados.is_vivo}
-              onChange={(e) => alterar('is_vivo', e.target.checked)}
-            />
-            Pessoa viva
-            <span className="text-tinta3 font-normal text-xs">(ocultável na exportação)</span>
-          </label>
+        {/* Situação Vital */}
+        <div className="p-2.5 bg-sup/40 rounded-raio-s border border-borda flex flex-col gap-1.5">
+          <span className="text-xs font-semibold text-tinta">{t('ficha', 'situacaoVital')}</span>
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                setDados((d) => ({ ...d, is_vivo: true, falecimento: { ...DATA_VAZIA } }));
+              }}
+              className={`py-1.5 px-3 rounded-raio-s text-xs font-medium border flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                dados.is_vivo
+                  ? 'bg-emerald-500/15 text-emerald-800 dark:text-emerald-200 border-emerald-500/50 font-bold ring-1 ring-emerald-500/30'
+                  : 'bg-card text-tinta2 border-borda hover:border-borda2 hover:text-tinta'
+              }`}
+            >
+              <span>🌱</span> {t('ficha', 'viva')}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setDados((d) => ({ ...d, is_vivo: false }));
+              }}
+              className={`py-1.5 px-3 rounded-raio-s text-xs font-medium border flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                !dados.is_vivo
+                  ? 'bg-stone-500/15 text-stone-800 dark:text-stone-200 border-stone-500/50 font-bold ring-1 ring-stone-500/30'
+                  : 'bg-card text-tinta2 border-borda hover:border-borda2 hover:text-tinta'
+              }`}
+            >
+              <span>🕊️</span> {t('ficha', 'falecida')}
+            </button>
+          </div>
         </div>
       </div>
 
       <fieldset className="border border-borda rounded-raio-s p-4 space-y-3">
-        <legend className="px-2 text-sm font-semibold text-tinta2">Datas</legend>
+        <legend className="px-2 text-sm font-semibold text-tinta2">{t('ficha', 'datas')}</legend>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <CampoDeData
-            rotulo="Nascimento"
+            rotulo={t('ficha', 'nascimentoLabel')}
             valor={dados.nascimento}
             aoMudar={(v) => alterar('nascimento', v)}
           />
-          <CampoDeData
-            rotulo="Falecimento"
-            valor={dados.falecimento}
-            aoMudar={(v) => alterar('falecimento', v)}
+          {!dados.is_vivo ? (
+            <CampoDeData
+              rotulo={t('ficha', 'falecimentoOpcional')}
+              valor={dados.falecimento}
+              aoMudar={(v) => alterar('falecimento', v)}
+            />
+          ) : (
+            <div className="flex flex-col justify-center p-3 rounded-raio-s bg-sup/30 border border-dashed border-borda text-xs text-tinta3">
+              <span className="font-semibold text-tinta2 flex items-center gap-1">
+                <span>🌱</span> {t('ficha', 'pessoaMarcadaComoViva')}
+              </span>
+              <span className="mt-0.5">
+                {t('ficha', 'paraRegistrarFalecimentoDica')}
+              </span>
+            </div>
+          )}
+        </div>
+
+        {/* Local de Nascimento com IBGE */}
+        <div className="pt-2 border-t border-borda/40">
+          <span className="text-xs font-semibold text-tinta2 block mb-1.5">
+            {t('ficha', 'localNascimentoIBGE')}
+          </span>
+          <SeletorDeLocal
+            local={dados.localNascimento ?? null}
+            onEscolher={(l) => {
+              alterar('localNascimento', l);
+              if (l?.pais_id === 'br' && !dados.nacionalidadePaisId) {
+                alterar('nacionalidadePaisId', 'br');
+              }
+            }}
+            rotuloHistorico={dados.rotuloHistoricoNascimento ?? ''}
+            onMudarRotulo={(v) => alterar('rotuloHistoricoNascimento', v)}
           />
         </div>
 
         <p className="text-xs text-tinta3 leading-relaxed">
-          Escolha só o que souber: ano sozinho basta, e “Sem data” também é uma resposta.
-          Para o que não cabe em lista — “na época da guerra” — use “Só sei descrever”.
+          {t('ficha', 'dicaDatas')}
         </p>
       </fieldset>
 
       <div className="p-3.5 bg-fundo/40 rounded-raio-s border border-borda/70 space-y-2.5">
         <label className="block text-sm font-semibold text-tinta2">
-          Natureza da Cronologia / Tempo
+          {t('ficha', 'naturezaCronologia')}
         </label>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
           <label
@@ -188,10 +239,10 @@ export function PersonForm({ inicial, salvando, erro, onSalvar, onCancelar }: Pe
             />
             <div>
               <div className="text-xs font-bold text-tinta flex items-center gap-1.5">
-                <span>🌍 Tempo Real / Histórico</span>
+                <span>🌍 {t('ficha', 'tempoRealTitulo')}</span>
               </div>
               <p className="text-[11px] text-tinta3 mt-0.5 leading-snug">
-                Pessoas da história real. Suporta conversão entre calendários (Gregoriano, Judaico AM, Romano AUC, Holoceno HE, Islâmico AH).
+                {t('ficha', 'tempoRealDesc')}
               </p>
             </div>
           </label>
@@ -213,10 +264,10 @@ export function PersonForm({ inicial, salvando, erro, onSalvar, onCancelar }: Pe
             />
             <div>
               <div className="text-xs font-bold text-tinta flex items-center gap-1.5">
-                <span>✨ Tempo Fictício / Literário</span>
+                <span>✨ {t('ficha', 'tempoFicticioTitulo')}</span>
               </div>
               <p className="text-[11px] text-tinta3 mt-0.5 leading-snug">
-                Personagens de romances, ficção, mitologia, Tolkien, RPG ou fantasia. Opera em régua narrativa própria sem conversão terrestre.
+                {t('ficha', 'tempoFicticioDesc')}
               </p>
             </div>
           </label>
@@ -228,12 +279,12 @@ export function PersonForm({ inicial, salvando, erro, onSalvar, onCancelar }: Pe
           htmlFor="minibiografia"
           className="block text-sm font-semibold mb-1 text-tinta2"
         >
-          Minibiografia
+          {t('ficha', 'minibiografia')}
         </label>
         <textarea
           id="minibiografia"
           className="flex w-full rounded-raio-s border border-borda bg-card px-3 py-2 text-sm text-tinta placeholder:text-tinta3 focus:outline-none focus:ring-2 focus:ring-acento/50 min-h-[96px] resize-y"
-          placeholder="O que vale a pena lembrar sobre esta pessoa…"
+          placeholder={t('ficha', 'minibiografiaPlaceholder')}
           value={dados.minibiografia}
           onChange={(e) => alterar('minibiografia', e.target.value)}
         />
@@ -242,11 +293,11 @@ export function PersonForm({ inicial, salvando, erro, onSalvar, onCancelar }: Pe
       <div className="flex items-center justify-end gap-3 pt-4 border-t border-borda">
         {onCancelar && (
           <Button type="button" variant="ghost" onClick={onCancelar}>
-            Cancelar
+            {t('comum', 'cancelar')}
           </Button>
         )}
         <Button type="submit" disabled={salvando}>
-          {salvando ? 'Salvando…' : inicial?.id ? 'Atualizar' : 'Criar pessoa'}
+          {salvando ? t('comum', 'salvando') : inicial?.id ? t('ficha', 'atualizar') : t('ficha', 'criarPessoa')}
         </Button>
       </div>
     </form>

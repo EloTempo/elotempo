@@ -13,6 +13,7 @@ use serde::Serialize;
 use sqlx::{Row, SqlitePool};
 use tauri::State;
 
+use crate::domain::datas;
 use crate::domain::erros::Resultado;
 use crate::domain::eventos_cmds::tipos;
 
@@ -75,6 +76,8 @@ pub struct MarcoPessoal {
     pub data_texto: Option<String>,
     pub local: Option<String>,
     pub ano: Option<i64>,
+    pub mes: Option<i64>,
+    pub dia: Option<i64>,
     /// Com quem, nos eventos que pertencem a uma união.
     pub com: Option<String>,
     pub is_participacao: bool,
@@ -92,7 +95,13 @@ pub struct LinhaPessoal {
     /// vida desenhada sem cor não se liga à pessoa que ela representa.
     pub sexo: String,
     pub ano_nascimento: Option<i64>,
+    pub mes_nascimento: Option<i64>,
+    pub dia_nascimento: Option<i64>,
+    pub data_nascimento_texto: Option<String>,
     pub ano_falecimento: Option<i64>,
+    pub mes_falecimento: Option<i64>,
+    pub dia_falecimento: Option<i64>,
+    pub data_falecimento_texto: Option<String>,
     pub is_vivo: bool,
     pub marcos: Vec<MarcoPessoal>,
 }
@@ -240,7 +249,7 @@ pub async fn linha_pessoal(db: &SqlitePool, pessoa_id: &str) -> Resultado<LinhaP
 
     // Os eventos da própria pessoa.
     let proprios = sqlx::query(
-        "SELECT e.tipo_evento, e.data_texto, e.ano_inicio,
+        "SELECT e.tipo_evento, e.data_texto, e.ano_inicio, e.mes_inicio, e.dia_inicio,
                 COALESCE(e.rotulo_historico_livre,
                          CASE WHEN l.id IS NULL THEN NULL
                               WHEN l.uf IS NOT NULL THEN l.nome || ', ' || l.uf
@@ -256,28 +265,57 @@ pub async fn linha_pessoal(db: &SqlitePool, pessoa_id: &str) -> Resultado<LinhaP
 
     let mut marcos = Vec::with_capacity(proprios.len());
     let mut ano_nascimento = None;
+    let mut mes_nascimento = None;
+    let mut dia_nascimento = None;
+    let mut data_nascimento_texto = None;
     let mut ano_falecimento = None;
+    let mut mes_falecimento = None;
+    let mut dia_falecimento = None;
+    let mut data_falecimento_texto = None;
 
     for l in proprios {
         let tipo: String = l.try_get("tipo_evento")?;
         let ano: Option<i64> = l.try_get("ano_inicio")?;
+        let mut mes: Option<i64> = l.try_get("mes_inicio")?;
+        let mut dia: Option<i64> = l.try_get("dia_inicio")?;
+        let data_texto: Option<String> = l.try_get("data_texto")?;
+
+        if (mes.is_none() || dia.is_none()) && data_texto.is_some() {
+            if let Some(ref dt) = data_texto {
+                let inter = datas::interpretar(dt);
+                if mes.is_none() {
+                    mes = inter.mes_inicio.map(|m| m as i64);
+                }
+                if dia.is_none() {
+                    dia = inter.dia_inicio.map(|d| d as i64);
+                }
+            }
+        }
 
         // A faixa da vida sai só dos eventos próprios: nascer e morrer não são
         // eventos de união, e derivá-los de lá abriria caminho para uma barra
         // de vida montada a partir de um casamento.
         if tipo == tipos::NASCIMENTO && ano_nascimento.is_none() {
             ano_nascimento = ano;
+            mes_nascimento = mes;
+            dia_nascimento = dia;
+            data_nascimento_texto = data_texto.clone();
         }
         if tipo == tipos::FALECIMENTO && ano_falecimento.is_none() {
             ano_falecimento = ano;
+            mes_falecimento = mes;
+            dia_falecimento = dia;
+            data_falecimento_texto = data_texto.clone();
         }
 
         marcos.push(MarcoPessoal {
             tipo,
             titulo: None,
-            data_texto: l.try_get("data_texto")?,
+            data_texto,
             local: l.try_get("local")?,
             ano,
+            mes,
+            dia,
             com: None,
             is_participacao: false,
             linha_titulo: None,
@@ -287,16 +325,8 @@ pub async fn linha_pessoal(db: &SqlitePool, pessoa_id: &str) -> Resultado<LinhaP
     }
 
     // Os eventos das uniões de que a pessoa participa.
-    //
-    // Um casamento é evento da união — `eventos` tem `pessoa_id` E `uniao_id`,
-    // com CHECK exigindo um dos dois. Consultando só por `pessoa_id`, esta
-    // função deixava o casamento fora da linha dos **dois** cônjuges: o dado
-    // gravado e a tela calada.
-    //
-    // `OR` entre os slots, nunca `AND` — o mesmo engano já fez uma união
-    // inteira sumir da busca quando um dos cônjuges ficava fora do recorte.
     let de_uniao = sqlx::query(
-        "SELECT e.tipo_evento, e.data_texto, e.ano_inicio,
+        "SELECT e.tipo_evento, e.data_texto, e.ano_inicio, e.mes_inicio, e.dia_inicio,
                 COALESCE(e.rotulo_historico_livre,
                          CASE WHEN l.id IS NULL THEN NULL
                               WHEN l.uf IS NOT NULL THEN l.nome || ', ' || l.uf
@@ -320,12 +350,32 @@ pub async fn linha_pessoal(db: &SqlitePool, pessoa_id: &str) -> Resultado<LinhaP
     .await?;
 
     for l in de_uniao {
+        let tipo: String = l.try_get("tipo_evento")?;
+        let ano: Option<i64> = l.try_get("ano_inicio")?;
+        let mut mes: Option<i64> = l.try_get("mes_inicio")?;
+        let mut dia: Option<i64> = l.try_get("dia_inicio")?;
+        let data_texto: Option<String> = l.try_get("data_texto")?;
+
+        if (mes.is_none() || dia.is_none()) && data_texto.is_some() {
+            if let Some(ref dt) = data_texto {
+                let inter = datas::interpretar(dt);
+                if mes.is_none() {
+                    mes = inter.mes_inicio.map(|m| m as i64);
+                }
+                if dia.is_none() {
+                    dia = inter.dia_inicio.map(|d| d as i64);
+                }
+            }
+        }
+
         marcos.push(MarcoPessoal {
-            tipo: l.try_get("tipo_evento")?,
+            tipo,
             titulo: None,
-            data_texto: l.try_get("data_texto")?,
+            data_texto,
             local: l.try_get("local")?,
-            ano: l.try_get("ano_inicio")?,
+            ano,
+            mes,
+            dia,
             com: l.try_get("com")?,
             is_participacao: false,
             linha_titulo: None,
@@ -337,7 +387,7 @@ pub async fn linha_pessoal(db: &SqlitePool, pessoa_id: &str) -> Resultado<LinhaP
     // As participações em marcos de linhas criadas (seção 4 da fatia 10).
     let participacoes = sqlx::query(
         "SELECT mp.papel, mp.visivel_na_pessoa,
-                e.titulo, e.data_periodo_texto, e.ano_inicio,
+                e.titulo, e.data_periodo_texto, e.ano_inicio, e.ano_fim,
                 l.titulo AS linha_titulo
          FROM marco_participantes mp
          JOIN eventos_linha e ON e.id = mp.marco_id
@@ -354,7 +404,15 @@ pub async fn linha_pessoal(db: &SqlitePool, pessoa_id: &str) -> Resultado<LinhaP
         let linha_titulo: String = p.try_get("linha_titulo")?;
         let titulo: String = p.try_get("titulo")?;
         let data_periodo_texto: String = p.try_get("data_periodo_texto")?;
-        let ano: Option<i64> = p.try_get("ano_inicio")?;
+        let ano_inicio: Option<i64> = p.try_get("ano_inicio")?;
+        let ano_fim: Option<i64> = p.try_get("ano_fim")?;
+        let mut ano = ano_inicio.or(ano_fim);
+        let inter = datas::interpretar(&data_periodo_texto);
+        if ano.is_none() {
+            ano = inter.ano_inicio.map(|a| a as i64);
+        }
+        let mes = inter.mes_inicio.map(|m| m as i64);
+        let dia = inter.dia_inicio.map(|d| d as i64);
 
         marcos.push(MarcoPessoal {
             tipo: "participacao".to_string(),
@@ -362,6 +420,8 @@ pub async fn linha_pessoal(db: &SqlitePool, pessoa_id: &str) -> Resultado<LinhaP
             data_texto: Some(data_periodo_texto),
             local: None,
             ano,
+            mes,
+            dia,
             com: None,
             is_participacao: true,
             linha_titulo: Some(linha_titulo),
@@ -382,7 +442,13 @@ pub async fn linha_pessoal(db: &SqlitePool, pessoa_id: &str) -> Resultado<LinhaP
         },
         sexo,
         ano_nascimento,
+        mes_nascimento,
+        dia_nascimento,
+        data_nascimento_texto,
         ano_falecimento,
+        mes_falecimento,
+        dia_falecimento,
+        data_falecimento_texto,
         is_vivo,
         marcos,
     })
@@ -694,6 +760,49 @@ pub async fn buscar_participantes_marco(
     .bind(marco_id)
     .fetch_all(&*db)
     .await?)
+}
+
+#[derive(Debug, serde::Serialize, sqlx::FromRow)]
+pub struct ParticipacaoPessoa {
+    pub id: String,
+    pub marco_id: String,
+    pub linha_id: String,
+    pub linha_titulo: String,
+    pub titulo: String,
+    pub data_periodo_texto: String,
+    pub ano_inicio: Option<i64>,
+    pub ano_fim: Option<i64>,
+    pub papel: Option<String>,
+    pub visivel_na_pessoa: bool,
+}
+
+pub async fn participacoes_da_pessoa(
+    db: &SqlitePool,
+    pessoa_id: &str,
+) -> Resultado<Vec<ParticipacaoPessoa>> {
+    Ok(sqlx::query_as::<_, ParticipacaoPessoa>(
+        "SELECT mp.id, mp.marco_id, l.id AS linha_id, l.titulo AS linha_titulo,
+                e.titulo, e.data_periodo_texto,
+                COALESCE(e.ano_inicio, e.ano_fim) AS ano_inicio,
+                e.ano_fim,
+                mp.papel, mp.visivel_na_pessoa
+         FROM marco_participantes mp
+         JOIN eventos_linha e ON e.id = mp.marco_id
+         JOIN linhas_tempo l ON l.id = e.linha_id
+         WHERE mp.pessoa_id = ?
+         ORDER BY COALESCE(e.ano_inicio, e.ano_fim, 9999), e.titulo"
+    )
+    .bind(pessoa_id)
+    .fetch_all(db)
+    .await?)
+}
+
+#[tauri::command]
+pub async fn listar_participacoes_pessoa(
+    pessoa_id: String,
+    db: State<'_, SqlitePool>,
+) -> Resultado<Vec<ParticipacaoPessoa>> {
+    participacoes_da_pessoa(&db, &pessoa_id).await
 }
 
 #[cfg(test)]
@@ -1322,6 +1431,44 @@ mod testes {
         // Detalhe traz tudo
         let detalhe = marcos_filtrados(&pool, vec![lt_id.clone()], Some(1900), Some(1950), None, Some("detalhe".to_string())).await.unwrap();
         assert_eq!(detalhe.len(), 3);
+    }
+
+    #[tokio::test]
+    async fn listar_participacoes_da_pessoa_retorna_todas_as_ligacoes() {
+        let pool = pool_de_teste().await;
+        let ele = pessoa(&pool, "Joaquim", false).await;
+
+        let lt_id = uuid::Uuid::new_v4().to_string();
+        sqlx::query("INSERT INTO linhas_tempo (id, categoria, titulo, is_contexto, is_bloqueada) VALUES (?, 'historia', 'Brasil Império', 1, 1)")
+            .bind(&lt_id)
+            .execute(&pool)
+            .await
+            .unwrap();
+
+        let marco_id = uuid::Uuid::new_v4().to_string();
+        sqlx::query("INSERT INTO eventos_linha (id, linha_id, data_periodo_texto, titulo, relevancia, ano_inicio) VALUES (?, ?, '07/09/1822', 'Independência do Brasil', 'alta', 1822)")
+            .bind(&marco_id)
+            .bind(&lt_id)
+            .execute(&pool)
+            .await
+            .unwrap();
+
+        let part_id = uuid::Uuid::new_v4().to_string();
+        sqlx::query("INSERT INTO marco_participantes (id, marco_id, pessoa_id, papel, visivel_na_pessoa) VALUES (?, ?, ?, 'Testemunha', 1)")
+            .bind(&part_id)
+            .bind(&marco_id)
+            .bind(&ele)
+            .execute(&pool)
+            .await
+            .unwrap();
+
+        let parts = participacoes_da_pessoa(&pool, &ele).await.unwrap();
+        assert_eq!(parts.len(), 1);
+        assert_eq!(parts[0].titulo, "Independência do Brasil");
+        assert_eq!(parts[0].linha_titulo, "Brasil Império");
+        assert_eq!(parts[0].papel.as_deref(), Some("Testemunha"));
+        assert_eq!(parts[0].ano_inicio, Some(1822));
+        assert!(parts[0].visivel_na_pessoa);
     }
 }
 

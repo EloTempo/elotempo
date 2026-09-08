@@ -130,3 +130,65 @@ describe('paleta das linhas do tempo', () => {
     }
   });
 });
+
+describe('harmonia de linhas e bordas nos quatro temas', () => {
+  it('as linhas genealógicas (--linha) têm contraste suave e equilibrado sobre a mesa (--mesa)', () => {
+    // A linha não pode saltar na percepção (<= 2.5:1), nem desaparecer (< 1.2:1).
+    for (const tema of TEMAS) {
+      const tokens = tokensDoTema(tema.seletor);
+      const mesa = tokens['--mesa'] ?? tokensDoTema(':root {')['--mesa'];
+      const linha = tokens['--linha'] ?? tokensDoTema(':root {')['--linha'];
+      const razao = contraste(linha, mesa);
+
+      expect(
+        razao,
+        `--linha sobre --mesa no tema ${tema.nome} deve ser sutil e equilibrada (${razao.toFixed(2)}:1)`,
+      ).toBeGreaterThanOrEqual(1.2);
+
+      expect(
+        razao,
+        `--linha sobre --mesa no tema ${tema.nome} não deve saltar na percepção (${razao.toFixed(2)}:1)`,
+      ).toBeLessThanOrEqual(2.5);
+    }
+  });
+
+  it('os anéis de união (--anel) têm contraste harmônico sobre a mesa (--mesa), sem ofuscar', () => {
+    // No tema escuro anterior, o anel atingia 7.29:1 (excessivo). Deve ficar na faixa de 1.6:1 a 2.8:1.
+    for (const tema of TEMAS) {
+      const tokens = tokensDoTema(tema.seletor);
+      const mesa = tokens['--mesa'] ?? tokensDoTema(':root {')['--mesa'];
+      const anel = tokens['--anel'] ?? tokensDoTema(':root {')['--anel'];
+      const razao = contraste(anel, mesa);
+
+      expect(
+        razao,
+        `--anel sobre --mesa no tema ${tema.nome} deve ser legível (${razao.toFixed(2)}:1)`,
+      ).toBeGreaterThanOrEqual(1.6);
+
+      expect(
+        razao,
+        `--anel sobre --mesa no tema ${tema.nome} não deve ofuscar (${razao.toFixed(2)}:1)`,
+      ).toBeLessThanOrEqual(2.8);
+    }
+  });
+
+  it('as bordas principais (--borda) sobre os cards (--card) mantêm delicadeza visual', () => {
+    for (const tema of TEMAS) {
+      const tokens = tokensDoTema(tema.seletor);
+      const card = tokens['--card'] ?? tokensDoTema(':root {')['--card'];
+      const borda = tokens['--borda'] ?? tokensDoTema(':root {')['--borda'];
+      const razao = contraste(borda, card);
+
+      expect(
+        razao,
+        `--borda sobre --card no tema ${tema.nome} deve ser refinada (${razao.toFixed(2)}:1)`,
+      ).toBeGreaterThanOrEqual(1.15);
+
+      expect(
+        razao,
+        `--borda sobre --card no tema ${tema.nome} não deve ser pesada (${razao.toFixed(2)}:1)`,
+      ).toBeLessThanOrEqual(2.2);
+    }
+  });
+});
+

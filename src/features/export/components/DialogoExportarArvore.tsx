@@ -47,23 +47,26 @@ export function DialogoExportarArvore({
   nomeArvorePadrao,
   raizPessoa,
 }: DialogoExportarArvoreProps) {
-  const { t } = useI18n();
+  const { t, idioma } = useI18n();
   const { executarComGatekeeper } = useGatekeeper();
   const [titulo, setTitulo] = useState(() => {
     if (nomeArvorePadrao && nomeArvorePadrao !== 'Minha Árvore') {
       return nomeArvorePadrao;
     }
     if (raizPessoa?.sobrenome) {
-      return `Família ${raizPessoa.sobrenome}`;
+      return idioma === 'en-US' ? `${raizPessoa.sobrenome} Family` : `Família ${raizPessoa.sobrenome}`;
     }
-    return 'Árvore Genealógica Familiar';
+    return t('posterModal', 'tituloPadrao');
   });
 
   const [subtitulo, setSubtitulo] = useState(() => {
     if (raizPessoa) {
-      return `Linhagem de ${raizPessoa.nome} ${raizPessoa.sobrenome ?? ''} • Acervo Histórico`;
+      const nomeCompleto = `${raizPessoa.nome} ${raizPessoa.sobrenome ?? ''}`.trim();
+      return idioma === 'en-US'
+        ? `Lineage of ${nomeCompleto} • Historical Archive`
+        : `Linhagem de ${nomeCompleto} • Acervo Histórico`;
     }
-    return 'Linhagem e Descendência Familiar';
+    return t('posterModal', 'subtituloPadrao');
   });
 
   const [tema, setTema] = useState<TemaPoster>('pergaminho');
@@ -120,7 +123,7 @@ export function DialogoExportarArvore({
         setSalvando(true);
         try {
           await salvarArvorePng(caminho, svgConteudo, escalaPng, ticket);
-          setSucessoMsg(`Imagem PNG exportada com sucesso em: ${caminho}`);
+          setSucessoMsg(t('posterModal', 'sucessoPng', { caminho }));
         } finally {
           setSalvando(false);
         }
@@ -130,9 +133,9 @@ export function DialogoExportarArvore({
       try {
         const svgBlob = new Blob([svgConteudo], { type: 'image/svg+xml;charset=utf-8' });
         dispararDownloadNavegador(svgBlob, `${nomeArquivoSugerido}.svg`, 'image/svg+xml');
-        setSucessoMsg('Download do gráfico iniciado.');
+        setSucessoMsg(t('posterModal', 'downloadIniciado'));
       } catch (e2) {
-        setErroMsg(err instanceof Error ? err.message : 'Erro ao exportar imagem PNG.');
+        setErroMsg(err instanceof Error ? err.message : t('posterModal', 'erroPng'));
       }
     }
   };
@@ -149,7 +152,7 @@ export function DialogoExportarArvore({
         setSalvando(true);
         try {
           await salvarArvoreSvg(caminho, svgConteudo, ticket);
-          setSucessoMsg(`Vetor SVG exportado com sucesso em: ${caminho}`);
+          setSucessoMsg(t('posterModal', 'sucessoSvg', { caminho }));
         } finally {
           setSalvando(false);
         }
@@ -158,9 +161,9 @@ export function DialogoExportarArvore({
       console.warn('Salvamento nativo falhou, tentando fallback navegador:', err);
       try {
         dispararDownloadNavegador(svgConteudo, `${nomeArquivoSugerido}.svg`, 'image/svg+xml');
-        setSucessoMsg('Download do arquivo SVG iniciado.');
+        setSucessoMsg(t('posterModal', 'downloadIniciado'));
       } catch (e2) {
-        setErroMsg(err instanceof Error ? err.message : 'Erro ao exportar vetor SVG.');
+        setErroMsg(err instanceof Error ? err.message : t('posterModal', 'erroSvg'));
       }
     }
   };
@@ -197,10 +200,10 @@ export function DialogoExportarArvore({
               </div>
               <div>
                 <h2 className="text-base font-serif font-bold text-tinta">
-                  Exportar Pôster da Árvore Genealógica
+                  {t('posterModal', 'tituloModal')}
                 </h2>
                 <p className="text-xs text-tinta3">
-                  Gere arquivos de alta resolução para impressão de quadros, banners familiares ou vetores SVG para gráficas.
+                  {t('posterModal', 'subtituloModal')}
                 </p>
               </div>
             </div>
@@ -221,25 +224,25 @@ export function DialogoExportarArvore({
               <div className="flex flex-col gap-3 p-3.5 rounded-raio bg-sup/40 border border-borda">
                 <label className="text-xs font-semibold text-tinta flex items-center gap-1.5">
                   <Sparkles className="w-3.5 h-3.5 text-acento" />
-                  Identificação do Pôster
+                  {t('posterModal', 'identificacaoPoster')}
                 </label>
                 <div>
-                  <span className="text-[11px] text-tinta3 block mb-1">Título Principal:</span>
+                  <span className="text-[11px] text-tinta3 block mb-1">{t('posterModal', 'tituloPrincipal')}</span>
                   <input
                     type="text"
                     value={titulo}
                     onChange={(e) => setTitulo(e.target.value)}
-                    placeholder="Ex: Família Silva"
+                    placeholder={t('posterModal', 'placeholderTitulo')}
                     className="w-full px-3 py-1.5 text-xs bg-card border border-borda rounded-raio-s text-tinta focus:outline-none focus:ring-1 focus:ring-acento font-serif font-bold"
                   />
                 </div>
                 <div>
-                  <span className="text-[11px] text-tinta3 block mb-1">Subtítulo / Descrição:</span>
+                  <span className="text-[11px] text-tinta3 block mb-1">{t('posterModal', 'subtituloDescricao')}</span>
                   <input
                     type="text"
                     value={subtitulo}
                     onChange={(e) => setSubtitulo(e.target.value)}
-                    placeholder="Ex: Linhagem registrada no acervo..."
+                    placeholder={t('posterModal', 'placeholderSubtitulo')}
                     className="w-full px-3 py-1.5 text-xs bg-card border border-borda rounded-raio-s text-tinta focus:outline-none focus:ring-1 focus:ring-acento"
                   />
                 </div>
@@ -249,7 +252,7 @@ export function DialogoExportarArvore({
               <div className="flex flex-col gap-2.5 p-3.5 rounded-raio bg-sup/40 border border-borda">
                 <label className="text-xs font-semibold text-tinta flex items-center gap-1.5">
                   <Palette className="w-3.5 h-3.5 text-acento" />
-                  Tema Visual do Pôster
+                  {t('posterModal', 'temaVisualPoster')}
                 </label>
                 <div className="grid grid-cols-3 gap-2">
                   <button
@@ -262,8 +265,8 @@ export function DialogoExportarArvore({
                     }`}
                   >
                     <div className="w-full h-3 rounded-xs bg-[#f5efe3] border border-[#bfae8e]" />
-                    <span className="text-xs font-bold text-tinta">Pergaminho</span>
-                    <span className="text-[10px] text-tinta3">Tons sépia e papiro</span>
+                    <span className="text-xs font-bold text-tinta">{t('posterModal', 'temaPergaminho')}</span>
+                    <span className="text-[10px] text-tinta3">{t('posterModal', 'temaPergaminhoDesc')}</span>
                   </button>
 
                   <button
@@ -276,8 +279,8 @@ export function DialogoExportarArvore({
                     }`}
                   >
                     <div className="w-full h-3 rounded-xs bg-white border border-gray-300" />
-                    <span className="text-xs font-bold text-tinta">Gráfica</span>
-                    <span className="text-[10px] text-tinta3">Branco econômico</span>
+                    <span className="text-xs font-bold text-tinta">{t('posterModal', 'temaGrafica')}</span>
+                    <span className="text-[10px] text-tinta3">{t('posterModal', 'temaGraficaDesc')}</span>
                   </button>
 
                   <button
@@ -290,8 +293,8 @@ export function DialogoExportarArvore({
                     }`}
                   >
                     <div className="w-full h-3 rounded-xs bg-[#181512] border border-[#443a2d]" />
-                    <span className="text-xs font-bold text-tinta">Nobre Escuro</span>
-                    <span className="text-[10px] text-tinta3">Grafite e ouro</span>
+                    <span className="text-xs font-bold text-tinta">{t('posterModal', 'temaNobreEscuro')}</span>
+                    <span className="text-[10px] text-tinta3">{t('posterModal', 'temaNobreEscuroDesc')}</span>
                   </button>
                 </div>
               </div>
@@ -300,7 +303,7 @@ export function DialogoExportarArvore({
               <div className="flex flex-col gap-2 p-3.5 rounded-raio bg-sup/40 border border-borda text-xs">
                 <label className="font-semibold text-tinta flex items-center gap-1.5 mb-1">
                   <Layers className="w-3.5 h-3.5 text-acento" />
-                  Elementos e Detalhes
+                  {t('posterModal', 'elementosDetalhes')}
                 </label>
                 <label className="flex items-center gap-2 cursor-pointer text-tinta2 hover:text-tinta">
                   <input
@@ -309,7 +312,7 @@ export function DialogoExportarArvore({
                     onChange={(e) => setIncluirDatas(e.target.checked)}
                     className="rounded text-acento focus:ring-acento"
                   />
-                  <span>Incluir anos de nascimento e falecimento</span>
+                  <span>{t('posterModal', 'incluirAnosDatas')}</span>
                 </label>
                 <label className="flex items-center gap-2 cursor-pointer text-tinta2 hover:text-tinta">
                   <input
@@ -318,7 +321,7 @@ export function DialogoExportarArvore({
                     onChange={(e) => setIncluirCasamentos(e.target.checked)}
                     className="rounded text-acento focus:ring-acento"
                   />
-                  <span>Incluir anos de casamento sobre os anéis</span>
+                  <span>{t('posterModal', 'incluirAnosCasamentos')}</span>
                 </label>
                 <label className="flex items-center gap-2 cursor-pointer text-tinta2 hover:text-tinta">
                   <input
@@ -327,13 +330,13 @@ export function DialogoExportarArvore({
                     onChange={(e) => setIncluirMoldura(e.target.checked)}
                     className="rounded text-acento focus:ring-acento"
                   />
-                  <span>Moldura decorativa com cantoneiras artísticas</span>
+                  <span>{t('posterModal', 'molduraDecorativa')}</span>
                 </label>
               </div>
 
               {/* Resolução para PNG */}
               <div className="flex items-center justify-between p-3 rounded-raio bg-sup/40 border border-borda text-xs">
-                <span className="font-semibold text-tinta">Resolução PNG:</span>
+                <span className="font-semibold text-tinta">{t('posterModal', 'resolucaoPng')}</span>
                 <div className="flex items-center gap-1 bg-card rounded p-0.5 border border-borda">
                   <button
                     type="button"
@@ -341,7 +344,7 @@ export function DialogoExportarArvore({
                     className={`px-2 py-1 rounded text-xs font-semibold cursor-pointer ${
                       escalaPng === 1 ? 'bg-acento text-acento-tinta' : 'text-tinta2 hover:text-tinta'
                     }`}
-                    title="1x - Padrão de Tela"
+                    title={t('posterModal', 'padraoTela')}
                   >
                     1x
                   </button>
@@ -351,7 +354,7 @@ export function DialogoExportarArvore({
                     className={`px-2 py-1 rounded text-xs font-semibold cursor-pointer ${
                       escalaPng === 2 ? 'bg-acento text-acento-tinta' : 'text-tinta2 hover:text-tinta'
                     }`}
-                    title="2x - Alta Definição (Recomendado)"
+                    title={t('posterModal', 'altaDefinicao')}
                   >
                     2x (HD)
                   </button>
@@ -361,7 +364,7 @@ export function DialogoExportarArvore({
                     className={`px-2 py-1 rounded text-xs font-semibold cursor-pointer ${
                       escalaPng === 3 ? 'bg-acento text-acento-tinta' : 'text-tinta2 hover:text-tinta'
                     }`}
-                    title="3x - Qualidade Pôster (300 DPI para Gráfica)"
+                    title={t('posterModal', 'qualidadePoster')}
                   >
                     3x (300 DPI)
                   </button>
@@ -374,10 +377,10 @@ export function DialogoExportarArvore({
               <div className="flex items-center justify-between">
                 <span className="text-xs font-semibold text-tinta2 flex items-center gap-1.5">
                   <Eye className="w-3.5 h-3.5 text-acento" />
-                  Prévia em Tempo Real
+                  {t('posterModal', 'previaTempoReal')}
                 </span>
                 <span className="text-[11px] text-tinta3">
-                  {layout.pessoas.length} {layout.pessoas.length === 1 ? 'pessoa' : 'pessoas'} no gráfico
+                  {layout.pessoas.length} {layout.pessoas.length === 1 ? t('posterModal', 'pessoaNoGrafico') : t('posterModal', 'pessoasNoGrafico')}
                 </span>
               </div>
 
@@ -422,7 +425,7 @@ export function DialogoExportarArvore({
               onClick={onFechar}
               className="px-4 py-2 rounded-raio-s bg-sup hover:bg-card border border-borda text-xs font-semibold text-tinta transition-colors cursor-pointer"
             >
-              Fechar
+              {t('comum', 'fechar')}
             </button>
 
             <div className="flex items-center gap-2.5 flex-wrap">
@@ -430,10 +433,10 @@ export function DialogoExportarArvore({
                 type="button"
                 onClick={handleImprimir}
                 className="px-3.5 py-2 rounded-raio-s border border-borda bg-card hover:bg-sup text-xs font-semibold text-tinta flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs"
-                title="Imprimir pôster em página inteira ou salvar como PDF"
+                title={t('posterModal', 'imprimirPdf')}
               >
                 <Printer className="w-4 h-4 text-tinta2" />
-                <span>Imprimir / PDF</span>
+                <span>{t('posterModal', 'imprimirPdf')}</span>
               </button>
 
               <button
@@ -441,10 +444,10 @@ export function DialogoExportarArvore({
                 onClick={handleExportarSvg}
                 disabled={salvando}
                 className="px-3.5 py-2 rounded-raio-s border border-borda bg-card hover:bg-sup text-xs font-semibold text-tinta flex items-center gap-1.5 transition-colors cursor-pointer disabled:opacity-50 shadow-xs"
-                title="Exportar como vetor SVG para Illustrator, Inkscape ou plotters"
+                title={t('posterModal', 'exportarSvg')}
               >
                 <Download className="w-4 h-4 text-tinta2" />
-                <span>Exportar SVG</span>
+                <span>{t('posterModal', 'exportarSvg')}</span>
               </button>
 
               <button
@@ -452,10 +455,10 @@ export function DialogoExportarArvore({
                 onClick={handleExportarPng}
                 disabled={salvando}
                 className="px-4 py-2 rounded-raio-s bg-acento hover:bg-acento/90 text-acento-tinta text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer disabled:opacity-50 shadow-xs"
-                title={`Exportar como imagem PNG em alta resolução (${escalaPng}x)`}
+                title={`${t('posterModal', 'exportarPng')} (${escalaPng}x)`}
               >
                 <FileImage className="w-4 h-4" />
-                <span>{salvando ? 'Gerando Imagem...' : `Exportar PNG (${escalaPng}x)`}</span>
+                <span>{salvando ? t('posterModal', 'gerandoImagem') : `${t('posterModal', 'exportarPng')} (${escalaPng}x)`}</span>
               </button>
             </div>
           </div>

@@ -1,5 +1,15 @@
+function comOpacidade(varName) {
+  return ({ opacityValue }) => {
+    if (opacityValue !== undefined) {
+      return `color-mix(in srgb, var(${varName}) calc(100% * ${opacityValue}), transparent)`;
+    }
+    return `var(${varName})`;
+  };
+}
+
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: ['selector', '[data-tema="classico-escuro"], [data-tema="moderno-escuro"]'],
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
@@ -7,25 +17,30 @@ export default {
   theme: {
     extend: {
       colors: {
-        mesa: 'var(--mesa)',
-        bg: 'var(--bg)',
-        sup: 'var(--sup)',
-        card: 'var(--card)',
-        card2: 'var(--card2)',
-        borda: 'var(--borda)',
-        borda2: 'var(--borda2)',
-        tinta: 'var(--tinta)',
-        tinta2: 'var(--tinta2)',
-        tinta3: 'var(--tinta3)',
-        linha: 'var(--linha)',
-        masc: 'var(--masc)',
-        fem: 'var(--fem)',
-        anel: 'var(--anel)',
-        acento: 'var(--acento)',
-        'acento-tinta': 'var(--acento-tinta)',
-        acento2: 'var(--acento2)',
-        'acento2-tinta': 'var(--acento2-tinta)',
-        chip: 'var(--chip)',
+        mesa: comOpacidade('--mesa'),
+        bg: comOpacidade('--bg'),
+        sup: comOpacidade('--sup'),
+        card: comOpacidade('--card'),
+        card2: comOpacidade('--card2'),
+        borda: comOpacidade('--borda'),
+        borda2: comOpacidade('--borda2'),
+        tinta: comOpacidade('--tinta'),
+        tinta2: comOpacidade('--tinta2'),
+        tinta3: comOpacidade('--tinta3'),
+        linha: comOpacidade('--linha'),
+        masc: comOpacidade('--masc'),
+        fem: comOpacidade('--fem'),
+        anel: comOpacidade('--anel'),
+        acento: comOpacidade('--acento'),
+        'acento-tinta': comOpacidade('--acento-tinta'),
+        acento2: comOpacidade('--acento2'),
+        'acento2-tinta': comOpacidade('--acento2-tinta'),
+        chip: comOpacidade('--chip'),
+        'lt-historia': comOpacidade('--lt-historia'),
+        'lt-politica': comOpacidade('--lt-politica'),
+        'lt-moeda': comOpacidade('--lt-moeda'),
+        'lt-tecnologia': comOpacidade('--lt-tecnologia'),
+        'lt-projeto': comOpacidade('--lt-projeto'),
       },
       fontFamily: {
         tit: 'var(--f-tit)',

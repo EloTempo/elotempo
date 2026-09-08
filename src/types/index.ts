@@ -138,6 +138,8 @@ export interface Event {
   data_qualificador: DateQualifier;
   ano_inicio?: number | null;
   ano_fim?: number | null;
+  dia_inicio?: number | null;
+  mes_inicio?: number | null;
   local_id?: string | null;
   /** Nome do local já resolvido pelo backend. */
   local_nome?: string | null;

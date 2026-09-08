@@ -187,22 +187,40 @@ describe('calcularGridBlender (Grade adaptativa de alta precisão)', () => {
     expect(grid.marcasSecundarias).not.toContain(1600);
   });
 
-  it('calcula subdivisões adequadas para um zoom próximo de 30 anos', () => {
+  it('calcula subdivisões adequadas para um zoom próximo de 30 anos (9 anos intermediários entre décadas)', () => {
     const grid = calcularGridBlender({ de: 1810, ate: 1840 }); // span 30
     expect(grid.passoPrincipal).toBe(10);
-    expect(grid.passoSecundario).toBe(2);
+    expect(grid.passoSecundario).toBe(1); // Exatamente 1 ano por subdivisão
     expect(grid.marcasPrincipais).toEqual([1810, 1820, 1830, 1840]);
-    expect(grid.marcasSecundarias).toContain(1812);
+    // Entre 1810 e 1820, devem existir exatamente as 9 linhas intermediárias (1811 a 1819)
+    const entre1810e1820 = grid.marcasSecundarias.filter((a) => a > 1810 && a < 1820);
+    expect(entre1810e1820).toEqual([1811, 1812, 1813, 1814, 1815, 1816, 1817, 1818, 1819]);
     expect(grid.marcasSecundarias).toContain(1822); // ano da Independência!
     expect(grid.marcasSecundarias).not.toContain(1820);
   });
 
-  it('calcula subdivisões para zoom ultra-próximo de poucos anos', () => {
+  it('calcula subdivisões de 3 níveis para zoom de 15 anos (quinquênios + anos intermediários + meses)', () => {
+    const grid = calcularGridBlender({ de: 2000, ate: 2015 }); // span 15
+    expect(grid.passoPrincipal).toBe(5);
+    expect(grid.passoSecundario).toBe(1);
+    expect(grid.marcasPrincipais).toEqual([2000, 2005, 2010, 2015]);
+    // Anos intermediários entre 2000 e 2005 (2001 a 2004)
+    const entre2000e2005 = grid.marcasSecundarias.filter((a) => a > 2000 && a < 2005);
+    expect(entre2000e2005).toEqual([2001, 2002, 2003, 2004]);
+    // Marcas terciárias representando meses (trimestres 4, 7, 10 de cada ano)
+    expect(grid.marcasTerciarias.length).toBeGreaterThan(0);
+    // Ex: abril de 2001 deve estar presente nas marcas terciárias
+    const abril2001 = grid.marcasTerciarias.find((t) => t > 2001.2 && t < 2001.3);
+    expect(abril2001).toBeDefined();
+  });
+
+  it('calcula subdivisões para zoom ultra-próximo de poucos anos com meses', () => {
     const grid = calcularGridBlender({ de: 1820, ate: 1826 }); // span 6
     expect(grid.passoPrincipal).toBe(2);
     expect(grid.passoSecundario).toBe(1);
     expect(grid.marcasPrincipais).toEqual([1820, 1822, 1824, 1826]);
     expect(grid.marcasSecundarias).toEqual([1821, 1823, 1825]);
+    expect(grid.marcasTerciarias.length).toBeGreaterThan(0);
   });
 });
 
@@ -337,3 +355,28 @@ describe('calcularSubLanesContexto (Regra Simples de Visibilidade de Texto)', ()
   });
 });
 
+describe('calcularGridBlender - Escalas Sub-Anuais (Meses e Dias)', () => {
+  it('gera marcas de meses quando o span está entre 0.35 e 2 anos', () => {
+    // Zoom em 1 ano exato (1822)
+    const grid = calcularGridBlender({ de: 1822.0, ate: 1823.0 });
+    expect(grid.escala).toBe('meses');
+    expect(grid.marcasPrincipais.length).toBeGreaterThanOrEqual(11);
+    // Primeiro mês de 1822
+    expect(grid.rotulos?.get(grid.marcasPrincipais[0])).toContain('Jan 1822');
+    // Deve conter Setembro
+    const temSetembro = Array.from(grid.rotulos?.values() ?? []).some((r) => r.includes('Set'));
+    expect(temSetembro).toBe(true);
+  });
+
+  it('gera marcas de dias quando o span está abaixo de 0.35 anos', () => {
+    // Zoom em ~1 mês (fevereiro de 2024 - ano bissexto)
+    const deFev = 2024 + 31 / 366;
+    const ateFev = 2024 + 60 / 366;
+    const grid = calcularGridBlender({ de: deFev, ate: ateFev });
+    expect(grid.escala).toBe('dias');
+    expect(grid.marcasPrincipais.length).toBeGreaterThan(0);
+    // Deve conter o dia 1 de Fev
+    const temDia1 = Array.from(grid.rotulos?.values() ?? []).some((r) => r.includes('1 Fev'));
+    expect(temDia1).toBe(true);
+  });
+});

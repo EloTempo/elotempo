@@ -18,14 +18,15 @@ use domain::eventos_cmds::{
     remover_evento,
 };
 use domain::documentos_cmds::{
-    anexar_documento, definir_foto_principal, listar_documentos_pessoa, remover_documento,
+    abrir_documento_no_sistema, anexar_documento, definir_foto_principal, listar_documentos_pessoa,
+    remover_documento,
 };
 use domain::linhas_tempo_cmds::{
     buscar_marcos, listar_linhas_de_contexto, montar_linha_pessoal, quem_estava_vivo,
     criar_linha_tempo, atualizar_linha_tempo, deletar_linha_tempo,
     criar_marco, atualizar_marco, deletar_marco,
     adicionar_participante, remover_participante, toggle_visibilidade_participacao,
-    buscar_participantes_marco,
+    buscar_participantes_marco, listar_participacoes_pessoa,
 };
 use domain::marcadores_cmds::{
     listar_marcadores, criar_marcador, atualizar_marcador, deletar_marcador,
@@ -128,6 +129,7 @@ fn main() {
             remover_participante,
             toggle_visibilidade_participacao,
             buscar_participantes_marco,
+            listar_participacoes_pessoa,
             // Busca multicritério e estatísticas
             buscar_pessoas_filtrado,
             opcoes_de_filtro,
@@ -155,6 +157,7 @@ fn main() {
             listar_documentos_pessoa,
             remover_documento,
             definir_foto_principal,
+            abrir_documento_no_sistema,
             // Nomes ao longo da vida
             listar_nomes_pessoa,
             adicionar_nome,

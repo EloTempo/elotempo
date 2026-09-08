@@ -26,6 +26,8 @@ function invalidarAcervo(queryClient: ReturnType<typeof useQueryClient>) {
   queryClient.invalidateQueries({ queryKey: ['arvore'] });
   queryClient.invalidateQueries({ queryKey: ['conexoes'] });
   queryClient.invalidateQueries({ queryKey: ['pessoas'] });
+  queryClient.invalidateQueries({ queryKey: ['pessoas-arvore-timeline'] });
+  queryClient.invalidateQueries({ queryKey: ['arvores'] });
 }
 
 export function useConexoes(pessoaId: string | null) {

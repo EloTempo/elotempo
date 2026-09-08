@@ -57,8 +57,18 @@ if hasattr(sys.stdout, "reconfigure"):
 
 COMMONS_API = "https://commons.wikimedia.org/w/api.php"
 WIKIDATA_API = "https://www.wikidata.org/w/api.php"
+WIKIPEDIA_PT_API = "https://pt.wikipedia.org/w/api.php"
+WIKIPEDIA_EN_API = "https://en.wikipedia.org/w/api.php"
 
-USER_AGENT = "EloTempo/3.0 (historical genealogy image importer; strict entity curation; contact@elotempo.app)"
+USER_AGENT = "EloTempo/4.0 (historical genealogy image importer; strict anti-anachronism; artwork curation; contact@elotempo.app)"
+
+PALAVRAS_MODERNAS_REJEICAO = (
+    "futebolista", "footballer", "futebol", "jogador", "cantor", "singer", "rapper",
+    "ator contemporâneo", "ator brasileiro", "atriz", "modelo", "politico contemporaneo",
+    "político contemporâneo", "político brasileiro", "deputado", "senador", "vereador",
+    "governador", "ministro do brasil", "prefeito", "nascido em 19", "nascido em 20",
+    "born 19", "born 20", "série de televisão", "telenovela", "filme de 20", "filme de 19"
+)
 
 DEFAULT_MAX_IMAGES = 3
 DEFAULT_MIN_WIDTH = 350
@@ -169,8 +179,80 @@ def clean_html(value: str) -> str:
         return ""
     value = html.unescape(value)
     value = re.sub(r"<br\s*/?>", "\n", value, flags=re.I)
-    value = re.sub(r"<[^>]+>", "", value)
+    value = re.sub(r"<[^>]+>", " ", value)
+    value = re.sub(r"\{\{[^}]+\}\}", " ", value)
+    value = re.sub(r"\[\[(?:[^|\]]*\|)?([^\]]+)\]\]", r"\1", value)
+    value = re.sub(r"\b(?:date|title|label)\s*QS:[^\s]+", " ", value)
     return re.sub(r"\s+", " ", value).strip()
+
+
+def extrair_ano_data(valor: str) -> tuple[Optional[int], bool]:
+    """
+    Extrai o ano numérico e indica se é a.C.
+    Ex.: 'cerca de 4 a.C.' -> (4, True)
+    Ex.: '1000 a.C.' -> (1000, True)
+    Ex.: '1872' -> (1872, False)
+    Ex.: 'séc. IV a.C.' -> (400, True)
+    """
+    if not valor:
+        return None, False
+    v_norm = normalize_text(valor).lower()
+    is_ac = any(m in v_norm for m in ["a.c.", "a. c.", "bc", "b.c.", "aec", "bce", "antes de cristo"])
+
+    sec_match = re.search(r"s[eé]c(?:\.|ulo)?\s+([ivxlcdm]+)", v_norm)
+    if sec_match:
+        mapa_romano = {
+            "i": 1, "ii": 2, "iii": 3, "iv": 4, "v": 5, "vi": 6, "vii": 7, "viii": 8, "ix": 9, "x": 10,
+            "xi": 11, "xii": 12, "xiii": 13, "xiv": 14, "xv": 15, "xvi": 16, "xvii": 17, "xviii": 18, "xix": 19, "xx": 20
+        }
+        rom = sec_match.group(1).lower()
+        if rom in mapa_romano:
+            ano = mapa_romano[rom] * 100 - 50
+            return ano, is_ac
+
+    ano_match = re.search(r"\b(\d{1,4})\b", v_norm)
+    if ano_match:
+        return int(ano_match.group(1)), is_ac
+
+    return None, is_ac
+
+
+def detectar_epoca(person: dict[str, Any], txt_path: Path) -> dict[str, Any]:
+    """
+    Identifica a cronologia histórica da pessoa:
+    - Se é da Antiguidade ou anterior a 1840 (invenção da fotografia moderna)
+    - Se possui data a.C.
+    - Se pertence a linhagem bíblica, dinastia faraônica ou clássica
+    """
+    campos = person.get("campos", {})
+    txt_str = str(txt_path).lower().replace("\\", "/")
+
+    eh_biblica = any(k in txt_str for k in ["biblica", "jesus", "patriarca", "davi", "moises", "israel"])
+    eh_antiga = eh_biblica or any(k in txt_str for k in ["farao", "antigas", "grecia", "roma", "egito"])
+
+    nasc = campos.get("nascimento", "")
+    fale = campos.get("falecimento", "")
+    ident = campos.get("identidade", "")
+
+    ano_nasc, is_ac_nasc = extrair_ano_data(nasc)
+    ano_fale, is_ac_fale = extrair_ano_data(fale)
+
+    is_ac = is_ac_nasc or is_ac_fale or "a.c." in ident.lower() or "b.c." in ident.lower()
+    ano_ref = ano_nasc or ano_fale
+
+    is_antiguidade = eh_antiga or is_ac
+    if ano_ref is not None:
+        if is_ac or ano_ref < 1840:
+            is_antiguidade = True
+    elif eh_antiga:
+        is_antiguidade = True
+
+    return {
+        "is_antiguidade": is_antiguidade,
+        "is_ac": is_ac,
+        "ano_ref": ano_ref,
+        "eh_biblica": eh_biblica,
+    }
 
 
 def sha256_file(path: Path) -> str:
@@ -210,10 +292,14 @@ def parse_txt_file(path: Path) -> dict[str, Any]:
 
         heading_match = re.match(r"^==\s*(.*?)\s*==$", stripped)
         if heading_match:
+            heading = heading_match.group(1).strip()
+            # Ignora linhas que são meros divisores visuais (ex: ==== ou ----)
+            if not heading or set(heading) <= {"=", "-", "#"}:
+                continue
+
             if current is not None:
                 people.append(current)
 
-            heading = heading_match.group(1).strip()
             current = {
                 "titulo_bloco": heading,
                 "campos": {},
@@ -265,71 +351,97 @@ def parse_txt_file(path: Path) -> dict[str, Any]:
 # MOTOR INTELIGENTE DE ALIASES E NOMES SEGUROS
 # ============================================================
 
-def build_search_names(person: dict[str, Any]) -> list[str]:
+def build_search_names(person: dict[str, Any], epoca_info: Optional[dict[str, Any]] = None) -> list[str]:
     """
-    Gera aliases de busca de forma estrita:
-    - Prioriza nome de registro histórico (ex: José Maria da Silva Paranhos Júnior)
-    - Desmembra nome público e título do bloco
-    - NUNCA extrai anos em parênteses (ex: '1872') nem termos de parentesco puro ('tio')
+    Gera aliases de busca enriquecidos e canônicos:
+    - Prioriza nome público e título canônico (ex: Jesus de Nazaré, Virgem Maria, Rei Salomão)
+    - Gera qualificadores internacionais (ex: King Solomon, Jesus Christ, Saint Joseph)
+    - Limpa notas exegéticas em parênteses "(segundo o Protoevangelho...)"
+    - Não polui buscas com anos soltos nem relações de parentesco sem nome
     """
-    fields = person["campos"]
-    candidates = [
-        fields.get("nome_registro", ""),
-        fields.get("nome_publico", ""),
-        person.get("titulo_bloco", ""),
-    ]
+    fields = person.get("campos", {})
+    pub = (fields.get("nome_publico") or "").strip()
+    bloco = (person.get("titulo_bloco") or "").strip()
+    reg = (fields.get("nome_registro") or "").strip()
 
-    base_names: list[str] = []
+    # Limpa comentários/anotações de fontes entre parênteses no nome de registro
+    reg_clean = re.sub(r"\(segundo[^)]+\)", "", reg).strip()
+    reg_clean = re.sub(r"\(transmissor[^)]+\)", "", reg_clean).strip()
 
-    for cand in candidates:
-        cand = (cand or "").strip()
-        if not cand or cand in base_names:
+    # 1. Candidatos primários (ordem: público, bloco, registro limpo)
+    primary_cands: list[str] = []
+    for cand in [pub, bloco, reg_clean]:
+        if not cand or cand in primary_cands:
             continue
-        base_names.append(cand)
+        primary_cands.append(cand)
 
         match_paren = re.match(r"^(.*?)\s*\((.*?)\)$", cand)
         if match_paren:
             parte_principal = match_paren.group(1).strip()
             parte_parenteses = match_paren.group(2).strip()
 
-            if parte_principal and parte_principal not in base_names:
-                base_names.append(parte_principal)
+            if parte_principal and parte_principal not in primary_cands:
+                primary_cands.append(parte_principal)
 
             norm_par = normalize_text(parte_parenteses).lower()
             is_ano = re.match(r"^\d{1,4}(\s*(a\.c\.|d\.c\.|bc|ad))?$", norm_par)
             is_parentesco = norm_par in TERMOS_PARENTESCO
 
-            # Só aceita conteúdo de parênteses se for nome/título real (não ano, não parentesco)
-            if not is_ano and not is_parentesco and len(parte_parenteses.split()) <= 4:
-                if parte_parenteses not in base_names:
-                    base_names.append(parte_parenteses)
+            if not is_ano and not is_parentesco and 0 < len(parte_parenteses.split()) <= 4:
+                if not any(k in norm_par for k in ["filho de", "pai de", "mae de", "mãe de", "segundo", "transmissor"]):
+                    if parte_parenteses not in primary_cands:
+                        primary_cands.append(parte_parenteses)
 
-    # Versões sem títulos honoríficos / monárquicos
+    # 2. Qualificadores históricos e bíblicos inteligentes
+    qualificadores: list[str] = []
+    clean_target = re.sub(r"\(.*?\)", "", f"{pub} {bloco}").strip().lower()
+    norm_alvo = normalize_text(clean_target)
+    full_text = f"{pub} {bloco} {reg} {fields.get('identidade', '')}".lower()
+    norm_full = normalize_text(full_text)
+
+    is_ancient = epoca_info.get("is_antiguidade", False) if epoca_info else False
+    eh_biblica = epoca_info.get("eh_biblica", False) if epoca_info else False
+
+    if is_ancient or eh_biblica or "salomao" in norm_alvo:
+        if "salomao" in norm_alvo:
+            qualificadores.extend(["Rei Salomão", "Salomão rei de Israel", "King Solomon", "Solomon king of Israel"])
+        elif "david" in norm_alvo or "davi" in norm_alvo:
+            qualificadores.extend(["Rei Davi", "Rei David de Israel", "King David", "David king of Israel"])
+        elif "jesus" in norm_alvo and "eliezer" not in norm_alvo:
+            qualificadores.extend(["Jesus de Nazaré", "Jesus Cristo", "Jesus Christ", "Jesus"])
+        elif "maria" in norm_alvo and ("jesus" in norm_full or "virgem" in norm_alvo or "nazare" in norm_full):
+            qualificadores.extend(["Virgem Maria", "Virgem Maria de Nazaré", "Maria mãe de Jesus", "Virgin Mary"])
+        elif "jose" in norm_alvo and ("maria" in norm_full or "jesus" in norm_full or "nazare" in norm_full or "sao jose" in norm_alvo):
+            qualificadores.extend(["São José", "São José de Nazaré", "Saint Joseph"])
+
+    # 3. Versões sem títulos honoríficos / monárquicos
     sem_titulos: list[str] = []
-    for nome in base_names:
+    for nome in primary_cands + qualificadores:
         limpo = TITULO_REGEX.sub("", nome).strip()
-        if limpo and limpo not in base_names and limpo not in sem_titulos:
+        if limpo and limpo not in primary_cands and limpo not in sem_titulos:
             sem_titulos.append(limpo)
 
-    # Versões em inglês para nobreza / santos
+    # 4. Versões em inglês para nobreza / santos
     nomes_en: list[str] = []
-    for nome in base_names + sem_titulos:
+    for nome in primary_cands + qualificadores + sem_titulos:
         versao_en = nome
         for pat, rep in TRADUCOES_INGLES:
             versao_en = re.sub(pat, rep, versao_en, flags=re.I)
         if (
             versao_en != nome
-            and versao_en not in base_names
+            and versao_en not in primary_cands
             and versao_en not in sem_titulos
             and versao_en not in nomes_en
         ):
             nomes_en.append(versao_en)
 
     resultado_final = []
-    for n in base_names + sem_titulos + nomes_en:
-        n_limpo = re.sub(r"\s+", " ", n).strip()
-        if n_limpo and n_limpo not in resultado_final:
-            resultado_final.append(n_limpo)
+    # Prioridade máxima: qualificadores canônicos conhecidos, depois primários
+    for cand_list in [qualificadores, primary_cands, sem_titulos, nomes_en]:
+        for n in cand_list:
+            n_limpo = re.sub(r"\s+", " ", n).strip()
+            if n_limpo and n_limpo not in resultado_final:
+                resultado_final.append(n_limpo)
 
     return resultado_final
 
@@ -337,6 +449,108 @@ def build_search_names(person: dict[str, Any]) -> list[str]:
 # ============================================================
 # RESOLUÇÃO DE METADADOS NO WIKIMEDIA COMMONS
 # ============================================================
+
+def extract_artwork_metadata(
+    extmeta: dict[str, Any],
+    file_title: str,
+    raw_artist: str,
+    raw_date: str,
+    raw_desc: str,
+    categories_str: str,
+) -> dict[str, Any]:
+    """
+    Extrai e estrutura metadados da obra de arte (pintor, escultor, data, técnica e acervo).
+    """
+    artist_clean = clean_html(raw_artist)
+    date_clean = clean_html(raw_date)
+    desc_clean = clean_html(raw_desc)
+    cat_clean = clean_html(categories_str)
+
+    is_user_photographer = False
+    if "user:" in raw_artist.lower() or "usuário:" in raw_artist.lower() or "commons.wikimedia" in raw_artist.lower():
+        is_user_photographer = True
+    if re.search(r"\b(?:user|usuário|fotógrafo|photographer|own work|obra própria|fotografia própria)\b", artist_clean, re.I):
+        is_user_photographer = True
+
+    all_text = f"{file_title} {desc_clean} {cat_clean} {artist_clean}".lower()
+
+    role = "pintor"
+    art_type = "Pintura"
+
+    if any(k in all_text for k in ["sculpture", "escultura", "statue", "estátua", "busto", "bust", "relief", "relevo", "mármore", "marble", "bronze"]):
+        role = "escultor"
+        art_type = "Escultura"
+    elif any(k in all_text for k in ["mosaic", "mosaico"]):
+        role = "artista"
+        art_type = "Mosaico"
+    elif any(k in all_text for k in ["fresco", "afresco", "catacomb", "catacumba"]):
+        role = "pintor"
+        art_type = "Afresco"
+    elif any(k in all_text for k in ["icon", "ícone", "icone"]):
+        role = "iconógrafo"
+        art_type = "Ícone"
+    elif any(k in all_text for k in ["painting", "pintura", "óleo", "oil on canvas", "tela", "panel", "painel", "tempera"]):
+        role = "pintor"
+        art_type = "Pintura"
+
+    final_artist = artist_clean
+    if is_user_photographer or not final_artist or any(k in final_artist.lower() for k in ["desconhecido", "unknown"]):
+        m_escola = re.search(r"\b(scuola\s+[\w\s]+|escola\s+[\w\s]+|école\s+[\w\s]+|school\s+of\s+[\w\s]+)\b", f"{file_title} {desc_clean}", re.I)
+        if m_escola:
+            final_artist = m_escola.group(1).strip()
+        else:
+            final_artist = "autor anônimo"
+
+    final_artist = re.sub(r"^\s*(?:pintado por|pintura de|sculpture by|painted by)\s*", "", final_artist, flags=re.I).strip()
+
+    final_date = date_clean
+    if re.match(r"^\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2}$", final_date):
+        data_hist = re.search(r"\b(c\.\s*\d{1,4}|\d{1,4}(?:[–-]\d{1,4})?|\d{1,2}[ºoª]?\s*s[eé]culo|\w+\s*century|\d{1,4}\s*(?:a\.c\.|d\.c\.|bc|ad))\b", desc_clean, re.I)
+        if data_hist:
+            final_date = data_hist.group(1)
+        else:
+            final_date = ""
+
+    final_date = re.sub(r"\bdate\s+QS:[^\s]+", "", final_date).strip()
+    final_date = re.sub(r"\s+", " ", final_date).strip()
+
+    medium = clean_html(extmeta.get("Medium", {}).get("value", ""))
+    credit = clean_html(extmeta.get("Credit", {}).get("value", ""))
+    museum = ""
+    if credit:
+        m_museu = re.search(r"(?:doado ao wikimedia commons por como parte de um projeto do|acervo do|acervo da|museum|gallery|galeria|instituto|catacomb|catacumba)\s+([^.]+)", credit, re.I)
+        if m_museu:
+            museum = m_museu.group(0).strip()
+            museum = re.sub(r"^(?:doado ao wikimedia commons por como parte de um projeto do|acervo do|acervo da)\s*", "", museum, flags=re.I).strip()
+        elif not credit.startswith("http") and not any(k in credit.lower() for k in ["own work", "obra do próprio", "fotografia própria", "extraído"]):
+            museum = credit[:100].strip()
+
+    partes = []
+    if final_artist and final_artist.lower() not in ["desconhecido", "unknown"]:
+        partes.append(f"{art_type} por {final_artist}")
+    else:
+        partes.append(f"{art_type} histórica")
+
+    if final_date:
+        partes.append(f"({final_date})")
+
+    desc_str = " ".join(partes)
+    if medium:
+        desc_str += f". Técnica: {medium}"
+    if museum:
+        desc_str += f". Acervo: {museum[:100]}"
+    desc_str = desc_str.strip(". ") + "."
+
+    return {
+        "artist": final_artist,
+        "role": role,
+        "date_created": final_date,
+        "title": clean_html(extmeta.get("ObjectName", {}).get("value", "")) or file_title,
+        "medium": medium,
+        "museum": museum,
+        "formatted_description": desc_str,
+    }
+
 
 def get_commons_file_info(
     file_title: str,
@@ -366,6 +580,20 @@ def get_commons_file_info(
             info = imageinfo[0]
             extmeta = info.get("extmetadata", {})
 
+            raw_artist = extmeta.get("Artist", {}).get("value", "")
+            raw_date = extmeta.get("DateTimeOriginal", {}).get("value", "") or extmeta.get("Date", {}).get("value", "")
+            raw_desc = extmeta.get("ImageDescription", {}).get("value", "")
+            raw_cats = extmeta.get("Categories", {}).get("value", "")
+
+            artwork = extract_artwork_metadata(
+                extmeta=extmeta,
+                file_title=page.get("title", file_title),
+                raw_artist=raw_artist,
+                raw_date=raw_date,
+                raw_desc=raw_desc,
+                categories_str=raw_cats,
+            )
+
             return {
                 "title": page.get("title", file_title),
                 "url": info.get("url", ""),
@@ -377,13 +605,14 @@ def get_commons_file_info(
                 "sha1": info.get("sha1", ""),
                 "license": extract_meta(extmeta, "LicenseShortName") or "Public domain",
                 "license_url": extract_meta(extmeta, "LicenseUrl"),
-                "artist": extract_meta(extmeta, "Artist"),
+                "artist": artwork["artist"],
                 "credit": extract_meta(extmeta, "Credit"),
                 "description": extract_meta(extmeta, "ImageDescription"),
-                "date_taken": extract_meta(extmeta, "DateTimeOriginal"),
+                "date_taken": artwork["date_created"] or extract_meta(extmeta, "DateTimeOriginal"),
                 "categories": extract_meta(extmeta, "Categories"),
                 "filepage": info.get("descriptionurl", ""),
                 "source_provider": "Wikimedia Commons",
+                "artwork": artwork,
             }
     except Exception:
         pass
@@ -405,11 +634,13 @@ def search_wikidata_strict(
     person: dict[str, Any],
     aliases: list[str],
     session: requests.Session,
+    epoca_info: Optional[dict[str, Any]] = None,
 ) -> tuple[Optional[dict[str, Any]], list[dict[str, Any]]]:
     """
     Pesquisa entidades no Wikidata e valida com critérios rigorosos:
     - P31 deve ser humano (Q5) ou figura bíblica/cultural.
     - Rejeita explicitamente ruas, cidades, furacões, monumentos, anos e desambiguações.
+    - Anti-anacronismo incondicional: rejeita figuras contemporâneas para alvos antigos.
     - Penaliza divergência de sufixos geracionais (Júnior vs Pai).
     - Pontua correspondência de contexto (profissão, nacionalidade, biografia).
     """
@@ -420,7 +651,7 @@ def search_wikidata_strict(
     melhor_score = -1
     entidades_avaliadas: list[dict[str, Any]] = []
 
-    for alias in aliases[:4]:
+    for alias in aliases[:8]:
         params = {
             "action": "wbsearchentities",
             "format": "json",
@@ -476,6 +707,42 @@ def search_wikidata_strict(
             # Descarta entidades explicitamente proibidas (anos, ruas, furacões, cidades, etc.)
             if any(p in P31_PROIBIDOS for p in p31_list):
                 continue
+
+            # Descarta se descrição indicar monumento, estátua ou rua em vez da pessoa
+            if any(term in desc.lower() for term in ["monumento na cidade", "monumento em", "estátua em", "avenida em", "rua em"]):
+                continue
+
+            # Data de nascimento (P569) da entidade para filtro anti-anacronismo
+            cand_ano_nasc = None
+            cand_is_ac = False
+            for c in claims.get("P569", []):
+                try:
+                    time_val = c["mainsnak"]["datavalue"]["value"]["time"]
+                    m_ano = re.search(r"([+-]\d+)", time_val)
+                    if m_ano:
+                        val_num = int(m_ano.group(1))
+                        if val_num < 0:
+                            cand_ano_nasc = abs(val_num)
+                            cand_is_ac = True
+                        else:
+                            cand_ano_nasc = val_num
+                            cand_is_ac = False
+                        break
+                except Exception:
+                    pass
+
+            # REGRA ANTI-ANACRONISMO INCONDICIONAL
+            if epoca_info and epoca_info.get("is_antiguidade"):
+                # 1. Rejeita sumariamente qualquer entidade nascida a partir de 1850
+                if cand_ano_nasc is not None and not cand_is_ac and cand_ano_nasc >= 1850:
+                    continue
+                # 2. Se alvo é a.C. e entidade nasceu séculos depois na era comum
+                if epoca_info.get("is_ac") and cand_ano_nasc is not None and not cand_is_ac and cand_ano_nasc > 100:
+                    continue
+                # 3. Rejeita termos contemporâneos inconfundíveis na descrição
+                desc_lower = desc.lower()
+                if any(pm in desc_lower for pm in PALAVRAS_MODERNAS_REJEICAO):
+                    continue
 
             score = 0
 
@@ -561,6 +828,145 @@ def search_wikidata_strict(
     } if melhor_entidade else None
 
     return record, p18_results
+
+
+def search_wikipedia_direct(
+    person: dict[str, Any],
+    aliases: list[str],
+    session: requests.Session,
+    epoca_info: dict[str, Any],
+) -> tuple[Optional[dict[str, Any]], list[dict[str, Any]]]:
+    """
+    Busca direta nas APIs da Wikipédia (PT e EN) como contingência caso o Wikidata
+    não tenha selecionado uma entidade com pontuação satisfatória.
+    Recupera a lead image da infobox e o wikibase_item (QID) com seus claims oficiais.
+    """
+    for alias in aliases[:8]:
+        for lang in ["pt", "en"]:
+            api_url = f"https://{lang}.wikipedia.org/w/api.php"
+            try:
+                r = session.get(api_url, params={
+                    "action": "query",
+                    "format": "json",
+                    "list": "search",
+                    "srsearch": alias,
+                    "srlimit": 3,
+                }, timeout=REQUEST_TIMEOUT)
+                if r.status_code != 200:
+                    continue
+                hits = r.json().get("query", {}).get("search", [])
+            except Exception:
+                continue
+
+            for hit in hits:
+                title = hit.get("title", "")
+                encoded = quote(title.replace(" ", "_"))
+                sum_url = f"https://{lang}.wikipedia.org/api/rest_v1/page/summary/{encoded}"
+                try:
+                    r_sum = session.get(sum_url, timeout=REQUEST_TIMEOUT)
+                    if r_sum.status_code != 200:
+                        continue
+                    data = r_sum.json()
+                except Exception:
+                    continue
+
+                if data.get("type") == "disambiguation":
+                    continue
+
+                extract = data.get("extract", "")
+                if epoca_info.get("is_antiguidade"):
+                    if any(pm in extract.lower() for pm in PALAVRAS_MODERNAS_REJEICAO):
+                        continue
+
+                qid = data.get("wikibase_item")
+                if not qid:
+                    continue
+
+                # Busca detalhes no Wikidata
+                try:
+                    r_wd = session.get(WIKIDATA_API, params={
+                        "action": "wbgetentities",
+                        "ids": qid,
+                        "props": "claims|sitelinks|labels|descriptions",
+                        "languages": "pt|en",
+                        "format": "json",
+                    }, timeout=REQUEST_TIMEOUT)
+                    ent = r_wd.json().get("entities", {}).get(qid, {})
+                except Exception:
+                    continue
+
+                claims = ent.get("claims", {})
+
+                # Valida anti-anacronismo pela data P569
+                if epoca_info.get("is_antiguidade"):
+                    ano_nasc = None
+                    is_ac = False
+                    for c in claims.get("P569", []):
+                        try:
+                            tv = c["mainsnak"]["datavalue"]["value"]["time"]
+                            m = re.search(r"([+-]\d+)", tv)
+                            if m:
+                                val = int(m.group(1))
+                                if val < 0:
+                                    ano_nasc = abs(val)
+                                    is_ac = True
+                                else:
+                                    ano_nasc = val
+                                    is_ac = False
+                                break
+                        except Exception:
+                            pass
+                    if ano_nasc is not None and not is_ac and ano_nasc >= 1850:
+                        continue
+                    if epoca_info.get("is_ac") and ano_nasc is not None and not is_ac and ano_nasc > 100:
+                        continue
+
+                label = ent.get("labels", {}).get("pt", {}).get("value") or ent.get("labels", {}).get("en", {}).get("value") or title
+                desc = ent.get("descriptions", {}).get("pt", {}).get("value") or ent.get("descriptions", {}).get("en", {}).get("value") or extract[:100]
+
+                selected = {
+                    "id": qid,
+                    "label": label,
+                    "description": desc,
+                    "score": 135,
+                    "claims": claims,
+                    "sitelinks": ent.get("sitelinks", {}),
+                    "source": f"Wikipedia {lang.upper()} direct search",
+                }
+
+                # Coleta fotos P18 associadas
+                p18_imgs = []
+                for claim in claims.get("P18", []) + claims.get("P1543", []):
+                    try:
+                        val = claim["mainsnak"]["datavalue"]["value"]
+                        if any(tn in val.lower() for tn in TERMOS_NEGATIVOS):
+                            continue
+                        fi = get_commons_file_info(val, session)
+                        if fi:
+                            fi["source_provider"] = "Wikidata (P18 Oficial)"
+                            fi["is_wikidata_p18"] = True
+                            fi["wikidata_qid"] = qid
+                            p18_imgs.append(fi)
+                    except Exception:
+                        pass
+
+                # Coleta lead image da própria página da Wikipédia
+                orig = data.get("originalimage") or data.get("thumbnail")
+                if orig and orig.get("source"):
+                    img_url = orig.get("source")
+                    if not any(tn in img_url.lower() for tn in TERMOS_NEGATIVOS):
+                        fn_match = re.search(r"/([^/]+?)(?:\?.*)?$", unquote(img_url))
+                        fn = fn_match.group(1) if fn_match else title
+                        ci = get_commons_file_info(fn, session)
+                        if ci:
+                            ci["source_provider"] = f"Wikipedia {lang.upper()} (Lead Image)"
+                            ci["is_wikipedia_lead"] = True
+                            p18_imgs.append(ci)
+
+                record = {"selected": selected, "candidates": [selected]}
+                return record, p18_imgs
+
+    return None, []
 
 
 # ============================================================
@@ -729,6 +1135,7 @@ def search_commons_by_category(
 def score_profile_photo(
     person: dict[str, Any],
     result: dict[str, Any],
+    epoca_info: Optional[dict[str, Any]] = None,
 ) -> int:
     score = 0
 
@@ -767,6 +1174,25 @@ def score_profile_photo(
     if any(tn in title_desc for tn in TERMOS_NEGATIVOS):
         score -= 120
 
+    # Para personalidades da Antiguidade / Pré-Modernas: prioriza amplamente arte clássica
+    if epoca_info and epoca_info.get("is_antiguidade"):
+        artwork = result.get("artwork") or {}
+        role = artwork.get("role")
+        artist = artwork.get("artist") or ""
+        date_created = artwork.get("date_created") or ""
+
+        # Obras artísticas autênticas (pintura, afresco, escultura, mosaico, ícone)
+        if role in ["pintor", "escultor", "iconógrafo", "artista"]:
+            score += 45
+        if artist and artist.lower() not in ["desconhecido", "unknown", "autor anônimo"]:
+            score += 35
+        if date_created:
+            score += 25
+
+        # Penaliza páginas digitalizadas de livros de texto ou diagramas modernos
+        if any(bad in title_desc for bad in ["diagram", "diagrama", "page scan", "textbook", "map", "mapa"]):
+            score -= 80
+
     if w >= 800 and h >= 800:
         score += 20
     elif w >= 400 and h >= 400:
@@ -779,6 +1205,7 @@ def rank_and_deduplicate(
     person: dict[str, Any],
     results: list[dict[str, Any]],
     min_width: int,
+    epoca_info: Optional[dict[str, Any]] = None,
 ) -> list[dict[str, Any]]:
     filtered = []
 
@@ -787,7 +1214,7 @@ def rank_and_deduplicate(
         if w < min_width:
             continue
 
-        r["elotempo_score"] = score_profile_photo(person, r)
+        r["elotempo_score"] = score_profile_photo(person, r, epoca_info)
         filtered.append(r)
 
     filtered.sort(
@@ -891,7 +1318,7 @@ def build_image_json(
     campos = person["campos"]
 
     result: dict[str, Any] = {
-        "schema_version": "3.0",
+        "schema_version": "4.0",
         "person": {
             "block_title": person.get("titulo_bloco", ""),
             "name_public": campos.get("nome_publico", person.get("titulo_bloco", "")),
@@ -925,6 +1352,7 @@ def build_image_json(
             "artist": source.get("artist", "") if source else "",
             "credit": source.get("credit", "") if source else "",
         },
+        "artwork": source.get("artwork") if source else None,
         "provenance": {
             "page_url": source.get("filepage", "") if source else "",
             "original_url": source.get("url", "") if source else "",
@@ -1018,18 +1446,40 @@ def process_person(
             return 0
         print(f"  AVISO: foto declarada não encontrada: {declared_photo}")
 
-    # Aliases cirúrgicos
-    aliases = build_search_names(person)
-    print(f"  Aliases de busca expandidos ({len(aliases)}): {', '.join(aliases[:4])}")
+    # Detecção de época e filtro anti-anacronismo
+    epoca_info = detectar_epoca(person, txt_path)
+    if epoca_info.get("is_antiguidade"):
+        ref_str = f" (~{epoca_info['ano_ref']} {'a.C.' if epoca_info['is_ac'] else 'd.C.'})" if epoca_info.get("ano_ref") else " (Antiguidade/Bíblica)"
+        print(f"  [ÉPOCA HISTÓRICA] Detectada personalidade antiga{ref_str} — Filtro anti-anacronismo ativo.")
+
+    declared_photo = campos.get("foto", "").strip()
+    existing_photo = resolve_existing_photo(txt_path, declared_photo)
+    if declared_photo:
+        if existing_photo:
+            print(f"  Foto já declarada no TXT: {existing_photo}")
+            return 0
+        print(f"  AVISO: foto declarada não encontrada: {declared_photo}")
+
+    # Aliases canônicos inteligentes
+    aliases = build_search_names(person, epoca_info)
+    print(f"  Aliases de busca expandidos ({len(aliases)}): {', '.join(aliases[:6])}")
 
     # 1. Busca e validação estrita no Wikidata
-    wikidata_record, p18_imgs = search_wikidata_strict(person, aliases, session)
+    wikidata_record, p18_imgs = search_wikidata_strict(person, aliases, session, epoca_info)
+
+    # 2. Contingência: se Wikidata não pontuou bem, realiza busca direta nos artigos da Wikipédia
+    if not wikidata_record or not wikidata_record.get("selected"):
+        print("  -> Consultando diretamente os artigos da Wikipédia (PT/EN)...")
+        wiki_direct_record, wiki_direct_imgs = search_wikipedia_direct(person, aliases, session, epoca_info)
+        if wiki_direct_record and wiki_direct_record.get("selected"):
+            wikidata_record = wiki_direct_record
+            p18_imgs.extend(wiki_direct_imgs)
 
     if wikidata_record and wikidata_record.get("selected"):
         sel = wikidata_record["selected"]
-        print(f"  ✓ Entidade Wikidata confirmada: {sel.get('id')} — {sel.get('label')} ({sel.get('description')}) [Score: {sel.get('score')}]")
+        print(f"  ✓ Entidade confirmada: {sel.get('id')} — {sel.get('label')} ({sel.get('description')}) [Score: {sel.get('score')}]")
     else:
-        print("  ✕ Nenhuma entidade com correspondência biográfica confiável no Wikidata.")
+        print("  ✕ Nenhuma entidade com correspondência biográfica confiável encontrada.")
         return 0
 
     all_results: list[dict[str, Any]] = []
@@ -1041,7 +1491,7 @@ def process_person(
 
     time.sleep(delay)
 
-    # 2. Coleta foto de perfil da infobox da Wikipedia (via sitelink exato)
+    # 3. Coleta foto de perfil da infobox da Wikipedia (via sitelink exato)
     wiki_leads = search_wikipedia_lead_image(wikidata_record, session)
     if wiki_leads:
         print(f"  -> Foto principal de perfil da Wikipedia: {len(wiki_leads)}")
@@ -1049,7 +1499,7 @@ def process_person(
 
     time.sleep(delay)
 
-    # 3. Coleta fotos da Categoria oficial do Commons (P373)
+    # 4. Coleta fotos da Categoria oficial do Commons (P373)
     commons_cat_imgs = search_commons_by_category(wikidata_record, session, limit=4)
     if commons_cat_imgs:
         print(f"  -> Imagens da categoria dedicada no Commons: {len(commons_cat_imgs)}")
@@ -1059,7 +1509,7 @@ def process_person(
         print("  ✕ Nenhum retrato disponível para esta entidade histórica.")
         return 0
 
-    ranked = rank_and_deduplicate(person, all_results, min_width)
+    ranked = rank_and_deduplicate(person, all_results, min_width, epoca_info)
     if not ranked:
         print("  ✕ Nenhuma imagem passou no filtro de resolução mínima e proporção.")
         return 0
@@ -1079,11 +1529,18 @@ def process_person(
 
         score = result.get("elotempo_score", 0)
         prov = result.get("source_provider", "Wikimedia")
+        artwork = result.get("artwork") or {}
 
         print()
         print(f"  ✓ Candidato #{idx} [Score: {score} pts | Fonte: {prov}]")
         print(f"    Título:   {result.get('title')}")
         print(f"    Medidas:  {result.get('width')} x {result.get('height')} px")
+        if artwork and artwork.get("formatted_description"):
+            print(f"    Obra:     {artwork['formatted_description']}")
+            if artwork.get("artist"):
+                print(f"    Artista:  {artwork['artist']} ({artwork.get('role', 'artista')})")
+            if artwork.get("date_created"):
+                print(f"    Data:     {artwork['date_created']}")
         print(f"    URL:      {result.get('filepage') or result.get('url')}")
 
         if no_download:

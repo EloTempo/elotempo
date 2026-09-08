@@ -298,6 +298,38 @@ pub async fn apagar_midia_da_pessoa(
     Ok(())
 }
 
+/// Abre um arquivo no aplicativo padrão do sistema operacional (leitor de PDF, visualizador de fotos, etc.)
+#[tauri::command]
+pub async fn abrir_documento_no_sistema(
+    caminho_relativo: String,
+    app: tauri::AppHandle,
+) -> Resultado<()> {
+    if let Ok(base) = app.path().app_data_dir() {
+        let alvo = base.join(&caminho_relativo);
+        if alvo.is_file() {
+            #[cfg(target_os = "windows")]
+            {
+                let _ = std::process::Command::new("cmd")
+                    .args(["/C", "start", "", &alvo.to_string_lossy()])
+                    .spawn();
+            }
+            #[cfg(target_os = "macos")]
+            {
+                let _ = std::process::Command::new("open")
+                    .arg(&alvo)
+                    .spawn();
+            }
+            #[cfg(target_os = "linux")]
+            {
+                let _ = std::process::Command::new("xdg-open")
+                    .arg(&alvo)
+                    .spawn();
+            }
+        }
+    }
+    Ok(())
+}
+
 #[cfg(test)]
 mod testes {
     use super::*;

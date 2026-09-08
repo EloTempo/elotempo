@@ -29,6 +29,7 @@ export function SeletorDeArvore({
   const { t } = useI18n();
   const [menuAberto, setMenuAberto] = useState(false);
   const [modalGerenciarAberto, setModalGerenciarAberto] = useState(false);
+  const [iniciarCriacaoAoSurgir, setIniciarCriacaoAoSurgir] = useState(false);
   const [busca, setBusca] = useState('');
   const [abaFiltro, setAbaFiltro] = useState<'todas' | 'pessoais' | 'historicas'>('historicas');
   const menuRef = useRef<HTMLDivElement>(null);
@@ -111,8 +112,8 @@ export function SeletorDeArvore({
             className="h-8 px-2.5 rounded-raio-s bg-card hover:bg-sup border border-borda text-xs font-semibold text-tinta flex items-center gap-1.5 cursor-pointer shadow-2xs transition-colors max-w-[260px]"
             title={
               arvoreAtiva
-                ? `Árvore ativa: ${arvoreAtiva.nome} (clique para alternar)`
-                : 'Todo o Acervo ativo (visão global sem filtros)'
+                ? t('arvore', 'arvoreAtivaTitulo', { nome: arvoreAtiva.nome })
+                : t('arvore', 'todoAcervoAtivoTitulo')
             }
           >
             {arvoreAtiva ? (
@@ -123,9 +124,9 @@ export function SeletorDeArvore({
             ) : (
               <>
                 <Globe className="w-3.5 h-3.5 text-acento flex-none" />
-                <span className="truncate">Todo o Acervo</span>
+                <span className="truncate">{t('arvore', 'todoAcervo')}</span>
                 <span className="text-[9.5px] px-1 py-0.2 rounded font-sans font-medium bg-sup text-tinta3 border border-borda/60 flex-none">
-                  Geral
+                  {t('arvore', 'geral')}
                 </span>
               </>
             )}
@@ -137,8 +138,8 @@ export function SeletorDeArvore({
               type="button"
               onClick={() => onSelecionarArvore(null)}
               className="ml-1 p-1.5 rounded-raio-s hover:bg-sup text-tinta3 hover:text-tinta border border-transparent hover:border-borda transition-colors cursor-pointer"
-              title="Voltar para 'Todo o Acervo' (remover filtro de árvore ativa)"
-              aria-label="Voltar para Todo o Acervo"
+              title={t('arvore', 'voltarTodoAcervo')}
+              aria-label={t('arvore', 'voltarTodoAcervo')}
             >
               <X className="w-3 h-3" />
             </button>
@@ -151,7 +152,7 @@ export function SeletorDeArvore({
             <div className="px-3 py-1.5 text-[10.5px] font-bold text-tinta3 uppercase tracking-wider border-b border-borda/40 flex items-center justify-between">
               <span>{t('arvore', 'arvoresDoAcervo')}</span>
               <span className="font-num text-[10.5px] text-acento font-bold">
-                {arvores.length} árvores no acervo
+                {t('arvore', 'arvoresNoAcervo', { total: arvores.length })}
               </span>
             </div>
 
@@ -162,7 +163,7 @@ export function SeletorDeArvore({
                 <input
                   ref={inputBuscaRef}
                   type="text"
-                  placeholder="Buscar por nome, categoria, país ou época..."
+                  placeholder={t('arvore', 'filtrarArvoresPlaceholder')}
                   value={busca}
                   onChange={(e) => setBusca(e.target.value)}
                   className="w-full text-xs pl-8 pr-7 py-1.5 rounded-raio-s bg-sup/80 border border-borda text-tinta placeholder:text-tinta3 outline-none focus:border-acento transition-colors"
@@ -190,7 +191,7 @@ export function SeletorDeArvore({
                     : 'text-tinta2 hover:text-tinta hover:bg-sup'
                 }`}
               >
-                <span>🏛️ Públicas</span>
+                <span>🏛️ {t('arvore', 'publicas')}</span>
                 <span>({arvoresHistoricas.length})</span>
               </button>
               <button
@@ -202,7 +203,7 @@ export function SeletorDeArvore({
                     : 'text-tinta2 hover:text-tinta hover:bg-sup'
                 }`}
               >
-                Minhas ({arvoresPessoais.length})
+                {t('arvore', 'minhas')} ({arvoresPessoais.length})
               </button>
               <button
                 type="button"
@@ -213,7 +214,7 @@ export function SeletorDeArvore({
                     : 'text-tinta2 hover:text-tinta hover:bg-sup'
                 }`}
               >
-                Todas ({arvores.length})
+                {t('arvore', 'todas')} ({arvores.length})
               </button>
             </div>
 
@@ -235,9 +236,9 @@ export function SeletorDeArvore({
                     <Globe className="w-3.5 h-3.5" />
                   </div>
                   <div className="flex flex-col min-w-0 flex-1">
-                    <span className="truncate font-semibold text-tinta">Todo o Acervo</span>
+                    <span className="truncate font-semibold text-tinta">{t('arvore', 'todoAcervo')}</span>
                     <span className="text-[10px] text-tinta3 truncate">
-                      Visão global de todos os registros ({totalPessoasAcervo} pessoas)
+                      {t('arvore', 'visaoGlobal', { total: totalPessoasAcervo })}
                     </span>
                   </div>
                 </div>
@@ -249,7 +250,7 @@ export function SeletorDeArvore({
                 arvoresFiltradas.some((a) => !a.is_publico) && (
                   <div>
                     <div className="px-3 py-1 text-[9.5px] font-bold text-tinta3 uppercase tracking-wider bg-sup/50 flex items-center justify-between">
-                      <span>Minhas Árvores</span>
+                      <span>{t('arvore', 'minhasArvores')}</span>
                       <span className="font-num text-[9.5px] text-tinta3">
                         {arvoresFiltradas.filter((a) => !a.is_publico).length}
                       </span>
@@ -273,8 +274,8 @@ export function SeletorDeArvore({
                             <div className="flex flex-col min-w-0 flex-1">
                               <span className="truncate text-tinta font-medium">{a.nome}</span>
                               <div className="flex items-center gap-1.5 text-[10px] text-tinta3 truncate mt-0.5">
-                                {a.raiz_pessoa_nome && <span>Raiz: {a.raiz_pessoa_nome}</span>}
-                                <span>· {a.total_membros} membros</span>
+                                {a.raiz_pessoa_nome && <span>{t('arvore', 'raiz')}: {a.raiz_pessoa_nome}</span>}
+                                <span>· {a.total_membros} {t('arvore', 'membros')}</span>
                               </div>
                             </div>
                             {isAtiva && <Check className="w-3.5 h-3.5 text-acento flex-none" />}
@@ -291,7 +292,7 @@ export function SeletorDeArvore({
                     <div className="px-3 py-1.5 text-[9.5px] font-bold text-acento uppercase tracking-wider bg-acento/10 flex items-center justify-between border-y border-borda/30">
                       <span className="flex items-center gap-1">
                         <Sparkles className="w-3 h-3" />
-                        <span>Acervo de Referência Histórica</span>
+                        <span>{t('arvore', 'acervoHistorico')}</span>
                       </span>
                       <span className="font-num text-[10px] text-acento font-bold">
                         {arvoresFiltradas.filter((a) => a.is_publico).length}
@@ -325,7 +326,7 @@ export function SeletorDeArvore({
                                     <span className="font-semibold text-tinta2">{a.pais}</span>
                                   )}
                                   {a.periodo && <span>· {a.periodo}</span>}
-                                  <span>· {a.total_membros} membros</span>
+                                  <span>· {a.total_membros} {t('arvore', 'membros')}</span>
                                 </div>
                               </div>
                               {isAtiva && <Check className="w-3.5 h-3.5 text-acento flex-none" />}
@@ -338,8 +339,26 @@ export function SeletorDeArvore({
                 )}
 
               {arvoresFiltradas.length === 0 && (
-                <div className="p-5 text-center text-xs text-tinta3">
-                  Nenhuma árvore encontrada para o filtro.
+                <div className="p-5 text-center text-xs text-tinta3 flex flex-col items-center gap-2">
+                  <span>
+                    {abaFiltro === 'pessoais'
+                      ? t('arvore', 'nenhumaPessoalEncontrada')
+                      : t('arvore', 'nenhumaEncontradaFiltro')}
+                  </span>
+                  {abaFiltro === 'pessoais' && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setMenuAberto(false);
+                        setIniciarCriacaoAoSurgir(true);
+                        setModalGerenciarAberto(true);
+                      }}
+                      className="px-2.5 py-1 rounded bg-acento text-acento-tinta font-semibold hover:bg-acento/90 cursor-pointer flex items-center gap-1 mt-1 text-xs transition-colors"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                      {t('arvore', 'criarNovaArvore')}
+                    </button>
+                  )}
                 </div>
               )}
             </div>
@@ -350,6 +369,7 @@ export function SeletorDeArvore({
                 type="button"
                 onClick={() => {
                   setMenuAberto(false);
+                  setIniciarCriacaoAoSurgir(true);
                   setModalGerenciarAberto(true);
                 }}
                 className="w-full text-left px-3 py-1.5 text-xs text-tinta2 hover:text-tinta hover:bg-sup flex items-center gap-2 cursor-pointer transition-colors"
@@ -362,6 +382,7 @@ export function SeletorDeArvore({
                 type="button"
                 onClick={() => {
                   setMenuAberto(false);
+                  setIniciarCriacaoAoSurgir(false);
                   setModalGerenciarAberto(true);
                 }}
                 className="w-full text-left px-3 py-1.5 text-xs text-tinta2 hover:text-tinta hover:bg-sup flex items-center gap-2 cursor-pointer transition-colors"
@@ -376,9 +397,14 @@ export function SeletorDeArvore({
 
       <ModalGerenciarArvores
         isOpen={modalGerenciarAberto}
-        onClose={() => setModalGerenciarAberto(false)}
+        onClose={() => {
+          setModalGerenciarAberto(false);
+          setIniciarCriacaoAoSurgir(false);
+        }}
         arvoreAtivaId={arvoreAtiva?.id ?? null}
         onSelecionarArvore={onSelecionarArvore}
+        iniciarComCriacao={iniciarCriacaoAoSurgir}
+        abaInicial={abaFiltro === 'pessoais' ? 'pessoais' : 'publicas'}
       />
     </>
   );

@@ -2,6 +2,19 @@
  * Funções puras de ordenação e reordenação das trilhas da Linha do Tempo.
  */
 
+import {
+  dataParaAnoContinuo,
+  interpretarDataParaAnoContinuo,
+  NOMES_MESES_CURTOS,
+  obterDiasNoMes,
+} from '../../lib/precisionTime';
+import {
+  formatarAnoNoCalendario,
+  formatarDataNoCalendario,
+  type TipoCalendario,
+} from '../../lib/calendarios';
+import type { TipoTempo } from '../../types';
+
 export function reordenarLista<T>(
   lista: T[],
   origem: T,
@@ -141,24 +154,150 @@ export function calcularFatiaVisivelBarra({
 export interface GridBlender {
   passoPrincipal: number;
   passoSecundario: number;
+  passoTerciario?: number;
   marcasPrincipais: number[];
   marcasSecundarias: number[];
+  marcasTerciarias: number[];
+  rotulos?: Map<number, string>;
+  escala?: 'anos' | 'meses' | 'dias';
 }
 
 /**
- * Calcula subdivisões principais (Major ticks) e secundárias (Minor lines)
- * estilo timeline/graph editor do Blender, adaptando-se harmonicamente ao zoom.
+ * Calcula subdivisões principais (Major ticks), secundárias (Minor lines) e
+ * terciárias (Sub-minor / Meses) estilo timeline/graph editor do Blender, adaptando-se
+ * harmonicamente ao zoom (cascata harmônica de séculos -> décadas -> anos -> meses -> dias).
  */
 export function calcularGridBlender({
   de,
   ate,
+  calendario = 'gregoriano',
+  tipoTempo = 'real',
 }: {
   de: number;
   ate: number;
+  calendario?: TipoCalendario;
+  tipoTempo?: TipoTempo;
 }): GridBlender {
-  const span = Math.max(1, ate - de);
+  const span = Math.max(0.0001, ate - de);
+  const rotulos = new Map<number, string>();
+  const marcasPrincipais: number[] = [];
+  const marcasSecundarias: number[] = [];
+  const marcasTerciarias: number[] = [];
+
+  // 1. Nível Sub-Anual: Dias (menos de 0.35 anos / ~128 dias)
+  if (span < 0.35) {
+    const passoDias = span < 0.09 ? 1 : 5;
+    const anoInicio = Math.floor(de);
+    const anoFim = Math.floor(ate);
+
+    for (let ano = anoInicio; ano <= anoFim; ano++) {
+      for (let mes = 1; mes <= 12; mes++) {
+        const totalDiasMes = obterDiasNoMes(mes, ano);
+        for (let dia = 1; dia <= totalDiasMes; dia++) {
+          const anoCont = dataParaAnoContinuo(ano, mes, dia);
+          if (anoCont >= de - 0.002 && anoCont <= ate + 0.002) {
+            const ehPrincipal = dia === 1 || (passoDias === 1 ? true : dia % passoDias === 0);
+            if (ehPrincipal) {
+              marcasPrincipais.push(anoCont);
+              const rotulo =
+                calendario === 'gregoriano' && tipoTempo === 'real'
+                  ? dia === 1
+                    ? `${dia} ${NOMES_MESES_CURTOS[mes - 1]}`
+                    : `${dia}`
+                  : formatarDataNoCalendario({ ano, mes, dia }, calendario, tipoTempo, 'diaMes');
+              rotulos.set(anoCont, rotulo);
+            } else {
+              marcasSecundarias.push(anoCont);
+            }
+
+            // Subdivisão terciária: meio-dia (12h) se zoom for de passo 1 dia
+            if (passoDias === 1 && span < 0.08) {
+              const meioDia = anoCont + 0.5 / (totalDiasMes * 12);
+              if (meioDia >= de && meioDia <= ate) {
+                marcasTerciarias.push(meioDia);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    marcasPrincipais.sort((a, b) => a - b);
+    marcasSecundarias.sort((a, b) => a - b);
+    marcasTerciarias.sort((a, b) => a - b);
+
+    return {
+      passoPrincipal: passoDias / 365,
+      passoSecundario: 1 / 365,
+      marcasPrincipais,
+      marcasSecundarias,
+      marcasTerciarias,
+      rotulos,
+      escala: 'dias',
+    };
+  }
+
+  // 2. Nível Sub-Anual: Meses (entre 0.35 e 2 anos)
+  if (span <= 2.0) {
+    const passoMes = span > 1.2 ? 2 : 1;
+    const anoInicio = Math.floor(de);
+    const anoFim = Math.floor(ate);
+
+    for (let ano = anoInicio; ano <= anoFim; ano++) {
+      for (let mes = 1; mes <= 12; mes++) {
+        const anoCont = dataParaAnoContinuo(ano, mes, 1);
+        if (anoCont >= de - 0.05 && anoCont <= ate + 0.05) {
+          if ((mes - 1) % passoMes === 0) {
+            marcasPrincipais.push(anoCont);
+            const rotulo =
+              calendario === 'gregoriano' && tipoTempo === 'real'
+                ? mes === 1 || marcasPrincipais.length === 1
+                  ? `${NOMES_MESES_CURTOS[mes - 1]} ${ano}`
+                  : NOMES_MESES_CURTOS[mes - 1]
+                : mes === 1 || marcasPrincipais.length === 1
+                  ? formatarDataNoCalendario({ ano, mes, dia: 1 }, calendario, tipoTempo, 'mesCurtoAno')
+                  : formatarDataNoCalendario({ ano, mes, dia: 1 }, calendario, tipoTempo, 'mesCurto');
+            rotulos.set(anoCont, rotulo);
+          } else {
+            marcasSecundarias.push(anoCont);
+          }
+        }
+        // Marca secundária: quinzena (dia 15)
+        const quinzena = dataParaAnoContinuo(ano, mes, 15);
+        if (quinzena >= de && quinzena <= ate) {
+          marcasSecundarias.push(quinzena);
+        }
+        // Marca terciária: a cada 5 dias (dias 5, 10, 20, 25) se span <= 1.2
+        if (span <= 1.2) {
+          for (const d of [5, 10, 20, 25]) {
+            const diaCont = dataParaAnoContinuo(ano, mes, d);
+            if (diaCont >= de && diaCont <= ate) {
+              marcasTerciarias.push(diaCont);
+            }
+          }
+        }
+      }
+    }
+
+    marcasPrincipais.sort((a, b) => a - b);
+    marcasSecundarias.sort((a, b) => a - b);
+    marcasTerciarias.sort((a, b) => a - b);
+
+    return {
+      passoPrincipal: passoMes / 12,
+      passoSecundario: 0.5 / 12,
+      marcasPrincipais,
+      marcasSecundarias,
+      marcasTerciarias,
+      rotulos,
+      escala: 'meses',
+    };
+  }
+
+  // 3. Nível Anual (span > 2 anos)
   let passoPrincipal = 100;
   let passoSecundario = 20;
+  let passoTerciario: number | undefined = undefined;
 
   if (span > 15000) {
     passoPrincipal = 2500;
@@ -182,76 +321,131 @@ export function calcularGridBlender({
     passoPrincipal = 20;
     passoSecundario = 5;
   } else if (span > 25) {
+    // Zoom de 25 a 60 anos (ex: 2000 e 2010): exatamente 9 anos intermediários (2001..2009)!
     passoPrincipal = 10;
-    passoSecundario = 2;
+    passoSecundario = 1;
   } else if (span > 10) {
+    // Zoom de 10 a 25 anos (ex: 2000, 2005, 2010): 4 anos intermediários (2001..2004) + trimestres
     passoPrincipal = 5;
     passoSecundario = 1;
-  } else if (span > 4) {
+    passoTerciario = 0.25;
+  } else if (span > 5) {
+    // Zoom de 5 a 10 anos: a cada 2 anos principal, anos ímpares secundários, todos os meses terciários
     passoPrincipal = 2;
     passoSecundario = 1;
+    passoTerciario = 1 / 12;
   } else {
+    // 2 < span <= 5 anos: cada ano é principal numerado, trimestres secundários, todos os meses terciários
     passoPrincipal = 1;
-    passoSecundario = 0;
+    passoSecundario = 0.25;
+    passoTerciario = 1 / 12;
   }
 
-  const marcasPrincipais: number[] = [];
+  // Gera marcas principais
   for (let a = Math.ceil(de / passoPrincipal) * passoPrincipal; a <= ate; a += passoPrincipal) {
     marcasPrincipais.push(a);
+    const rotulo =
+      calendario === 'gregoriano' && tipoTempo === 'real'
+        ? a < 0 ? `${Math.abs(a)} a.C.` : `${a}`
+        : formatarAnoNoCalendario(a, calendario, tipoTempo);
+    rotulos.set(a, rotulo);
   }
 
-  const marcasSecundarias: number[] = [];
-  if (passoSecundario > 0 && passoSecundario < passoPrincipal) {
-    const princSet = new Set(marcasPrincipais);
-    for (let a = Math.ceil(de / passoSecundario) * passoSecundario; a <= ate; a += passoSecundario) {
-      if (!princSet.has(a)) {
+  const princSet = new Set(marcasPrincipais);
+
+  // Gera marcas secundárias e terciárias para span > 2
+  if (span <= 5) {
+    // Para span <= 5 anos:
+    // Secundárias = trimestres (meses 4, 7, 10 de cada ano)
+    // Terciárias = outros meses (meses 2, 3, 5, 6, 8, 9, 11, 12)
+    const anoMin = Math.floor(de);
+    const anoMax = Math.ceil(ate);
+    for (let a = anoMin; a <= anoMax; a++) {
+      for (const m of [4, 7, 10]) {
+        const frac = dataParaAnoContinuo(a, m, 1);
+        if (frac >= de && frac <= ate) {
+          marcasSecundarias.push(frac);
+        }
+      }
+      for (const m of [2, 3, 5, 6, 8, 9, 11, 12]) {
+        const frac = dataParaAnoContinuo(a, m, 1);
+        if (frac >= de && frac <= ate) {
+          marcasTerciarias.push(frac);
+        }
+      }
+    }
+  } else if (span <= 10) {
+    // Para 5 < span <= 10 anos:
+    // Secundárias = anos intermediários inteiros (ex: ímpares quando passoPrincipal = 2)
+    const anoMin = Math.floor(de);
+    const anoMax = Math.ceil(ate);
+    for (let a = anoMin; a <= anoMax; a++) {
+      if (a >= de && a <= ate && !princSet.has(a)) {
         marcasSecundarias.push(a);
+      }
+      // Terciárias = todos os meses de 2 a 12
+      for (let m = 2; m <= 12; m++) {
+        const frac = dataParaAnoContinuo(a, m, 1);
+        if (frac >= de && frac <= ate) {
+          marcasTerciarias.push(frac);
+        }
+      }
+    }
+  } else if (span <= 25) {
+    // Para 10 < span <= 25 anos (ex: imagem 2 do usuário: 2000, 2005, 2010):
+    // Secundárias = anos intermediários inteiros (2001, 2002, 2003, 2004) -> 4 linhas de anos
+    // Terciárias = trimestres (meses 4, 7, 10 indicando a passagem dos meses no ano)
+    const anoMin = Math.floor(de);
+    const anoMax = Math.ceil(ate);
+    for (let a = anoMin; a <= anoMax; a++) {
+      if (a >= de && a <= ate && !princSet.has(a)) {
+        marcasSecundarias.push(a);
+      }
+      for (const m of [4, 7, 10]) {
+        const frac = dataParaAnoContinuo(a, m, 1);
+        if (frac >= de && frac <= ate) {
+          marcasTerciarias.push(frac);
+        }
+      }
+    }
+  } else {
+    // Para span > 25 (ex: imagem 1 do usuário: 2000 e 2010 -> 9 anos intermediários 2001..2009!):
+    if (passoSecundario > 0 && passoSecundario < passoPrincipal) {
+      for (let a = Math.ceil(de / passoSecundario) * passoSecundario; a <= ate; a += passoSecundario) {
+        if (!princSet.has(a)) {
+          marcasSecundarias.push(a);
+        }
       }
     }
   }
 
+  marcasPrincipais.sort((a, b) => a - b);
+  marcasSecundarias.sort((a, b) => a - b);
+  marcasTerciarias.sort((a, b) => a - b);
+
   return {
     passoPrincipal,
     passoSecundario,
+    passoTerciario,
     marcasPrincipais,
     marcasSecundarias,
+    marcasTerciarias,
+    rotulos,
+    escala: 'anos',
   };
 }
 
 /**
- * Converte um ano e string de data opcional ("DD/MM/AAAA" ou "AAAA-MM-DD")
- * em um valor de ano contínuo fracionário para posicionamento temporal preciso.
- * Ex: "24/08/1820" -> 1820 + (8 - 1)/12 + (24 - 1)/372 ~= 1820.645
+ * Converte um ano, texto de data e/ou campos estruturados (mês, dia)
+ * em um valor de ano contínuo fracionário de alta precisão com suporte a bissextos.
  */
 export function converterDataParaAnoFracionario(
   ano?: number | null,
   dataTexto?: string | null,
+  mes?: number | null,
+  dia?: number | null,
 ): number | null {
-  if (ano == null && !dataTexto) return null;
-  if (!dataTexto) return ano ?? null;
-
-  const limpo = dataTexto.trim();
-  // Formato brasileiro DD/MM/AAAA
-  const matchBr = limpo.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
-  if (matchBr) {
-    const dia = parseInt(matchBr[1], 10);
-    const mes = parseInt(matchBr[2], 10);
-    const a = parseInt(matchBr[3], 10);
-    const frac = Math.max(0, Math.min(0.995, ((mes - 1) + (dia - 1) / 31) / 12));
-    return a + frac;
-  }
-
-  // Formato ISO AAAA-MM-DD
-  const matchIso = limpo.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
-  if (matchIso) {
-    const a = parseInt(matchIso[1], 10);
-    const mes = parseInt(matchIso[2], 10);
-    const dia = parseInt(matchIso[3], 10);
-    const frac = Math.max(0, Math.min(0.995, ((mes - 1) + (dia - 1) / 31) / 12));
-    return a + frac;
-  }
-
-  return ano ?? null;
+  return interpretarDataParaAnoContinuo(ano, dataTexto, mes, dia);
 }
 
 export interface GrupoMarcosPessoais<T> {
@@ -267,7 +461,7 @@ export interface GrupoMarcosPessoais<T> {
  * Agrupa marcos pessoais que estejam a uma distância visual menor que `distanciaMinima`
  * no canvas para evitar empilhamento caótico de chips no mesmo ano (ex: 1822).
  */
-export function agruparMarcosPessoaisProximos<T extends { ano?: number | null; data_texto?: string | null }>(
+export function agruparMarcosPessoaisProximos<T extends { ano?: number | null; data_texto?: string | null; mes?: number | null; dia?: number | null }>(
   marcos: T[],
   posicaoDoAno: (ano: number) => number,
   distanciaMinima = 65,
@@ -277,7 +471,8 @@ export function agruparMarcosPessoaisProximos<T extends { ano?: number | null; d
 
   const mapeados = marcos
     .map((m, idx) => {
-      const anoFrac = converterDataParaAnoFracionario(m.ano, m.data_texto) ?? m.ano ?? 0;
+      const anyM = m as { ano?: number | null; data_texto?: string | null; mes?: number | null; dia?: number | null };
+      const anoFrac = converterDataParaAnoFracionario(anyM.ano, anyM.data_texto, anyM.mes, anyM.dia) ?? anyM.ano ?? 0;
       return {
         item: m,
         idx,
@@ -302,11 +497,14 @@ export function agruparMarcosPessoaisProximos<T extends { ano?: number | null; d
         grupoAtual.push(atual);
       } else {
         const centroX = grupoAtual.reduce((acc, el) => acc + el.x, 0) / grupoAtual.length;
-        const anoMedio = grupoAtual[0].ano;
+        const anoMedio =
+          grupoAtual.length === 1
+            ? grupoAtual[0].ano
+            : grupoAtual.reduce((acc, el) => acc + el.ano, 0) / grupoAtual.length;
         grupos.push({
           id: `cluster-${grupos.length}-${grupoAtual[0].idx}`,
           x: centroX,
-          ano: Math.round(anoMedio),
+          ano: grupoAtual.length > 1 ? Math.round(anoMedio) : anoMedio,
           itens: grupoAtual.map((g) => g.item),
           isCluster: grupoAtual.length > 1,
           subLane: 0,
@@ -318,11 +516,14 @@ export function agruparMarcosPessoaisProximos<T extends { ano?: number | null; d
 
   if (grupoAtual.length > 0) {
     const centroX = grupoAtual.reduce((acc, el) => acc + el.x, 0) / grupoAtual.length;
-    const anoMedio = grupoAtual[0].ano;
+    const anoMedio =
+      grupoAtual.length === 1
+        ? grupoAtual[0].ano
+        : grupoAtual.reduce((acc, el) => acc + el.ano, 0) / grupoAtual.length;
     grupos.push({
       id: `cluster-${grupos.length}-${grupoAtual[0].idx}`,
       x: centroX,
-      ano: Math.round(anoMedio),
+      ano: grupoAtual.length > 1 ? Math.round(anoMedio) : anoMedio,
       itens: grupoAtual.map((g) => g.item),
       isCluster: grupoAtual.length > 1,
       subLane: 0,

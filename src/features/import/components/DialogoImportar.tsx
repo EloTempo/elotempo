@@ -22,6 +22,7 @@ import {
   type AnalisePrevia,
   type ResumoImportacao,
 } from '../../../lib/api';
+import { useI18n } from '../../../i18n/I18nContext';
 
 interface DialogoImportarProps {
   onFechar: () => void;
@@ -37,14 +38,9 @@ function mensagemDeErro(erro: unknown): string | null {
   return String(erro);
 }
 
-const PASSOS: Array<{ id: Etapa; rotulo: string }> = [
-  { id: 'arquivo', rotulo: 'Arquivo' },
-  { id: 'leitura', rotulo: 'Leitura' },
-  { id: 'conflitos', rotulo: 'Conflitos' },
-  { id: 'pronto', rotulo: 'Aplicar' },
-];
 
 export function DialogoImportar({ onFechar, onImportado }: DialogoImportarProps) {
+  const { t } = useI18n();
   const qc = useQueryClient();
   const [etapa, setEtapa] = useState<Etapa>('arquivo');
   const [caminho, setCaminho] = useState<string | null>(null);
@@ -54,6 +50,13 @@ export function DialogoImportar({ onFechar, onImportado }: DialogoImportarProps)
   const [resumo, setResumo] = useState<ResumoImportacao | null>(null);
   const [ocupado, setOcupado] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
+
+  const passos: Array<{ id: Etapa; rotulo: string }> = [
+    { id: 'arquivo', rotulo: t('gedcom', 'passoArquivo') },
+    { id: 'leitura', rotulo: t('gedcom', 'passoLeitura') },
+    { id: 'conflitos', rotulo: t('gedcom', 'passoConflitos') },
+    { id: 'pronto', rotulo: t('gedcom', 'passoAplicar') },
+  ];
 
   const escolher = async () => {
     setErro(null);
@@ -98,7 +101,7 @@ export function DialogoImportar({ onFechar, onImportado }: DialogoImportarProps)
 
   const conflitos = analise?.conflitos ?? [];
   const atual = conflitos[indice];
-  const etapaAtiva = PASSOS.findIndex((p) => p.id === etapa);
+  const etapaAtiva = passos.findIndex((p) => p.id === etapa);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm print:hidden">
@@ -108,16 +111,16 @@ export function DialogoImportar({ onFechar, onImportado }: DialogoImportarProps)
         <header className="p-4 border-b border-borda bg-card2 flex items-start gap-3 flex-none">
           <FileUp className="w-5 h-5 text-acento flex-none mt-0.5" />
           <div className="min-w-0">
-            <h2 className="font-tit font-bold text-lg m-0">Importar GEDCOM</h2>
+            <h2 className="font-tit font-bold text-lg m-0">{t('gedcom', 'importarTitulo')}</h2>
             <p className="text-xs text-tinta2 m-0 mt-0.5 leading-relaxed">
-              Traz uma árvore feita em outro programa. Aceita GEDCOM 5.5.1 e 7.0.
+              {t('gedcom', 'importarSubtitulo')}
             </p>
           </div>
         </header>
 
         {/* Trilha das quatro etapas */}
         <div className="px-4 py-2.5 border-b border-borda flex items-center gap-2 text-[11.5px] flex-none overflow-x-auto">
-          {PASSOS.map((p, i) => (
+          {passos.map((p, i) => (
             <div key={p.id} className="flex items-center gap-2 flex-none">
               {i > 0 && <span className="w-5 h-px bg-borda" />}
               <span
@@ -152,13 +155,11 @@ export function DialogoImportar({ onFechar, onImportado }: DialogoImportarProps)
           {etapa === 'arquivo' && (
             <div className="flex flex-col gap-3 items-start">
               <p className="text-sm text-tinta2 m-0 leading-relaxed">
-                Escolha o arquivo <code className="font-num text-xs">.ged</code> ou o pacote{' '}
-                <code className="font-num text-xs">.gdz</code>. Nada é gravado até você conferir o
-                que vem — a leitura é só leitura.
+                {t('gedcom', 'instrucaoArquivo')}
               </p>
               <Button onClick={escolher} disabled={ocupado}>
                 <FolderOpen className="w-4 h-4 mr-1" />
-                {ocupado ? 'Lendo…' : 'Escolher arquivo'}
+                {ocupado ? t('gedcom', 'lendo') : t('gedcom', 'escolherArquivo')}
               </Button>
             </div>
           )}
@@ -169,12 +170,12 @@ export function DialogoImportar({ onFechar, onImportado }: DialogoImportarProps)
               <ul className="list-none m-0 p-0 text-sm text-tinta2 flex flex-col gap-1">
                 <li>
                   <span className="font-num text-tinta">{analise.pessoas}</span>{' '}
-                  {analise.pessoas === 1 ? 'pessoa' : 'pessoas'} ·{' '}
+                  {analise.pessoas === 1 ? t('gedcom', 'pessoa') : t('gedcom', 'pessoas')} ·{' '}
                   <span className="font-num text-tinta">{analise.unioes}</span>{' '}
-                  {analise.unioes === 1 ? 'união' : 'uniões'}
+                  {analise.unioes === 1 ? t('gedcom', 'uniao') : t('gedcom', 'unioes')}
                 </li>
                 <li className="text-xs text-tinta3">
-                  GEDCOM {analise.versao} · codificação {analise.codificacao}
+                  GEDCOM {analise.versao} · {t('gedcom', 'codificacao')} {analise.codificacao}
                 </li>
               </ul>
 
@@ -187,16 +188,14 @@ export function DialogoImportar({ onFechar, onImportado }: DialogoImportarProps)
 
               {conflitos.length === 0 ? (
                 <p className="text-sm text-tinta2 m-0 leading-relaxed border-t border-borda pt-3">
-                  Nada a decidir: o arquivo cabe inteiro nas regras do acervo.
+                  {t('gedcom', 'nadaADecidir')}
                 </p>
               ) : (
                 <p className="text-sm text-tinta m-0 leading-relaxed border-t border-borda pt-3 flex items-start gap-2">
                   <AlertTriangle className="w-4 h-4 flex-none mt-0.5 text-acento" />
                   <span>
                     <strong className="font-num">{conflitos.length}</strong>{' '}
-                    {conflitos.length === 1 ? 'ponto precisa' : 'pontos precisam'} da sua decisão. O
-                    GEDCOM permite coisas que este acervo não permite — e as regras de conexão não
-                    se afrouxam para caber um arquivo.
+                    {conflitos.length === 1 ? t('gedcom', 'pontoPrecisa') : t('gedcom', 'pontosPrecisam')}
                   </span>
                 </p>
               )}
@@ -244,31 +243,30 @@ export function DialogoImportar({ onFechar, onImportado }: DialogoImportarProps)
             <div className="flex flex-col gap-3">
               <div className="flex items-start gap-2 p-3 rounded-raio-s border border-acento bg-card2">
                 <Check className="w-4 h-4 text-acento flex-none mt-0.5" />
-                <p className="text-sm text-tinta m-0 font-semibold">Importação concluída</p>
+                <p className="text-sm text-tinta m-0 font-semibold">{t('gedcom', 'importacaoConcluida')}</p>
               </div>
 
               <ul className="list-none m-0 p-0 text-sm text-tinta2 flex flex-col gap-1">
                 <li>
-                  {resumo.pessoas} {resumo.pessoas === 1 ? 'pessoa' : 'pessoas'} · {resumo.unioes}{' '}
-                  {resumo.unioes === 1 ? 'união' : 'uniões'} · {resumo.filhos}{' '}
-                  {resumo.filhos === 1 ? 'filiação' : 'filiações'}
+                  {resumo.pessoas} {resumo.pessoas === 1 ? t('gedcom', 'pessoa') : t('gedcom', 'pessoas')} · {resumo.unioes}{' '}
+                  {resumo.unioes === 1 ? t('gedcom', 'uniao') : t('gedcom', 'unioes')} · {resumo.filhos}{' '}
+                  {resumo.filhos === 1 ? t('gedcom', 'filiacao') : t('gedcom', 'filiacoes')}
                 </li>
                 {resumo.placeholders > 0 && (
                   <li>
                     {resumo.placeholders}{' '}
-                    {resumo.placeholders === 1 ? 'lado desconhecido criado' : 'lados desconhecidos criados'}{' '}
-                    — slot de união nunca fica vazio
+                    {resumo.placeholders === 1 ? t('gedcom', 'ladoDesconhecidoCriado') : t('gedcom', 'ladosDesconhecidosCriados')}
                   </li>
                 )}
                 <li className="text-xs text-tinta3">
-                  {resumo.eventos} eventos · {resumo.nomes} nomes · {resumo.atributos} atributos
+                  {resumo.eventos} {t('gedcom', 'eventos')} · {resumo.nomes} {t('gedcom', 'nomes')} · {resumo.atributos} {t('gedcom', 'atributos')}
                 </li>
               </ul>
 
               {resumo.descartados.length > 0 && (
                 <div className="border-t border-borda pt-3 flex flex-col gap-1.5">
                   <p className="font-num text-[10.5px] uppercase tracking-wider text-tinta3 m-0">
-                    O que não coube
+                    {t('gedcom', 'oQueNaoCoube')}
                   </p>
                   {resumo.descartados.map((d, i) => (
                     <p key={i} className="text-xs text-tinta2 m-0 leading-relaxed">
@@ -283,35 +281,35 @@ export function DialogoImportar({ onFechar, onImportado }: DialogoImportarProps)
 
         <footer className="p-4 border-t border-borda flex justify-between gap-3 flex-none">
           <Button variant="ghost" onClick={onFechar}>
-            {etapa === 'pronto' ? 'Fechar' : 'Cancelar'}
+            {etapa === 'pronto' ? t('comum', 'fechar') : t('comum', 'cancelar')}
           </Button>
 
           <div className="flex gap-2">
             {etapa === 'conflitos' && indice > 0 && (
               <Button variant="secondary" onClick={() => setIndice((i) => i - 1)}>
-                Anterior
+                {t('gedcom', 'anterior')}
               </Button>
             )}
 
             {/* Sem conflito não há o que perguntar: a etapa some, em vez de
                 virar uma tela vazia com um botão. */}
             {etapa === 'leitura' && conflitos.length > 0 && (
-              <Button onClick={() => setEtapa('conflitos')}>Resolver conflitos</Button>
+              <Button onClick={() => setEtapa('conflitos')}>{t('gedcom', 'resolverConflitos')}</Button>
             )}
 
             {etapa === 'leitura' && conflitos.length === 0 && (
               <Button onClick={aplicar} disabled={ocupado}>
-                {ocupado ? 'Importando…' : 'Importar'}
+                {ocupado ? t('gedcom', 'importando') : t('gedcom', 'importar')}
               </Button>
             )}
 
             {etapa === 'conflitos' && indice < conflitos.length - 1 && (
-              <Button onClick={() => setIndice((i) => i + 1)}>Próximo</Button>
+              <Button onClick={() => setIndice((i) => i + 1)}>{t('gedcom', 'proximo')}</Button>
             )}
 
             {etapa === 'conflitos' && indice >= conflitos.length - 1 && (
               <Button onClick={aplicar} disabled={ocupado}>
-                {ocupado ? 'Importando…' : 'Importar'}
+                {ocupado ? t('gedcom', 'importando') : t('gedcom', 'importar')}
               </Button>
             )}
           </div>

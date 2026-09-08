@@ -79,9 +79,9 @@ export function DialogoExportar({ raizId, onFechar }: DialogoExportarProps) {
         <header className="p-4 border-b border-borda bg-card2 flex items-start gap-3">
           <FileDown className="w-5 h-5 text-acento flex-none mt-0.5" />
           <div>
-            <h2 className="font-tit font-bold text-lg m-0">Exportar o acervo</h2>
+            <h2 className="font-tit font-bold text-lg m-0">{t('gedcom', 'exportarTitulo')}</h2>
             <p className="text-xs text-tinta2 m-0 mt-0.5 leading-relaxed">
-              GEDCOM 7.0 — o formato que outros programas de genealogia leem.
+              {t('gedcom', 'exportarSubtitulo')}
             </p>
           </div>
         </header>
@@ -94,7 +94,7 @@ export function DialogoExportar({ raizId, onFechar }: DialogoExportarProps) {
                 <Check className="w-4 h-4 text-acento flex-none mt-0.5" />
                 <div className="text-sm text-tinta">
                   <p className="m-0 font-semibold">
-                    {resumo.empacotado ? 'Pacote GEDZip criado' : 'Arquivo criado'}
+                    {resumo.empacotado ? t('gedcom', 'pacoteGedzipCriado') : t('gedcom', 'arquivoCriado')}
                   </p>
                   <p className="m-0 text-xs text-tinta2 break-all mt-1">{resumo.caminho}</p>
                 </div>
@@ -102,28 +102,25 @@ export function DialogoExportar({ raizId, onFechar }: DialogoExportarProps) {
 
               <ul className="list-none m-0 p-0 text-sm text-tinta2 flex flex-col gap-1">
                 <li>
-                  {resumo.pessoas} {resumo.pessoas === 1 ? 'pessoa' : 'pessoas'} ·{' '}
-                  {resumo.unioes} {resumo.unioes === 1 ? 'união' : 'uniões'}
+                  {resumo.pessoas} {resumo.pessoas === 1 ? t('gedcom', 'pessoa') : t('gedcom', 'pessoas')} ·{' '}
+                  {resumo.unioes} {resumo.unioes === 1 ? t('gedcom', 'uniao') : t('gedcom', 'unioes')}
                 </li>
                 {resumo.arquivos_de_midia > 0 && (
                   <li>
                     {resumo.arquivos_de_midia}{' '}
-                    {resumo.arquivos_de_midia === 1 ? 'arquivo' : 'arquivos'} de mídia no pacote
+                    {resumo.arquivos_de_midia === 1 ? t('gedcom', 'arquivoMidiaNoPacote') : t('gedcom', 'arquivosMidiaNoPacote')}
                   </li>
                 )}
                 {resumo.vivas_ocultadas > 0 && (
                   <li>
                     {resumo.vivas_ocultadas}{' '}
-                    {resumo.vivas_ocultadas === 1 ? 'pessoa viva teve' : 'pessoas vivas tiveram'}{' '}
-                    os dados omitidos, mantendo o parentesco
+                    {resumo.vivas_ocultadas === 1 ? t('gedcom', 'pessoaVivaOcultada') : t('gedcom', 'pessoasVivasOcultadas')}
                   </li>
                 )}
               </ul>
 
               <p className="text-xs text-tinta3 m-0 leading-relaxed border-t border-borda pt-3">
-                Guarde este arquivo junto dos seus backups. Ele abre no Gramps, no Ancestris e
-                em qualquer programa que leia GEDCOM — é a garantia de que o seu trabalho não
-                depende deste programa continuar existindo.
+                {t('gedcom', 'dicaBackup')}
               </p>
             </div>
           ) : (
@@ -139,7 +136,7 @@ export function DialogoExportar({ raizId, onFechar }: DialogoExportarProps) {
 
               <fieldset className="flex flex-col gap-2.5 border-none p-0 m-0">
                 <legend className="font-num text-[10.5px] uppercase tracking-wider text-tinta3 mb-1 p-0">
-                  O que exportar
+                  {t('gedcom', 'oQueExportar')}
                 </legend>
 
                 <label className="flex items-start gap-2 text-sm text-tinta2 cursor-pointer">
@@ -151,10 +148,10 @@ export function DialogoExportar({ raizId, onFechar }: DialogoExportarProps) {
                     className="mt-0.5 rounded border-borda accent-[var(--acento)]"
                   />
                   <span>
-                    Só a árvore em volta da pessoa selecionada
+                    {t('gedcom', 'soArvoreEmVolta')}
                     {!raizId && (
                       <span className="block text-xs text-tinta3">
-                        Escolha alguém na lista para habilitar.
+                        {t('gedcom', 'escolhaAlguemLista')}
                       </span>
                     )}
                   </span>
@@ -168,10 +165,9 @@ export function DialogoExportar({ raizId, onFechar }: DialogoExportarProps) {
                     className="mt-0.5 rounded border-borda accent-[var(--acento)]"
                   />
                   <span>
-                    Levar as fotos e documentos junto
+                    {t('gedcom', 'levarFotosDocumentos')}
                     <span className="block text-xs text-tinta3 leading-relaxed">
-                      Gera um GEDZip — o arquivo GEDCOM mais a pasta de mídia, num pacote só.
-                      Sem isso, o arquivo referencia fotos que ficaram para trás.
+                      {t('gedcom', 'levarFotosDocumentosDesc')}
                     </span>
                   </span>
                 </label>
@@ -184,10 +180,9 @@ export function DialogoExportar({ raizId, onFechar }: DialogoExportarProps) {
                     className="mt-0.5 rounded border-borda accent-[var(--acento)]"
                   />
                   <span>
-                    Ocultar dados de pessoas vivas
+                    {t('gedcom', 'ocultarDadosVivas')}
                     <span className="block text-xs text-tinta3 leading-relaxed">
-                      Elas continuam no arquivo, sem nome nem datas, para o parentesco de quem
-                      recebe não se partir. Use ao mandar a árvore para fora da família.
+                      {t('gedcom', 'ocultarDadosVivasDesc')}
                     </span>
                   </span>
                 </label>
@@ -196,8 +191,7 @@ export function DialogoExportar({ raizId, onFechar }: DialogoExportarProps) {
               <p className="text-xs text-tinta3 m-0 leading-relaxed border-t border-borda pt-3 flex items-start gap-2">
                 <Package className="w-3.5 h-3.5 flex-none mt-0.5" />
                 <span>
-                  Os “desconhecidos” que seguram lugar de pai ou mãe não são exportados como
-                  pessoas — a união simplesmente sai com um lado só, que é GEDCOM válido.
+                  {t('gedcom', 'desconhecidosLugarPaiMae')}
                 </span>
               </p>
             </>
@@ -206,12 +200,12 @@ export function DialogoExportar({ raizId, onFechar }: DialogoExportarProps) {
 
         <footer className="p-4 border-t border-borda flex justify-end gap-3 flex-none">
           <Button variant="ghost" onClick={onFechar}>
-            {resumo ? 'Fechar' : 'Cancelar'}
+            {resumo ? t('comum', 'fechar') : t('comum', 'cancelar')}
           </Button>
           {!resumo && (
             <Button onClick={exportar} disabled={exportando}>
               <Download className="w-4 h-4 mr-1" />
-              {exportando ? 'Exportando…' : 'Escolher onde salvar'}
+              {exportando ? t('gedcom', 'exportando') : t('gedcom', 'escolherOndeSalvar')}
             </Button>
           )}
         </footer>

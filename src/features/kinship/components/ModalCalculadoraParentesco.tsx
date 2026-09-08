@@ -14,6 +14,7 @@ import { IconeRelacoes } from '../../../components/icons';
 import { buscarPessoas } from '../../../lib/api/tree';
 import { calcularParentesco, type ParentescoResultado } from '../../../lib/api/parentesco';
 import type { PersonNode } from '../../../types';
+import { useI18n } from '../../../i18n/I18nContext';
 
 interface ModalCalculadoraParentescoProps {
   aberto: boolean;
@@ -21,11 +22,104 @@ interface ModalCalculadoraParentescoProps {
   pessoaInicialId?: string | null;
 }
 
+function traduzirPapel(papel: string, idioma: string): string {
+  if (idioma !== 'en-US') return papel;
+  switch (papel) {
+    case 'Origem': return 'Origin';
+    case 'Pessoa A': return 'Person A';
+    case 'Pessoa B': return 'Person B';
+    case 'Pai': return 'Father';
+    case 'Mãe': return 'Mother';
+    case 'Filho': return 'Son';
+    case 'Filha': return 'Daughter';
+    case 'Marido': return 'Husband';
+    case 'Esposa': return 'Wife';
+    case 'Ancestral Comum Mais Próximo': return 'Most Recent Common Ancestor';
+    case 'Mesma pessoa': return 'Same person';
+    default: return papel;
+  }
+}
+
+function traduzirDescricaoParentesco(desc: string, idioma: string): string {
+  if (idioma !== 'en-US' || !desc) return desc;
+  const traducoesDiretas: Record<string, string> = {
+    'Mesma pessoa': 'Same person',
+    'Pai de B': 'Father of B',
+    'Mãe de B': 'Mother of B',
+    'Filho de B': 'Son of B',
+    'Filha de B': 'Daughter of B',
+    'Avô de B': 'Grandfather of B',
+    'Avó de B': 'Grandmother of B',
+    'Neto de B': 'Grandson of B',
+    'Neta de B': 'Granddaughter of B',
+    'Bisavô de B': 'Great-grandfather of B',
+    'Bisavó de B': 'Great-grandmother of B',
+    'Bisneto de B': 'Great-grandson of B',
+    'Bisneta de B': 'Great-granddaughter of B',
+    'Trisavô de B': 'Great-great-grandfather of B',
+    'Trisavó de B': 'Great-great-grandmother of B',
+    'Trineto de B': 'Great-great-grandson of B',
+    'Trineta de B': 'Great-great-granddaughter of B',
+    'Irmãos': 'Brothers',
+    'Irmãs': 'Sisters',
+    'Irmãos (Irmão e Irmã)': 'Siblings (Brother and Sister)',
+    'Tio de B': 'Uncle of B',
+    'Tia de B': 'Aunt of B',
+    'Sobrinho de B': 'Nephew of B',
+    'Sobrinha de B': 'Niece of B',
+    'Tio-avô de B': 'Great-uncle of B',
+    'Tia-avó de B': 'Great-aunt of B',
+    'Sobrinho-neto de B': 'Great-nephew of B',
+    'Sobrinha-neta de B': 'Great-niece of B',
+    'Tio-bisavô de B': 'Great-great-uncle of B',
+    'Tia-bisavó de B': 'Great-great-aunt of B',
+    'Sobrinho-bisneto de B': 'Great-great-nephew of B',
+    'Sobrinha-bisneta de B': 'Great-great-niece of B',
+    'Primos de 1º grau (Primos-irmãos)': 'First cousins',
+    'Primo de 1º grau afastado (Primo-tio de B)': 'First cousin once removed (Cousin-uncle of B)',
+    'Prima de 1º grau afastada (Prima-tia de B)': 'First cousin once removed (Cousin-aunt of B)',
+    'Primo de 1º grau afastado (Primo-sobrinho de B)': 'First cousin once removed (Cousin-nephew of B)',
+    'Prima de 1º grau afastada (Prima-sobrinha de B)': 'First cousin once removed (Cousin-niece of B)',
+    'Primos de 2º grau': 'Second cousins',
+    'Primos de 2º grau afastados': 'Second cousins once removed',
+    'Primos de 3º grau': 'Third cousins',
+    'Nenhum parentesco ou vínculo encontrado no acervo': 'No kinship or link found in the archive',
+    'Sogro(a) de A': 'Parent-in-law of A',
+    'Genro / Nora de A': 'Child-in-law of A',
+    'Cunhado(a) de A': 'Sibling-in-law of A',
+  };
+
+  if (traducoesDiretas[desc]) {
+    return traducoesDiretas[desc];
+  }
+
+  let m = desc.match(/^Ancestral de (\d+)ª geração$/);
+  if (m) return `${m[1]}th generation ancestor`;
+
+  m = desc.match(/^Descendente de (\d+)ª geração$/);
+  if (m) return `${m[1]}th generation descendant`;
+
+  m = desc.match(/^Parentes consanguíneos colaterais \(grau (\d+)\)$/);
+  if (m) return `Collateral consanguineous relatives (degree ${m[1]})`;
+
+  m = desc.match(/^Cônjuges \(Marido de A\)$/);
+  if (m) return 'Spouses (Husband of A)';
+
+  m = desc.match(/^Cônjuges \(Esposa de A\)$/);
+  if (m) return 'Spouses (Wife of A)';
+
+  m = desc.match(/^Vínculo familiar por afinidade\/casamento \((\d+) passos de conexão\)$/);
+  if (m) return `Family relationship by affinity/marriage (${m[1]} connection steps)`;
+
+  return desc;
+}
+
 export const ModalCalculadoraParentesco: React.FC<ModalCalculadoraParentescoProps> = ({
   aberto,
   aoFechar,
   pessoaInicialId,
 }) => {
+  const { t, idioma } = useI18n();
   const [pessoaA, setPessoaA] = useState<PersonNode | null>(null);
   const [pessoaB, setPessoaB] = useState<PersonNode | null>(null);
 
@@ -122,7 +216,7 @@ export const ModalCalculadoraParentesco: React.FC<ModalCalculadoraParentescoProp
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in">
+    <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in">
       <div className="bg-card border border-borda rounded-raio shadow-sombra w-full max-w-3xl max-h-[90vh] flex flex-col overflow-hidden text-tinta">
         {/* Cabeçalho */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-borda bg-sup/50">
@@ -132,10 +226,10 @@ export const ModalCalculadoraParentesco: React.FC<ModalCalculadoraParentescoProp
             </div>
             <div>
               <h2 className="text-base font-serif font-bold text-tinta">
-                Cruzamento de Linhagens e Parentesco
+                {t('parentescoModal', 'titulo')}
               </h2>
               <p className="text-xs text-tinta3">
-                Calcule o grau de parentesco biológico ou afinidade entre quaisquer duas pessoas do acervo.
+                {t('parentescoModal', 'subtitulo')}
               </p>
             </div>
           </div>
@@ -143,6 +237,7 @@ export const ModalCalculadoraParentesco: React.FC<ModalCalculadoraParentescoProp
             type="button"
             onClick={aoFechar}
             className="p-1.5 rounded-raio-s text-tinta3 hover:text-tinta hover:bg-sup transition-colors cursor-pointer"
+            title={t('comum', 'fechar')}
           >
             <X className="w-5 h-5" />
           </button>
@@ -156,7 +251,7 @@ export const ModalCalculadoraParentesco: React.FC<ModalCalculadoraParentescoProp
             <div className="flex flex-col gap-2">
               <label className="text-xs font-semibold text-tinta2 flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-acento" />
-                1ª Pessoa (Origem)
+                {t('parentescoModal', 'pessoaA')}
               </label>
 
               {pessoaA ? (
@@ -178,7 +273,7 @@ export const ModalCalculadoraParentesco: React.FC<ModalCalculadoraParentescoProp
                     type="button"
                     onClick={() => setPessoaA(null)}
                     className="p-1 rounded text-tinta3 hover:text-erro hover:bg-card ml-2 cursor-pointer"
-                    title="Remover seleção"
+                    title={t('parentescoModal', 'removerSelecao')}
                   >
                     <X className="w-4 h-4" />
                   </button>
@@ -189,7 +284,7 @@ export const ModalCalculadoraParentesco: React.FC<ModalCalculadoraParentescoProp
                     <Search className="w-4 h-4 absolute left-3 top-2.5 text-tinta3" />
                     <input
                       type="text"
-                      placeholder="Buscar por nome ou sobrenome..."
+                      placeholder={t('parentescoModal', 'buscarPlaceholder')}
                       value={buscaA}
                       onChange={(e) => setBuscaA(e.target.value)}
                       className="w-full pl-9 pr-3 py-2 text-xs bg-sup border border-borda rounded-raio-s text-tinta placeholder:text-tinta3 focus:outline-none focus:ring-1 focus:ring-acento"
@@ -221,7 +316,7 @@ export const ModalCalculadoraParentesco: React.FC<ModalCalculadoraParentescoProp
                           </div>
                           {p.is_publico && (
                             <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 font-medium">
-                              Pública
+                              {t('arvore', 'publicas')}
                             </span>
                           )}
                         </button>
@@ -238,7 +333,7 @@ export const ModalCalculadoraParentesco: React.FC<ModalCalculadoraParentescoProp
                 type="button"
                 onClick={inverterPessoas}
                 disabled={!pessoaA && !pessoaB}
-                title="Inverter posições"
+                title={t('parentescoModal', 'inverterPosicoes')}
                 className="p-2 rounded-full border border-borda bg-sup hover:bg-card text-tinta2 hover:text-acento transition-colors disabled:opacity-40 cursor-pointer shadow-xs"
               >
                 <RotateCcw className="w-4 h-4" />
@@ -249,7 +344,7 @@ export const ModalCalculadoraParentesco: React.FC<ModalCalculadoraParentescoProp
             <div className="flex flex-col gap-2">
               <label className="text-xs font-semibold text-tinta2 flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-blue-500" />
-                2ª Pessoa (Comparação)
+                {t('parentescoModal', 'pessoaB')}
               </label>
 
               {pessoaB ? (
@@ -271,7 +366,7 @@ export const ModalCalculadoraParentesco: React.FC<ModalCalculadoraParentescoProp
                     type="button"
                     onClick={() => setPessoaB(null)}
                     className="p-1 rounded text-tinta3 hover:text-erro hover:bg-card ml-2 cursor-pointer"
-                    title="Remover seleção"
+                    title={t('parentescoModal', 'removerSelecao')}
                   >
                     <X className="w-4 h-4" />
                   </button>
@@ -282,7 +377,7 @@ export const ModalCalculadoraParentesco: React.FC<ModalCalculadoraParentescoProp
                     <Search className="w-4 h-4 absolute left-3 top-2.5 text-tinta3" />
                     <input
                       type="text"
-                      placeholder="Buscar por nome ou sobrenome..."
+                      placeholder={t('parentescoModal', 'buscarPlaceholder')}
                       value={buscaB}
                       onChange={(e) => setBuscaB(e.target.value)}
                       className="w-full pl-9 pr-3 py-2 text-xs bg-sup border border-borda rounded-raio-s text-tinta placeholder:text-tinta3 focus:outline-none focus:ring-1 focus:ring-acento"
@@ -314,7 +409,7 @@ export const ModalCalculadoraParentesco: React.FC<ModalCalculadoraParentescoProp
                           </div>
                           {p.is_publico && (
                             <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 font-medium">
-                              Pública
+                              {t('arvore', 'publicas')}
                             </span>
                           )}
                         </button>
@@ -330,7 +425,7 @@ export const ModalCalculadoraParentesco: React.FC<ModalCalculadoraParentescoProp
           {carregando && (
             <div className="flex flex-col items-center justify-center p-8 text-tinta3 gap-2">
               <Sparkles className="w-6 h-6 animate-pulse text-acento" />
-              <span className="text-xs font-medium">Cruzando linhagens no acervo...</span>
+              <span className="text-xs font-medium">{t('parentescoModal', 'calculando')}</span>
             </div>
           )}
 
@@ -378,20 +473,21 @@ export const ModalCalculadoraParentesco: React.FC<ModalCalculadoraParentescoProp
                   <div>
                     <div className="text-[11px] font-semibold uppercase tracking-wider text-tinta3">
                       {resultado.tipo_relacao === 'consanguineo'
-                        ? 'Parentesco Consanguíneo (Biológico)'
+                        ? t('parentescoModal', 'parentescoConsanguineo')
                         : resultado.tipo_relacao === 'afim'
-                        ? 'Vínculo Familiar por Afinidade'
+                        ? t('parentescoModal', 'parentescoAfinidade')
                         : resultado.tipo_relacao === 'mesma_pessoa'
-                        ? 'Mesmo Indivíduo'
-                        : 'Sem Parentesco Detectado'}
+                        ? t('parentescoModal', 'mesmoIndividuo')
+                        : t('parentescoModal', 'semParentescoDetectado')}
                     </div>
                     <div className="text-lg font-serif font-bold text-tinta">
-                      {resultado.descricao_parentesco}
+                      {traduzirDescricaoParentesco(resultado.descricao_parentesco, idioma)}
                     </div>
                     {resultado.grau_consanguinidade !== null && resultado.grau_consanguinidade !== undefined && (
                       <div className="text-xs text-tinta2 mt-0.5">
-                        Grau de distância genealógica: <strong>{resultado.grau_consanguinidade}</strong>{' '}
-                        (A: {resultado.distancia_geracoes_a} ger., B: {resultado.distancia_geracoes_b} ger.)
+                        {t('parentescoModal', 'grauDistanciaGenealogica')}{' '}
+                        <strong>{resultado.grau_consanguinidade}</strong>{' '}
+                        (A: {resultado.distancia_geracoes_a} {t('parentescoModal', 'geracoesAbrev')}, B: {resultado.distancia_geracoes_b} {t('parentescoModal', 'geracoesAbrev')})
                       </div>
                     )}
                   </div>
@@ -400,7 +496,7 @@ export const ModalCalculadoraParentesco: React.FC<ModalCalculadoraParentescoProp
                 {resultado.ancestral_comum && (
                   <div className="p-3 rounded-raio-s bg-card border border-borda text-xs flex flex-col gap-1 w-full md:w-auto">
                     <span className="text-[11px] font-semibold text-tinta3">
-                      Ancestral Comum Mais Próximo:
+                      {t('parentescoModal', 'ancestralComumMaisProximo')}
                     </span>
                     <span className="font-bold text-acento">
                       {resultado.ancestral_comum.nome}{' '}
@@ -414,7 +510,7 @@ export const ModalCalculadoraParentesco: React.FC<ModalCalculadoraParentescoProp
               {resultado.caminho && resultado.caminho.length > 0 && (
                 <div className="flex flex-col gap-2.5">
                   <div className="text-xs font-semibold text-tinta2 uppercase tracking-wider">
-                    Caminho de Conexão no Acervo
+                    {t('parentescoModal', 'caminhoConexao')}
                   </div>
 
                   <div className="flex flex-wrap items-center gap-2 p-4 rounded-raio bg-sup/50 border border-borda">
@@ -437,7 +533,7 @@ export const ModalCalculadoraParentesco: React.FC<ModalCalculadoraParentescoProp
                             }`}
                           >
                             <span className="text-[10px] text-tinta3 font-medium uppercase">
-                              {passo.papel}
+                              {traduzirPapel(passo.papel, idioma)}
                             </span>
                             <span className="text-xs font-bold text-tinta">
                               {passo.nome} {passo.sobrenome ?? ''}
@@ -461,10 +557,7 @@ export const ModalCalculadoraParentesco: React.FC<ModalCalculadoraParentescoProp
             <div className="p-4 rounded-raio bg-sup/40 border border-dashed border-borda text-xs text-tinta2 flex items-start gap-3">
               <Sparkles className="w-4 h-4 text-acento flex-none mt-0.5" />
               <div>
-                <strong>Dica de Uso:</strong> Você pode comparar qualquer antepassado da sua família com
-                figuras históricas públicas registradas (como a <em>Família Imperial do Brasil</em>, os{' '}
-                <em>Reis de Portugal</em> ou a <em>Casa de Windsor</em>) para verificar se há algum elo de
-                ancestralidade comum ou casamento registrado no acervo.
+                <strong>{t('parentescoModal', 'dicaUsoTitulo')}</strong> {t('parentescoModal', 'dicaUsoTexto')}
               </div>
             </div>
           )}
@@ -478,14 +571,14 @@ export const ModalCalculadoraParentesco: React.FC<ModalCalculadoraParentescoProp
             disabled={!pessoaA && !pessoaB}
             className="text-xs text-tinta3 hover:text-tinta disabled:opacity-30 cursor-pointer"
           >
-            Limpar Seleções
+            {t('parentescoModal', 'limparSelecoes')}
           </button>
           <button
             type="button"
             onClick={aoFechar}
             className="px-4 py-1.5 rounded-raio-s bg-sup hover:bg-card border border-borda text-xs font-semibold text-tinta transition-colors cursor-pointer"
           >
-            Fechar
+            {t('comum', 'fechar')}
           </button>
         </div>
       </div>

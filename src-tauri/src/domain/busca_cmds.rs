@@ -228,7 +228,7 @@ pub async fn buscar_pessoas_filtrado(
     limite: Option<i64>,
     db: State<'_, SqlitePool>,
 ) -> Resultado<Vec<PessoaNode>> {
-    buscar(&db, &filtros, limite.unwrap_or(200)).await
+    buscar(&db, &filtros, limite.unwrap_or(5000)).await
 }
 
 pub async fn buscar(
@@ -236,7 +236,7 @@ pub async fn buscar(
     filtros: &FiltrosBusca,
     limite: i64,
 ) -> Resultado<Vec<PessoaNode>> {
-    let limite = limite.clamp(1, 1000);
+    let limite = limite.clamp(1, 10_000);
 
     let (condicoes, valores) = montar_condicoes(filtros);
 

@@ -46,6 +46,8 @@ export interface MarcoPessoal {
   data_texto?: string | null;
   local?: string | null;
   ano?: number | null;
+  mes?: number | null;
+  dia?: number | null;
   /** Com quem, nos eventos que pertencem a uma união (o casamento). */
   com?: string | null;
   is_participacao: boolean;
@@ -60,7 +62,13 @@ export interface LinhaPessoal {
   /** Mesma cor do card na árvore — é o que liga as duas telas. */
   sexo: string;
   ano_nascimento?: number | null;
+  mes_nascimento?: number | null;
+  dia_nascimento?: number | null;
+  data_nascimento_texto?: string | null;
   ano_falecimento?: number | null;
+  mes_falecimento?: number | null;
+  dia_falecimento?: number | null;
+  data_falecimento_texto?: string | null;
   is_vivo: boolean;
   marcos: MarcoPessoal[];
 }
@@ -191,3 +199,20 @@ export interface ParticipanteDetalhado {
 
 export const buscarParticipantesMarco = (marcoId: string): Promise<ParticipanteDetalhado[]> =>
   chamar<ParticipanteDetalhado[]>('buscar_participantes_marco', { marcoId });
+
+export interface ParticipacaoPessoa {
+  id: string;
+  marco_id: string;
+  linha_id: string;
+  linha_titulo: string;
+  titulo: string;
+  data_periodo_texto: string;
+  ano_inicio?: number | null;
+  ano_fim?: number | null;
+  papel?: string | null;
+  visivel_na_pessoa: boolean;
+}
+
+export const listarParticipacoesPessoa = (pessoaId: string): Promise<ParticipacaoPessoa[]> =>
+  chamar<ParticipacaoPessoa[]>('listar_participacoes_pessoa', { pessoaId });
+

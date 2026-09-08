@@ -16,8 +16,27 @@
  */
 
 import type { TipoTempo } from '../types';
+import {
+  anoContinuoParaData,
+  NOMES_MESES_EXTENSO,
+  NOMES_MESES_CURTOS,
+} from './precisionTime';
 
 export type TipoCalendario = 'gregoriano' | 'judaico' | 'romano' | 'holoceno' | 'islamico';
+
+export type FormatoDataCalendario =
+  | 'completo'
+  | 'mesAno'
+  | 'mesCurtoAno'
+  | 'mesCurto'
+  | 'diaMes'
+  | 'anoApenas';
+
+export interface DataEntradaCalendario {
+  ano: number;
+  mes?: number | null;
+  dia?: number | null;
+}
 
 export interface InfoCalendario {
   id: TipoCalendario;
@@ -225,50 +244,312 @@ export function formatarAnoNoCalendario(
     return ano < 0 ? `Ano ${Math.abs(ano)} a.F.` : `Ano ${ano}`;
   }
 
+  const anoInt = Math.floor(ano);
+
   switch (cal) {
     case 'judaico':
-      return converterParaJudaico(ano).formatado;
+      return converterParaJudaico(anoInt).formatado;
     case 'romano':
-      return converterParaRomano(ano).formatado;
+      return converterParaRomano(anoInt).formatado;
     case 'holoceno':
-      return converterParaHoloceno(ano).formatado;
+      return converterParaHoloceno(anoInt).formatado;
     case 'islamico':
-      return converterParaIslamico(ano).formatado;
+      return converterParaIslamico(anoInt).formatado;
     case 'gregoriano':
     default:
-      return ano < 0 ? `${Math.abs(ano)} a.C.` : `${ano}`;
+      return anoInt < 0 ? `${Math.abs(anoInt)} a.C.` : `${anoInt}`;
   }
 }
 
 /**
+ * Formata uma data decomposta (ano, mês, dia) no calendário especificado,
+ * respeitando os nomes de meses nativos de cada sistema (ex: Adar, Ramadan, etc.).
+ */
+export function formatarDataNoCalendario(
+  data: DataEntradaCalendario,
+  cal: TipoCalendario = 'gregoriano',
+  tipoTempo: TipoTempo = 'real',
+  formato: FormatoDataCalendario = 'completo',
+): string {
+  const { ano, mes, dia } = data;
+  if (ano == null || isNaN(ano)) return '';
+
+  const m = mes != null && mes >= 1 && mes <= 12 ? mes : 1;
+  const d = dia != null && dia >= 1 ? dia : 1;
+
+  if (tipoTempo === 'ficticio') {
+    const anoStr = ano < 0 ? `Ano ${Math.abs(ano)} a.F.` : `Ano ${ano}`;
+    switch (formato) {
+      case 'anoApenas':
+        return anoStr;
+      case 'mesCurto':
+        return NOMES_MESES_CURTOS[m - 1];
+      case 'mesCurtoAno':
+        return `${NOMES_MESES_CURTOS[m - 1]} ${anoStr}`;
+      case 'diaMes':
+        return `${d} ${NOMES_MESES_CURTOS[m - 1]}`;
+      case 'mesAno':
+        return `${NOMES_MESES_EXTENSO[m - 1]} de ${anoStr}`;
+      case 'completo':
+      default:
+        return dia != null
+          ? `${d} de ${NOMES_MESES_EXTENSO[m - 1]} do ${anoStr}`
+          : `${NOMES_MESES_EXTENSO[m - 1]} do ${anoStr}`;
+    }
+  }
+
+  // 1. Calendário Judaico (Anno Mundi)
+  if (cal === 'judaico') {
+    if (formato === 'anoApenas') {
+      return converterParaJudaico(ano).formatado;
+    }
+    try {
+      const dataJs = new Date(0);
+      dataJs.setFullYear(ano, m - 1, d);
+      const parts = new Intl.DateTimeFormat('pt-BR-u-ca-hebrew', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+      }).formatToParts(dataJs);
+
+      const diaJudaico = parts.find((p) => p.type === 'day')?.value || String(d);
+      const mesJudaico = parts.find((p) => p.type === 'month')?.value || 'Adar';
+      const anoJudaico =
+        parts.find((p) => p.type === 'year')?.value || String(converterParaJudaico(ano).anoCalculado);
+
+      switch (formato) {
+        case 'mesCurto':
+          return mesJudaico;
+        case 'mesCurtoAno':
+          return `${mesJudaico} ${anoJudaico}`;
+        case 'diaMes':
+          return `${diaJudaico} ${mesJudaico}`;
+        case 'mesAno':
+          return `${mesJudaico} de ${anoJudaico} AM`;
+        case 'completo':
+        default:
+          return dia != null
+            ? `${diaJudaico} de ${mesJudaico} de ${anoJudaico} AM`
+            : `${mesJudaico} de ${anoJudaico} AM`;
+      }
+    } catch {
+      return converterParaJudaico(ano).formatado;
+    }
+  }
+
+  // 2. Calendário Islâmico (Hijri)
+  if (cal === 'islamico') {
+    if (formato === 'anoApenas') {
+      return converterParaIslamico(ano).formatado;
+    }
+    if (ano >= 622) {
+      try {
+        const dataJs = new Date(0);
+        dataJs.setFullYear(ano, m - 1, d);
+        const parts = new Intl.DateTimeFormat('pt-BR-u-ca-islamic-umalqura', {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric',
+        }).formatToParts(dataJs);
+
+        const diaIslamico = parts.find((p) => p.type === 'day')?.value || String(d);
+        const mesIslamico = parts.find((p) => p.type === 'month')?.value || 'Ramadan';
+        const anoIslamico =
+          parts.find((p) => p.type === 'year')?.value || String(converterParaIslamico(ano).anoCalculado);
+
+        switch (formato) {
+          case 'mesCurto':
+            return mesIslamico;
+          case 'mesCurtoAno':
+            return `${mesIslamico} ${anoIslamico}`;
+          case 'diaMes':
+            return `${diaIslamico} ${mesIslamico}`;
+          case 'mesAno':
+            return `${mesIslamico} de ${anoIslamico} AH`;
+          case 'completo':
+          default:
+            return dia != null
+              ? `${diaIslamico} de ${mesIslamico} de ${anoIslamico} AH`
+              : `${mesIslamico} de ${anoIslamico} AH`;
+        }
+      } catch {
+        return converterParaIslamico(ano).formatado;
+      }
+    } else {
+      return converterParaIslamico(ano).formatado;
+    }
+  }
+
+  // 3. Calendário Romano (AUC - Ab Urbe Condita)
+  if (cal === 'romano') {
+    const rom = converterParaRomano(ano);
+    switch (formato) {
+      case 'anoApenas':
+        return rom.formatado;
+      case 'mesCurto':
+        return NOMES_MESES_CURTOS[m - 1];
+      case 'mesCurtoAno':
+        return `${NOMES_MESES_CURTOS[m - 1]} ${rom.anoCalculado}`;
+      case 'diaMes':
+        return `${d} ${NOMES_MESES_CURTOS[m - 1]}`;
+      case 'mesAno':
+        return `${NOMES_MESES_EXTENSO[m - 1]} de ${rom.formatado}`;
+      case 'completo':
+      default:
+        return dia != null
+          ? `${d} de ${NOMES_MESES_EXTENSO[m - 1]} de ${rom.formatado}`
+          : `${NOMES_MESES_EXTENSO[m - 1]} de ${rom.formatado}`;
+    }
+  }
+
+  // 4. Calendário Holoceno (HE - Human Era)
+  if (cal === 'holoceno') {
+    const hol = converterParaHoloceno(ano);
+    switch (formato) {
+      case 'anoApenas':
+        return hol.formatado;
+      case 'mesCurto':
+        return NOMES_MESES_CURTOS[m - 1];
+      case 'mesCurtoAno':
+        return `${NOMES_MESES_CURTOS[m - 1]} ${hol.anoCalculado}`;
+      case 'diaMes':
+        return `${d} ${NOMES_MESES_CURTOS[m - 1]}`;
+      case 'mesAno':
+        return `${NOMES_MESES_EXTENSO[m - 1]} de ${hol.formatado}`;
+      case 'completo':
+      default:
+        return dia != null
+          ? `${d} de ${NOMES_MESES_EXTENSO[m - 1]} de ${hol.formatado}`
+          : `${NOMES_MESES_EXTENSO[m - 1]} de ${hol.formatado}`;
+    }
+  }
+
+  // 5. Calendário Gregoriano Padrão
+  const anoGregStr = ano < 0 ? `${Math.abs(ano)} a.C.` : `${ano}`;
+  switch (formato) {
+    case 'anoApenas':
+      return ano < 0 ? `${Math.abs(ano)} a.C.` : `${ano} d.C.`;
+    case 'mesCurto':
+      return NOMES_MESES_CURTOS[m - 1];
+    case 'mesCurtoAno':
+      return `${NOMES_MESES_CURTOS[m - 1]} ${anoGregStr}`;
+    case 'diaMes':
+      return `${d} ${NOMES_MESES_CURTOS[m - 1]}`;
+    case 'mesAno':
+      return `${NOMES_MESES_EXTENSO[m - 1]} de ${anoGregStr}`;
+    case 'completo':
+    default:
+      return dia != null
+        ? `${d} de ${NOMES_MESES_EXTENSO[m - 1]} de ${anoGregStr}`
+        : `${NOMES_MESES_EXTENSO[m - 1]} de ${anoGregStr}`;
+  }
+}
+
+/**
+ * Formata uma coordenada contínua de ano para exibição na agulha temporal ou régua,
+ * adaptando o nível de granularidade (ano, mês ou dia) de acordo com o zoom visível (spanAnos).
+ */
+export function formatarDataPrecisaNoCalendario(
+  anoContinuo: number | null | undefined,
+  spanAnos: number,
+  cal: TipoCalendario = 'gregoriano',
+  tipoTempo: TipoTempo = 'real',
+): string {
+  if (anoContinuo == null || isNaN(anoContinuo)) return '';
+
+  const dec = anoContinuoParaData(anoContinuo);
+
+  // Zoom macro (mais de 2.5 anos visíveis): apenas o ano
+  if (spanAnos > 2.5) {
+    if (tipoTempo === 'ficticio') {
+      return dec.ano < 0 ? `Ano ${Math.abs(dec.ano)} a.F.` : `Ano ${dec.ano}`;
+    }
+    return formatarAnoNoCalendario(dec.ano, cal, 'real');
+  }
+
+  // Zoom médio (meses: entre 0.35 e 2.5 anos visíveis)
+  if (spanAnos > 0.35) {
+    return formatarDataNoCalendario(dec, cal, tipoTempo, 'mesAno');
+  }
+
+  // Zoom micro (dias: <= 0.35 anos visíveis)
+  return formatarDataNoCalendario(dec, cal, tipoTempo, 'completo');
+}
+
+/**
  * Retorna uma descrição completa para exibição na agulha temporal ou balões de detalhe,
- * mostrando o ano no calendário selecionado e opcionalmente o correspondente gregoriano
+ * mostrando o ano ou data no calendário selecionado e o correspondente gregoriano
  * como referência universal.
+ */
+export function descreverDataComDetalhes(
+  anoContinuo: number | null | undefined,
+  spanAnos: number,
+  cal: TipoCalendario = 'gregoriano',
+  tipoTempo: TipoTempo = 'real',
+): { principal: string; secundario?: string } {
+  if (anoContinuo == null || isNaN(anoContinuo)) return { principal: '' };
+
+  const dec = anoContinuoParaData(anoContinuo);
+
+  if (tipoTempo === 'ficticio') {
+    return {
+      principal: formatarDataPrecisaNoCalendario(anoContinuo, spanAnos, cal, 'ficticio'),
+      secundario: 'Cronologia Narrativa / Fictícia',
+    };
+  }
+
+  if (cal === 'gregoriano') {
+    const principal =
+      spanAnos > 2.5
+        ? dec.ano < 0
+          ? `${Math.abs(dec.ano)} a.C.`
+          : `${dec.ano} d.C.`
+        : formatarDataPrecisaNoCalendario(anoContinuo, spanAnos, 'gregoriano', 'real');
+    return { principal };
+  }
+
+  const principal = formatarDataPrecisaNoCalendario(anoContinuo, spanAnos, cal, 'real');
+  const refGregoriana =
+    spanAnos > 2.5
+      ? dec.ano < 0
+        ? `${Math.abs(dec.ano)} a.C.`
+        : `${dec.ano} d.C.`
+      : formatarDataPrecisaNoCalendario(anoContinuo, spanAnos, 'gregoriano', 'real');
+
+  return {
+    principal,
+    secundario: `equiv. ${refGregoriana}`,
+  };
+}
+
+/**
+ * Retorna uma descrição de ano para exibição estática sem necessidade de fração contínua.
  */
 export function descreverAnoComDetalhes(
   ano: number | null | undefined,
   cal: TipoCalendario = 'gregoriano',
   tipoTempo: TipoTempo = 'real',
 ): { principal: string; secundario?: string } {
-  if (ano == null) return { principal: '' };
+  if (ano == null || isNaN(ano)) return { principal: '' };
+  const anoInt = Math.floor(ano);
 
   if (tipoTempo === 'ficticio') {
     return {
-      principal: ano < 0 ? `Ano ${Math.abs(ano)} a.F.` : `Ano ${ano}`,
+      principal: anoInt < 0 ? `Ano ${Math.abs(anoInt)} a.F.` : `Ano ${anoInt}`,
       secundario: 'Cronologia Narrativa / Fictícia',
     };
   }
 
-  const formatado = formatarAnoNoCalendario(ano, cal, 'real');
+  const formatado = formatarAnoNoCalendario(anoInt, cal, 'real');
 
   if (cal === 'gregoriano') {
-    const gregorianoExtenso = ano < 0 ? `${Math.abs(ano)} a.C.` : `${ano} d.C.`;
+    const gregorianoExtenso = anoInt < 0 ? `${Math.abs(anoInt)} a.C.` : `${anoInt} d.C.`;
     return {
       principal: gregorianoExtenso,
     };
   }
 
-  const refGregoriana = ano < 0 ? `${Math.abs(ano)} a.C.` : `${ano} d.C.`;
+  const refGregoriana = anoInt < 0 ? `${Math.abs(anoInt)} a.C.` : `${anoInt} d.C.`;
   return {
     principal: formatado,
     secundario: `equiv. ${refGregoriana}`,

@@ -89,6 +89,15 @@ pub async fn buscar_grafo_arvore(
     geracoes_abaixo: Option<i64>,
     db: State<'_, SqlitePool>,
 ) -> Resultado<GrafoArvore> {
+    buscar_grafo_arvore_db(&db, &raiz_id, geracoes_acima, geracoes_abaixo).await
+}
+
+pub async fn buscar_grafo_arvore_db(
+    db: &SqlitePool,
+    raiz_id: &str,
+    geracoes_acima: Option<i64>,
+    geracoes_abaixo: Option<i64>,
+) -> Resultado<GrafoArvore> {
     let acima = geracoes_acima.unwrap_or(4).clamp(0, 30);
     let abaixo = geracoes_abaixo.unwrap_or(4).clamp(0, 30);
 
@@ -137,21 +146,22 @@ pub async fn buscar_grafo_arvore(
         UNION
         SELECT u.slot_feminino_id FROM unioes u JOIN nucleo n ON u.slot_masculino_id = n.id
         UNION
-        -- Se a pessoa raiz pertence a uma árvore do acervo, inclui todos os membros dessa árvore
-        SELECT am.pessoa_id FROM arvore_membros am
-        WHERE am.pessoa_id IS NOT NULL
-          AND am.arvore_id = (SELECT arvore_id FROM arvore_membros WHERE pessoa_id = ?1 LIMIT 1)
+        -- Irmãos diretos da raiz (filhos da mesma união parental) quando em visão bidirecional
+        SELECT uf.pessoa_id
+        FROM uniao_filhos uf
+        WHERE ?2 > 0 AND ?3 > 0
+          AND uf.uniao_id IN (SELECT uniao_id FROM uniao_filhos WHERE pessoa_id = ?1)
         "#,
     )
-    .bind(&raiz_id)
+    .bind(raiz_id)
     .bind(acima)
     .bind(abaixo)
-    .fetch_all(&*db)
+    .fetch_all(db)
     .await?;
 
     if ids.is_empty() {
         return Ok(GrafoArvore {
-            raiz_id,
+            raiz_id: raiz_id.to_string(),
             nodes: vec![],
             unions: vec![],
             links: vec![],
@@ -197,7 +207,7 @@ pub async fn buscar_grafo_arvore(
     for id in &ids {
         q = q.bind(id);
     }
-    let nodes = q.fetch_all(&*db).await?;
+    let nodes = q.fetch_all(db).await?;
 
     // ---------------------------------------------------------------
     // 3. Uniões: basta UM dos lados estar no recorte.
@@ -225,7 +235,7 @@ pub async fn buscar_grafo_arvore(
     for id in &ids {
         q = q.bind(id);
     }
-    let linhas_uniao = q.fetch_all(&*db).await?;
+    let linhas_uniao = q.fetch_all(db).await?;
 
     let mut unions = Vec::with_capacity(linhas_uniao.len());
     let mut links = Vec::new();
@@ -275,7 +285,7 @@ pub async fn buscar_grafo_arvore(
             q = q.bind(id);
         }
 
-        for row in q.fetch_all(&*db).await? {
+        for row in q.fetch_all(db).await? {
             links.push(GrafoLink {
                 source: row.try_get("uniao_id")?,
                 target: row.try_get("pessoa_id")?,
@@ -308,7 +318,7 @@ pub async fn buscar_grafo_arvore(
     });
 
     Ok(GrafoArvore {
-        raiz_id,
+        raiz_id: raiz_id.to_string(),
         nodes,
         unions,
         links,
@@ -542,5 +552,87 @@ mod testes {
         .flatten();
 
         assert_eq!(ano, Some(1900));
+    }
+
+    #[tokio::test]
+    async fn profundidade_limita_recorte_mesmo_com_membros_de_arvore() {
+        let pool = pool_de_teste().await;
+
+        let bisavo = pessoa(&pool, "Bisavô", "M").await;
+        let bisavo_f = pessoa(&pool, "Bisavó", "F").await;
+        let avo = pessoa(&pool, "Avô", "M").await;
+        let avo_f = pessoa(&pool, "Avó", "F").await;
+        let pai = pessoa(&pool, "Pai", "M").await;
+        let mae = pessoa(&pool, "Mãe", "F").await;
+        let filho = pessoa(&pool, "Filho", "M").await;
+        let irmao = pessoa(&pool, "Irmão", "M").await;
+        let nora = pessoa(&pool, "Nora", "F").await;
+        let neto = pessoa(&pool, "Neto", "M").await;
+        let bisneto = pessoa(&pool, "Bisneto", "M").await;
+
+        let u0 = regras::criar_uniao(&pool, Some(&bisavo), Some(&bisavo_f), "casamento").await.unwrap();
+        regras::anexar_filho(&pool, &u0, &avo, "biologico").await.unwrap();
+
+        let u1 = regras::criar_uniao(&pool, Some(&avo), Some(&avo_f), "casamento").await.unwrap();
+        regras::anexar_filho(&pool, &u1, &pai, "biologico").await.unwrap();
+
+        let u2 = regras::criar_uniao(&pool, Some(&pai), Some(&mae), "casamento").await.unwrap();
+        regras::anexar_filho(&pool, &u2, &filho, "biologico").await.unwrap();
+        regras::anexar_filho(&pool, &u2, &irmao, "biologico").await.unwrap();
+
+        let u3 = regras::criar_uniao(&pool, Some(&filho), Some(&nora), "casamento").await.unwrap();
+        regras::anexar_filho(&pool, &u3, &neto, "biologico").await.unwrap();
+
+        let u4 = regras::criar_uniao(&pool, Some(&neto), None, "estavel").await.unwrap();
+        regras::anexar_filho(&pool, &u4, &bisneto, "biologico").await.unwrap();
+
+        // Insere todos na mesma árvore do acervo
+        sqlx::query("INSERT INTO arvores (id, nome, is_publico) VALUES ('arv_teste', 'Árvore Teste', 0)")
+            .execute(&pool)
+            .await
+            .unwrap();
+
+        for p in [&bisavo, &bisavo_f, &avo, &avo_f, &pai, &mae, &filho, &irmao, &nora, &neto, &bisneto] {
+            sqlx::query("INSERT INTO arvore_membros (id, arvore_id, pessoa_id) VALUES (lower(hex(randomblob(16))), 'arv_teste', ?)")
+                .bind(p)
+                .execute(&pool)
+                .await
+                .unwrap();
+        }
+
+        // Teste 1: Profundidade 1 geração acima e 1 geração abaixo a partir de 'filho'
+        let g1 = buscar_grafo_arvore_db(&pool, &filho, Some(1), Some(1)).await.unwrap();
+        let ids1: Vec<String> = g1.nodes.into_iter().map(|n| n.id).collect();
+
+        // Deve conter filho, pai, mãe, irmão, nora, neto
+        assert!(ids1.contains(&filho), "deve conter a raiz");
+        assert!(ids1.contains(&pai), "deve conter o pai (1 ger. acima)");
+        assert!(ids1.contains(&mae), "deve conter a mãe (1 ger. acima)");
+        assert!(ids1.contains(&irmao), "deve conter o irmão");
+        assert!(ids1.contains(&nora), "deve conter a nora (cônjuge da raiz)");
+        assert!(ids1.contains(&neto), "deve conter o neto (1 ger. abaixo)");
+
+        // NÃO deve conter avós nem bisavós nem bisnetos
+        assert!(!ids1.contains(&avo), "não deve conter avô (2 ger. acima)");
+        assert!(!ids1.contains(&bisavo), "não deve conter bisavô (3 ger. acima)");
+        assert!(!ids1.contains(&bisneto), "não deve conter bisneto (2 ger. abaixo)");
+
+        // Teste 2: Modo Descendentes (0 acima, 2 abaixo)
+        let g_desc = buscar_grafo_arvore_db(&pool, &filho, Some(0), Some(2)).await.unwrap();
+        let ids_desc: Vec<String> = g_desc.nodes.into_iter().map(|n| n.id).collect();
+        assert!(ids_desc.contains(&filho));
+        assert!(ids_desc.contains(&neto));
+        assert!(ids_desc.contains(&bisneto));
+        assert!(!ids_desc.contains(&pai), "não deve conter pais no modo descendentes");
+        assert!(!ids_desc.contains(&irmao), "não deve conter irmãos no modo descendentes");
+
+        // Teste 3: Modo Ancestrais (2 acima, 0 abaixo)
+        let g_anc = buscar_grafo_arvore_db(&pool, &filho, Some(2), Some(0)).await.unwrap();
+        let ids_anc: Vec<String> = g_anc.nodes.into_iter().map(|n| n.id).collect();
+        assert!(ids_anc.contains(&filho));
+        assert!(ids_anc.contains(&pai));
+        assert!(ids_anc.contains(&avo));
+        assert!(!ids_anc.contains(&bisavo), "não deve conter bisavô além de 2 ger.");
+        assert!(!ids_anc.contains(&neto), "não deve conter descendentes no modo ancestrais");
     }
 }

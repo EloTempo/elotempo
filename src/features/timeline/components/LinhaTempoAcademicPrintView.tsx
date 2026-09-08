@@ -85,7 +85,7 @@ export function LinhaTempoAcademicPrintView({
           marcasPrincipais.push(a);
         }
 
-        const passoSecundario = spanFaixa <= 25 ? 1 : spanFaixa <= 60 ? 2 : 5;
+        const passoSecundario = spanFaixa <= 60 ? 1 : 5;
         const marcasSecundarias: number[] = [];
         const primeiroAnoSecundario = Math.ceil(faixa.de / passoSecundario) * passoSecundario;
         for (let a = primeiroAnoSecundario; a <= faixa.ate; a += passoSecundario) {
@@ -213,10 +213,17 @@ export function LinhaTempoAcademicPrintView({
 
               {/* Grade de fundo vertical nas trilhas */}
               <div className="absolute top-10 bottom-2 left-3 right-3 pointer-events-none overflow-hidden z-0">
+                {marcasSecundarias.map((ano) => (
+                  <div
+                    key={`grid-print-sub-${ano}`}
+                    className="absolute top-0 bottom-0 border-l border-solid border-neutral-200/50"
+                    style={{ left: `${obterPct(ano)}%` }}
+                  />
+                ))}
                 {marcasPrincipais.map((ano) => (
                   <div
                     key={`grid-print-${ano}`}
-                    className="absolute top-0 bottom-0 border-l border-dashed border-neutral-200"
+                    className="absolute top-0 bottom-0 border-l border-dashed border-neutral-300"
                     style={{ left: `${obterPct(ano)}%` }}
                   />
                 ))}

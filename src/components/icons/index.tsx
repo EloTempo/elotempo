@@ -241,6 +241,15 @@ export function IconeLinhaTempoAmplo(props: PropsIcone) {
   );
 }
 
+/** Medição temporal: compasso e linha de cota com delimitadores verticais e setas. */
+export function IconeMedicaoTemporal(props: PropsIcone) {
+  return (
+    <Base {...props}>
+      <path d="M4 12h16M4 7v10M20 7v10M7 9.5L4 12l3 2.5M17 9.5l3 2.5-3 2.5" />
+    </Base>
+  );
+}
+
 /** Relações e conexões: malha, não hierarquia. */
 export function IconeRelacoes(props: PropsIcone) {
   return (

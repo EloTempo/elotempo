@@ -96,19 +96,19 @@ export function BarraControlesArvore({
       <div className="h-4 w-px bg-borda flex-none" />
 
       {/* Controle de Gerações */}
-      <div className="flex items-center gap-1.5">
-        <span className="text-xs text-tinta font-semibold mr-0.5">{t('arvore', 'profundidade')}:</span>
+      <div className="flex items-center gap-1.5 flex-none">
+        <span className="text-xs text-tinta font-semibold mr-0.5 select-none">{t('arvore', 'profundidade')}:</span>
         <button
           type="button"
           onClick={() => onMudarGeracoes(Math.max(1, geracoes - 1))}
           disabled={geracoes <= 1}
           className="p-1 text-tinta hover:text-acento disabled:opacity-30 rounded hover:bg-sup cursor-pointer disabled:cursor-not-allowed transition-colors"
-          title="-"
+          title="-1"
         >
           <Minus className="w-3.5 h-3.5" />
         </button>
 
-        <span className="font-num font-bold text-xs text-tinta min-w-[36px] text-center bg-sup/80 px-1.5 py-0.5 rounded border border-borda/60">
+        <span className="font-num font-bold text-xs text-tinta whitespace-nowrap min-w-[50px] inline-flex items-center justify-center bg-sup/80 px-2 py-0.5 rounded border border-borda/60 select-none shadow-2xs">
           {geracoes} {t('arvore', 'geracoesAbrev')}
         </span>
 
@@ -117,7 +117,7 @@ export function BarraControlesArvore({
           onClick={() => onMudarGeracoes(Math.min(12, geracoes + 1))}
           disabled={geracoes >= 12}
           className="p-1 text-tinta hover:text-acento disabled:opacity-30 rounded hover:bg-sup cursor-pointer disabled:cursor-not-allowed transition-colors"
-          title="+"
+          title="+1"
         >
           <Plus className="w-3.5 h-3.5" />
         </button>

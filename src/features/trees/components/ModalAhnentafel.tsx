@@ -8,6 +8,8 @@ import { Modal } from '../../../components/ui/Modal';
 import { Input } from '../../../components/ui/Input';
 import { buscarGrafoArvore } from '../../../lib/api';
 import type { PersonNode, TreeGraph } from '../../../types';
+import { useI18n } from '../../../i18n/I18nContext';
+import type { TranslationSchema } from '../../../i18n/types';
 
 interface ModalAhnentafelProps {
   isOpen: boolean;
@@ -26,10 +28,32 @@ export interface ItemAhnentafel {
 
 const NUMEROS_ROMANOS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
 
+type TranslateFn = (secao: 'ahnentafelModal', chave: keyof TranslationSchema['ahnentafelModal']) => string;
+
 /**
  * Calcula o parentesco tradicional com base no número Ahnentafel (Sosa-Stradonitz).
  */
-export function rotuloParentescoAhnentafel(n: number): string {
+export function rotuloParentescoAhnentafel(n: number, t?: TranslateFn): string {
+  if (t) {
+    if (n === 1) return t('ahnentafelModal', 'pessoaFocoRaiz');
+    if (n === 2) return t('ahnentafelModal', 'pai');
+    if (n === 3) return t('ahnentafelModal', 'mae');
+    if (n === 4) return t('ahnentafelModal', 'avoPaterno');
+    if (n === 5) return t('ahnentafelModal', 'avoPaterna');
+    if (n === 6) return t('ahnentafelModal', 'avoMaterno');
+    if (n === 7) return t('ahnentafelModal', 'avoMaterna');
+    if (n >= 8 && n <= 15) {
+      return n % 2 === 0 ? t('ahnentafelModal', 'bisavoMasc') : t('ahnentafelModal', 'bisavoFem');
+    }
+    if (n >= 16 && n <= 31) {
+      return n % 2 === 0 ? t('ahnentafelModal', 'trisavoMasc') : t('ahnentafelModal', 'trisavoFem');
+    }
+    if (n >= 32 && n <= 63) {
+      return n % 2 === 0 ? t('ahnentafelModal', 'tetravoMasc') : t('ahnentafelModal', 'tetravoFem');
+    }
+    return n % 2 === 0 ? t('ahnentafelModal', 'ascendenteMasc') : t('ahnentafelModal', 'ascendenteFem');
+  }
+
   if (n === 1) return 'Pessoa Foco (Raiz)';
   if (n === 2) return 'Pai';
   if (n === 3) return 'Mãe';
@@ -55,6 +79,7 @@ export function rotuloParentescoAhnentafel(n: number): string {
 export function montarAhnentafel(
   grafo: TreeGraph | null | undefined,
   raizId: string | null,
+  t?: TranslateFn,
 ): ItemAhnentafel[] {
   if (!grafo || !raizId) return [];
 
@@ -85,7 +110,7 @@ export function montarAhnentafel(
     itens.push({
       numero,
       geracao,
-      grauParentesco: rotuloParentescoAhnentafel(numero),
+      grauParentesco: rotuloParentescoAhnentafel(numero, t),
       pessoa: p,
     });
 
@@ -123,6 +148,7 @@ export function ModalAhnentafel({
   onFocarPessoa,
   onAbrirFicha,
 }: ModalAhnentafelProps) {
+  const { t } = useI18n();
   const [busca, setBusca] = useState('');
 
   // Busca até 8 gerações acima (ancestrais puros)
@@ -132,7 +158,7 @@ export function ModalAhnentafel({
     enabled: isOpen && !!raizId,
   });
 
-  const todosItens = useMemo(() => montarAhnentafel(grafo, raizId), [grafo, raizId]);
+  const todosItens = useMemo(() => montarAhnentafel(grafo, raizId, t), [grafo, raizId, t]);
 
   const itensFiltrados = useMemo(() => {
     const termo = busca.trim().toLowerCase();
@@ -165,18 +191,17 @@ export function ModalAhnentafel({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="Tabela de Ancestrais (Ahnentafel / Sosa-Stradonitz)"
+      title={t('ahnentafelModal', 'titulo')}
       className="max-w-3xl"
     >
       <div className="flex flex-col gap-4">
         <div className="flex items-start justify-between gap-4">
           <p className="text-xs text-tinta2 m-0 leading-relaxed flex-1">
-            O sistema <strong>Ahnentafel</strong> é o padrão universal da genealogia para numeração matemática de ascendentes diretos:
-            o pai é sempre o <em>dobro do número do filho (2n)</em> e a mãe é o <em>dobro mais um (2n + 1)</em>.
+            {t('ahnentafelModal', 'descricao')}
           </p>
           <div className="w-56 flex-none">
             <Input
-              placeholder="Buscar por nome, grau ou nº..."
+              placeholder={t('ahnentafelModal', 'buscarPlaceholder')}
               value={busca}
               onChange={(e) => setBusca(e.target.value)}
             />
@@ -185,13 +210,13 @@ export function ModalAhnentafel({
 
         {isLoading && (
           <p className="p-8 text-center text-xs text-tinta3">
-            Calculando linhagem matemática de ancestrais...
+            {t('ahnentafelModal', 'calculando')}
           </p>
         )}
 
         {!isLoading && todosItens.length === 0 && (
           <p className="p-8 text-center text-xs text-tinta3">
-            Nenhum ancestral cadastrado para a raiz selecionada.
+            {t('ahnentafelModal', 'nenhumAncestral')}
           </p>
         )}
 
@@ -202,10 +227,10 @@ export function ModalAhnentafel({
               <div key={geracao} className="flex flex-col gap-2">
                 <div className="flex items-center gap-2 border-b border-borda/60 pb-1 pt-2">
                   <span className="px-2 py-0.5 text-[10px] font-bold rounded bg-acento/10 text-acento font-num">
-                    Geração {rotuloRomano}
+                    {t('ahnentafelModal', 'geracaoRotulo').replace('{numero}', rotuloRomano)}
                   </span>
                   <span className="text-xs text-tinta3 font-medium">
-                    {lista.length} {lista.length === 1 ? 'ancestral' : 'ancestrais'} nesta geração
+                    {lista.length} {lista.length === 1 ? t('ahnentafelModal', 'ancestralSingular') : t('ahnentafelModal', 'ancestraisPlural')}
                   </span>
                 </div>
 

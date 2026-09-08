@@ -181,7 +181,7 @@ export const ModalFusaoPessoas: React.FC<ModalFusaoPessoasProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in">
+    <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in">
       <div className="bg-card border border-borda rounded-raio shadow-sombra w-full max-w-4xl max-h-[92vh] flex flex-col overflow-hidden text-tinta">
         {/* Cabeçalho */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-borda bg-sup/50">

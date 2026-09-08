@@ -352,6 +352,15 @@ pub async fn criar_pessoa(pool: &SqlitePool, nova: NovaPessoa) -> Resultado<Stri
     .execute(pool)
     .await?;
 
+    // Associa automaticamente a pessoa às árvores pessoais existentes
+    let _ = sqlx::query(
+        "INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
+         SELECT id, ?, NULL FROM arvores WHERE is_publico = 0",
+    )
+    .bind(&id)
+    .execute(pool)
+    .await;
+
     Ok(id)
 }
 

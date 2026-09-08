@@ -418,7 +418,15 @@ function resolverColisoesHorizontais(
 
     let xAnel: number;
     if (pM && pF && u.slot_masculino_id !== u.slot_feminino_id) {
-      xAnel = (pM.x + pF.x) / 2;
+      const dist = Math.abs(pM.x - pF.x);
+      // Se ambos os parceiros estão adjacentes (até distância de casal com folga):
+      if (dist <= METRICAS.larguraNo * 2 + METRICAS.espacoCasal * 2) {
+        xAnel = (pM.x + pF.x) / 2;
+      } else {
+        // Se estão distantes (ex.: um parceiro compartilhado em outra família/ramo),
+        // preserva a posição original do anel ancorado sobre a prole / parceiro local
+        xAnel = posUniao.get(uid)?.x ?? (pM.x + pF.x) / 2;
+      }
     } else if (pM) {
       xAnel = pM.x;
     } else if (pF) {
@@ -481,6 +489,14 @@ export function calcularLayout(
       uniaoDona.set(uid, u.slot_masculino_id);
     } else if (fEhDesc && !mEhDesc) {
       uniaoDona.set(uid, u.slot_feminino_id);
+    } else {
+      const mUnioes = idx.unioesDoParceiro.get(u.slot_masculino_id)?.length ?? 0;
+      const fUnioes = idx.unioesDoParceiro.get(u.slot_feminino_id)?.length ?? 0;
+      if (mUnioes > fUnioes) {
+        uniaoDona.set(uid, u.slot_masculino_id);
+      } else if (fUnioes > mUnioes) {
+        uniaoDona.set(uid, u.slot_feminino_id);
+      }
     }
   }
 
@@ -568,6 +584,52 @@ export function calcularLayout(
       return larguraNo;
     }
 
+    if (unioes.length === 1) {
+      const res = Math.max(larguraNo, medirBloco(unioes[0]));
+      medidaPessoa.set(id, res);
+      return res;
+    }
+
+    // Múltiplas uniões lideradas por esta pessoa:
+    const comFilhos = unioes.filter((uid) => (idx.filhosDaUniao.get(uid)?.length ?? 0) > 0);
+    const semFilhos = unioes.filter((uid) => (idx.filhosDaUniao.get(uid)?.length ?? 0) === 0);
+
+    if (comFilhos.length <= 1) {
+      // Caso Pedro I & Marquesa de Santos: apenas 1 união tem descendência própria (ou nenhuma).
+      // A união principal com filhos é colocada sobre sua prole. Cônjuges sem filhos
+      // flanqueiam o parceiro no lado livre com espaçamento padrão de casal.
+      const uPrincipal = comFilhos[0] ?? unioes[0];
+      const blocoPrincipal = medirBloco(uPrincipal);
+      const casalX0Rel = (blocoPrincipal - larguraCasal) / 2;
+      const uPrinc = idx.unioes.get(uPrincipal)!;
+      const idEhMasculino = uPrinc.slot_masculino_id === id;
+      const xPessoaRel = idEhMasculino
+        ? casalX0Rel + larguraNo / 2
+        : casalX0Rel + larguraNo + espacoCasal + larguraNo / 2;
+
+      const qtdSemFilhos = semFilhos.filter((uid) => uid !== uPrincipal).length;
+      let res = blocoPrincipal;
+      if (qtdSemFilhos > 0) {
+        if (idEhMasculino) {
+          const espacoNecessarioEsq = qtdSemFilhos * (larguraNo + espacoCasal);
+          const espacoDisponivelEsq = xPessoaRel - larguraNo / 2;
+          if (espacoNecessarioEsq > espacoDisponivelEsq) {
+            res += espacoNecessarioEsq - espacoDisponivelEsq;
+          }
+        } else {
+          const espacoNecessarioDir = qtdSemFilhos * (larguraNo + espacoCasal);
+          const espacoDisponivelDir = blocoPrincipal - (xPessoaRel + larguraNo / 2);
+          if (espacoNecessarioDir > espacoDisponivelDir) {
+            res += espacoNecessarioDir - espacoDisponivelDir;
+          }
+        }
+      }
+      const finalRes = Math.max(larguraNo, res);
+      medidaPessoa.set(id, finalRes);
+      return finalRes;
+    }
+
+    // Múltiplas uniões com descendência separada:
     let total = 0;
     for (const uid of unioes) total += medirBloco(uid) + espacoBlocos;
     total -= espacoBlocos;
@@ -595,6 +657,104 @@ export function calcularLayout(
 
     if (unioes.length === 0) {
       posPessoa.set(id, { x: x0 + larguraNo / 2, y: y(id) });
+      return;
+    }
+
+    const comFilhos = unioes.filter((uid) => (idx.filhosDaUniao.get(uid)?.length ?? 0) > 0);
+
+    // Se temos mais de uma união e no máximo UMA delas tem filhos próprios:
+    // Flanqueia o parceiro com os cônjuges sem filhos no lado livre
+    if (unioes.length > 1 && comFilhos.length <= 1) {
+      const uPrincipal = comFilhos[0] ?? unioes[0];
+      const uSecundarias = unioes.filter((uid) => uid !== uPrincipal);
+
+      const blocoPrincipal = medirBloco(uPrincipal);
+      const uPrinc = idx.unioes.get(uPrincipal)!;
+      const ehMesmoSlot = uPrinc.slot_masculino_id === uPrinc.slot_feminino_id;
+      const conjugePrincipalId =
+        uPrinc.slot_masculino_id === id ? uPrinc.slot_feminino_id : uPrinc.slot_masculino_id;
+      const temConjuge = !ehMesmoSlot && idx.pessoas.has(conjugePrincipalId) && conjugePrincipalId !== id;
+
+      const casalX0Rel = temConjuge ? (blocoPrincipal - larguraCasal) / 2 : (blocoPrincipal - larguraNo) / 2;
+      const idEhMasculino = uPrinc.slot_masculino_id === id;
+      const xPessoaRel = temConjuge
+        ? (idEhMasculino ? casalX0Rel + larguraNo / 2 : casalX0Rel + larguraNo + espacoCasal + larguraNo / 2)
+        : casalX0Rel + larguraNo / 2;
+
+      let offsetEsq = 0;
+      if (idEhMasculino) {
+        const espacoNecessarioEsq = uSecundarias.length * (larguraNo + espacoCasal);
+        const espacoDisponivelEsq = xPessoaRel - larguraNo / 2;
+        if (espacoNecessarioEsq > espacoDisponivelEsq) {
+          offsetEsq = espacoNecessarioEsq - espacoDisponivelEsq;
+        }
+      }
+
+      const cursorPrincipal = x0 + offsetEsq;
+      unioesConsumidas.add(uPrincipal);
+
+      if (!temConjuge) {
+        const casalX0 = cursorPrincipal + casalX0Rel;
+        posPessoa.set(id, { x: casalX0 + larguraNo / 2, y: y(id) });
+        posUniao.set(uPrincipal, { x: posPessoa.get(id)!.x, y: y(id) });
+      } else {
+        const casalX0 = cursorPrincipal + casalX0Rel;
+        const xEsquerda = casalX0 + larguraNo / 2;
+        const xDireita = casalX0 + larguraNo + espacoCasal + larguraNo / 2;
+        const xPessoa = idEhMasculino ? xEsquerda : xDireita;
+        const xConjuge = idEhMasculino ? xDireita : xEsquerda;
+
+        posPessoa.set(id, { x: xPessoa, y: y(id) });
+        if (!colocadas.has(conjugePrincipalId)) {
+          colocadas.add(conjugePrincipalId);
+          posPessoa.set(conjugePrincipalId, { x: xConjuge, y: y(conjugePrincipalId) });
+        }
+        posUniao.set(uPrincipal, { x: (xPessoa + xConjuge) / 2, y: y(id) });
+      }
+
+      const filhos = idx.filhosDaUniao.get(uPrincipal) ?? [];
+      if (filhos.length > 0) {
+        const larguraFilhos = medirFilhos(uPrincipal);
+        let cursorFilho = cursorPrincipal + (blocoPrincipal - larguraFilhos) / 2;
+        for (const f of filhos) {
+          const larguraFilho = medirPessoa(f);
+          colocarPessoa(f, cursorFilho);
+          cursorFilho += larguraFilho + espacoIrmaos;
+        }
+      }
+
+      // Posiciona os cônjuges sem filhos no lado livre
+      const xId = posPessoa.get(id)!.x;
+      let step = 1;
+      for (const uSecId of uSecundarias) {
+        unioesConsumidas.add(uSecId);
+        const uSec = idx.unioes.get(uSecId)!;
+        const conjId = uSec.slot_masculino_id === id ? uSec.slot_feminino_id : uSec.slot_masculino_id;
+        const temConj =
+          uSec.slot_masculino_id !== uSec.slot_feminino_id && idx.pessoas.has(conjId) && conjId !== id;
+
+        if (temConj) {
+          let xConj: number;
+          let xAnel: number;
+          if (idEhMasculino) {
+            xConj = xId - step * (larguraNo + espacoCasal);
+            xAnel = (xId - (step - 1) * (larguraNo + espacoCasal) + xConj) / 2;
+          } else {
+            xConj = xId + step * (larguraNo + espacoCasal);
+            xAnel = (xId + (step - 1) * (larguraNo + espacoCasal) + xConj) / 2;
+          }
+
+          if (!colocadas.has(conjId)) {
+            colocadas.add(conjId);
+            posPessoa.set(conjId, { x: xConj, y: y(conjId) });
+          }
+          posUniao.set(uSecId, { x: xAnel, y: y(id) });
+          step++;
+        } else {
+          posUniao.set(uSecId, { x: xId, y: y(id) });
+        }
+      }
+
       return;
     }
 
@@ -643,14 +803,15 @@ export function calcularLayout(
           posPessoa.set(conjugeId, { x: xConjuge, y: y(conjugeId) });
         }
 
-        const xr = posPessoa.get(id)!.x;
+        const xr = posPessoa.get(id)?.x ?? xPessoa;
         let xAnel: number;
         if (conjugeJaColocado) {
           const xc = posPessoa.get(conjugeId)!.x;
           xAnel = (xr + xc) / 2;
         } else {
-          const xc = posPessoa.get(conjugeId)?.x ?? xConjuge;
-          xAnel = (xr + xc) / 2;
+          // O anel fica centralizado no casal deste bloco (sobre sua própria prole),
+          // mesmo que 'id' já tenha sido posicionado numa união anterior
+          xAnel = (xEsquerda + xDireita) / 2;
         }
         posUniao.set(uid, { x: xAnel, y: y(id) });
       }

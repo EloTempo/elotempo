@@ -6,6 +6,7 @@ import {
   buscarPessoas,
   removerPessoa,
   restaurarPessoa,
+  adicionarNacionalidade,
 } from '../../../lib/api';
 import { useHistorico } from '../../../contexts/HistoricoContext';
 import { TIPOS_EVENTO, type DataEscolhida } from '../../../types';
@@ -47,14 +48,26 @@ export function useCriarPessoa() {
         tipo_tempo: dados.tipo_tempo ?? 'real',
       });
 
-      // Só cria o evento quando há alguma data escolhida — um evento de
-      // nascimento sem data nenhuma não acrescenta nada à ficha.
-      if (temData(dados.nascimento)) {
+      // Cria o evento de nascimento quando há data ou local
+      if (temData(dados.nascimento) || dados.localNascimento || dados.rotuloHistoricoNascimento) {
         await criarEvento({
           pessoa_id: id,
           tipo_evento: TIPOS_EVENTO.nascimento,
           data: dados.nascimento,
+          local_id: dados.localNascimento?.id ?? null,
+          rotulo_historico_livre: dados.rotuloHistoricoNascimento?.trim() || null,
         });
+
+        const paisId =
+          dados.nacionalidadePaisId ||
+          (dados.localNascimento?.pais_id === 'br' ? 'br' : null);
+        if (paisId) {
+          try {
+            await adicionarNacionalidade(id, paisId);
+          } catch {
+            // tolera duplicação
+          }
+        }
       }
 
       if (temData(dados.falecimento)) {

@@ -2,6 +2,7 @@ import { Clock, History, RotateCcw, RotateCw } from 'lucide-react';
 import { Modal } from '../../../components/ui/Modal';
 import { Button } from '../../../components/ui/Button';
 import { useHistorico } from '../../../contexts/HistoricoContext';
+import { useI18n } from '../../../i18n/I18nContext';
 
 interface ModalHistoricoAcoesProps {
   isOpen: boolean;
@@ -9,6 +10,7 @@ interface ModalHistoricoAcoesProps {
 }
 
 export function ModalHistoricoAcoes({ isOpen, onClose }: ModalHistoricoAcoesProps) {
+  const { t } = useI18n();
   const { pilhaDesfazer, pilhaRefazer, desfazer, refazer, podeDesfazer, podeRefazer } =
     useHistorico();
 
@@ -21,13 +23,13 @@ export function ModalHistoricoAcoes({ isOpen, onClose }: ModalHistoricoAcoesProp
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="Histórico de Ações da Sessão"
+      title={t('historicoModal', 'titulo')}
       className="max-w-xl"
     >
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between gap-2 border-b border-borda/60 pb-3">
           <p className="text-xs text-tinta2 m-0 leading-relaxed">
-            Acompanhe a trilha de modificações realizadas nesta sessão. Você pode desfazer ou refazer alterações a qualquer momento.
+            {t('historicoModal', 'descricao')}
           </p>
 
           <div className="flex items-center gap-1.5 flex-none">
@@ -36,20 +38,20 @@ export function ModalHistoricoAcoes({ isOpen, onClose }: ModalHistoricoAcoesProp
               variant="secondary"
               onClick={desfazer}
               disabled={!podeDesfazer}
-              title="Desfazer última alteração (Ctrl+Z)"
+              title={t('topo', 'desfazer')}
             >
               <RotateCcw className="w-3.5 h-3.5 mr-1" />
-              Desfazer
+              {t('topo', 'desfazer')}
             </Button>
             <Button
               size="sm"
               variant="secondary"
               onClick={refazer}
               disabled={!podeRefazer}
-              title="Refazer última alteração (Ctrl+Y)"
+              title={t('topo', 'refazer')}
             >
               <RotateCw className="w-3.5 h-3.5 mr-1" />
-              Refazer
+              {t('topo', 'refazer')}
             </Button>
           </div>
         </div>
@@ -57,7 +59,7 @@ export function ModalHistoricoAcoes({ isOpen, onClose }: ModalHistoricoAcoesProp
         {todasAcoes.length === 0 ? (
           <div className="p-8 text-center flex flex-col items-center gap-2 text-tinta3">
             <History className="w-8 h-8 opacity-40" />
-            <p className="text-xs m-0">Nenhuma ação registrada nesta sessão ainda.</p>
+            <p className="text-xs m-0">{t('historicoModal', 'nenhumaAcao')}</p>
           </div>
         ) : (
           <div className="flex flex-col gap-2 max-h-80 overflow-y-auto pr-1">
@@ -98,7 +100,7 @@ export function ModalHistoricoAcoes({ isOpen, onClose }: ModalHistoricoAcoesProp
                     <Clock className="w-3 h-3" />
                     <span>{hora}</span>
                     <span className="px-1.5 py-0.2 text-[9.5px] rounded bg-sup font-sans">
-                      {isAplicada ? 'Aplicada' : 'Desfeita'}
+                      {isAplicada ? t('historicoModal', 'aplicada') : t('historicoModal', 'desfeita')}
                     </span>
                   </div>
                 </div>

@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { IconeArvore } from '../../../components/icons';
 import type { ArvoreInfo } from '../../../lib/api';
+import { useI18n } from '../../../i18n/I18nContext';
 
 interface SeletorArvoreEstatisticaProps {
   arvoreId: string | null;
@@ -25,9 +26,11 @@ export function SeletorArvoreEstatistica({
   arvores = [],
   desabilitarId = null,
   permitirTodoAcervo = true,
-  labelPlaceholder = 'Selecionar árvore...',
+  labelPlaceholder,
   className = '',
 }: SeletorArvoreEstatisticaProps) {
+  const { t } = useI18n();
+  const placeholderEfetivo = labelPlaceholder ?? t('estatisticasModal', 'selecionarArvorePlaceholder');
   const [aberto, setAberto] = useState(false);
   const [termoBusca, setTermoBusca] = useState('');
   const [abaFiltro, setAbaFiltro] = useState<'todas' | 'pessoais' | 'historicas'>('todas');
@@ -104,7 +107,7 @@ export function SeletorArvoreEstatistica({
   );
 
   return (
-    <div ref={containerRef} className={`relative w-full ${className}`}>
+    <div ref={containerRef} className={`relative w-full ${aberto ? 'z-50' : 'z-10'} ${className}`}>
       {/* Botão de Disparo do Popover */}
       <button
         type="button"
@@ -119,39 +122,46 @@ export function SeletorArvoreEstatistica({
                 {arvoreSelecionada.nome}
               </span>
               <span className="text-[10px] text-tinta3 flex-none">
-                ({arvoreSelecionada.total_membros} pessoas)
+                ({arvoreSelecionada.total_membros} {t('estatisticasModal', 'pessoas')})
               </span>
             </>
           ) : permitirTodoAcervo ? (
             <>
               <Globe className="w-3.5 h-3.5 text-acento flex-none" />
-              <span className="truncate font-semibold text-tinta">Todo o Acervo</span>
+              <span className="truncate font-semibold text-tinta">{t('arvore', 'todoAcervo')}</span>
               <span className="text-[10px] text-tinta3 flex-none">
-                ({totalPessoasAcervo} pessoas)
+                ({totalPessoasAcervo} {t('estatisticasModal', 'pessoas')})
               </span>
             </>
           ) : (
-            <span className="text-tinta3 italic truncate">{labelPlaceholder}</span>
+            <span className="text-tinta3 italic truncate">{placeholderEfetivo}</span>
           )}
         </div>
         <div className="flex items-center gap-1.5 flex-none">
-          <span className="text-[10px] px-1.5 py-0.5 rounded bg-sup text-tinta3 border border-borda/60 font-medium group-hover:border-acento/40">
-            Alternar
+          <span
+            className="text-[10px] px-2 py-0.5 rounded bg-sup text-tinta2 border border-borda/60 font-medium group-hover:border-acento/40 flex-none"
+            title={t('arvore', 'alternarArvores')}
+          >
+            {t('arvore', 'alternar')}
           </span>
-          <ChevronDown className="w-3.5 h-3.5 text-tinta3 group-hover:text-tinta transition-transform" />
+          <ChevronDown
+            className={`w-3.5 h-3.5 text-tinta3 group-hover:text-tinta transition-transform duration-150 ${
+              aberto ? 'rotate-180 text-tinta' : ''
+            }`}
+          />
         </div>
       </button>
 
       {/* Popover Pesquisável Flutuante */}
       {aberto && (
-        <div className="absolute top-full left-0 right-0 sm:right-auto sm:w-[380px] mt-1 bg-card border border-borda rounded-raio shadow-2xl z-50 p-2 flex flex-col gap-2 animate-in fade-in duration-100">
+        <div className="absolute top-full left-0 right-0 sm:right-auto sm:w-[390px] max-w-full mt-1.5 bg-card border border-borda rounded-raio shadow-2xl z-50 p-2.5 flex flex-col gap-2 animate-in fade-in duration-100">
           {/* Campo de Busca Rápida */}
           <div className="relative flex items-center">
             <Search className="w-3.5 h-3.5 text-tinta3 absolute left-2.5 pointer-events-none" />
             <input
               ref={inputBuscaRef}
               type="text"
-              placeholder="Buscar árvore por nome, categoria ou país..."
+              placeholder={t('arvore', 'buscarArvorePlaceholder')}
               value={termoBusca}
               onChange={(e) => setTermoBusca(e.target.value)}
               className="w-full text-xs pl-8 pr-7 py-1.5 rounded-raio-s bg-sup/90 border border-borda text-tinta placeholder:text-tinta3 outline-none focus:border-acento"
@@ -161,7 +171,7 @@ export function SeletorArvoreEstatistica({
                 type="button"
                 onClick={() => setTermoBusca('')}
                 className="absolute right-2 text-tinta3 hover:text-tinta p-0.5"
-                title="Limpar busca"
+                title={t('comum', 'limpar')}
               >
                 <X className="w-3 h-3" />
               </button>
@@ -179,7 +189,7 @@ export function SeletorArvoreEstatistica({
                   : 'text-tinta3 hover:text-tinta hover:bg-sup'
               }`}
             >
-              Todas ({arvores.length})
+              {t('arvore', 'todas')} ({arvores.length})
             </button>
             <button
               type="button"
@@ -190,7 +200,7 @@ export function SeletorArvoreEstatistica({
                   : 'text-tinta3 hover:text-tinta hover:bg-sup'
               }`}
             >
-              Minhas Árvores ({arvores.filter((a) => !a.is_publico).length})
+              {t('arvore', 'minhasArvores')} ({arvores.filter((a) => !a.is_publico).length})
             </button>
             <button
               type="button"
@@ -201,7 +211,7 @@ export function SeletorArvoreEstatistica({
                   : 'text-tinta3 hover:text-tinta hover:bg-sup'
               }`}
             >
-              🏛️ Históricas ({arvores.filter((a) => a.is_publico).length})
+              🏛️ {t('arvore', 'acervoHistorico')} ({arvores.filter((a) => a.is_publico).length})
             </button>
           </div>
 
@@ -222,9 +232,9 @@ export function SeletorArvoreEstatistica({
                 <div className="flex items-center gap-2 min-w-0 flex-1">
                   <Globe className="w-3.5 h-3.5 text-acento flex-none" />
                   <div className="flex flex-col min-w-0">
-                    <span className="truncate font-semibold">Todo o Acervo</span>
+                    <span className="truncate font-semibold">{t('arvore', 'todoAcervo')}</span>
                     <span className="text-[10px] text-tinta3">
-                      Visão agregada de todas as árvores registradas ({totalPessoasAcervo} pessoas)
+                      {t('estatisticasModal', 'visaoAgregada')} ({totalPessoasAcervo} {t('estatisticasModal', 'pessoas')})
                     </span>
                   </div>
                 </div>
@@ -236,7 +246,7 @@ export function SeletorArvoreEstatistica({
             {pessoaisFiltradas.length > 0 && (
               <div className="flex flex-col gap-0.5 pt-1">
                 <div className="px-2 py-0.5 text-[9px] font-bold text-tinta3 uppercase tracking-wider bg-sup/50 rounded">
-                  Minhas Árvores ({pessoaisFiltradas.length})
+                  {t('arvore', 'minhasArvores')} ({pessoaisFiltradas.length})
                 </div>
                 {pessoaisFiltradas.map((a) => {
                   const isSelecionada = a.id === arvoreId;
@@ -270,7 +280,7 @@ export function SeletorArvoreEstatistica({
             {Object.keys(historicasPorCategoria).length > 0 && (
               <div className="flex flex-col gap-1.5 pt-1">
                 <div className="px-2 py-0.5 text-[9px] font-bold text-acento uppercase tracking-wider bg-acento/10 rounded flex items-center justify-between">
-                  <span>🏛️ Referência Histórica</span>
+                  <span>🏛️ {t('arvore', 'referenciaHistoricaBadge')}</span>
                   <span className="font-num text-[10px]">
                     {arvoresFiltradas.filter((a) => a.is_publico).length}
                   </span>
@@ -317,7 +327,7 @@ export function SeletorArvoreEstatistica({
 
             {arvoresFiltradas.length === 0 && (
               <div className="p-4 text-center text-xs text-tinta3 italic">
-                Nenhuma árvore encontrada para "{termoBusca}".
+                {t('arvore', 'nenhumaEncontradaFiltro')}
               </div>
             )}
           </div>

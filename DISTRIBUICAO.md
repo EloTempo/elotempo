@@ -24,9 +24,9 @@ npm run instalador:msi
 ### Onde os arquivos gerados são salvos:
 Após o término do build, os instaladores finais ficam disponíveis em:
 - **Instalador Executável NSIS:**  
-  `src-tauri/target/release/bundle/nsis/EloTempo_1.0.0_x64-setup.exe`
+  `src-tauri/target/release/bundle/nsis/EloTempo_1.0.1_x64-setup.exe`
 - **Pacote Windows Installer MSI:**  
-  `src-tauri/target/release/bundle/msi/EloTempo_1.0.0_x64_pt-BR.msi`
+  `src-tauri/target/release/bundle/msi/EloTempo_1.0.1_x64_pt-BR.msi`
 
 ---
 
@@ -40,8 +40,8 @@ Para compilar pacotes nativos de **Linux (`.deb` e `.AppImage`)** com as bibliot
 #### Opção A: Criando uma Tag Git (Recomendado)
 Sempre que você criar uma nova tag de versão e enviá-la ao repositório GitHub:
 ```bash
-git tag v1.0.0
-git push origin v1.0.0
+git tag v1.0.1
+git push origin v1.0.1
 ```
 O GitHub Actions iniciará automaticamente duas máquinas virtuais em paralelo:
 1. **Windows Runner (`windows-latest`):** Compila o `.exe` (NSIS) e o `.msi`.
@@ -52,7 +52,7 @@ Ao finalizar, um **Release Público** é criado automaticamente no GitHub com os
 #### Opção B: Disparo Manual pela Interface do GitHub
 1. Acesse a aba **Actions** no repositório GitHub.
 2. Selecione o workflow **Release Multiplataforma (EloTempo)**.
-3. Clique em **Run workflow**, digite a versão desejada (ex: `v1.0.0`) e confirme.
+3. Clique em **Run workflow**, digite a versão desejada (ex: `v1.0.1`) e confirme.
 
 ---
 
@@ -85,15 +85,15 @@ npx tauri build -b deb,appimage
 ```
 
 Os arquivos serão gerados em:
-- `src-tauri/target/release/bundle/deb/elotempo_1.0.0_amd64.deb`
-- `src-tauri/target/release/bundle/appimage/elotempo_1.0.0_amd64.AppImage`
+- `src-tauri/target/release/bundle/deb/elotempo_1.0.1_amd64.deb`
+- `src-tauri/target/release/bundle/appimage/elotempo_1.0.1_amd64.AppImage`
 
 ---
 
 ## 4. Como o Usuário Final Instala
 
 ### No Windows:
-- **`EloTempo_1.0.0_x64-setup.exe`:**  
+- **`EloTempo_1.0.1_x64-setup.exe`:**  
   O usuário clica duas vezes. O instalador assistido em português cria o atalho no Menu Iniciar e na Área de Trabalho. Não requer permissões de administrador (instalação per-user no perfil do usuário).
 - **Associação de Arquivos:**  
   Ao dar dois cliques em qualquer arquivo `.ged` (GEDCOM), o sistema operacional já reconhece e oferece abrir com o EloTempo.
@@ -101,12 +101,12 @@ Os arquivos serão gerados em:
 ### No Linux:
 - **Distribuições baseadas em Debian (Ubuntu, Mint, Pop!_OS):**
   ```bash
-  sudo dpkg -i elotempo_1.0.0_amd64.deb
+  sudo dpkg -i elotempo_1.0.1_amd64.deb
   # ou clique duplo pela interface gráfica da loja de aplicativos
   ```
 - **Qualquer Distribuição Linux (AppImage portátil universal):**
   ```bash
-  chmod +x elotempo_1.0.0_amd64.AppImage
-  ./elotempo_1.0.0_amd64.AppImage
+  chmod +x elotempo_1.0.1_amd64.AppImage
+  ./elotempo_1.0.1_amd64.AppImage
   ```
   *Não precisa de instalação nem de permissões de root.*
