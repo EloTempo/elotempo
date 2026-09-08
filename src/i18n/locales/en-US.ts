@@ -678,6 +678,7 @@ export const enUS: TranslationSchema = {
     versao: 'Version',
     fase: 'Official release version v1.0.1',
     autor: 'Author',
+    colaboracao: 'Collaboration & AI',
     concepcao: 'Conception started',
     concepcaoData: 'July 2026',
     licenca: 'License',

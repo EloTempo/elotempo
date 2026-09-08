@@ -74,9 +74,9 @@ O seu acervo genealógico é armazenado em formato SQLite na pasta de dados do s
 
 | Sistema | Caminho dos Dados |
 |---|---|
-| **Windows** | `%APPDATA%\com.arvore.genealogica\acervo.sqlite` |
-| **Linux** | `~/.local/share/com.arvore.genealogica/acervo.sqlite` |
-| **macOS** | `~/Library/Application Support/com.arvore.genealogica/acervo.sqlite` |
+| **Windows** | `%APPDATA%\com.elotempo.app\acervo.sqlite` |
+| **Linux** | `~/.local/share/com.elotempo.app/acervo.sqlite` |
+| **macOS** | `~/Library/Application Support/com.elotempo.app/acervo.sqlite` |
 
 As fotos e documentos anexados residem na subpasta `midia/` dentro do mesmo diretório. Fazer backup da sua história consiste simplesmente em copiar esse arquivo e pasta para o seu armazenamento de confiança.
 
@@ -125,6 +125,13 @@ Este comando executa em sequência:
 1. `npm run typecheck`: Validação estrita de tipos TypeScript (zero erros).
 2. `npm run test`: Suíte de testes unitários do frontend (Vitest).
 3. `npm run test:rust`: 240+ testes unitários das regras de domínio e invariantes genealógicas no backend Rust.
+
+---
+
+## Autores e Contribuições
+
+- **Gabriel Nascimento** — Concepção, design, arquitetura e desenvolvimento principal.
+- **Gemini 3.8 Flash (Google DeepMind)** — Parceria de engenharia de software e inteligência artificial: auxílio na implementação de regras de domínio genealógico, algoritmos de layout, auditoria de integridade e consistência histórica, testes automatizados e compilação multiplataforma.
 
 ---
 

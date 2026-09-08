@@ -44,12 +44,18 @@ export function ModalSobre({ aberto, aoFechar }: ModalSobreProps) {
         </div>
 
         {/* Metadados de Autoria e Concepção */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 p-3 rounded-raio bg-sup border border-borda text-xs">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 p-3 rounded-raio bg-sup border border-borda text-xs">
           <div>
             <span className="text-tinta3 block text-[11px] font-medium uppercase tracking-wider">
               {t('sobreModal', 'autor')}:
             </span>
             <span className="text-tinta font-semibold">Gabriel Nascimento</span>
+          </div>
+          <div>
+            <span className="text-tinta3 block text-[11px] font-medium uppercase tracking-wider">
+              {t('sobreModal', 'colaboracao')}:
+            </span>
+            <span className="text-tinta font-semibold">Gemini 3.8 Flash</span>
           </div>
           <div>
             <span className="text-tinta3 block text-[11px] font-medium uppercase tracking-wider">

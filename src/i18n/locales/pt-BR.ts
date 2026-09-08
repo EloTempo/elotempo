@@ -678,6 +678,7 @@ export const ptBR: TranslationSchema = {
     versao: 'Versão',
     fase: 'Versão de lançamento oficial v1.0.1',
     autor: 'Autor',
+    colaboracao: 'Colaboração & IA',
     concepcao: 'Início da concepção',
     concepcaoData: 'Julho de 2026',
     licenca: 'Licença',

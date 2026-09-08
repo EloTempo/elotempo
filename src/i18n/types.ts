@@ -686,6 +686,7 @@ export interface TranslationSchema {
     versao: string;
     fase: string;
     autor: string;
+    colaboracao: string;
     concepcao: string;
     concepcaoData: string;
     licenca: string;
