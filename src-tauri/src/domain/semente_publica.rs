@@ -875,6 +875,10 @@ pub async fn sanear_e_sincronizar_acervo(pool: &SqlitePool) -> Resultado<()> {
     const SQL_PESQUISA: &str = include_str!("seeds/arvores_pesquisa.sql");
     sqlx::raw_sql(SQL_PESQUISA).execute(pool).await?;
 
+    // 11. Aplica enriquecimento biográfico, locais georreferenciados e correção vital (migração 029)
+    const SQL_ENRIQUECIMENTO: &str = include_str!("../../migrations/029__enriquecimento_biografias_locais.sql");
+    sqlx::raw_sql(SQL_ENRIQUECIMENTO).execute(pool).await?;
+
     Ok(())
 }
 
