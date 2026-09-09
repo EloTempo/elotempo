@@ -12,6 +12,7 @@ import {
 import { IconeArvore, IconeLinhaTempo, IconeAplicativo } from '../icons';
 import { listarArvores, type ArvoreInfo } from '../../lib/api';
 import { useI18n } from '../../i18n/I18nContext';
+import pkg from '../../../package.json';
 
 interface SplashScreenProps {
   aberto: boolean;
@@ -79,7 +80,7 @@ export function SplashScreen({
                   EloTempo
                 </h2>
                 <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-masc/15 text-masc border border-masc/25 font-num">
-                  v0.1.0
+                  v{pkg.version}
                 </span>
               </div>
               <p className="text-xs text-tinta2 mt-1.5 m-0 max-w-md leading-relaxed">

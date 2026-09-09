@@ -2,6 +2,7 @@ import { Modal } from './Modal';
 import { useI18n } from '../../i18n/I18nContext';
 import { HardDrive, ShieldCheck, HeartHandshake, Layers } from 'lucide-react';
 import { IconeAplicativo } from '../icons';
+import pkg from '../../../package.json';
 
 interface ModalSobreProps {
   aberto: boolean;
@@ -28,7 +29,7 @@ export function ModalSobre({ aberto, aoFechar }: ModalSobreProps) {
                 {t('topo', 'tituloApp')}
               </h3>
               <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-masc/15 text-masc border border-masc/25 shadow-2xs font-num">
-                v0.1.0
+                v{pkg.version}
               </span>
             </div>
             <span className="font-marca text-[10px] text-masc font-semibold tracking-[0.2em] uppercase mt-1">
