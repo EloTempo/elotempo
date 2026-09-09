@@ -245,3 +245,10 @@
     width: 100% !important;
   }
 }
+
+/* Inversão e estética noturna elegante para o mapa Leaflet em temas escuros (OpenStreetMap 100% gratuito sem API key) */
+.dark .leaflet-tile-pane,
+:root[data-tema="classico-escuro"] .leaflet-tile-pane,
+:root[data-tema="noturno"] .leaflet-tile-pane {
+  filter: brightness(0.72) invert(1) contrast(1.35) hue-rotate(200deg) saturate(0.35);
+}

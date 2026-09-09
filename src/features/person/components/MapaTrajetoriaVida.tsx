@@ -74,8 +74,6 @@ export function MapaTrajetoriaVida({
   useEffect(() => {
     if (!containerMapaRef.current || mapaRef.current) return;
 
-    const isEscuro = document.documentElement.classList.contains('dark');
-    
     // Configura o mapa com centro inicial neutro
     const map = L.map(containerMapaRef.current, {
       zoomControl: false,
@@ -90,16 +88,13 @@ export function MapaTrajetoriaVida({
     // Attribution discreto no canto inferior direito
     L.control
       .attribution({ position: 'bottomright', prefix: false })
-      .addAttribution('&copy; <a href="https://carto.com/" target="_blank">CARTO</a> · <a href="https://osm.org/copyright" target="_blank">OSM</a>')
+      .addAttribution('&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>')
       .addTo(map);
 
-    // Tiles cartográficos de alta performance e paleta neutra
-    const tileUrl = isEscuro
-      ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-      : 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
+    // Tiles cartográficos abertos, 100% gratuitos e sem necessidade de chave de API
+    const tileUrl = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
 
     L.tileLayer(tileUrl, {
-      subdomains: 'abcd',
       maxZoom: 19,
     }).addTo(map);
 
