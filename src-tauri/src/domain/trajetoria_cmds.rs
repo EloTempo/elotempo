@@ -62,11 +62,21 @@ pub async fn obter_trajetoria_pessoa_interno(
                 e.rotulo_historico_livre AS rotulo_historico,
                 l.latitude,
                 l.longitude,
-                e.nota
+                CASE
+                  WHEN outro.id IS NOT NULL AND outro.is_placeholder = 0 THEN
+                    CASE WHEN e.nota IS NOT NULL AND TRIM(e.nota) != ''
+                         THEN 'Casamento com ' || TRIM(outro.nome || ' ' || COALESCE(outro.sobrenome, '')) || ' · ' || e.nota
+                         ELSE 'Casamento com ' || TRIM(outro.nome || ' ' || COALESCE(outro.sobrenome, ''))
+                    END
+                  ELSE e.nota
+                END AS nota
          FROM eventos e
          JOIN locais l ON l.id = e.local_id
          LEFT JOIN paises p ON p.id = l.pais_id
-         WHERE e.pessoa_id = ?
+         LEFT JOIN unioes u ON u.id = e.uniao_id
+         LEFT JOIN pessoas outro
+                ON outro.id = CASE WHEN u.slot_masculino_id = ?1 THEN u.slot_feminino_id ELSE u.slot_masculino_id END
+         WHERE (e.pessoa_id = ?1 OR u.slot_masculino_id = ?1 OR u.slot_feminino_id = ?1)
            AND l.latitude IS NOT NULL
            AND l.longitude IS NOT NULL
          ORDER BY (e.ano_inicio IS NULL), e.ano_inicio, e.tipo_evento",
@@ -185,5 +195,36 @@ mod testes {
         assert!(traj.max_lat.is_some());
         assert!(traj.min_lon.is_some());
         assert!(traj.max_lon.is_some());
+    }
+
+    #[tokio::test]
+    async fn casamento_em_uniao_aparece_na_trajetoria_dos_dois_conjuges() {
+        let pool = criar_banco_teste().await;
+
+        // Criar marido e esposa
+        sqlx::query("INSERT INTO pessoas (id, nome, sobrenome, sexo, is_vivo, is_placeholder, is_publico) VALUES ('marido', 'Pedro', 'Silva', 'M', 0, 0, 1)")
+            .execute(&pool).await.unwrap();
+        sqlx::query("INSERT INTO pessoas (id, nome, sobrenome, sexo, is_vivo, is_placeholder, is_publico) VALUES ('esposa', 'Maria', 'Ferreira', 'F', 0, 0, 1)")
+            .execute(&pool).await.unwrap();
+
+        // Criar união entre eles
+        sqlx::query("INSERT INTO unioes (id, slot_masculino_id, slot_feminino_id, estado_vinculo) VALUES ('u_casal', 'marido', 'esposa', 'casamento')")
+            .execute(&pool).await.unwrap();
+
+        // Casamento vinculado à união (pessoa_id é NULL)
+        // ibge-3548500 = Santos (SP)
+        sqlx::query("INSERT INTO eventos (id, uniao_id, tipo_evento, ano_inicio, local_id, nota) VALUES ('ev_casamento', 'u_casal', 'casamento', 1950, 'ibge-3548500', 'Na Igreja Matriz')")
+            .execute(&pool).await.unwrap();
+
+        let traj_marido = obter_trajetoria_pessoa_interno("marido", &pool).await.unwrap();
+        let traj_esposa = obter_trajetoria_pessoa_interno("esposa", &pool).await.unwrap();
+
+        assert_eq!(traj_marido.total_pontos, 1);
+        assert_eq!(traj_marido.pontos[0].tipo_evento, "casamento");
+        assert!(traj_marido.pontos[0].nota.as_deref().unwrap().contains("Maria Ferreira"));
+
+        assert_eq!(traj_esposa.total_pontos, 1);
+        assert_eq!(traj_esposa.pontos[0].tipo_evento, "casamento");
+        assert!(traj_esposa.pontos[0].nota.as_deref().unwrap().contains("Pedro Silva"));
     }
 }

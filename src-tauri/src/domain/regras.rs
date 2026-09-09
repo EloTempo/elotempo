@@ -330,6 +330,7 @@ pub struct NovaPessoa {
     pub is_vivo: bool,
     pub foto_url: Option<String>,
     pub tipo_tempo: Option<String>,
+    pub arvore_id: Option<String>,
 }
 
 pub async fn criar_pessoa(pool: &SqlitePool, nova: NovaPessoa) -> Resultado<String> {
@@ -352,14 +353,17 @@ pub async fn criar_pessoa(pool: &SqlitePool, nova: NovaPessoa) -> Resultado<Stri
     .execute(pool)
     .await?;
 
-    // Associa automaticamente a pessoa às árvores pessoais existentes
-    let _ = sqlx::query(
-        "INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-         SELECT id, ?, NULL FROM arvores WHERE is_publico = 0",
-    )
-    .bind(&id)
-    .execute(pool)
-    .await;
+    // Se uma árvore foi indicada pelo usuário, associa a pessoa especificamente a ela
+    if let Some(ref aid) = nova.arvore_id {
+        let _ = sqlx::query(
+            "INSERT OR IGNORE INTO arvore_membros (id, arvore_id, pessoa_id, uniao_id)
+             VALUES (lower(hex(randomblob(16))), ?, ?, NULL)",
+        )
+        .bind(aid)
+        .bind(&id)
+        .execute(pool)
+        .await;
+    }
 
     Ok(id)
 }
@@ -562,6 +566,22 @@ pub async fn criar_uniao(
     .execute(pool)
     .await?;
 
+    // Se algum dos cônjuges já pertencer a árvores genealógicas, vincula o outro cônjuge
+    // e a união recém-criada às mesmas árvores
+    let _ = sqlx::query(
+        "INSERT OR IGNORE INTO arvore_membros (id, arvore_id, pessoa_id, uniao_id)
+         SELECT lower(hex(randomblob(16))), arvore_id, ?1, NULL FROM arvore_membros WHERE pessoa_id = ?2
+         UNION
+         SELECT lower(hex(randomblob(16))), arvore_id, ?2, NULL FROM arvore_membros WHERE pessoa_id = ?1
+         UNION
+         SELECT lower(hex(randomblob(16))), arvore_id, NULL, ?3 FROM arvore_membros WHERE pessoa_id IN (?1, ?2)",
+    )
+    .bind(&feminino_id)
+    .bind(&masculino_id)
+    .bind(&id)
+    .execute(pool)
+    .await;
+
     Ok(id)
 }
 
@@ -686,6 +706,20 @@ pub async fn anexar_filho(
     .execute(pool)
     .await?;
 
+    // Garante que o filho faça parte de todas as árvores a que os pais ou a união pertencem
+    let _ = sqlx::query(
+        "INSERT OR IGNORE INTO arvore_membros (id, arvore_id, pessoa_id, uniao_id)
+         SELECT lower(hex(randomblob(16))), arvore_id, ?1, NULL
+         FROM arvore_membros
+         WHERE pessoa_id IN (?2, ?3) OR uniao_id = ?4",
+    )
+    .bind(pessoa_id)
+    .bind(&pai)
+    .bind(&mae)
+    .bind(uniao_id)
+    .execute(pool)
+    .await;
+
     Ok(())
 }
 
@@ -733,6 +767,7 @@ mod testes {
                 is_vivo: false,
                 foto_url: None,
                 tipo_tempo: None,
+                arvore_id: None,
             },
         )
         .await
@@ -1138,6 +1173,7 @@ mod testes {
                 is_vivo: true,
                 foto_url: None,
                 tipo_tempo: None,
+                arvore_id: None,
             },
         )
         .await

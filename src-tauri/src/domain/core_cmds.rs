@@ -25,6 +25,8 @@ pub struct NovaPessoaDto {
     pub foto_url: Option<String>,
     #[serde(default)]
     pub tipo_tempo: Option<String>,
+    #[serde(default)]
+    pub arvore_id: Option<String>,
 }
 
 #[tauri::command]
@@ -42,6 +44,7 @@ pub async fn criar_pessoa(
             is_vivo: nova.is_vivo,
             foto_url: nova.foto_url,
             tipo_tempo: nova.tipo_tempo,
+            arvore_id: nova.arvore_id,
         },
     )
     .await

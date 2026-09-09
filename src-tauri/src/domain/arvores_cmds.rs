@@ -60,7 +60,9 @@ pub struct AtualizarArvoreInput {
     pub tipo_tempo: Option<String>,
 }
 
-/// Sincroniza todos os membros conectados pelo grafo familiar e pessoas pessoais na árvore.
+/// Sincroniza todos os membros conectados pelo grafo familiar na árvore.
+/// Garante isolamento estrito: pessoas de outras famílias ou avulsas não são
+/// incorporadas à árvore, apenas membros conectados por parentesco ou explicitamente atribuídos.
 pub async fn sincronizar_membros_arvore(
     pool: &SqlitePool,
     arvore_id: &str,
@@ -69,70 +71,66 @@ pub async fn sincronizar_membros_arvore(
     if let Some(rid) = raiz_pessoa_id {
         // 1. Insere a própria raiz
         sqlx::query(
-            "INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-             VALUES (?, ?, NULL)",
+            "INSERT OR IGNORE INTO arvore_membros (id, arvore_id, pessoa_id, uniao_id)
+             VALUES (lower(hex(randomblob(16))), ?, ?, NULL)",
         )
         .bind(arvore_id)
         .bind(rid)
         .execute(pool)
         .await?;
-
-        // 2. Insere todos os membros conectados recursivamente no grafo familiar
-        let sql_conexos = r#"
-            INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-            WITH RECURSIVE conexos(id) AS (
-                SELECT ?1
-                UNION
-                -- Pais
-                SELECT u.slot_masculino_id FROM conexos c
-                JOIN uniao_filhos uf ON uf.pessoa_id = c.id
-                JOIN unioes u ON u.id = uf.uniao_id
-                WHERE u.slot_masculino_id IS NOT NULL
-                UNION
-                SELECT u.slot_feminino_id FROM conexos c
-                JOIN uniao_filhos uf ON uf.pessoa_id = c.id
-                JOIN unioes u ON u.id = uf.uniao_id
-                WHERE u.slot_feminino_id IS NOT NULL
-                UNION
-                -- Filhos
-                SELECT uf.pessoa_id FROM conexos c
-                JOIN unioes u ON u.slot_masculino_id = c.id OR u.slot_feminino_id = c.id
-                JOIN uniao_filhos uf ON uf.uniao_id = u.id
-                UNION
-                -- Cônjuges
-                SELECT u.slot_masculino_id FROM conexos c
-                JOIN unioes u ON u.slot_feminino_id = c.id
-                WHERE u.slot_masculino_id IS NOT NULL
-                UNION
-                SELECT u.slot_feminino_id FROM conexos c
-                JOIN unioes u ON u.slot_masculino_id = c.id
-                WHERE u.slot_feminino_id IS NOT NULL
-            )
-            SELECT ?2, id, NULL FROM conexos WHERE id IS NOT NULL;
-        "#;
-        let _ = sqlx::query(sql_conexos)
-            .bind(rid)
-            .bind(arvore_id)
-            .execute(pool)
-            .await;
     }
 
-    // Se a árvore for pessoal (is_publico = 0), inclui também quaisquer outras pessoas
-    // pessoais cadastradas no acervo, garantindo que membros criados fiquem acessíveis
-    let eh_publica: Option<(bool,)> = sqlx::query_as("SELECT is_publico FROM arvores WHERE id = ?")
-        .bind(arvore_id)
-        .fetch_optional(pool)
-        .await?;
-
-    if let Some((false,)) = eh_publica {
-        let _ = sqlx::query(
-            "INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-             SELECT ?, id, NULL FROM pessoas WHERE is_publico = 0 AND is_placeholder = 0",
+    // 2. Insere todos os membros conectados recursivamente no grafo familiar
+    // a partir dos membros já presentes nesta árvore (ou da raiz)
+    let sql_conexos = r#"
+        INSERT OR IGNORE INTO arvore_membros (id, arvore_id, pessoa_id, uniao_id)
+        WITH RECURSIVE conexos(id) AS (
+            SELECT pessoa_id FROM arvore_membros WHERE arvore_id = ?1 AND pessoa_id IS NOT NULL
+            UNION
+            -- Pais
+            SELECT u.slot_masculino_id FROM conexos c
+            JOIN uniao_filhos uf ON uf.pessoa_id = c.id
+            JOIN unioes u ON u.id = uf.uniao_id
+            WHERE u.slot_masculino_id IS NOT NULL
+            UNION
+            SELECT u.slot_feminino_id FROM conexos c
+            JOIN uniao_filhos uf ON uf.pessoa_id = c.id
+            JOIN unioes u ON u.id = uf.uniao_id
+            WHERE u.slot_feminino_id IS NOT NULL
+            UNION
+            -- Filhos
+            SELECT uf.pessoa_id FROM conexos c
+            JOIN unioes u ON u.slot_masculino_id = c.id OR u.slot_feminino_id = c.id
+            JOIN uniao_filhos uf ON uf.uniao_id = u.id
+            UNION
+            -- Cônjuges
+            SELECT u.slot_masculino_id FROM conexos c
+            JOIN unioes u ON u.slot_feminino_id = c.id
+            WHERE u.slot_masculino_id IS NOT NULL
+            UNION
+            SELECT u.slot_feminino_id FROM conexos c
+            JOIN unioes u ON u.slot_masculino_id = c.id
+            WHERE u.slot_feminino_id IS NOT NULL
         )
+        SELECT lower(hex(randomblob(16))), ?1, id, NULL FROM conexos WHERE id IS NOT NULL;
+    "#;
+    let _ = sqlx::query(sql_conexos)
         .bind(arvore_id)
         .execute(pool)
         .await;
-    }
+
+    // 3. Associa as uniões correspondentes a esses membros à árvore
+    let sql_unioes = r#"
+        INSERT OR IGNORE INTO arvore_membros (id, arvore_id, pessoa_id, uniao_id)
+        SELECT DISTINCT lower(hex(randomblob(16))), ?1, NULL, u.id
+        FROM unioes u
+        JOIN arvore_membros am1 ON am1.arvore_id = ?1 AND (u.slot_masculino_id = am1.pessoa_id OR u.slot_feminino_id = am1.pessoa_id)
+        WHERE u.id IS NOT NULL;
+    "#;
+    let _ = sqlx::query(sql_unioes)
+        .bind(arvore_id)
+        .execute(pool)
+        .await;
 
     Ok(())
 }
@@ -590,5 +588,92 @@ mod testes {
                 .await
                 .unwrap();
         assert_eq!(pessoa_continua.unwrap().0, "Teresa");
+    }
+
+    #[tokio::test]
+    async fn arvore_isolada_nao_herda_pessoas_avulsas_ou_de_outras_familias() {
+        let pool = pool_de_teste().await;
+
+        // 1. Cria a pessoa Manuel Ferreira e a árvore "Árvore Genealógica Ferreira"
+        let p_manuel = crate::domain::regras::criar_pessoa(
+            &pool,
+            crate::domain::regras::NovaPessoa {
+                nome: "Manuel".into(),
+                sobrenome: Some("Ferreira".into()),
+                sexo: "M".into(),
+                minibiografia: None,
+                is_vivo: false,
+                foto_url: None,
+                tipo_tempo: None,
+                arvore_id: None,
+            },
+        )
+        .await
+        .unwrap();
+
+        let arv_ferreira = criar(
+            &pool,
+            NovaArvoreInput {
+                nome: "Árvore Genealógica Ferreira".into(),
+                descricao: Some("Família Ferreira".into()),
+                raiz_pessoa_id: Some(p_manuel.clone()),
+                ..Default::default()
+            },
+        )
+        .await
+        .unwrap();
+
+        // 2. Cria pessoa "Aguiar Ferreira" como pessoa avulsa (arvore_id: None)
+        let p_aguiar = crate::domain::regras::criar_pessoa(
+            &pool,
+            crate::domain::regras::NovaPessoa {
+                nome: "Aguiar".into(),
+                sobrenome: Some("Ferreira".into()),
+                sexo: "M".into(),
+                minibiografia: None,
+                is_vivo: true,
+                foto_url: None,
+                tipo_tempo: None,
+                arvore_id: None,
+            },
+        )
+        .await
+        .unwrap();
+
+        // 3. Cria pessoa "Rosa Ferreira" explicitamente associada à Árvore Ferreira
+        let p_rosa = crate::domain::regras::criar_pessoa(
+            &pool,
+            crate::domain::regras::NovaPessoa {
+                nome: "Rosa".into(),
+                sobrenome: Some("Ferreira".into()),
+                sexo: "F".into(),
+                minibiografia: None,
+                is_vivo: false,
+                foto_url: None,
+                tipo_tempo: None,
+                arvore_id: Some(arv_ferreira.id.clone()),
+            },
+        )
+        .await
+        .unwrap();
+
+        // Sincroniza a árvore Ferreira
+        sincronizar_membros_arvore(&pool, &arv_ferreira.id, Some(&p_manuel)).await.unwrap();
+
+        // 4. Verifica membros da Árvore Ferreira
+        let membros: Vec<String> = sqlx::query_scalar(
+            "SELECT pessoa_id FROM arvore_membros WHERE arvore_id = ? AND pessoa_id IS NOT NULL",
+        )
+        .bind(&arv_ferreira.id)
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+
+        assert!(membros.contains(&p_manuel), "Manuel deve estar na Árvore Ferreira");
+        assert!(membros.contains(&p_rosa), "Rosa deve estar na Árvore Ferreira");
+        assert!(
+            !membros.contains(&p_aguiar),
+            "Aguiar Ferreira é avulso e NÃO deve estar na Árvore Ferreira mesmo tendo o mesmo sobrenome!"
+        );
     }
 }

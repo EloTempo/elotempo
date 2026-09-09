@@ -98,6 +98,7 @@ export interface NewPerson {
   is_vivo: boolean;
   foto_url?: string | null;
   tipo_tempo?: TipoTempo;
+  arvore_id?: string | null;
 }
 
 export interface Union {
@@ -109,8 +110,7 @@ export interface Union {
 }
 
 /**
- * Um lugar. Município brasileiro do seed do IBGE, ou cidade estrangeira criada
- * no uso.
+ * Um lugar. Município brasileiro do seed do IBGE, concelho português ou cidade mundial.
  *
  * `codigo_ibge` é a chave estável exigida pela seção 2.4 — nome de cidade muda
  * com o tempo, o código não. Nulo no exterior, onde só o país é padronizado.
@@ -122,11 +122,19 @@ export interface Place {
   pais_id: string;
   codigo_ibge?: string | null;
   pais_nome: string;
+  latitude?: number | null;
+  longitude?: number | null;
 }
 
-/** "Campos dos Goytacazes, RJ" ou "Lisboa, Portugal". */
+/** "Campos dos Goytacazes, RJ" ou "Sintra, Lisboa - Portugal". */
 export function rotuloDoLocal(local: Place): string {
-  return local.uf ? `${local.nome}, ${local.uf}` : `${local.nome}, ${local.pais_nome}`;
+  if (local.pais_id === 'br') {
+    return local.uf ? `${local.nome}, ${local.uf}` : local.nome;
+  }
+  if (local.uf && local.uf !== local.pais_nome) {
+    return `${local.nome}, ${local.uf} - ${local.pais_nome}`;
+  }
+  return `${local.nome}, ${local.pais_nome}`;
 }
 
 export interface Event {

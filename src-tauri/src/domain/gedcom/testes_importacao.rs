@@ -504,6 +504,7 @@ async fn exportar_e_reimportar_devolve_a_mesma_arvore() {
             is_vivo: false,
             foto_url: None,
             tipo_tempo: None,
+            arvore_id: None,
         },
     )
     .await
@@ -518,6 +519,7 @@ async fn exportar_e_reimportar_devolve_a_mesma_arvore() {
             is_vivo: false,
             foto_url: None,
             tipo_tempo: None,
+            arvore_id: None,
         },
     )
     .await
@@ -532,6 +534,7 @@ async fn exportar_e_reimportar_devolve_a_mesma_arvore() {
             is_vivo: false,
             foto_url: None,
             tipo_tempo: None,
+            arvore_id: None,
         },
     )
     .await
@@ -650,6 +653,7 @@ async fn ida_e_volta_preserva_o_placeholder_como_lado_desconhecido() {
             is_vivo: false,
             foto_url: None,
             tipo_tempo: None,
+            arvore_id: None,
         },
     )
     .await
@@ -664,6 +668,7 @@ async fn ida_e_volta_preserva_o_placeholder_como_lado_desconhecido() {
             is_vivo: true,
             foto_url: None,
             tipo_tempo: None,
+            arvore_id: None,
         },
     )
     .await

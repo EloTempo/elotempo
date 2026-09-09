@@ -18,6 +18,7 @@ import { CampoDeData } from '../../../components/ui/CampoDeData';
 import { SeletorDeLocal } from './SeletorDeLocal';
 import { DATA_VAZIA, type DataEscolhida, type Person, type Place, type Sex, type TipoTempo } from '../../../types';
 import { useI18n } from '../../../i18n/I18nContext';
+import type { ArvoreInfo } from '../../../lib/api';
 
 export interface DadosPessoaForm {
   nome: string;
@@ -28,6 +29,7 @@ export interface DadosPessoaForm {
   nascimento: DataEscolhida;
   falecimento: DataEscolhida;
   tipo_tempo: TipoTempo;
+  arvore_id?: string | null;
   localNascimento?: Place | null;
   rotuloHistoricoNascimento?: string | null;
   nacionalidadePaisId?: string | null;
@@ -40,6 +42,8 @@ interface PersonFormProps {
   };
   salvando?: boolean;
   erro?: unknown;
+  arvoresDisponiveis?: ArvoreInfo[];
+  arvoreAtivaId?: string | null;
   onSalvar: (dados: DadosPessoaForm) => void;
   onCancelar?: () => void;
 }
@@ -51,7 +55,15 @@ function mensagemDeErro(erro: unknown): string | null {
   return String(erro);
 }
 
-export function PersonForm({ inicial, salvando, erro, onSalvar, onCancelar }: PersonFormProps) {
+export function PersonForm({
+  inicial,
+  salvando,
+  erro,
+  arvoresDisponiveis,
+  arvoreAtivaId,
+  onSalvar,
+  onCancelar,
+}: PersonFormProps) {
   const { t } = useI18n();
   const opcoesSexo = [
     { value: 'M', label: t('ficha', 'masculino') },
@@ -66,6 +78,7 @@ export function PersonForm({ inicial, salvando, erro, onSalvar, onCancelar }: Pe
     nascimento: { ...DATA_VAZIA },
     falecimento: { ...DATA_VAZIA },
     tipo_tempo: 'real',
+    arvore_id: inicial?.id ? null : (arvoreAtivaId ?? null),
   });
   const [erroLocal, setErroLocal] = useState<string | null>(null);
 
@@ -216,6 +229,65 @@ export function PersonForm({ inicial, salvando, erro, onSalvar, onCancelar }: Pe
           {t('ficha', 'dicaDatas')}
         </p>
       </fieldset>
+
+      {/* Confirmação e Isolamento da Árvore Genealógica (ao criar nova pessoa) */}
+      {!inicial?.id && (
+        <div className="p-3.5 bg-fundo/40 rounded-raio-s border border-borda/70 space-y-2.5">
+          <label className="block text-sm font-semibold text-tinta2">
+            🌳 {t('arvore', 'arvoresDoAcervo') || 'Árvore Genealógica / Família'}
+          </label>
+          <div className="flex flex-col gap-2">
+            {arvoresDisponiveis && arvoresDisponiveis.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {arvoresDisponiveis.map((arv) => (
+                  <label
+                    key={arv.id}
+                    className={`flex items-center gap-2 p-2.5 rounded-raio-s border cursor-pointer transition-all text-xs ${
+                      dados.arvore_id === arv.id
+                        ? 'bg-acento/10 border-acento/60 text-tinta font-medium ring-1 ring-acento/30'
+                        : 'bg-card border-borda/80 text-tinta2 hover:border-borda hover:text-tinta'
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="arvore_destino"
+                      value={arv.id}
+                      checked={dados.arvore_id === arv.id}
+                      onChange={() => alterar('arvore_id', arv.id)}
+                      className="text-acento focus:ring-acento/50"
+                    />
+                    <span className="truncate font-medium">{arv.nome}</span>
+                  </label>
+                ))}
+                <label
+                  className={`flex items-center gap-2 p-2.5 rounded-raio-s border cursor-pointer transition-all text-xs ${
+                    dados.arvore_id === null
+                      ? 'bg-acento/10 border-acento/60 text-tinta font-medium ring-1 ring-acento/30'
+                      : 'bg-card border-borda/80 text-tinta2 hover:border-borda hover:text-tinta'
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="arvore_destino"
+                    value=""
+                    checked={dados.arvore_id === null}
+                    onChange={() => alterar('arvore_id', null)}
+                    className="text-acento focus:ring-acento/50"
+                  />
+                  <span className="truncate italic text-tinta2">Nenhuma árvore (Pessoa Avulsa / Nova Família)</span>
+                </label>
+              </div>
+            ) : (
+              <p className="text-xs text-tinta3">
+                Esta pessoa será cadastrada como pessoa inicial/avulsa no acervo.
+              </p>
+            )}
+            <p className="text-[11px] text-tinta3 leading-tight">
+              Garante o isolamento familiar: ter o mesmo sobrenome não significa ser da mesma família.
+            </p>
+          </div>
+        </div>
+      )}
 
       <div className="p-3.5 bg-fundo/40 rounded-raio-s border border-borda/70 space-y-2.5">
         <label className="block text-sm font-semibold text-tinta2">

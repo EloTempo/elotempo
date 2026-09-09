@@ -69,7 +69,26 @@ export function SeletorDeLocal({
     setSalvandoExterior(true);
     setErro(null);
     try {
-      const criado = await registrarLocalEstrangeiro(cidadeExterior.trim(), paisId);
+      let lat: number | undefined;
+      let lon: number | undefined;
+      try {
+        // Tenta obter geolocalização rápida (timeout de 2.5s) para cidades rurais ou vilarejos não cadastrados
+        const resp = await fetch(
+          `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(cidadeExterior.trim())}&countrycodes=${encodeURIComponent(paisId.toLowerCase())}&format=json&limit=1`,
+          { signal: AbortSignal.timeout(2500) }
+        );
+        if (resp.ok) {
+          const dadosGeo = await resp.json();
+          if (dadosGeo && dadosGeo[0]) {
+            lat = parseFloat(dadosGeo[0].lat);
+            lon = parseFloat(dadosGeo[0].lon);
+          }
+        }
+      } catch {
+        // Silencioso se offline ou sem resposta
+      }
+
+      const criado = await registrarLocalEstrangeiro(cidadeExterior.trim(), paisId, lat, lon);
       onEscolher(criado);
       setCidadeExterior('');
     } catch (e) {

@@ -26,6 +26,8 @@ pub struct Local {
     pub codigo_ibge: Option<String>,
     /// Nome do país, para a interface não precisar de outra consulta.
     pub pais_nome: String,
+    pub latitude: Option<f64>,
+    pub longitude: Option<f64>,
 }
 
 /// Autocomplete de local.
@@ -50,12 +52,13 @@ pub async fn buscar_locais(
     let comeca = format!("{normalizado}%");
 
     Ok(sqlx::query_as::<_, Local>(
-        "SELECT l.id, l.nome, l.uf, l.pais_id, l.codigo_ibge, p.nome AS pais_nome
+        "SELECT l.id, l.nome, l.uf, l.pais_id, l.codigo_ibge, p.nome AS pais_nome, l.latitude, l.longitude
          FROM locais l
          JOIN paises p ON p.id = l.pais_id
          WHERE l.nome_busca LIKE ?1
          ORDER BY (l.nome_busca LIKE ?2) DESC,
-                  -- Brasil primeiro: é o caso da esmagadora maioria dos acervos.
+                  -- Brasil e Portugal primeiro: principais fluxos genealógicos dos acervos.
+                  (l.pais_id <> 'br' AND l.pais_id <> 'pt'),
                   (l.pais_id <> 'br'),
                   length(l.nome),
                   l.nome
@@ -70,18 +73,7 @@ pub async fn buscar_locais(
 
 #[tauri::command]
 pub async fn obter_local(id: String, db: State<'_, SqlitePool>) -> Resultado<Local> {
-    sqlx::query_as::<_, Local>(
-        "SELECT l.id, l.nome, l.uf, l.pais_id, l.codigo_ibge, p.nome AS pais_nome
-         FROM locais l JOIN paises p ON p.id = l.pais_id
-         WHERE l.id = ?",
-    )
-    .bind(&id)
-    .fetch_optional(&*db)
-    .await?
-    .ok_or_else(|| ErroDominio::ValorInvalido {
-        campo: "locais.id".into(),
-        valor: id,
-    })
+    obter_local_interno(&db, &id).await
 }
 
 /// Registra (ou reaproveita) uma cidade no exterior.
@@ -93,6 +85,8 @@ pub async fn obter_local(id: String, db: State<'_, SqlitePool>) -> Resultado<Loc
 pub async fn registrar_local_estrangeiro(
     nome: String,
     pais_id: String,
+    latitude: Option<f64>,
+    longitude: Option<f64>,
     db: State<'_, SqlitePool>,
 ) -> Resultado<Local> {
     let nome = nome.trim().to_string();
@@ -116,8 +110,8 @@ pub async fn registrar_local_estrangeiro(
 
     let busca = normalizar_busca(&nome);
 
-    let ja_existe: Option<String> = sqlx::query_scalar(
-        "SELECT id FROM locais WHERE pais_id = ? AND nome_busca = ? AND codigo_ibge IS NULL",
+    let ja_existe: Option<(String, Option<f64>, Option<f64>)> = sqlx::query_as(
+        "SELECT id, latitude, longitude FROM locais WHERE pais_id = ? AND nome_busca = ? AND codigo_ibge IS NULL",
     )
     .bind(&pais_id)
     .bind(&busca)
@@ -125,16 +119,31 @@ pub async fn registrar_local_estrangeiro(
     .await?;
 
     let id = match ja_existe {
-        Some(existente) => existente,
+        Some((existente_id, lat_existente, lon_existente)) => {
+            // Se já existia mas não tinha latitude/longitude, e agora foram fornecidas, atualiza
+            if (lat_existente.is_none() || lon_existente.is_none()) && latitude.is_some() && longitude.is_some() {
+                let _ = sqlx::query(
+                    "UPDATE locais SET latitude = COALESCE(latitude, ?), longitude = COALESCE(longitude, ?) WHERE id = ?"
+                )
+                .bind(latitude)
+                .bind(longitude)
+                .bind(&existente_id)
+                .execute(&*db)
+                .await;
+            }
+            existente_id
+        }
         None => {
             let novo = Uuid::new_v4().to_string();
             sqlx::query(
-                "INSERT INTO locais (id, nome, uf, pais_id, codigo_ibge, nome_busca)
-                 VALUES (?, ?, NULL, ?, NULL, ?)",
+                "INSERT INTO locais (id, nome, uf, pais_id, codigo_ibge, latitude, longitude, nome_busca)
+                 VALUES (?, ?, NULL, ?, NULL, ?, ?, ?)",
             )
             .bind(&novo)
             .bind(&nome)
             .bind(&pais_id)
+            .bind(latitude)
+            .bind(longitude)
             .bind(&busca)
             .execute(&*db)
             .await?;
@@ -147,7 +156,7 @@ pub async fn registrar_local_estrangeiro(
 
 async fn obter_local_interno(pool: &SqlitePool, id: &str) -> Resultado<Local> {
     sqlx::query_as::<_, Local>(
-        "SELECT l.id, l.nome, l.uf, l.pais_id, l.codigo_ibge, p.nome AS pais_nome
+        "SELECT l.id, l.nome, l.uf, l.pais_id, l.codigo_ibge, p.nome AS pais_nome, l.latitude, l.longitude
          FROM locais l JOIN paises p ON p.id = l.pais_id
          WHERE l.id = ?",
     )
@@ -309,16 +318,55 @@ mod testes {
             }
         };
 
-        let primeira = inserir("Lisboa").await;
-        let segunda = inserir("lisboa").await; // caixa diferente
-        assert_eq!(primeira, segunda, "a mesma Lisboa não pode virar dois lugares");
+        let primeira = inserir("MinhaVilaTeste").await;
+        let segunda = inserir("minhavilateste").await; // caixa diferente
+        assert_eq!(primeira, segunda, "a mesma vila não pode virar dois lugares");
 
         let quantas: i64 =
-            sqlx::query_scalar("SELECT COUNT(*) FROM locais WHERE pais_id = 'pt'")
+            sqlx::query_scalar("SELECT COUNT(*) FROM locais WHERE pais_id = 'pt' AND nome_busca = 'minhavilateste'")
                 .fetch_one(&pool)
                 .await
                 .unwrap();
         assert_eq!(quantas, 1);
+    }
+
+    #[tokio::test]
+    async fn concelhos_portugueses_e_cidades_mundiais_estao_disponiveis_com_coordenadas() {
+        let pool = pool_de_teste().await;
+
+        // Concelhos de Portugal essenciais
+        for concelho in ["Lisboa", "Porto", "Coimbra", "Braga", "Faro", "Cascais", "Sintra"] {
+            let res: Option<(String, Option<f64>, Option<f64>)> = sqlx::query_as(
+                "SELECT nome, latitude, longitude FROM locais WHERE pais_id = 'pt' AND nome = ?",
+            )
+            .bind(concelho)
+            .fetch_optional(&pool)
+            .await
+            .unwrap();
+
+            assert!(res.is_some(), "Concelho de Portugal '{concelho}' deve estar cadastrado");
+            let (nome, lat, lon) = res.unwrap();
+            assert_eq!(nome, concelho);
+            assert!(lat.is_some(), "Latitude de '{concelho}' não pode ser nula");
+            assert!(lon.is_some(), "Longitude de '{concelho}' não pode ser nula");
+        }
+
+        // Cidades mundiais
+        for cidade in ["Roma", "Paris", "Madrid"] {
+            let res: Option<(String, Option<f64>, Option<f64>)> = sqlx::query_as(
+                "SELECT nome, latitude, longitude FROM locais WHERE nome = ?",
+            )
+            .bind(cidade)
+            .fetch_optional(&pool)
+            .await
+            .unwrap();
+
+            assert!(res.is_some(), "Cidade mundial '{cidade}' deve estar cadastrada");
+            let (nome, lat, lon) = res.unwrap();
+            assert_eq!(nome, cidade);
+            assert!(lat.is_some(), "Latitude de '{cidade}' não pode ser nula");
+            assert!(lon.is_some(), "Longitude de '{cidade}' não pode ser nula");
+        }
     }
 
     #[tokio::test]

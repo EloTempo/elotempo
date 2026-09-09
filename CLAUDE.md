@@ -11,7 +11,13 @@ precisa saber para **não quebrar nada ao escrever código**.
 
 Software desktop **100% offline** para árvores genealógicas familiares, sem
 limite de tamanho. Local-first: os dados nunca saem da máquina do usuário sem
-ação explícita dele. Código aberto sob licença MIT.
+ação explícita dele. Código aberto sob **GPL-3.0-or-later** — a mesma licença do
+Blender, declarada em `LICENSE`, `package.json` e `Cargo.toml`.
+
+A escolha é copyleft, e isso tem consequência prática: quem distribuir uma versão
+modificada precisa abrir o código dela. Dependência nova continua precisando de
+licença permissiva (MIT, Apache-2.0, BSD) — permissiva entra em GPL sem
+problema; o contrário, não.
 
 O objetivo declarado não é catalogar parentesco — é **ajudar a memória das
 pessoas**, situando cada vida no contexto histórico e cultural da sua época.

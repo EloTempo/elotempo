@@ -1,4 +1,10 @@
-# Elotempo
+# EloTempo
+
+[![Licença: GPL v3](https://img.shields.io/badge/Licen%C3%A7a-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![Versão](https://img.shields.io/badge/vers%C3%A3o-v1.0.3-emerald.svg)](https://github.com/EloTempo/elotempo/releases)
+[![GEDCOM 7.0](https://img.shields.io/badge/GEDCOM-7.0%20%26%205.5.1-orange.svg)](https://gedcom.io)
+[![Plataforma](https://img.shields.io/badge/plataforma-Windows%20%7C%20Linux-lightgrey.svg)]()
+[![Local-first](https://img.shields.io/badge/privacidade-100%25%20Offline%20%26%20Local--First-success.svg)]()
 
 Software desktop **100% offline, local-first e de código aberto** para construir árvores genealógicas familiares e explorar a história de vidas através do tempo, sem limite de registros. Os dados ficam exclusivamente na sua máquina.
 
@@ -31,6 +37,12 @@ Programas de genealogia tendem a virar meras planilhas de parentesco. Este softw
 - **Guias Temporais Tracejadas e Crosshair Sincronizado**: grade de fundo para alinhamento e cursor magnético (*Snap*) que atrai o marcador com precisão para anos de nascimento, óbito ou eventos.
 - **Painel Flutuante de Sincronia**: acompanhe em tempo real a idade de cada parente e os acontecimentos históricos mundiais de qualquer ano selecionado.
 - Camadas temáticas de contexto histórico (Brasil Império/República, moedas, tecnologia e eventos mundiais), além de estúdio para criar suas próprias linhas cronológicas.
+
+### 🗺️ Atlas Biográfico e Mapa de Trajetória de Vidas
+- **Mapa Geográfico Interativo**: visualize no mapa-múndi todos os lugares por onde uma pessoa viveu (nascimento, batismo, residências, casamentos/uniões e falecimento).
+- **Linha de Deslocamento e Animação**: acompanhe as migrações familiares ao longo das décadas com rotas cronológicas e marcadores temáticos com badges de idade.
+- **Base Geográfica Completa e Offline**: 100% dos 5.570 municípios do Brasil (IBGE), todos os 308 concelhos de Portugal com coordenadas geográficas e as principais cidades históricas e de imigração do mundo pré-instalados localmente.
+- **Livre de Mensalidades e Chaves de API**: mapas vetoriais abertos sem custos, sem rastreamento e sem exigir chaves pagas de provedores terceiros.
 
 ### 👥 Conexões Familiares e Ficha Biográfica
 - Interface prática para adicionar pais, múltiplos cônjuges e filhos com respeito estrito às regras genealógicas (prevenção de ciclos e casamentos inválidos).
@@ -124,7 +136,7 @@ npm run verificar
 Este comando executa em sequência:
 1. `npm run typecheck`: Validação estrita de tipos TypeScript (zero erros).
 2. `npm run test`: Suíte de testes unitários do frontend (Vitest).
-3. `npm run test:rust`: 240+ testes unitários das regras de domínio e invariantes genealógicas no backend Rust.
+3. `npm run test:rust`: 255+ testes unitários das regras de domínio e invariantes genealógicas no backend Rust.
 
 ---
 

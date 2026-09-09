@@ -123,6 +123,11 @@ export default function App() {
     }
   });
   const [arvoreAtivaId, setArvoreAtivaId] = useState<string | null>(null);
+  const { data: listaArvores = [] } = useQuery({
+    queryKey: ['arvores'],
+    queryFn: listarArvores,
+  });
+  const arvoresPessoais = listaArvores.filter((a) => !a.is_publico);
 
   // Garante que o aplicativo sempre inicie com a mesa limpa e trilhas da linha do tempo vazias no menor tamanho
   useEffect(() => {
@@ -915,23 +920,26 @@ export default function App() {
         <PersonForm
           salvando={criar.isPending}
           erro={criar.error}
+          arvoresDisponiveis={arvoresPessoais}
+          arvoreAtivaId={arvoreAtivaId}
           onCancelar={() => setFormAberto(false)}
           onSalvar={(dados) =>
             criar.mutate(dados, {
               onSuccess: async (id) => {
                 setFormAberto(false);
                 setSelecionadaId(id);
-                if (!raizId) setRaizId(id);
                 qc.invalidateQueries({ queryKey: ['arvores'] });
                 qc.invalidateQueries({ queryKey: ['pessoas-arvore-timeline'] });
-                if (!arvoreAtivaId) {
-                  try {
-                    const lista = await listarArvores();
-                    const pessoal = lista.find((a) => !a.is_publico);
-                    if (pessoal) {
-                      handleSelecionarArvore(pessoal);
-                    }
-                  } catch {}
+
+                if (dados.arvore_id) {
+                  // Se o usuário vinculou a uma árvore específica, ativa essa árvore
+                  const arv = listaArvores.find((a) => a.id === dados.arvore_id);
+                  if (arv) {
+                    handleSelecionarArvore(arv);
+                  }
+                } else if (!arvoreAtivaId) {
+                  // Se for pessoa avulsa/nova árvore, define como raiz temporária da visualização
+                  setRaizId(id);
                 }
               },
             })

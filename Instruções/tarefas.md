@@ -135,13 +135,15 @@ A cada versão publicada, escreva `0NN__linha_projeto_vX.sql` com um `INSERT`.
 
 ---
 
-## Esperando decisão do Gabriel
+## Decidido
 
-- [ ] **Licença.** Os arquivos dizem MIT; foi escolha minha, nunca confirmada.
-      Ela permite que alguém pegue o código, feche e venda — se não for isso que
-      se quer, a GPL é a alternativa usual.
-- [ ] **Publicar no GitHub.** Adiado por decisão explícita. O repositório local
-      está pronto; falta só a decisão.
+- [x] **Licença: GPL-3.0-or-later**, a mesma do Blender. Copyleft: quem
+      distribuir versão modificada abre o código dela. Fecha o risco de alguém
+      pegar o trabalho, fechar e vender.
+- [x] **Publicar no GitHub.** Repositório público configurado e sincronizado
+      com releases e documentação completa.
+
+## Esperando decisão do Gabriel
 - [ ] **Oito marcos de tecnologia** entraram com `relevancia = 'media'` por eu
       não ter certeza das datas de chegada ao Brasil. Não aparecem na gaveta até
       serem conferidos. Conferidos, sobem para `'alta'` — por migration.

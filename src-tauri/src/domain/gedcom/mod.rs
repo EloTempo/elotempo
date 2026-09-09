@@ -236,6 +236,7 @@ mod testes {
                 is_vivo: vivo,
                 foto_url: None,
                 tipo_tempo: None,
+                arvore_id: None,
             },
         )
         .await

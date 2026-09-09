@@ -9,7 +9,7 @@ on:
       version:
         description: 'Versão do Release (ex: v1.0.0)'
         required: false
-        default: 'v1.0.2'
+        default: 'v1.0.3'
 
 permissions:
   contents: write

@@ -46,6 +46,7 @@ export function useCriarPessoa() {
         is_vivo: dados.is_vivo,
         foto_url: null,
         tipo_tempo: dados.tipo_tempo ?? 'real',
+        arvore_id: dados.arvore_id ?? null,
       });
 
       // Cria o evento de nascimento quando há data ou local
