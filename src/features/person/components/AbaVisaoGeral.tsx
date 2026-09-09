@@ -31,6 +31,7 @@ interface AbaVisaoGeralProps {
   onAdicionarEvento: () => void;
   onIrParaLinhaTempo: () => void;
   onIrParaTrajetoria?: () => void;
+  onIrParaMapa?: (eventoId?: string) => void;
 }
 
 export function AbaVisaoGeral({
@@ -45,6 +46,7 @@ export function AbaVisaoGeral({
   onAdicionarEvento,
   onIrParaLinhaTempo,
   onIrParaTrajetoria,
+  onIrParaMapa,
 }: AbaVisaoGeralProps) {
   const { t } = useI18n();
   const nomeCompleto = [pessoa.nome, pessoa.sobrenome].filter(Boolean).join(' ');
@@ -111,14 +113,27 @@ export function AbaVisaoGeral({
               <Calendar className="w-4 h-4 text-acento" />
               <h3 className="font-tit font-bold text-sm text-tinta m-0">{t('perfil', 'fatosVitais')}</h3>
             </div>
-            <button
-              type="button"
-              onClick={onAdicionarEvento}
-              className="text-xs font-semibold px-2.5 py-1 rounded-raio-s bg-acento/10 hover:bg-acento/20 text-acento border border-acento/30 transition-colors flex items-center gap-1 cursor-pointer"
-            >
-              <Plus className="w-3 h-3" />
-              {t('perfil', 'adicionarFato')}
-            </button>
+            <div className="flex items-center gap-1.5">
+              {onIrParaMapa && (
+                <button
+                  type="button"
+                  onClick={() => onIrParaMapa()}
+                  className="text-xs font-semibold px-2 py-1 rounded-raio-s bg-sup hover:bg-card border border-borda hover:border-acento text-tinta2 hover:text-tinta transition-colors flex items-center gap-1 cursor-pointer"
+                  title={t('perfil', 'abaMapa')}
+                >
+                  <Compass className="w-3 h-3 text-acento" />
+                  <span>{t('perfil', 'abaMapa')}</span>
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={onAdicionarEvento}
+                className="text-xs font-semibold px-2.5 py-1 rounded-raio-s bg-acento/10 hover:bg-acento/20 text-acento border border-acento/30 transition-colors flex items-center gap-1 cursor-pointer"
+              >
+                <Plus className="w-3 h-3" />
+                {t('perfil', 'adicionarFato')}
+              </button>
+            </div>
           </div>
 
           <div className="flex flex-col divide-y divide-borda/40">
@@ -158,10 +173,23 @@ export function AbaVisaoGeral({
                         {evento.data_texto || (evento.ano_inicio ? String(evento.ano_inicio) : t('perfil', 'dataNaoInformada'))}
                       </span>
                       {localFormatado ? (
-                        <span className="text-[11px] text-tinta2 block mt-0.5 flex items-center gap-1">
-                          <MapPin className="w-3 h-3 text-acento flex-none" />
-                          <span className="truncate">{localFormatado}</span>
-                        </span>
+                        <div className="text-[11px] text-tinta2 mt-0.5 flex items-center gap-2 flex-wrap">
+                          <span className="flex items-center gap-1 truncate">
+                            <MapPin className="w-3 h-3 text-acento flex-none" />
+                            <span className="truncate">{localFormatado}</span>
+                          </span>
+                          {onIrParaMapa && (
+                            <button
+                              type="button"
+                              onClick={() => onIrParaMapa(evento.id)}
+                              className="text-[10.5px] font-semibold text-acento hover:underline flex items-center gap-0.5 cursor-pointer bg-transparent border-none p-0 flex-none"
+                              title={t('perfil', 'verNoMapa')}
+                            >
+                              <Compass className="w-3 h-3" />
+                              <span>{t('perfil', 'verNoMapa')}</span>
+                            </button>
+                          )}
+                        </div>
                       ) : (
                         <button
                           type="button"

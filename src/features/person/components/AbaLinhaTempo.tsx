@@ -21,6 +21,7 @@ import {
 } from '../hooks/useFicha';
 import { TIPOS_DE_EVENTO, rotuloDoTipo } from '../taxonomias';
 import { DATA_VAZIA, type DataEscolhida, type Event, type Place } from '../../../types';
+import { useI18n } from '../../../i18n/I18nContext';
 
 interface AbaLinhaTempoProps {
   pessoaId: string;
@@ -29,6 +30,7 @@ interface AbaLinhaTempoProps {
   onAbrirVincularMarco: () => void;
   formularioCriarAberto?: boolean;
   onAlternarFormularioCriar?: () => void;
+  onVerNoMapa?: (eventoId: string) => void;
 }
 
 export function AbaLinhaTempo({
@@ -38,7 +40,9 @@ export function AbaLinhaTempo({
   onAbrirVincularMarco,
   formularioCriarAberto: formAbertoProp,
   onAlternarFormularioCriar,
+  onVerNoMapa,
 }: AbaLinhaTempoProps) {
+  const { t } = useI18n();
   const [formLocalAberto, setFormLocalAberto] = useState(false);
   const formAberto = formAbertoProp !== undefined ? formAbertoProp : formLocalAberto;
   const toggleForm = onAlternarFormularioCriar ?? (() => setFormLocalAberto((a) => !a));
@@ -228,9 +232,22 @@ export function AbaLinhaTempo({
                         </div>
 
                         {local && (
-                          <div className="flex items-center gap-1 text-[11px] text-tinta3 mt-1">
-                            <MapPin className="w-3 h-3 text-acento/70 flex-none" />
-                            <span className="truncate">{local}</span>
+                          <div className="flex items-center gap-2 mt-1 flex-wrap">
+                            <div className="flex items-center gap-1 text-[11px] text-tinta3">
+                              <MapPin className="w-3 h-3 text-acento/70 flex-none" />
+                              <span className="truncate">{local}</span>
+                            </div>
+                            {onVerNoMapa && (
+                              <button
+                                type="button"
+                                onClick={() => onVerNoMapa(ev.id)}
+                                className="text-[10.5px] font-semibold text-acento hover:underline flex items-center gap-0.5 cursor-pointer bg-transparent border-none p-0 transition-opacity"
+                                title={t('perfil', 'verNoMapa')}
+                              >
+                                <Compass className="w-3 h-3" />
+                                <span>{t('perfil', 'verNoMapa')}</span>
+                              </button>
+                            )}
                           </div>
                         )}
 

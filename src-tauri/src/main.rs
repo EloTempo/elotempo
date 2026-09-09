@@ -43,6 +43,7 @@ use domain::arvores_cmds::{
 use domain::nomes_cmds::{
     adicionar_nome, listar_nomes_pessoa, remover_nome, usar_nome_na_arvore,
 };
+use domain::trajetoria_cmds::obter_trajetoria_pessoa;
 use domain::parentesco_cmds::calcular_parentesco;
 use domain::exportacao_grafica_cmds::{salvar_arquivo_bytes, salvar_arquivo_texto};
 use domain::fusao_cmds::{buscar_duplicatas_potenciais, fundir_pessoas};
@@ -198,6 +199,7 @@ fn main() {
             criar_marcador,
             atualizar_marcador,
             deletar_marcador,
+            obter_trajetoria_pessoa,
             // Sistema de Segurança, Criptografia e Modo Híbrido
             obter_status_seguranca,
             gerar_chave_recuperacao,

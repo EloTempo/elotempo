@@ -397,3 +397,31 @@ export interface DomainError {
   codigo: DomainErrorCode;
   detalhe?: unknown;
 }
+
+// ---------------------------------------------------------------------------
+// Trajetória Geográfica e Atlas Biográfico
+// ---------------------------------------------------------------------------
+
+export interface PontoTrajetoria {
+  evento_id: string;
+  tipo_evento: string;
+  ano: number | null;
+  data_texto: string | null;
+  local_id: string | null;
+  local_nome: string;
+  rotulo_historico: string | null;
+  latitude: number;
+  longitude: number;
+  nota: string | null;
+}
+
+export interface TrajetoriaPessoa {
+  pessoa_id: string;
+  total_pontos: number;
+  pontos: PontoTrajetoria[];
+  min_lat: number | null;
+  max_lat: number | null;
+  min_lon: number | null;
+  max_lon: number | null;
+}
+

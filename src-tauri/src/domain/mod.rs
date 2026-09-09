@@ -21,3 +21,4 @@ pub mod relatorio_cmds;
 pub mod semente_publica;
 pub mod seguranca;
 pub mod texto;
+pub mod trajetoria_cmds;

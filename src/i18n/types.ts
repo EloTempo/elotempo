@@ -191,6 +191,17 @@ export interface TranslationSchema {
     abaLinhaTempo: string;
     abaTrajetoria: string;
     abaGaleria: string;
+    abaMapa: string;
+    verNoMapa: string;
+    mapaVidaTitulo: string;
+    trajetoriaDeVida: string;
+    nenhumLocalRegistrado: string;
+    nenhumLocalDesc: string;
+    verTrajetoriaCompleta: string;
+    pontoAnterior: string;
+    proximoPonto: string;
+    eventosNoMapa: string;
+    rotaDeDeslocamento: string;
     carregandoPessoa: string;
     erroCarregarPessoa: string;
     adicionarNacionalidade: string;

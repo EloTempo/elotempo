@@ -8,6 +8,7 @@ import {
   ImagePlus,
   UserCheck,
   Globe,
+  Compass,
 } from 'lucide-react';
 import { IconeArvore, IconeRelacoes } from '../../../components/icons';
 import { Button } from '../../../components/ui/Button';
@@ -27,11 +28,13 @@ import {
   idiomas,
   religioes,
 } from '../hooks/useFicha';
+import { useTrajetoriaPessoa } from '../hooks/useTrajetoria';
 import { useConexoes } from '../../union/hooks/useConexoes';
 import { AbaVisaoGeral } from './AbaVisaoGeral';
 import { AbaLinhaTempo } from './AbaLinhaTempo';
 import { AbaTrajetoria } from './AbaTrajetoria';
 import { AbaGaleria } from './AbaGaleria';
+import { MapaTrajetoriaVida } from './MapaTrajetoriaVida';
 import { ModalEditarIdentidade } from './ModalEditarIdentidade';
 import { ModalAdicionarEventoVida } from '../../timeline/components/ModalAdicionarEventoVida';
 import { ErroDoAcervo } from '../../../lib/api';
@@ -45,7 +48,7 @@ interface PersonDetailsProps {
   isRaizAtual?: boolean;
 }
 
-type AbaTipo = 'visao_geral' | 'linha_tempo' | 'trajetoria' | 'galeria';
+type AbaTipo = 'visao_geral' | 'linha_tempo' | 'mapa' | 'trajetoria' | 'galeria';
 
 function mensagemDeErro(erro: unknown): string | null {
   if (!erro) return null;
@@ -64,6 +67,12 @@ export function PersonDetails({
   const { t } = useI18n();
   const [idPessoaAtiva, setIdPessoaAtiva] = useState(pessoaId);
   const [abaAtiva, setAbaAtiva] = useState<AbaTipo>('visao_geral');
+  const [eventoFocoMapaId, setEventoFocoMapaId] = useState<string | null>(null);
+
+  const handleIrParaMapa = (eventoId?: string) => {
+    setEventoFocoMapaId(eventoId ?? null);
+    setAbaAtiva('mapa');
+  };
 
   // Modais auxiliares
   const [modalEditarAberto, setModalEditarAberto] = useState(false);
@@ -73,6 +82,7 @@ export function PersonDetails({
   // Sincroniza se a prop mudar
   useEffect(() => {
     setIdPessoaAtiva(pessoaId);
+    setEventoFocoMapaId(null);
   }, [pessoaId]);
 
   // Queries de dados
@@ -80,6 +90,7 @@ export function PersonDetails({
   const { data: eventos } = useEventos(idPessoaAtiva);
   const { data: participacoes } = useParticipacoesPessoa(idPessoaAtiva);
   const { data: conexoes } = useConexoes(idPessoaAtiva);
+  const { data: trajetoria } = useTrajetoriaPessoa(idPessoaAtiva);
   const listaNomes = useNomes(idPessoaAtiva);
   const listaApelidos = apelidos.useLista(idPessoaAtiva);
   const listaDocumentos = useDocumentos(idPessoaAtiva);
@@ -353,6 +364,30 @@ export function PersonDetails({
 
         <button
           type="button"
+          onClick={() => handleIrParaMapa()}
+          className={`px-3 py-1.5 rounded-raio-s text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer border ${
+            abaAtiva === 'mapa'
+              ? 'bg-acento text-acento-tinta border-acento shadow-xs'
+              : 'bg-sup/40 text-tinta2 hover:text-tinta hover:bg-sup border-borda/60'
+          }`}
+        >
+          <Compass className="w-3.5 h-3.5" />
+          <span>{t('perfil', 'abaMapa')}</span>
+          {(trajetoria?.total_pontos ?? 0) > 0 && (
+            <span
+              className={`text-[10px] font-num px-1.5 py-0.2 rounded-full ${
+                abaAtiva === 'mapa'
+                  ? 'bg-black/20 text-white'
+                  : 'bg-acento/10 text-acento'
+              }`}
+            >
+              {trajetoria?.total_pontos}
+            </span>
+          )}
+        </button>
+
+        <button
+          type="button"
           onClick={() => setAbaAtiva('trajetoria')}
           className={`px-3 py-1.5 rounded-raio-s text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer border ${
             abaAtiva === 'trajetoria'
@@ -418,6 +453,7 @@ export function PersonDetails({
             }}
             onIrParaLinhaTempo={() => setAbaAtiva('linha_tempo')}
             onIrParaTrajetoria={() => setAbaAtiva('trajetoria')}
+            onIrParaMapa={(eventoId) => handleIrParaMapa(eventoId)}
           />
         )}
 
@@ -429,6 +465,15 @@ export function PersonDetails({
             onAbrirVincularMarco={() => setModalVincularMarcoAberto(true)}
             formularioCriarAberto={formularioNovoEventoAberto}
             onAlternarFormularioCriar={() => setFormularioNovoEventoAberto((a) => !a)}
+            onVerNoMapa={(eventoId) => handleIrParaMapa(eventoId)}
+          />
+        )}
+
+        {abaAtiva === 'mapa' && (
+          <MapaTrajetoriaVida
+            pessoaId={idPessoaAtiva}
+            nomePessoa={nomeCompleto}
+            eventoInicialId={eventoFocoMapaId ?? undefined}
           />
         )}
 
