@@ -9,7 +9,7 @@ on:
       version:
         description: 'Versão do Release (ex: v1.0.0)'
         required: false
-        default: 'v1.0.1'
+        default: 'v1.0.2'
 
 permissions:
   contents: write
@@ -90,6 +90,8 @@ jobs:
               - `elotempo_*_amd64.AppImage` (Executável universal portátil - basta dar permissão de execução e rodar)
             
             ### Novidades desta Versão:
+            - **Atlas Biográfico & Mapa Interativo de Trajetórias de Vida**: Visualização de deslocamento geográfico e marcos de vida através do OpenStreetMap (100% gratuito e sem chave de API), animações suaves (*flyTo*), anéis pulsantes, trilha de migração sequencial e atalhos na Linha do Tempo.
+            - **Geocodificação Local Offline**: Centróides geoespaciais integrados para todos os 5.571 municípios do IBGE e cidades históricas de imigração mundial.
             - Catálogo completo de 37 Linhas de Contexto Histórico e 431 eventos cronológicos.
             - 40+ Árvores Genealógicas Públicas de referência pré-carregadas.
             - Estúdio de Linhas do Tempo com comparação simultânea de vidas e zoom milenar a.C./d.C.
