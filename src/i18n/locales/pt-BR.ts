@@ -687,7 +687,7 @@ export const ptBR: TranslationSchema = {
     titulo: 'Sobre o Aplicativo',
     subtitulo: 'Software desktop offline para genealogia e história familiar',
     versao: 'Versão',
-    fase: 'Versão de lançamento oficial v1.0.1',
+    fase: 'Versão de lançamento oficial v1.0.2',
     autor: 'Autor',
     colaboracao: 'Colaboração & IA',
     concepcao: 'Início da concepção',

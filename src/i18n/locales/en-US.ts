@@ -687,7 +687,7 @@ export const enUS: TranslationSchema = {
     titulo: 'About the App',
     subtitulo: 'Offline desktop software for genealogy and family history',
     versao: 'Version',
-    fase: 'Official release version v1.0.1',
+    fase: 'Official release version v1.0.2',
     autor: 'Author',
     colaboracao: 'Collaboration & AI',
     concepcao: 'Conception started',

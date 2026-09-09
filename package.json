@@ -1,7 +1,7 @@
 {
   "name": "elotempo",
   "private": true,
-  "version": "1.0.1",
+  "version": "1.0.2",
   "type": "module",
   "description": "Elotempo — Software desktop offline para árvores genealógicas e contexto de vidas, compatível com GEDCOM 7.0",
   "license": "GPL-3.0-or-later",
