@@ -883,6 +883,10 @@ pub async fn sanear_e_sincronizar_acervo(pool: &SqlitePool) -> Resultado<()> {
     const SQL_CATEGORIAS_LOCAIS: &str = include_str!("../../migrations/030__organizacao_categorias_e_locais_publicos.sql");
     sqlx::raw_sql(SQL_CATEGORIAS_LOCAIS).execute(pool).await?;
 
+    // 13. Aplica enriquecimento de atributos culturais, idiomas, escolaridade, profissões e obras (migração 031)
+    const SQL_ATRIBUTOS_CULTURAIS: &str = include_str!("../../migrations/031__enriquecimento_atributos_culturais_e_profissionais.sql");
+    sqlx::raw_sql(SQL_ATRIBUTOS_CULTURAIS).execute(pool).await?;
+
     Ok(())
 }
 
@@ -940,6 +944,36 @@ mod testes {
         assert_eq!(ev_jimmu[0].2, "cerca_de");
         assert_eq!(ev_jimmu[1].1, -585);
         assert_eq!(ev_jimmu[1].2, "cerca_de");
+
+        let total_religioes: i64 = sqlx::query_scalar("SELECT COUNT(*) FROM religioes_pessoa")
+            .fetch_one(&pool)
+            .await
+            .unwrap();
+        assert!(total_religioes >= 50);
+
+        let total_idiomas: i64 = sqlx::query_scalar("SELECT COUNT(*) FROM idiomas_pessoa")
+            .fetch_one(&pool)
+            .await
+            .unwrap();
+        assert!(total_idiomas >= 100);
+
+        let total_escolaridade: i64 = sqlx::query_scalar("SELECT COUNT(*) FROM escolaridade_pessoa")
+            .fetch_one(&pool)
+            .await
+            .unwrap();
+        assert!(total_escolaridade >= 30);
+
+        let total_profissoes: i64 = sqlx::query_scalar("SELECT COUNT(*) FROM profissoes_pessoa")
+            .fetch_one(&pool)
+            .await
+            .unwrap();
+        assert!(total_profissoes >= 50);
+
+        let total_publicacoes: i64 = sqlx::query_scalar("SELECT COUNT(*) FROM eventos WHERE tipo_evento = 'publicacao'")
+            .fetch_one(&pool)
+            .await
+            .unwrap();
+        assert!(total_publicacoes >= 40);
     }
 
     #[tokio::test]
