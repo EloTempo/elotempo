@@ -142,7 +142,7 @@ pub async fn garantir_acervo_publico(pool: &SqlitePool) -> Resultado<()> {
 
     sqlx::query(
         "INSERT OR IGNORE INTO arvores (id, nome, descricao, raiz_pessoa_id, is_publico, categoria, pais, periodo)
-         VALUES ('arv_imperial_brasil', 'Família Imperial do Brasil', 'Dinastia de Bragança: de Dom João VI a Dom Pedro II e Princesa Isabel', 'pub_pedro2', 1, 'Famílias Reais', 'Brasil', 'Império (Séc. XIX)')"
+         VALUES ('arv_imperial_brasil', 'Família Imperial do Brasil', 'Dinastia de Bragança: de Dom João VI a Dom Pedro II e Princesa Isabel', 'pub_pedro2', 1, 'Monarquias e Casas Reais', 'Brasil', 'Império (Séc. XIX)')"
     )
     .execute(&mut *tx)
     .await?;
@@ -265,7 +265,7 @@ pub async fn garantir_acervo_publico(pool: &SqlitePool) -> Resultado<()> {
 
     sqlx::query(
         "INSERT OR IGNORE INTO arvores (id, nome, descricao, raiz_pessoa_id, is_publico, categoria, pais, periodo)
-         VALUES ('arv_presidentes_brasil', 'Presidentes do Brasil', 'Linhagens e famílias de presidentes: Getúlio Vargas, Juscelino Kubitschek e Deodoro', 'pub_vargas', 1, 'Chefes de Estado', 'Brasil', 'República (Séc. XX)')"
+         VALUES ('arv_presidentes_brasil', 'Presidentes do Brasil', 'Linhagens e famílias de presidentes: Getúlio Vargas, Juscelino Kubitschek e Deodoro', 'pub_vargas', 1, 'Chefes de Estado e Lideranças Políticas', 'Brasil', 'República (Séc. XX)')"
     )
     .execute(&mut *tx)
     .await?;
@@ -386,7 +386,7 @@ pub async fn garantir_acervo_publico(pool: &SqlitePool) -> Resultado<()> {
 
     sqlx::query(
         "INSERT OR IGNORE INTO arvores (id, nome, descricao, raiz_pessoa_id, is_publico, categoria, pais, periodo)
-         VALUES ('arv_biblica_david', 'Casa Real de Davi (Linhagem Bíblica)', 'Reis de Judá e linhagem davídica da Antiguidade (anos antes de Cristo)', 'pub_rei_david', 1, 'Monarcas Bíblicos', 'Israel Antigo', 'Antiguidade (a.C.)')"
+         VALUES ('arv_biblica_david', 'Casa Real de Davi (Linhagem Bíblica)', 'Reis de Judá e linhagem davídica da Antiguidade (anos antes de Cristo)', 'pub_rei_david', 1, 'Tradição Bíblica', 'Israel Antigo', 'Antiguidade (a.C.)')"
     )
     .execute(&mut *tx)
     .await?;
@@ -503,7 +503,7 @@ pub async fn garantir_acervo_publico(pool: &SqlitePool) -> Resultado<()> {
 
     sqlx::query(
         "INSERT OR IGNORE INTO arvores (id, nome, descricao, raiz_pessoa_id, is_publico, categoria, pais, periodo)
-         VALUES ('arv_real_portugal', 'Casa Real de Portugal (Bragança)', 'Monarcas de Portugal com ligação direta à dinastia imperial do Brasil', 'pub_maria1_pt', 1, 'Famílias Reais', 'Portugal', 'Séc. XVIII-XIX')"
+         VALUES ('arv_real_portugal', 'Casa Real de Portugal (Bragança)', 'Monarcas de Portugal com ligação direta à dinastia imperial do Brasil', 'pub_maria1_pt', 1, 'Monarquias e Casas Reais', 'Portugal', 'Séc. XVIII-XIX')"
     )
     .execute(&mut *tx)
     .await?;
@@ -654,7 +654,7 @@ pub async fn garantir_acervo_publico(pool: &SqlitePool) -> Resultado<()> {
 
     sqlx::query(
         "INSERT OR IGNORE INTO arvores (id, nome, descricao, raiz_pessoa_id, is_publico, categoria, pais, periodo)
-         VALUES ('arv_real_britanica', 'Casa Real Britânica (Windsor)', 'Da Rainha Vitória aos monarcas contemporâneos do Reino Unido', 'pub_vitoria_uk', 1, 'Famílias Reais', 'Reino Unido', 'Séc. XIX-XXI')"
+         VALUES ('arv_real_britanica', 'Casa Real Britânica (Windsor)', 'Da Rainha Vitória aos monarcas contemporâneos do Reino Unido', 'pub_vitoria_uk', 1, 'Monarquias e Casas Reais', 'Reino Unido', 'Séc. XIX-XXI')"
     )
     .execute(&mut *tx)
     .await?;
@@ -878,6 +878,10 @@ pub async fn sanear_e_sincronizar_acervo(pool: &SqlitePool) -> Resultado<()> {
     // 11. Aplica enriquecimento biográfico, locais georreferenciados e correção vital (migração 029)
     const SQL_ENRIQUECIMENTO: &str = include_str!("../../migrations/029__enriquecimento_biografias_locais.sql");
     sqlx::raw_sql(SQL_ENRIQUECIMENTO).execute(pool).await?;
+
+    // 12. Aplica reorganização de categorias canônicas e georreferenciamento ampliado (migração 030)
+    const SQL_CATEGORIAS_LOCAIS: &str = include_str!("../../migrations/030__organizacao_categorias_e_locais_publicos.sql");
+    sqlx::raw_sql(SQL_CATEGORIAS_LOCAIS).execute(pool).await?;
 
     Ok(())
 }

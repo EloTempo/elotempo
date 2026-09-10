@@ -36,7 +36,7 @@ INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo
 VALUES ('pub_casa_imperial_japao_hisahito', 'Hisahito', '(Príncipe de Akishino)', 'M', 'Segundo na linha de sucessão ao Trono do Crisântemo japonês.', 1, 0, 1, 'Grandes Linhagens Antigas');
 
 INSERT OR IGNORE INTO arvores (id, nome, descricao, raiz_pessoa_id, is_publico, categoria, pais, periodo)
-VALUES ('pub_arv_casa_imperial_japao', 'Casa Imperial do Japão (Dinastia Yamato)', 'A mais antiga monarquia hereditária contínua do mundo (desde o Imperador Jimmu até a era moderna).', 'pub_casa_imperial_japao_imperador_jimmu', 1, 'Grandes Linhagens Antigas', 'Japão', '660 a.C. – presente');
+VALUES ('pub_arv_casa_imperial_japao', 'Casa Imperial do Japão (Dinastia Yamato)', 'A mais antiga monarquia hereditária contínua do mundo (desde o Imperador Jimmu até a era moderna).', 'pub_casa_imperial_japao_imperador_jimmu', 1, 'Monarquias e Casas Reais', 'Japão', '660 a.C. – presente');
 
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_casa_imperial_japao', 'pub_casa_imperial_japao_imperador_jimmu', NULL);
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_casa_imperial_japao', 'pub_casa_imperial_japao_imperador_meiji', NULL);
@@ -187,7 +187,7 @@ VALUES ('pub_ph_pub_kong_confucio_kung_te_cheng', 'Desconhecido', NULL, 'F', NUL
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
 VALUES ('pub_ph_pub_kong_confucio_kung_tsui_chang', 'Desconhecido', NULL, 'F', NULL, 0, 1, 1, 'Grandes Linhagens Antigas');
 INSERT OR IGNORE INTO arvores (id, nome, descricao, raiz_pessoa_id, is_publico, categoria, pais, periodo)
-VALUES ('pub_arv_kong_confucio', 'Linhagem de Confúcio (Família Kong)', 'A maior árvore genealógica documentada do mundo, com mais de 80 gerações registradas.', 'pub_kong_confucio_confucio', 1, 'Grandes Linhagens Antigas', 'China', '551 a.C. – presente');
+VALUES ('pub_arv_kong_confucio', 'Linhagem de Confúcio (Família Kong)', 'A maior árvore genealógica documentada do mundo, com mais de 80 gerações registradas.', 'pub_kong_confucio_confucio', 1, 'Antiguidade e Dinastias Históricas', 'China', '551 a.C. – presente');
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
 VALUES ('pub_arv_kong_confucio', 'pub_kong_confucio_shuliang_he', NULL);
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
@@ -270,7 +270,7 @@ INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo
 VALUES ('pub_lurie_david_luria', 'David', 'Luria', 'M', 'O "Radal" (1798–1855); rabino, teólogo, comentarista e líder comunal em Bykhaw.', 0, 0, 1, 'Grandes Linhagens Antigas');
 
 INSERT OR IGNORE INTO arvores (id, nome, descricao, raiz_pessoa_id, is_publico, categoria, pais, periodo)
-VALUES ('pub_arv_lurie', 'Família Lurie / Luria', 'Uma das mais antigas linhagens documentadas da diáspora judaica, com tradição rabínica remontando a Rashi e à Casa de Davi.', 'pub_lurie_rashi', 1, 'Grandes Linhagens Antigas', 'Europa Oriental / Lituânia', 'Séc. XI – presente');
+VALUES ('pub_arv_lurie', 'Família Lurie / Luria', 'Uma das mais antigas linhagens documentadas da diáspora judaica, com tradição rabínica remontando a Rashi e à Casa de Davi.', 'pub_lurie_rashi', 1, 'Antiguidade e Dinastias Históricas', 'Europa Oriental / Lituânia', 'Séc. XI – presente');
 
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_lurie', 'pub_lurie_rashi', NULL);
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_lurie', 'pub_lurie_jehiel_luria', NULL);
@@ -344,7 +344,7 @@ VALUES ('pub_ph_pub_bach_maria_barbara_bach', 'Desconhecido', NULL, 'M', NULL, 0
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
 VALUES ('pub_ph_pub_bach_anna_magdalena_bach', 'Desconhecido', NULL, 'M', NULL, 0, 1, 1, 'Ciência e Artes');
 INSERT OR IGNORE INTO arvores (id, nome, descricao, raiz_pessoa_id, is_publico, categoria, pais, periodo)
-VALUES ('pub_arv_bach', 'Dinastia Musical Bach', 'A mais prolífica linhagem de músicos da história europeia, culminando em Johann Sebastian Bach e seus filhos compositores.', 'pub_bach_johann_sebastian_bach', 1, 'Ciência e Artes', 'Alemanha / Sacro Império', '1550 – 1800');
+VALUES ('pub_arv_bach', 'Dinastia Musical Bach', 'A mais prolífica linhagem de músicos da história europeia, culminando em Johann Sebastian Bach e seus filhos compositores.', 'pub_bach_johann_sebastian_bach', 1, 'Ciência, Artes e Pensamento', 'Alemanha / Sacro Império', '1550 – 1800');
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
 VALUES ('pub_arv_bach', 'pub_bach_veit_bach', NULL);
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
@@ -455,7 +455,7 @@ VALUES ('pub_curie_helene_langevin_joliot', 'Hélène', 'Langevin-Joliot', 'F', 
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
 VALUES ('pub_curie_pierre_joliot', 'Pierre', 'Joliot', 'M', 'Atuação: biólogo (fotossíntese).', 0, 0, 1, 'Ciência e Artes');
 INSERT OR IGNORE INTO arvores (id, nome, descricao, raiz_pessoa_id, is_publico, categoria, pais, periodo)
-VALUES ('pub_arv_curie', 'Família Curie / Joliot-Curie', 'Dinastia científica pioneira da física nuclear e radioatividade, laureada com 5 Prêmios Nobel.', 'pub_curie_marie_skodowska_curie', 1, 'Ciência e Artes', 'França / Polônia', '1856 – presente');
+VALUES ('pub_arv_curie', 'Família Curie / Joliot-Curie', 'Dinastia científica pioneira da física nuclear e radioatividade, laureada com 5 Prêmios Nobel.', 'pub_curie_marie_skodowska_curie', 1, 'Ciência, Artes e Pensamento', 'França / Polônia', '1856 – presente');
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
 VALUES ('pub_arv_curie', 'pub_curie_marie_skodowska_curie', NULL);
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
@@ -567,7 +567,7 @@ VALUES ('pub_ph_pub_darwin_erasmus_darwin', 'Desconhecido', NULL, 'F', NULL, 0, 
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
 VALUES ('pub_darwin_elizabeth_allen', 'Elizabeth', 'Allen', 'F', 'Esposa de Josiah Wedgwood II e mãe de Emma Darwin.', 0, 0, 1, 'Ciência e Artes');
 INSERT OR IGNORE INTO arvores (id, nome, descricao, raiz_pessoa_id, is_publico, categoria, pais, periodo)
-VALUES ('pub_arv_darwin', 'Família Darwin-Wedgwood', 'Família interligada de cientistas, naturalistas e industriais, berço de Charles Darwin e Josiah Wedgwood.', 'pub_darwin_josiah_wedgwood_i', 1, 'Ciência e Artes', 'Reino Unido', '1730 – 1914');
+VALUES ('pub_arv_darwin', 'Família Darwin-Wedgwood', 'Família interligada de cientistas, naturalistas e industriais, berço de Charles Darwin e Josiah Wedgwood.', 'pub_darwin_josiah_wedgwood_i', 1, 'Ciência, Artes e Pensamento', 'Reino Unido', '1730 – 1914');
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
 VALUES ('pub_arv_darwin', 'pub_darwin_erasmus_darwin', NULL);
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
@@ -730,7 +730,7 @@ VALUES ('pub_moises_arao', 'Arão', NULL, 'M', '', 0, 0, 1, 'Bíblicas e Antigui
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
 VALUES ('pub_moises_miria', 'Miriã', NULL, 'F', '', 0, 0, 1, 'Bíblicas e Antiguidade');
 INSERT OR IGNORE INTO arvores (id, nome, descricao, raiz_pessoa_id, is_publico, categoria, pais, periodo)
-VALUES ('pub_arv_moises', 'Linhagem de Moisés e Aarão (Tribo de Levi)', 'Líderes do Êxodo e fundadores do sacerdócio levítico de Israel.', 'pub_moises_anrao', 1, 'Bíblicas e Antiguidade', 'Israel Antigo / Egito', 'Séc. XIII a.C.');
+VALUES ('pub_arv_moises', 'Linhagem de Moisés e Aarão (Tribo de Levi)', 'Líderes do Êxodo e fundadores do sacerdócio levítico de Israel.', 'pub_moises_anrao', 1, 'Tradição Bíblica', 'Israel Antigo / Egito', 'Séc. XIII a.C.');
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
 VALUES ('pub_arv_moises', 'pub_moises_anrao', NULL);
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
@@ -779,7 +779,7 @@ INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo
 VALUES ('pub_patriarcas_israel_jose', 'José', '(do Egito)', 'M', 'Filho de Jacó e Raquel; vendido pelos irmãos, tornou-se vizir do Egito.', 0, 0, 1, 'Bíblicas e Antiguidade');
 
 INSERT OR IGNORE INTO arvores (id, nome, descricao, raiz_pessoa_id, is_publico, categoria, pais, periodo)
-VALUES ('pub_arv_patriarcas_israel', 'Patriarcas de Israel (Abraão a José)', 'Linhagem fundacional das doze tribos de Israel narrada nas tradições bíblicas.', 'pub_patriarcas_israel_abraao', 1, 'Bíblicas e Antiguidade', 'Canaã / Oriente Próximo', 'Antiguidade (a.C.)');
+VALUES ('pub_arv_patriarcas_israel', 'Patriarcas de Israel (Abraão a José)', 'Linhagem fundacional das doze tribos de Israel narrada nas tradições bíblicas.', 'pub_patriarcas_israel_abraao', 1, 'Tradição Bíblica', 'Canaã / Oriente Próximo', 'Antiguidade (a.C.)');
 
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_patriarcas_israel', 'pub_patriarcas_israel_abraao', NULL);
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_patriarcas_israel', 'pub_patriarcas_israel_sara', NULL);
@@ -894,7 +894,7 @@ INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo
 VALUES ('pub_terah', 'Terá', NULL, 'M', 'Descendente da linhagem de Sem e pai de Abraão; partiu de Ur dos Caldeus rumo a Canaã.', 0, 0, 1, 'Bíblicas e Antiguidade');
 
 INSERT OR IGNORE INTO arvores (id, nome, descricao, raiz_pessoa_id, is_publico, categoria, pais, periodo)
-VALUES ('pub_arv_adao', 'Genealogia de Adão (Gênesis / Antediluviana)', 'Linhagem patriarcal das primeiras gerações narrada no livro de Gênesis: de Adão e Eva, passando por Enoque e Matusalém, até Noé e Abraão.', 'pub_adao', 1, 'Bíblicas e Antiguidade', 'Crescente Fértil / Antiguidade', 'Antiguidade (a.C.)');
+VALUES ('pub_arv_adao', 'Genealogia de Adão (Gênesis / Antediluviana)', 'Linhagem patriarcal das primeiras gerações narrada no livro de Gênesis: de Adão e Eva, passando por Enoque e Matusalém, até Noé e Abraão.', 'pub_adao', 1, 'Tradição Bíblica', 'Crescente Fértil / Antiguidade', 'Antiguidade (a.C.)');
 
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_adao', 'pub_adao', NULL);
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_adao', 'pub_eva', NULL);
@@ -1097,7 +1097,7 @@ VALUES ('pub_penteado_antonieta_penteado', 'Antonieta Álvares', 'Penteado', 'F'
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
 VALUES ('pub_ph_pub_penteado_silvio_alvares_penteado', 'Desconhecido', NULL, 'F', NULL, 0, 1, 1, 'História do Brasil');
 INSERT OR IGNORE INTO arvores (id, nome, descricao, raiz_pessoa_id, is_publico, categoria, pais, periodo)
-VALUES ('pub_arv_penteado', 'Família Álvares Penteado', 'Tradicional linhagem cafeeira e mecenas das artes e educação em São Paulo.', 'pub_penteado_joao_carlos_leite_penteado', 1, 'História do Brasil', 'Brasil', 'Séc. XIX – XX');
+VALUES ('pub_arv_penteado', 'Família Álvares Penteado', 'Tradicional linhagem cafeeira e mecenas das artes e educação em São Paulo.', 'pub_penteado_joao_carlos_leite_penteado', 1, 'História e Sociedade Brasileira', 'Brasil', 'Séc. XIX – XX');
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
 VALUES ('pub_arv_penteado', 'pub_penteado_joao_carlos_leite_penteado', NULL);
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
@@ -1179,7 +1179,7 @@ VALUES ('pub_prado_caio_prado_junior', 'Caio Prado', 'Júnior', 'M', 'Historiado
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
 VALUES ('pub_ph_pub_prado_caio_da_silva_prado_1872', 'Desconhecido', NULL, 'F', NULL, 0, 1, 1, 'História do Brasil');
 INSERT OR IGNORE INTO arvores (id, nome, descricao, raiz_pessoa_id, is_publico, categoria, pais, periodo)
-VALUES ('pub_arv_prado', 'Família Silva Prado', 'Uma das mais influentes famílias políticas, cafeeiras e culturais de São Paulo.', 'pub_prado_antonio_da_silva_prado_barao_de_iguape', 1, 'História do Brasil', 'Brasil', '1742 – Séc. XX');
+VALUES ('pub_arv_prado', 'Família Silva Prado', 'Uma das mais influentes famílias políticas, cafeeiras e culturais de São Paulo.', 'pub_prado_antonio_da_silva_prado_barao_de_iguape', 1, 'História e Sociedade Brasileira', 'Brasil', '1742 – Séc. XX');
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
 VALUES ('pub_arv_prado', 'pub_prado_antonio_da_silva_prado_barao_de_iguape', NULL);
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
@@ -1307,7 +1307,7 @@ VALUES ('pub_rio_branco_marie_stevens', 'Marie', 'Stevens', 'F', 'Atriz belga; e
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
 VALUES ('pub_rio_branco_paulo_do_rio_branco', 'Paulo', 'do Rio Branco', 'M', 'Atuação: jogador de rúgbi.', 0, 0, 1, 'História do Brasil');
 INSERT OR IGNORE INTO arvores (id, nome, descricao, raiz_pessoa_id, is_publico, categoria, pais, periodo)
-VALUES ('pub_arv_rio_branco', 'Barão do Rio Branco e Família Paranhos', 'Patrono da diplomacia brasileira e seu pai, o Visconde do Rio Branco.', 'pub_rio_branco_jose_maria_da_silva_paranhos_visconde_do_rio_branco', 1, 'História do Brasil', 'Brasil', '1819 – 1912');
+VALUES ('pub_arv_rio_branco', 'Barão do Rio Branco e Família Paranhos', 'Patrono da diplomacia brasileira e seu pai, o Visconde do Rio Branco.', 'pub_rio_branco_jose_maria_da_silva_paranhos_visconde_do_rio_branco', 1, 'História e Sociedade Brasileira', 'Brasil', '1819 – 1912');
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
 VALUES ('pub_arv_rio_branco', 'pub_rio_branco_jose_maria_da_silva_paranhos_visconde_do_rio_branco', NULL);
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
@@ -1349,7 +1349,7 @@ VALUES ('pub_souza_queiros_vicente_de_sousa_queiros', 'Barão', 'de Limeira', 'M
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
 VALUES ('pub_souza_queiros_maria_angelica_de_sousa_queiros', 'Maria Angélica', 'de Sousa Queirós', 'F', 'Proprietária rural; grande latifundiária da região central de São Paulo.', 0, 0, 1, 'História do Brasil');
 INSERT OR IGNORE INTO arvores (id, nome, descricao, raiz_pessoa_id, is_publico, categoria, pais, periodo)
-VALUES ('pub_arv_souza_queiros', 'Família Souza Queirós', 'Linhagem aristocrática paulista de barões do café e senadores do Império.', 'pub_souza_queiros_luis_antonio_de_sousa_queiros', 1, 'História do Brasil', 'Brasil', 'Séc. XIX');
+VALUES ('pub_arv_souza_queiros', 'Família Souza Queirós', 'Linhagem aristocrática paulista de barões do café e senadores do Império.', 'pub_souza_queiros_luis_antonio_de_sousa_queiros', 1, 'História e Sociedade Brasileira', 'Brasil', 'Séc. XIX');
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
 VALUES ('pub_arv_souza_queiros', 'pub_souza_queiros_luis_antonio_de_sousa_queiros', NULL);
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
@@ -1403,7 +1403,7 @@ VALUES ('pub_franco_francis_franco', 'Francis', 'Franco', 'U', 'Atuação: arist
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
 VALUES ('pub_franco_luis_alfonso_de_borbon', 'Luis Alfonso', 'de Borbón', 'M', 'Bisneto de Franco; pretendente legitimista ("Louis XX") ao trono francês.', 0, 0, 1, 'Figuras Históricas do Século XX');
 INSERT OR IGNORE INTO arvores (id, nome, descricao, raiz_pessoa_id, is_publico, categoria, pais, periodo)
-VALUES ('pub_arv_franco', 'Família de Francisco Franco', 'Linhagem militar e política do generalíssimo Francisco Franco na Espanha.', 'pub_franco_francisco_franco', 1, 'Figuras Históricas do Século XX', 'Espanha', '1855 – 1975');
+VALUES ('pub_arv_franco', 'Família de Francisco Franco', 'Linhagem militar e política do generalíssimo Francisco Franco na Espanha.', 'pub_franco_francisco_franco', 1, 'Chefes de Estado e Lideranças Políticas', 'Espanha', '1855 – 1975');
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
 VALUES ('pub_arv_franco', 'pub_franco_francisco_franco', NULL);
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
@@ -1479,7 +1479,7 @@ VALUES ('pub_hitler_william_patrick_hitler', 'William Patrick', 'Stuart-Houston'
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
 VALUES ('pub_ph_pub_hitler_angela_hitler', 'Desconhecido', NULL, 'M', NULL, 0, 1, 1, 'Figuras Históricas do Século XX');
 INSERT OR IGNORE INTO arvores (id, nome, descricao, raiz_pessoa_id, is_publico, categoria, pais, periodo)
-VALUES ('pub_arv_hitler', 'Genealogia de Adolf Hitler', 'Ancestralidade e familiares imediatos de Adolf Hitler em Waldviertel e Linz.', 'pub_hitler_alois_hitler', 1, 'Figuras Históricas do Século XX', 'Áustria / Alemanha', '1837 – 1960');
+VALUES ('pub_arv_hitler', 'Genealogia de Adolf Hitler', 'Ancestralidade e familiares imediatos de Adolf Hitler em Waldviertel e Linz.', 'pub_hitler_alois_hitler', 1, 'Chefes de Estado e Lideranças Políticas', 'Áustria / Alemanha', '1837 – 1960');
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
 VALUES ('pub_arv_hitler', 'pub_hitler_alois_hitler', NULL);
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
@@ -1565,7 +1565,7 @@ VALUES ('pub_mao_mao_xinyu', 'Mao', 'Xinyu', 'M', 'Atuação: militar (general);
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
 VALUES ('pub_ph_pub_mao_mao_anqing', 'Desconhecido', NULL, 'F', NULL, 0, 1, 1, 'Figuras Históricas do Século XX');
 INSERT OR IGNORE INTO arvores (id, nome, descricao, raiz_pessoa_id, is_publico, categoria, pais, periodo)
-VALUES ('pub_arv_mao', 'Família de Mao Tsé-Tung', 'Linhagem de Mao Tsé-Tung em Shaoshan, suas esposas e descendentes.', 'pub_mao_mao_zedong', 1, 'Figuras Históricas do Século XX', 'China', '1870 – 1976');
+VALUES ('pub_arv_mao', 'Família de Mao Tsé-Tung', 'Linhagem de Mao Tsé-Tung em Shaoshan, suas esposas e descendentes.', 'pub_mao_mao_zedong', 1, 'Chefes de Estado e Lideranças Políticas', 'China', '1870 – 1976');
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
 VALUES ('pub_arv_mao', 'pub_mao_mao_yichang', NULL);
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
@@ -1680,7 +1680,7 @@ VALUES ('pub_mussolini_rachele_mussolini_politica', 'Rachele', 'Mussolini', 'F',
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
 VALUES ('pub_ph_pub_mussolini_romano_mussolini', 'Desconhecido', NULL, 'F', NULL, 0, 1, 1, 'Figuras Históricas do Século XX');
 INSERT OR IGNORE INTO arvores (id, nome, descricao, raiz_pessoa_id, is_publico, categoria, pais, periodo)
-VALUES ('pub_arv_mussolini', 'Família Mussolini', 'Família do ditador fascista Benito Mussolini e sua descendência política e artística.', 'pub_mussolini_benito_mussolini', 1, 'Figuras Históricas do Século XX', 'Itália', '1854 – presente');
+VALUES ('pub_arv_mussolini', 'Família Mussolini', 'Família do ditador fascista Benito Mussolini e sua descendência política e artística.', 'pub_mussolini_benito_mussolini', 1, 'Chefes de Estado e Lideranças Políticas', 'Itália', '1854 – presente');
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
 VALUES ('pub_arv_mussolini', 'pub_mussolini_alessandro_mussolini', NULL);
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
@@ -1786,7 +1786,7 @@ VALUES ('pub_stalin_chrese_evans', 'Chrese', 'Evans', 'F', '', 0, 0, 1, 'Figuras
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
 VALUES ('pub_ph_pub_stalin_svetlana_alliluyeva', 'Desconhecido', NULL, 'M', NULL, 0, 1, 1, 'Figuras Históricas do Século XX');
 INSERT OR IGNORE INTO arvores (id, nome, descricao, raiz_pessoa_id, is_publico, categoria, pais, periodo)
-VALUES ('pub_arv_stalin', 'Família Stalin (Jughashvili)', 'Família de Josef Stalin, suas duas esposas e filhos na União Soviética.', 'pub_stalin_besarion_jughashvili', 1, 'Figuras Históricas do Século XX', 'União Soviética / Geórgia', '1850 – 2011');
+VALUES ('pub_arv_stalin', 'Família Stalin (Jughashvili)', 'Família de Josef Stalin, suas duas esposas e filhos na União Soviética.', 'pub_stalin_besarion_jughashvili', 1, 'Chefes de Estado e Lideranças Políticas', 'União Soviética / Geórgia', '1850 – 2011');
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
 VALUES ('pub_arv_stalin', 'pub_stalin_besarion_jughashvili', NULL);
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
@@ -1892,7 +1892,7 @@ VALUES ('pub_ph_pub_bush_marvin_pierce', 'Desconhecido', NULL, 'F', NULL, 0, 1, 
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
 VALUES ('pub_ph_pub_bush_jeb_bush', 'Desconhecido', NULL, 'F', NULL, 0, 1, 1, 'Grandes Empreendedores');
 INSERT OR IGNORE INTO arvores (id, nome, descricao, raiz_pessoa_id, is_publico, categoria, pais, periodo)
-VALUES ('pub_arv_bush', 'Dinastia Bush', 'Influente família norte-americana de senadores, industriais do petróleo e dois presidentes dos EUA.', 'pub_bush_barbara_bush', 1, 'Grandes Empreendedores', 'Estados Unidos', '1895 – presente');
+VALUES ('pub_arv_bush', 'Dinastia Bush', 'Influente família norte-americana de senadores, industriais do petróleo e dois presidentes dos EUA.', 'pub_bush_barbara_bush', 1, 'Chefes de Estado e Lideranças Políticas', 'Estados Unidos', '1895 – presente');
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
 VALUES ('pub_arv_bush', 'pub_bush_samuel_p_bush', NULL);
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
@@ -2050,7 +2050,7 @@ VALUES ('pub_guinle_guilhermina_guinle', 'Guilhermina', 'Guinle', 'F', 'Atuaçã
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
 VALUES ('pub_ph_pub_guinle_carlos_guinle', 'Desconhecido', NULL, 'F', NULL, 0, 1, 1, 'Grandes Empreendedores');
 INSERT OR IGNORE INTO arvores (id, nome, descricao, raiz_pessoa_id, is_publico, categoria, pais, periodo)
-VALUES ('pub_arv_guinle', 'Família Guinle', 'Pioneiros da infraestrutura moderna brasileira (Porto de Santos) e hotelaria (Copacabana Palace).', 'pub_guinle_jean_arnauld_guinle', 1, 'Grandes Empreendedores', 'Brasil', '1846 – Séc. XX');
+VALUES ('pub_arv_guinle', 'Família Guinle', 'Pioneiros da infraestrutura moderna brasileira (Porto de Santos) e hotelaria (Copacabana Palace).', 'pub_guinle_jean_arnauld_guinle', 1, 'Grandes Empreendedores e Pioneiros', 'Brasil', '1846 – Séc. XX');
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
 VALUES ('pub_arv_guinle', 'pub_guinle_jean_arnauld_guinle', NULL);
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
@@ -2134,7 +2134,7 @@ VALUES ('pub_klabin_celso_lafer', 'Celso', 'Lafer', 'U', 'Jurista e diplomata; m
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
 VALUES ('pub_klabin_horacio_lafer_piva', 'Horácio Lafer', 'Piva', 'M', 'Atuação: empresário (ex-presidente da FIESP).', 0, 0, 1, 'Grandes Empreendedores');
 INSERT OR IGNORE INTO arvores (id, nome, descricao, raiz_pessoa_id, is_publico, categoria, pais, periodo)
-VALUES ('pub_arv_klabin', 'Família Klabin-Lafer', 'Fundadores da maior indústria papeleira do Brasil e diplomatas proeminentes.', 'pub_klabin_miguel_lafer', 1, 'Grandes Empreendedores', 'Brasil / Lituânia', '1850 – presente');
+VALUES ('pub_arv_klabin', 'Família Klabin-Lafer', 'Fundadores da maior indústria papeleira do Brasil e diplomatas proeminentes.', 'pub_klabin_miguel_lafer', 1, 'Grandes Empreendedores e Pioneiros', 'Brasil / Lituânia', '1850 – presente');
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
 VALUES ('pub_arv_klabin', 'pub_klabin_mauricio_freeman_klabin', NULL);
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
@@ -2212,7 +2212,7 @@ VALUES ('pub_ph_pub_matarazzo_francisco_matarazzo_junior', 'Desconhecido', NULL,
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
 VALUES ('pub_ph_pub_matarazzo_maria_pia_matarazzo', 'Desconhecido', NULL, 'M', NULL, 0, 1, 1, 'Grandes Empreendedores');
 INSERT OR IGNORE INTO arvores (id, nome, descricao, raiz_pessoa_id, is_publico, categoria, pais, periodo)
-VALUES ('pub_arv_matarazzo', 'Família Matarazzo', 'Maior conglomerado industrial da história da América Latina sob o comando do Conde Francesco Matarazzo.', 'pub_matarazzo_francisco_matarazzo_pignatari', 1, 'Grandes Empreendedores', 'Brasil / Itália', '1854 – 1977');
+VALUES ('pub_arv_matarazzo', 'Família Matarazzo', 'Maior conglomerado industrial da história da América Latina sob o comando do Conde Francesco Matarazzo.', 'pub_matarazzo_francisco_matarazzo_pignatari', 1, 'Grandes Empreendedores e Pioneiros', 'Brasil / Itália', '1854 – 1977');
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
 VALUES ('pub_arv_matarazzo', 'pub_matarazzo_costabile_matarazzo', NULL);
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
@@ -2300,7 +2300,7 @@ VALUES ('pub_rockefeller_david_rockefeller', 'David', 'Rockefeller', 'M', 'Banqu
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
 VALUES ('pub_rockefeller_john_d_rockefeller_iv', 'Jay', 'Rockefeller', 'M', 'Atuação: político (senador dos EUA pela Virgínia Ocidental; governador).', 0, 0, 1, 'Grandes Empreendedores');
 INSERT OR IGNORE INTO arvores (id, nome, descricao, raiz_pessoa_id, is_publico, categoria, pais, periodo)
-VALUES ('pub_arv_rockefeller', 'Família Rockefeller', 'Fundadores da Standard Oil, pioneiros da filantropia moderna, finanças e política norte-americana.', 'pub_rockefeller_john_d_rockefeller', 1, 'Grandes Empreendedores', 'Estados Unidos', '1810 – presente');
+VALUES ('pub_arv_rockefeller', 'Família Rockefeller', 'Fundadores da Standard Oil, pioneiros da filantropia moderna, finanças e política norte-americana.', 'pub_rockefeller_john_d_rockefeller', 1, 'Grandes Empreendedores e Pioneiros', 'Estados Unidos', '1810 – presente');
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
 VALUES ('pub_arv_rockefeller', 'pub_rockefeller_william_avery_rockefeller_sr', NULL);
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
@@ -2406,7 +2406,7 @@ VALUES ('pub_ph_pub_dinastia_18_tutmes_iii', 'Desconhecido', NULL, 'F', NULL, 0,
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
 VALUES ('pub_ph_pub_dinastia_18_amenofis_iii', 'Desconhecido', NULL, 'F', NULL, 0, 1, 1, 'Egito Antigo e Faraós');
 INSERT OR IGNORE INTO arvores (id, nome, descricao, raiz_pessoa_id, is_publico, categoria, pais, periodo)
-VALUES ('pub_arv_dinastia_18', '18ª Dinastia do Egito (Tutmésides e Amarna)', 'A dinastia do Novo Império que incluiu Hatshepsut, Akhenaton e Tutancâmon.', 'pub_dinastia_18_tutancamon', 1, 'Egito Antigo e Faraós', 'Egito Antigo', 'c. 1550 a.C. – 1292 a.C.');
+VALUES ('pub_arv_dinastia_18', '18ª Dinastia do Egito (Tutmésides e Amarna)', 'A dinastia do Novo Império que incluiu Hatshepsut, Akhenaton e Tutancâmon.', 'pub_dinastia_18_tutancamon', 1, 'Antiguidade e Dinastias Históricas', 'Egito Antigo', 'c. 1550 a.C. – 1292 a.C.');
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
 VALUES ('pub_arv_dinastia_18', 'pub_dinastia_18_amosis_i', NULL);
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
@@ -2474,7 +2474,7 @@ VALUES ('pub_ph_pub_dinastia_19_ramesses_i', 'Desconhecido', NULL, 'F', NULL, 0,
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
 VALUES ('pub_ph_pub_dinastia_19_seti_i', 'Desconhecido', NULL, 'F', NULL, 0, 1, 1, 'Egito Antigo e Faraós');
 INSERT OR IGNORE INTO arvores (id, nome, descricao, raiz_pessoa_id, is_publico, categoria, pais, periodo)
-VALUES ('pub_arv_dinastia_19', '19ª Dinastia do Egito (Ramsésidas)', 'Grande dinastia de guerreiros e construtores faraônicos, destacando Ramsés II, o Grande.', 'pub_dinastia_19_ramesses_i', 1, 'Egito Antigo e Faraós', 'Egito Antigo', 'c. 1292 a.C. – 1189 a.C.');
+VALUES ('pub_arv_dinastia_19', '19ª Dinastia do Egito (Ramsésidas)', 'Grande dinastia de guerreiros e construtores faraônicos, destacando Ramsés II, o Grande.', 'pub_dinastia_19_ramesses_i', 1, 'Antiguidade e Dinastias Históricas', 'Egito Antigo', 'c. 1292 a.C. – 1189 a.C.');
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
 VALUES ('pub_arv_dinastia_19', 'pub_dinastia_19_ramesses_i', NULL);
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
@@ -2516,7 +2516,7 @@ VALUES ('pub_dinastias_21_23_psusennes_i', 'Psusennes', 'I', 'M', 'Atuação: fa
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
 VALUES ('pub_dinastias_21_23_sheshonq_i', 'Sheshonq', 'I', 'M', 'Fundador da 22ª dinastia (líbia); frequentemente associado ao "Shishak" bíblico.', 0, 0, 1, 'Egito Antigo e Faraós');
 INSERT OR IGNORE INTO arvores (id, nome, descricao, raiz_pessoa_id, is_publico, categoria, pais, periodo)
-VALUES ('pub_arv_dinastias_21_23', 'Dinastias 21 a 23 do Egito (Terceiro Período Intermediário)', 'Período de governantes sacerdotes de Tebas e reis de Tânis.', 'pub_dinastias_21_23_sheshonq_i', 1, 'Egito Antigo e Faraós', 'Egito Antigo', 'c. 1069 a.C. – 715 a.C.');
+VALUES ('pub_arv_dinastias_21_23', 'Dinastias 21 a 23 do Egito (Terceiro Período Intermediário)', 'Período de governantes sacerdotes de Tebas e reis de Tânis.', 'pub_dinastias_21_23_sheshonq_i', 1, 'Antiguidade e Dinastias Históricas', 'Egito Antigo', 'c. 1069 a.C. – 715 a.C.');
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
 VALUES ('pub_arv_dinastias_21_23', 'pub_dinastias_21_23_psusennes_i', NULL);
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
@@ -3103,7 +3103,7 @@ VALUES ('pub_ph_pub_kennedy_john_francis_fitzgerald', 'Desconhecido', NULL, 'F',
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
 VALUES ('pub_ph_pub_kennedy_edward_m_kennedy', 'Desconhecido', NULL, 'F', NULL, 0, 1, 1, 'Chefes de Estado e Política');
 INSERT OR IGNORE INTO arvores (id, nome, descricao, raiz_pessoa_id, is_publico, categoria, pais, periodo)
-VALUES ('pub_arv_kennedy', 'Família Kennedy', 'Dinastia política norte-americana de Patrick Joseph até JFK, Robert e Edward Kennedy.', 'pub_kennedy_eunice_kennedy_shriver', 1, 'Chefes de Estado e Política', 'Estados Unidos', '1858 – presente');
+VALUES ('pub_arv_kennedy', 'Família Kennedy', 'Dinastia política norte-americana de Patrick Joseph até JFK, Robert e Edward Kennedy.', 'pub_kennedy_eunice_kennedy_shriver', 1, 'Chefes de Estado e Lideranças Políticas', 'Estados Unidos', '1858 – presente');
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
 VALUES ('pub_arv_kennedy', 'pub_kennedy_patrick_joseph_kennedy', NULL);
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
@@ -3311,7 +3311,7 @@ VALUES ('pub_peron_juan_duarte_pai', 'Juan', 'Duarte', 'M', 'Atuação: fazendei
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
 VALUES ('pub_peron_juan_duarte_irmao', 'Juan "Juancito"', 'Duarte', 'M', 'Atuação: secretário particular de Juan Perón.', 0, 0, 1, 'Chefes de Estado e Política');
 INSERT OR IGNORE INTO arvores (id, nome, descricao, raiz_pessoa_id, is_publico, categoria, pais, periodo)
-VALUES ('pub_arv_peron', 'Família Perón', 'O general Juan Domingo Perón, suas esposas (incluindo Evita) e familiares na Argentina.', 'pub_peron_juan_domingo_peron', 1, 'Chefes de Estado e Política', 'Argentina', '1867 – 1974');
+VALUES ('pub_arv_peron', 'Família Perón', 'O general Juan Domingo Perón, suas esposas (incluindo Evita) e familiares na Argentina.', 'pub_peron_juan_domingo_peron', 1, 'Chefes de Estado e Lideranças Políticas', 'Argentina', '1867 – 1974');
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
 VALUES ('pub_arv_peron', 'pub_peron_mario_tomas_peron', NULL);
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
@@ -3417,7 +3417,7 @@ VALUES ('pub_roosevelt_john_aspinwall_roosevelt', 'John', 'Roosevelt', 'M', 'Atu
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
 VALUES ('pub_ph_pub_roosevelt_elliott_roosevelt_filho_de_fdr', 'Desconhecido', NULL, 'F', NULL, 0, 1, 1, 'Chefes de Estado e Política');
 INSERT OR IGNORE INTO arvores (id, nome, descricao, raiz_pessoa_id, is_publico, categoria, pais, periodo)
-VALUES ('pub_arv_roosevelt', 'Dinastia Roosevelt (Oyster Bay e Hyde Park)', 'As duas ramas da família que geraram Theodore Roosevelt e Franklin Delano Roosevelt.', 'pub_roosevelt_claes_martenszen_van_rosenvelt', 1, 'Chefes de Estado e Política', 'Estados Unidos', '1831 – 1962');
+VALUES ('pub_arv_roosevelt', 'Dinastia Roosevelt (Oyster Bay e Hyde Park)', 'As duas ramas da família que geraram Theodore Roosevelt e Franklin Delano Roosevelt.', 'pub_roosevelt_claes_martenszen_van_rosenvelt', 1, 'Chefes de Estado e Lideranças Políticas', 'Estados Unidos', '1831 – 1962');
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
 VALUES ('pub_arv_roosevelt', 'pub_roosevelt_claes_martenszen_van_rosenvelt', NULL);
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
@@ -3627,7 +3627,7 @@ VALUES ('pub_ph_pub_bourbon_afonso_xiii', 'Desconhecido', NULL, 'F', NULL, 0, 1,
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
 VALUES ('pub_ph_pub_bourbon_juan_carlos_i', 'Desconhecido', NULL, 'F', NULL, 0, 1, 1, 'Famílias Reais e Dinastias');
 INSERT OR IGNORE INTO arvores (id, nome, descricao, raiz_pessoa_id, is_publico, categoria, pais, periodo)
-VALUES ('pub_arv_bourbon', 'Casa de Bourbon (França e Espanha)', 'Dinastia real capetiana que governou a França, Espanha, Parma e Duas Sicílias.', 'pub_bourbon_henrique_iv_da_franca', 1, 'Famílias Reais e Dinastias', 'França / Espanha', '1553 – presente');
+VALUES ('pub_arv_bourbon', 'Casa de Bourbon (França e Espanha)', 'Dinastia real capetiana que governou a França, Espanha, Parma e Duas Sicílias.', 'pub_bourbon_henrique_iv_da_franca', 1, 'Monarquias e Casas Reais', 'França / Espanha', '1553 – presente');
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
 VALUES ('pub_arv_bourbon', 'pub_bourbon_henrique_iv_da_franca', NULL);
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
@@ -3773,7 +3773,7 @@ VALUES ('pub_ph_pub_habsburgo_maria_teresa', 'Desconhecido', NULL, 'M', NULL, 0,
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
 VALUES ('pub_ph_pub_habsburgo_carlos_i_da_austria', 'Desconhecido', NULL, 'F', NULL, 0, 1, 1, 'Famílias Reais e Dinastias');
 INSERT OR IGNORE INTO arvores (id, nome, descricao, raiz_pessoa_id, is_publico, categoria, pais, periodo)
-VALUES ('pub_arv_habsburgo', 'Casa de Habsburgo', 'Uma das casas reais mais influentes da Europa, soberanos do Sacro Império, Áustria e Espanha.', 'pub_habsburgo_filipe_o_belo', 1, 'Famílias Reais e Dinastias', 'Áustria / Sacro Império', '1459 – 1922');
+VALUES ('pub_arv_habsburgo', 'Casa de Habsburgo', 'Uma das casas reais mais influentes da Europa, soberanos do Sacro Império, Áustria e Espanha.', 'pub_habsburgo_filipe_o_belo', 1, 'Monarquias e Casas Reais', 'Áustria / Sacro Império', '1459 – 1922');
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
 VALUES ('pub_arv_habsburgo', 'pub_habsburgo_filipe_o_belo', NULL);
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
@@ -3935,7 +3935,7 @@ VALUES ('pub_outras_monarquias_hans_adam_ii_de_liechtenstein', 'Hans-Adam', 'II'
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
 VALUES ('pub_outras_monarquias_henri_de_luxemburgo', 'Grão-Duque', 'Henri', 'M', 'Atuação: monarca (grão-duque de Luxemburgo, desde 2000).', 0, 0, 1, 'Famílias Reais e Dinastias');
 INSERT OR IGNORE INTO arvores (id, nome, descricao, raiz_pessoa_id, is_publico, categoria, pais, periodo)
-VALUES ('pub_arv_outras_monarquias', 'Monarquias Tradicionais Europeias', 'Dinastias soberanas de Mônaco (Grimaldi), Suécia (Bernadotte) e Países Baixos (Orange-Nassau).', 'pub_outras_monarquias_philippe_da_belgica', 1, 'Famílias Reais e Dinastias', 'Mônaco / Suécia / Holanda', 'Séc. XVII – presente');
+VALUES ('pub_arv_outras_monarquias', 'Monarquias Tradicionais Europeias', 'Dinastias soberanas de Mônaco (Grimaldi), Suécia (Bernadotte) e Países Baixos (Orange-Nassau).', 'pub_outras_monarquias_philippe_da_belgica', 1, 'Monarquias e Casas Reais', 'Mônaco / Suécia / Holanda', 'Séc. XVII – presente');
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
 VALUES ('pub_arv_outras_monarquias', 'pub_outras_monarquias_philippe_da_belgica', NULL);
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
@@ -4620,7 +4620,7 @@ VALUES ('pub_maria_felipa', 'Maria Felipa', 'de Oliveira', 'F', 'Marisqueira e l
 
 -- Árvore
 INSERT OR IGNORE INTO arvores (id, nome, descricao, raiz_pessoa_id, is_publico, categoria, pais, periodo, tipo_tempo)
-VALUES ('pub_arv_independencia_1822', 'Protagonistas da Independência (1822)', 'Família Imperial, Clã dos Andradas, líderes da maçonaria liberal e heróis da Guerra da Independência', 'pub_pedro1', 1, 'História do Brasil', 'Brasil', '1820–1825', 'real');
+VALUES ('pub_arv_independencia_1822', 'Protagonistas da Independência (1822)', 'Família Imperial, Clã dos Andradas, líderes da maçonaria liberal e heróis da Guerra da Independência', 'pub_pedro1', 1, 'História e Sociedade Brasileira', 'Brasil', '1820–1825', 'real');
 
 -- Uniões
 INSERT OR IGNORE INTO unioes (id, slot_masculino_id, slot_feminino_id, estado_vinculo, nota)
@@ -5124,7 +5124,7 @@ VALUES ('ev_b_pub_jesus_mateus', 'pub_jesus_mateus', 'nascimento', 1, 1, 'exata'
 INSERT OR REPLACE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
 VALUES ('ev_d_pub_jesus_mateus', 'pub_jesus_mateus', 'falecimento', 33, 33, 'exata', '33 d.C.');
 INSERT OR REPLACE INTO arvores (id, nome, descricao, raiz_pessoa_id, is_publico, categoria, pais, periodo, tipo_tempo)
-VALUES ('pub_arv_jesus_mateus', 'Genealogia de Jesus (Mateus — Linhagem Régia)', 'Linhagem messiânica e dinástica de Jesus de Nazaré desde Abraão e Davi por Salomão e os Reis de Judá até José (Mateus 1:1-17).', 'pub_jesus_mateus', 1, 'Bíblicas e Antiguidade', 'Israel Antigo / Judeia', 'c. 1800 a.C. – 33 d.C.', 'real');
+VALUES ('pub_arv_jesus_mateus', 'Genealogia de Jesus (Mateus — Linhagem Régia)', 'Linhagem messiânica e dinástica de Jesus de Nazaré desde Abraão e Davi por Salomão e os Reis de Judá até José (Mateus 1:1-17).', 'pub_jesus_mateus', 1, 'Tradição Bíblica', 'Israel Antigo / Judeia', 'c. 1800 a.C. – 33 d.C.', 'real');
 INSERT OR IGNORE INTO arvore_membros (id, arvore_id, pessoa_id, uniao_id) VALUES ('am_mat_pub_mat_abraao', 'pub_arv_jesus_mateus', 'pub_mat_abraao', NULL);
 INSERT OR IGNORE INTO arvore_membros (id, arvore_id, pessoa_id, uniao_id) VALUES ('am_mat_pub_mat_sara', 'pub_arv_jesus_mateus', 'pub_mat_sara', NULL);
 INSERT OR IGNORE INTO arvore_membros (id, arvore_id, pessoa_id, uniao_id) VALUES ('am_mat_pub_mat_isaac', 'pub_arv_jesus_mateus', 'pub_mat_isaac', NULL);
@@ -5823,7 +5823,7 @@ VALUES ('ev_b_pub_luc_andre', 'pub_luc_andre', 'nascimento', -5, -5, 'cerca_de',
 INSERT OR REPLACE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
 VALUES ('ev_d_pub_luc_andre', 'pub_luc_andre', 'falecimento', 60, 60, 'cerca_de', '60 d.C.');
 INSERT OR REPLACE INTO arvores (id, nome, descricao, raiz_pessoa_id, is_publico, categoria, pais, periodo, tipo_tempo)
-VALUES ('pub_arv_jesus_lucas', 'Genealogia de Jesus (Lucas — Linhagem por Natã e Parentesco)', 'Linhagem universal de Jesus desde Davi por Natã até Heli e José, incluindo ramificações apostólicas e parentescos (Lucas 3:23-38).', 'pub_jesus_lucas', 1, 'Bíblicas e Antiguidade', 'Israel Antigo / Judeia', 'c. 1800 a.C. – c. 100 d.C.', 'real');
+VALUES ('pub_arv_jesus_lucas', 'Genealogia de Jesus (Lucas — Linhagem por Natã e Parentesco)', 'Linhagem universal de Jesus desde Davi por Natã até Heli e José, incluindo ramificações apostólicas e parentescos (Lucas 3:23-38).', 'pub_jesus_lucas', 1, 'Tradição Bíblica', 'Israel Antigo / Judeia', 'c. 1800 a.C. – c. 100 d.C.', 'real');
 INSERT OR IGNORE INTO arvore_membros (id, arvore_id, pessoa_id, uniao_id) VALUES ('am_luc_pub_luc_abraao', 'pub_arv_jesus_lucas', 'pub_luc_abraao', NULL);
 INSERT OR IGNORE INTO arvore_membros (id, arvore_id, pessoa_id, uniao_id) VALUES ('am_luc_pub_luc_isaac', 'pub_arv_jesus_lucas', 'pub_luc_isaac', NULL);
 INSERT OR IGNORE INTO arvore_membros (id, arvore_id, pessoa_id, uniao_id) VALUES ('am_luc_pub_luc_jaco_patriarca', 'pub_arv_jesus_lucas', 'pub_luc_jaco_patriarca', NULL);
