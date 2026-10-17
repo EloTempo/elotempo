@@ -22,16 +22,26 @@ dentro da árvore, e o localizador leva a qualquer membro com foco suave.
 
 **Semente pública e saneamento estrutural** do acervo canônico.
 
-## 2. Artefato de distribuição
+## 2. Artefatos de distribuição
+
+Checksums dos arquivos **publicados no release**, conforme a API do GitHub:
 
 | Arquivo | Tipo | Tamanho | SHA-256 |
-| :--- | :---: | :---: | :--- |
-| `EloTempo_1.2.0_x64-setup.exe` | Instalador Windows (NSIS) | 4,82 MB | `e0fc2e37107d06f26ce0daa78d5d94b365721a971c14bb848a128908301bf0dd` |
+| :--- | :---: | ---: | :--- |
+| `EloTempo_1.2.0_x64-setup.exe` | Windows (NSIS) | 5.062.997 | `9bacc731e2584401fbdd93082a92edd90a64a59ca61fd0c58c4e63112a41882d` |
+| `EloTempo_1.2.0_x64_pt-BR.msi` | Windows (WiX) | 6.336.512 | `aff93f9442a582bfab10f0934dea5d47eadb1e33377d87daf1c30e70a4df8215` |
+| `EloTempo_1.2.0_amd64.deb` | Debian/Ubuntu | 6.210.318 | `6eed39910793f267874c11d66e89150675629a1f7b307ac84e83545e4dae3a20` |
+| `EloTempo_1.2.0_amd64.AppImage` | Linux portátil | 84.253.176 | `2dd5cfdf7aa4facee04f8994683181a88367afcdb7eb88f2048b54b72f72a057` |
 
-O instalador cresceu de 3,6 MB para 4,8 MB: o OpenSSL exigido pelo SQLCipher
-agora é compilado junto e linkado estaticamente dentro do executável, que subiu
-para 14,1 MB. Nenhuma DLL acompanha o pacote — conferido com `dumpbin` no
-executável e por varredura no próprio instalador.
+O instalador do Windows cresceu de 3,6 MB para 4,8 MB: o OpenSSL exigido pelo
+SQLCipher agora é compilado junto e linkado estaticamente dentro do executável.
+Nenhuma biblioteca acompanha os pacotes — conferido com `dumpbin` no Windows e
+com `objdump -p` no Linux, mais varredura dentro do instalador e do `.deb`.
+
+> **Os binários do release vêm do runner, não de compilação local.** Uma build
+> local da mesma árvore produz um arquivo de tamanho próximo mas com checksum
+> diferente, porque a versão exata do toolchain difere. Confira sempre contra a
+> tabela acima, que é a do arquivo que as pessoas baixam.
 
 ## 3. Correções de build que esta versão traz junto
 
