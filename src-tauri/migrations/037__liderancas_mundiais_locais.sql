@@ -1,0 +1,31 @@
+-- 037__liderancas_mundiais_locais.sql
+-- Locais históricos ligados às Grandes Lideranças Mundiais e Fundadores de Nações.
+
+INSERT OR IGNORE INTO locais (id, nome, uf, pais_id, latitude, longitude, nome_busca) VALUES
+    ('loc-fr-ajaccio', 'Ajaccio', 'Corse', 'fr', 41.9267, 8.7369, 'ajaccio'),
+    ('loc-gb-saint-helena', 'Ilha de Santa Helena', 'Saint Helena', 'gb', -15.9650, -5.7089, 'ilha de santa helena saint helena'),
+    ('loc-fr-rueil-malmaison', 'Rueil-Malmaison', 'Île-de-France', 'fr', 48.8706, 2.1697, 'rueil malmaison'),
+    ('loc-at-viena', 'Viena', 'Wien', 'at', 48.2082, 16.3738, 'viena wien'),
+    ('loc-gb-chislehurst', 'Chislehurst', 'Kent', 'gb', 51.4056, 0.0722, 'chislehurst'),
+    ('loc-us-westmoreland-va', 'Condado de Westmoreland', 'VA', 'us', 38.1883, -76.9183, 'condado de westmoreland va'),
+    ('loc-us-mount-vernon-va', 'Mount Vernon', 'VA', 'us', 38.7080, -77.0861, 'mount vernon va'),
+    ('loc-us-shadwell-va', 'Shadwell', 'VA', 'us', 38.0167, -78.4000, 'shadwell va'),
+    ('loc-us-monticello-va', 'Monticello', 'VA', 'us', 38.0100, -78.4533, 'monticello charlottesville va'),
+    ('loc-us-hodgenville-ky', 'Hodgenville', 'KY', 'us', 37.5739, -85.7408, 'hodgenville ky'),
+    ('loc-us-springfield-il', 'Springfield', 'IL', 'us', 39.7817, -89.6501, 'springfield il'),
+    ('loc-gb-woodstock', 'Woodstock (Palácio de Blenheim)', 'Oxfordshire', 'gb', 51.8419, -1.3614, 'woodstock palacio de blenheim'),
+    ('loc-gb-chartwell', 'Chartwell (Westerham)', 'Kent', 'gb', 51.2536, 0.0817, 'chartwell westerham kent'),
+    ('loc-us-brooklyn-ny', 'Brooklyn', 'NY', 'us', 40.6782, -73.9442, 'brooklyn ny'),
+    ('loc-in-porbandar', 'Porbandar', 'Gujarat', 'in', 21.6417, 69.6293, 'porbandar gujarat'),
+    ('loc-in-rajkot', 'Rajkot', 'Gujarat', 'in', 22.3039, 70.8022, 'rajkot gujarat'),
+    ('loc-in-ahmedabad', 'Ahmedabad', 'Gujarat', 'in', 23.0225, 72.5714, 'ahmedabad gujarat'),
+    ('loc-in-new-delhi', 'Nova Déli', 'Delhi', 'in', 28.6139, 77.2090, 'nova deli new delhi'),
+    ('loc-za-durban', 'Durban', 'KwaZulu-Natal', 'za', -29.8587, 31.0218, 'durban'),
+    ('loc-za-mvezo', 'Mvezo', 'Eastern Cape', 'za', -31.9500, 28.5167, 'mvezo eastern cape'),
+    ('loc-za-qunu', 'Qunu', 'Eastern Cape', 'za', -31.7833, 28.6167, 'qunu eastern cape'),
+    ('loc-za-robben-island', 'Robben Island (Ilha Robben)', 'Western Cape', 'za', -33.8067, 18.3683, 'robben island ilha robben'),
+    ('loc-za-cape-town', 'Cidade do Cabo', 'Western Cape', 'za', -33.9249, 18.4241, 'cidade do cabo cape town'),
+    ('loc-za-pretoria', 'Pretória', 'Gauteng', 'za', -25.7479, 28.2293, 'pretoria'),
+    ('loc-us-marion-al', 'Marion', 'AL', 'us', 32.6324, -87.3194, 'marion al'),
+    ('loc-us-montgomery-al', 'Montgomery', 'AL', 'us', 32.3792, -86.3077, 'montgomery al'),
+    ('loc-us-memphis-tn', 'Memphis', 'TN', 'us', 35.1495, -90.0490, 'memphis tn');

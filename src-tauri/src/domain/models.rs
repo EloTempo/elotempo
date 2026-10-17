@@ -78,6 +78,21 @@ pub struct Nacionalidade {
     pub id: String,
     pub pessoa_id: String,
     pub pais_id: String,
+    #[serde(default)]
+    pub is_originaria: bool,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, sqlx::FromRow)]
+pub struct ObraCultural {
+    pub id: String,
+    pub pessoa_id: String,
+    pub categoria: String,
+    pub titulo: String,
+    pub subtipo: Option<String>,
+    pub ano: Option<i64>,
+    pub ano_fim: Option<i64>,
+    pub detalhes: Option<String>,
+    pub local_id: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, sqlx::FromRow)]

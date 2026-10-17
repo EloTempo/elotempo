@@ -262,6 +262,21 @@ export interface Nationality {
   id: string;
   pessoa_id: string;
   pais_id: string;
+  is_originaria?: boolean;
+}
+
+export type CategoriaObraCultural = 'livro' | 'musica' | 'teatro' | 'pesquisa' | 'arte' | 'outro';
+
+export interface ObraCultural {
+  id: string;
+  pessoa_id: string;
+  categoria: CategoriaObraCultural;
+  titulo: string;
+  subtipo?: string | null;
+  ano?: number | null;
+  ano_fim?: number | null;
+  detalhes?: string | null;
+  local_id?: string | null;
 }
 
 // ---------------------------------------------------------------------------

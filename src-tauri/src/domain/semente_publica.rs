@@ -887,6 +887,62 @@ pub async fn sanear_e_sincronizar_acervo(pool: &SqlitePool) -> Resultado<()> {
     const SQL_ATRIBUTOS_CULTURAIS: &str = include_str!("../../migrations/031__enriquecimento_atributos_culturais_e_profissionais.sql");
     sqlx::raw_sql(SQL_ATRIBUTOS_CULTURAIS).execute(pool).await?;
 
+    // 14. Aplica criação e catalogação de obras culturais e idiomas nativos (migração 032)
+    const SQL_OBRAS_CULTURAIS: &str = include_str!("../../migrations/032__obras_culturais.sql");
+    sqlx::raw_sql(SQL_OBRAS_CULTURAIS).execute(pool).await?;
+
+    // 15. Aplica correção estrutural de conexões e famílias históricas (migração 033)
+    const SQL_CORRECAO_CONEXOES: &str = include_str!("../../migrations/033__correcao_estrutural_conexoes_e_familias_historicas.sql");
+    sqlx::raw_sql(SQL_CORRECAO_CONEXOES).execute(pool).await?;
+
+    // 16. Aplica enriquecimento multitemático do acervo histórico (migração 034)
+    const SQL_ENRIQUECIMENTO_MULTITEMATICO: &str = include_str!("../../migrations/034__enriquecimento_multitematico_acervo_historico.sql");
+    sqlx::raw_sql(SQL_ENRIQUECIMENTO_MULTITEMATICO).execute(pool).await?;
+
+    // 17. Aplica Lote Brasil Ilustre
+    const SQL_BRASIL_ILUSTRE: &str = include_str!("seeds/lote_brasil_ilustre.sql");
+    sqlx::raw_sql(SQL_BRASIL_ILUSTRE).execute(pool).await?;
+
+    // 18. Aplica Lote 2: Revolução Científica e Invenção Tecnológica
+    const SQL_REVOLUCAO_CIENTIFICA: &str = include_str!("seeds/revolucao_cientifica.sql");
+    sqlx::raw_sql(SQL_REVOLUCAO_CIENTIFICA).execute(pool).await?;
+
+    // 19. Aplica Lote 3: Grandes Lideranças Mundiais e Fundadores de Nações
+    const SQL_LIDERANCAS_MUNDIAIS: &str = include_str!("seeds/liderancas_mundiais.sql");
+    sqlx::raw_sql(SQL_LIDERANCAS_MUNDIAIS).execute(pool).await?;
+
+    // 20. Aplica Lote 4: Grandes Gênios da Literatura e das Artes Clássicas
+    const SQL_ARTES_LITERATURA: &str = include_str!("seeds/artes_literatura.sql");
+    sqlx::raw_sql(SQL_ARTES_LITERATURA).execute(pool).await?;
+
+    // 21. Aplica Lote 5: Grandes Dinastias Políticas do Século XX
+    const SQL_DINASTIAS_POLITICAS: &str = include_str!("seeds/dinastias_politicas.sql");
+    sqlx::raw_sql(SQL_DINASTIAS_POLITICAS).execute(pool).await?;
+
+    // 22. Aplica Lote 6: Grandes Empreendedores & Pioneiros Industriais
+    const SQL_EMPREENDEDORES: &str = include_str!("seeds/empreendedores_pioneiros.sql");
+    sqlx::raw_sql(SQL_EMPREENDEDORES).execute(pool).await?;
+
+    // 23. Aplica Lote 8: Pais Fundadores & Estadistas das Américas
+    const SQL_PAIS_FUNDADORES: &str = include_str!("seeds/pais_fundadores_estadistas.sql");
+    sqlx::raw_sql(SQL_PAIS_FUNDADORES).execute(pool).await?;
+
+    // 24. Aplica Lote 9: Mestres da Música Clássica & Artes Cênicas
+    const SQL_MESTRES_MUSICA: &str = include_str!("seeds/mestres_musica_classica.sql");
+    sqlx::raw_sql(SQL_MESTRES_MUSICA).execute(pool).await?;
+
+    // 25. Aplica Lote 10: Grandes Gênios da Literatura Universal & Dramaturgia
+    const SQL_GRANDES_LITERATURA: &str = include_str!("seeds/grandes_genios_literatura.sql");
+    sqlx::raw_sql(SQL_GRANDES_LITERATURA).execute(pool).await?;
+
+    // 26. Aplica Lote 11: Grandes Monarquias, Impérios & Casas Reais
+    const SQL_GRANDES_MONARQUIAS: &str = include_str!("seeds/grandes_monarquias_mundiais.sql");
+    sqlx::raw_sql(SQL_GRANDES_MONARQUIAS).execute(pool).await?;
+
+    // 27. Aplica Lote 12: Antiguidade, Tradição Bíblica & Genealogias Ficcionais
+    const SQL_ANTIGUIDADE_BIBLIA_FICCAO: &str = include_str!("seeds/antiguidade_biblia_ficcao.sql");
+    sqlx::raw_sql(SQL_ANTIGUIDADE_BIBLIA_FICCAO).execute(pool).await?;
+
     Ok(())
 }
 
@@ -929,7 +985,7 @@ mod testes {
             .await
             .unwrap();
 
-        assert!(total_publicos >= 400);
+        assert!(total_publicos >= 420);
 
         // Verifica que Jimmu tem datas registradas com cerca_de
         let ev_jimmu: Vec<(String, i64, String)> = sqlx::query_as(
@@ -949,54 +1005,500 @@ mod testes {
             .fetch_one(&pool)
             .await
             .unwrap();
-        assert!(total_religioes >= 50);
+        assert!(total_religioes >= 170);
 
         let total_idiomas: i64 = sqlx::query_scalar("SELECT COUNT(*) FROM idiomas_pessoa")
             .fetch_one(&pool)
             .await
             .unwrap();
-        assert!(total_idiomas >= 100);
+        assert!(total_idiomas >= 760);
 
         let total_escolaridade: i64 = sqlx::query_scalar("SELECT COUNT(*) FROM escolaridade_pessoa")
             .fetch_one(&pool)
             .await
             .unwrap();
-        assert!(total_escolaridade >= 30);
+        assert!(total_escolaridade >= 120);
 
         let total_profissoes: i64 = sqlx::query_scalar("SELECT COUNT(*) FROM profissoes_pessoa")
             .fetch_one(&pool)
             .await
             .unwrap();
-        assert!(total_profissoes >= 50);
+        assert!(total_profissoes >= 230);
 
         let total_publicacoes: i64 = sqlx::query_scalar("SELECT COUNT(*) FROM eventos WHERE tipo_evento = 'publicacao'")
             .fetch_one(&pool)
             .await
             .unwrap();
         assert!(total_publicacoes >= 40);
-    }
 
-    #[tokio::test]
-    async fn atualizar_banco_real_se_existir() {
-        if let Ok(appdata) = std::env::var("APPDATA") {
-            for app_dir in &["com.elotempo.app", "com.arvore.genealogica"] {
-                let caminho = format!("{}/{}/acervo.sqlite", appdata, app_dir);
-                if std::path::Path::new(&caminho).exists() {
-                    let pool = SqlitePoolOptions::new()
-                        .connect(&format!("sqlite:{}", caminho))
-                        .await
-                        .unwrap();
-                    if let Err(e) = sqlx::migrate!("./migrations").run(&pool).await {
-                        eprintln!("ERRO MIGRAÇÃO ({}): {:?}", app_dir, e);
-                        panic!("Erro migração: {:?}", e);
-                    }
-                    if let Err(e) = garantir_acervo_publico(&pool).await {
-                        eprintln!("ERRO SEMENTE ({}): {:?}", app_dir, e);
-                        panic!("Erro semente: {:?}", e);
-                    }
-                }
-            }
-        }
+        let total_obras: i64 = sqlx::query_scalar("SELECT COUNT(*) FROM obras_culturais")
+            .fetch_one(&pool)
+            .await
+            .unwrap();
+        assert!(total_obras >= 180);
+
+        // Validação de integridade estrutural das 5 famílias corrigidas:
+        // 1. Stalin tem pai Besarion e mãe Ekaterine Geladze
+        let pais_stalin: Vec<String> = sqlx::query_scalar(
+            "SELECT u.slot_masculino_id FROM unioes u JOIN uniao_filhos uf ON uf.uniao_id = u.id WHERE uf.pessoa_id = 'pub_stalin_stalin'"
+        )
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+        assert_eq!(pais_stalin, vec!["pub_stalin_besarion_jughashvili".to_string()]);
+
+        // 2. Perón: Juan Domingo Perón é casado com Eva Perón (e NÃO Mario Tomás!)
+        let conjuge_eva: String = sqlx::query_scalar(
+            "SELECT slot_masculino_id FROM unioes WHERE slot_feminino_id = 'pub_peron_eva_peron'"
+        )
+        .fetch_one(&pool)
+        .await
+        .unwrap();
+        assert_eq!(conjuge_eva, "pub_peron_juan_domingo_peron".to_string());
+
+        // 3. Hitler: William Patrick é filho de Alois Jr. (e NÃO de Alois Sr. e Klara)
+        let pai_william: String = sqlx::query_scalar(
+            "SELECT u.slot_masculino_id FROM unioes u JOIN uniao_filhos uf ON uf.uniao_id = u.id WHERE uf.pessoa_id = 'pub_hitler_william_patrick_hitler'"
+        )
+        .fetch_one(&pool)
+        .await
+        .unwrap();
+        assert_eq!(pai_william, "pub_hitler_alois_hitler_jr".to_string());
+
+        // 4. Rockefeller: John D. III é casado com Blanchette Hooker (e NÃO Laura Spelman)
+        let esposa_jdr_iii: String = sqlx::query_scalar(
+            "SELECT slot_feminino_id FROM unioes WHERE slot_masculino_id = 'pub_rockefeller_john_d_rockefeller_iii'"
+        )
+        .fetch_one(&pool)
+        .await
+        .unwrap();
+        assert_eq!(esposa_jdr_iii, "pub_rockefeller_blanchette_hooker".to_string());
+
+        // 5. Klabin-Lafer: Jenny Klabin Segall existe e está casada com Lasar Segall
+        let conjuge_jenny: String = sqlx::query_scalar(
+            "SELECT slot_masculino_id FROM unioes WHERE slot_feminino_id = 'pub_klabin_jenny_klabin_segall'"
+        )
+        .fetch_one(&pool)
+        .await
+        .unwrap();
+        assert_eq!(conjuge_jenny, "pub_klabin_lasar_segall".to_string());
+
+        // 6. Enriquecimento Lote 1-5: José Bonifácio, Jacqueline Kennedy, Confúcio e Rashi
+        let profs_bonifacio: Vec<String> = sqlx::query_scalar(
+            "SELECT ocupacao FROM profissoes_pessoa WHERE pessoa_id = 'pub_jose_bonifacio'"
+        )
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+        assert!(!profs_bonifacio.is_empty());
+
+        let obras_jackie: Vec<String> = sqlx::query_scalar(
+            "SELECT titulo FROM obras_culturais WHERE pessoa_id = 'pub_kennedy_jacqueline_kennedy_onassis'"
+        )
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+        assert!(obras_jackie.len() >= 2);
+
+        // 7. Lote Brasil Ilustre (Caxias, Nabuco, Ruy, Mauá, Santos Dumont, Machado, Oswaldo Cruz, Chiquinha Gonzaga)
+        let pai_caxias: String = sqlx::query_scalar(
+            "SELECT u.slot_masculino_id FROM unioes u JOIN uniao_filhos uf ON uf.uniao_id = u.id WHERE uf.pessoa_id = 'pub_caxias_luis_alves'"
+        )
+        .fetch_one(&pool)
+        .await
+        .unwrap();
+        assert_eq!(pai_caxias, "pub_caxias_francisco_de_lima_e_silva".to_string());
+
+        let obras_nabuco: Vec<String> = sqlx::query_scalar(
+            "SELECT titulo FROM obras_culturais WHERE pessoa_id = 'pub_nabuco_joaquim_nabuco'"
+        )
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+        assert!(obras_nabuco.iter().any(|t| t.contains("Abolicionismo")));
+
+        let obras_machado: Vec<String> = sqlx::query_scalar(
+            "SELECT titulo FROM obras_culturais WHERE pessoa_id = 'pub_machado_de_assis'"
+        )
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+        assert!(obras_machado.iter().any(|t| t.contains("Dom Casmurro")));
+
+        let obras_dumont: Vec<String> = sqlx::query_scalar(
+            "SELECT titulo FROM obras_culturais WHERE pessoa_id = 'pub_dumont_alberto_santos'"
+        )
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+        assert!(obras_dumont.iter().any(|t| t.contains("14-Bis")));
+
+        let obras_chiquinha: Vec<String> = sqlx::query_scalar(
+            "SELECT titulo FROM obras_culturais WHERE pessoa_id = 'pub_gonzaga_chiquinha'"
+        )
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+        assert!(obras_chiquinha.iter().any(|t| t.contains("Ó Abre Alas")));
+
+        // 8. Lote 2: Revolução Científica (Einstein, Newton, Galileu, Da Vinci, Tesla, Edison)
+        let pai_einstein: String = sqlx::query_scalar(
+            "SELECT u.slot_masculino_id FROM unioes u JOIN uniao_filhos uf ON uf.uniao_id = u.id WHERE uf.pessoa_id = 'pub_einstein_albert'"
+        )
+        .fetch_one(&pool)
+        .await
+        .unwrap();
+        assert_eq!(pai_einstein, "pub_einstein_hermann".to_string());
+
+        let obras_einstein: Vec<String> = sqlx::query_scalar(
+            "SELECT titulo FROM obras_culturais WHERE pessoa_id = 'pub_einstein_albert'"
+        )
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+        assert!(obras_einstein.iter().any(|t| t.contains("Relatividade")));
+
+        let mae_newton: String = sqlx::query_scalar(
+            "SELECT u.slot_feminino_id FROM unioes u JOIN uniao_filhos uf ON uf.uniao_id = u.id WHERE uf.pessoa_id = 'pub_newton_isaac'"
+        )
+        .fetch_one(&pool)
+        .await
+        .unwrap();
+        assert_eq!(mae_newton, "pub_newton_hannah_ayscough".to_string());
+
+        let obras_newton: Vec<String> = sqlx::query_scalar(
+            "SELECT titulo FROM obras_culturais WHERE pessoa_id = 'pub_newton_isaac'"
+        )
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+        assert!(obras_newton.iter().any(|t| t.contains("Principia")));
+
+        let pai_galileu: String = sqlx::query_scalar(
+            "SELECT u.slot_masculino_id FROM unioes u JOIN uniao_filhos uf ON uf.uniao_id = u.id WHERE uf.pessoa_id = 'pub_galilei_galileo'"
+        )
+        .fetch_one(&pool)
+        .await
+        .unwrap();
+        assert_eq!(pai_galileu, "pub_galilei_vincenzo".to_string());
+
+        let obras_galileu: Vec<String> = sqlx::query_scalar(
+            "SELECT titulo FROM obras_culturais WHERE pessoa_id = 'pub_galilei_galileo'"
+        )
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+        assert!(obras_galileu.iter().any(|t| t.contains("Sidereus Nuncius")));
+
+        let pai_davinci: String = sqlx::query_scalar(
+            "SELECT u.slot_masculino_id FROM unioes u JOIN uniao_filhos uf ON uf.uniao_id = u.id WHERE uf.pessoa_id = 'pub_davinci_leonardo'"
+        )
+        .fetch_one(&pool)
+        .await
+        .unwrap();
+        assert_eq!(pai_davinci, "pub_davinci_piero".to_string());
+
+        let obras_davinci: Vec<String> = sqlx::query_scalar(
+            "SELECT titulo FROM obras_culturais WHERE pessoa_id = 'pub_davinci_leonardo'"
+        )
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+        assert!(obras_davinci.iter().any(|t| t.contains("Mona Lisa")));
+
+        let pai_tesla: String = sqlx::query_scalar(
+            "SELECT u.slot_masculino_id FROM unioes u JOIN uniao_filhos uf ON uf.uniao_id = u.id WHERE uf.pessoa_id = 'pub_tesla_nikola'"
+        )
+        .fetch_one(&pool)
+        .await
+        .unwrap();
+        assert_eq!(pai_tesla, "pub_tesla_milutin".to_string());
+
+        let obras_tesla: Vec<String> = sqlx::query_scalar(
+            "SELECT titulo FROM obras_culturais WHERE pessoa_id = 'pub_tesla_nikola'"
+        )
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+        assert!(obras_tesla.iter().any(|t| t.contains("Corrente Alternada")));
+
+        let pai_edison: String = sqlx::query_scalar(
+            "SELECT u.slot_masculino_id FROM unioes u JOIN uniao_filhos uf ON uf.uniao_id = u.id WHERE uf.pessoa_id = 'pub_edison_thomas'"
+        )
+        .fetch_one(&pool)
+        .await
+        .unwrap();
+        assert_eq!(pai_edison, "pub_edison_samuel".to_string());
+
+        let obras_edison: Vec<String> = sqlx::query_scalar(
+            "SELECT titulo FROM obras_culturais WHERE pessoa_id = 'pub_edison_thomas'"
+        )
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+        assert!(obras_edison.iter().any(|t| t.contains("Fonógrafo")));
+
+        // Validação Lote 6: Empreendedores Pioneiros
+        let pai_matarazzo_jr: String = sqlx::query_scalar(
+            "SELECT u.slot_masculino_id FROM unioes u JOIN uniao_filhos uf ON uf.uniao_id = u.id WHERE uf.pessoa_id = 'pub_matarazzo_francisco_matarazzo_junior'"
+        )
+        .fetch_one(&pool)
+        .await
+        .unwrap();
+        assert_eq!(pai_matarazzo_jr, "pub_matarazzo_francesco_matarazzo".to_string());
+
+        let pai_armando_penteado: String = sqlx::query_scalar(
+            "SELECT u.slot_masculino_id FROM unioes u JOIN uniao_filhos uf ON uf.uniao_id = u.id WHERE uf.pessoa_id = 'pub_penteado_armando_alvares_penteado'"
+        )
+        .fetch_one(&pool)
+        .await
+        .unwrap();
+        assert_eq!(pai_armando_penteado, "pub_penteado_antonio_alvares_leite_penteado".to_string());
+
+        let obras_maua: Vec<String> = sqlx::query_scalar(
+            "SELECT titulo FROM obras_culturais WHERE pessoa_id = 'pub_maua_irineu_evangelista'"
+        )
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+        assert!(obras_maua.iter().any(|t| t.contains("Autobiografia")));
+
+        let obras_klabin_jenny: Vec<String> = sqlx::query_scalar(
+            "SELECT titulo FROM obras_culturais WHERE pessoa_id = 'pub_klabin_jenny_klabin_segall'"
+        )
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+        assert!(obras_klabin_jenny.iter().any(|t| t.contains("Fausto")));
+
+        // Validação Lote 7: Pioneiros da Revolução Científica (Curie, Darwin, Galilei, Melzi)
+        let obras_curie: Vec<String> = sqlx::query_scalar(
+            "SELECT titulo FROM obras_culturais WHERE pessoa_id = 'pub_curie_marie_skodowska_curie'"
+        )
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+        assert!(obras_curie.iter().any(|t| t.contains("substances radioactives")));
+
+        let obras_darwin_erasmus: Vec<String> = sqlx::query_scalar(
+            "SELECT titulo FROM obras_culturais WHERE pessoa_id = 'pub_darwin_erasmus_darwin'"
+        )
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+        assert!(obras_darwin_erasmus.iter().any(|t| t.contains("Zoonomia")));
+
+        let obras_vincenzo_galilei: Vec<String> = sqlx::query_scalar(
+            "SELECT titulo FROM obras_culturais WHERE pessoa_id = 'pub_galilei_vincenzo'"
+        )
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+        assert!(obras_vincenzo_galilei.iter().any(|t| t.contains("musica antica")));
+
+        let obras_melzi: Vec<String> = sqlx::query_scalar(
+            "SELECT titulo FROM obras_culturais WHERE pessoa_id = 'pub_davinci_melzi'"
+        )
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+        assert!(obras_melzi.iter().any(|t| t.contains("Codex Urbinas")));
+
+        // Validação Lote 8: Pais Fundadores & Estadistas das Américas
+        let obras_washington: Vec<String> = sqlx::query_scalar(
+            "SELECT titulo FROM obras_culturais WHERE pessoa_id = 'pub_washington_george'"
+        )
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+        assert!(obras_washington.iter().any(|t| t.contains("Rules of Civility")));
+
+        let obras_jefferson: Vec<String> = sqlx::query_scalar(
+            "SELECT titulo FROM obras_culturais WHERE pessoa_id = 'pub_jefferson_thomas'"
+        )
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+        assert!(obras_jefferson.iter().any(|t| t.contains("Notes on the State of Virginia")));
+
+        let obras_franklin: Vec<String> = sqlx::query_scalar(
+            "SELECT titulo FROM obras_culturais WHERE pessoa_id = 'pub_franklin_benjamin'"
+        )
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+        assert!(obras_franklin.iter().any(|t| t.contains("Poor Richard")));
+
+        let obras_lincoln: Vec<String> = sqlx::query_scalar(
+            "SELECT titulo FROM obras_culturais WHERE pessoa_id = 'pub_lincoln_abraham'"
+        )
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+        assert!(obras_lincoln.iter().any(|t| t.contains("House Divided")));
+
+        let obras_1822: Vec<String> = sqlx::query_scalar(
+            "SELECT titulo FROM obras_culturais WHERE pessoa_id IN ('pub_goncalves_ledo', 'pub_antonio_carlos', 'pub_frei_caneca')"
+        )
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+        assert!(obras_1822.iter().any(|t| t.contains("Revérbero")));
+        assert!(obras_1822.iter().any(|t| t.contains("Constituição da Mandioca")));
+
+        // Validação Lote 9: Mestres da Música Clássica & Artes Cênicas
+        let obras_bach: Vec<String> = sqlx::query_scalar(
+            "SELECT titulo FROM obras_culturais WHERE pessoa_id = 'pub_bach_johann_sebastian_bach'"
+        )
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+        assert!(obras_bach.iter().any(|t| t.contains("Paixão segundo São Mateus")));
+
+        let obras_mozart: Vec<String> = sqlx::query_scalar(
+            "SELECT titulo FROM obras_culturais WHERE pessoa_id = 'pub_mozart_wolfgang'"
+        )
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+        assert!(obras_mozart.iter().any(|t| t.contains("Requiem")));
+
+        let obras_beethoven: Vec<String> = sqlx::query_scalar(
+            "SELECT titulo FROM obras_culturais WHERE pessoa_id = 'pub_beethoven_ludwig'"
+        )
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+        assert!(obras_beethoven.iter().any(|t| t.contains("Sinfonia nº 9")));
+
+        let obras_chiquinha: Vec<String> = sqlx::query_scalar(
+            "SELECT titulo FROM obras_culturais WHERE pessoa_id = 'pub_gonzaga_chiquinha'"
+        )
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+        assert!(obras_chiquinha.iter().any(|t| t.contains("Ó Abre Alas")));
+
+        // Validação Lote 10: Grandes Gênios da Literatura Universal & Dramaturgia
+        let obras_shak: Vec<String> = sqlx::query_scalar(
+            "SELECT titulo FROM obras_culturais WHERE pessoa_id = 'pub_shakespeare_william'"
+        )
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+        assert!(obras_shak.iter().any(|t| t.contains("Hamlet")));
+        assert!(obras_shak.iter().any(|t| t.contains("Sonetos")));
+
+        let obras_cerv: Vec<String> = sqlx::query_scalar(
+            "SELECT titulo FROM obras_culturais WHERE pessoa_id = 'pub_cervantes_miguel'"
+        )
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+        assert!(obras_cerv.iter().any(|t| t.contains("Don Quijote") || t.contains("Dom Quixote")));
+
+        let obras_dant: Vec<String> = sqlx::query_scalar(
+            "SELECT titulo FROM obras_culturais WHERE pessoa_id IN ('pub_dante_alighieri', 'pub_dante_pietro')"
+        )
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+        assert!(obras_dant.iter().any(|t| t.contains("Divina Comédia")));
+        assert!(obras_dant.iter().any(|t| t.contains("Commentarium")));
+
+        let obras_goet: Vec<String> = sqlx::query_scalar(
+            "SELECT titulo FROM obras_culturais WHERE pessoa_id IN ('pub_goethe_johann_wolfgang', 'pub_goethe_ottilie')"
+        )
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+        assert!(obras_goet.iter().any(|t| t.contains("Fausto")));
+        assert!(obras_goet.iter().any(|t| t.contains("Chaos")));
+
+        let obras_hugo: Vec<String> = sqlx::query_scalar(
+            "SELECT titulo FROM obras_culturais WHERE pessoa_id IN ('pub_hugo_victor', 'pub_hugo_francois_victor')"
+        )
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+        assert!(obras_hugo.iter().any(|t| t.contains("Miseráveis") || t.contains("Misérables")));
+        assert!(obras_hugo.iter().any(|t| t.contains("Shakespeare")));
+
+        // Validação Lote 11: Grandes Monarquias, Impérios & Casas Reais
+        let obras_windsor: Vec<String> = sqlx::query_scalar(
+            "SELECT titulo FROM obras_culturais WHERE pessoa_id IN ('pub_vitoria_uk', 'pub_alberto_uk', 'pub_elizabeth2_uk')"
+        )
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+        assert!(obras_windsor.iter().any(|t| t.contains("Proclamação Real de 1858") || t.contains("Índia")));
+        assert!(obras_windsor.iter().any(|t| t.contains("Grande Exposição")));
+
+        let obras_habs: Vec<String> = sqlx::query_scalar(
+            "SELECT titulo FROM obras_culturais WHERE pessoa_id IN ('pub_habsburgo_carlos_v', 'pub_habsburgo_filipe_ii', 'pub_habsburgo_maria_teresa')"
+        )
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+        assert!(obras_habs.iter().any(|t| t.contains("Worms")));
+        assert!(obras_habs.iter().any(|t| t.contains("Escorial")));
+
+        let obras_bourb: Vec<String> = sqlx::query_scalar(
+            "SELECT titulo FROM obras_culturais WHERE pessoa_id IN ('pub_bourbon_henrique_iv_da_franca', 'pub_bourbon_luis_xiv', 'pub_bourbon_juan_carlos_i')"
+        )
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+        assert!(obras_bourb.iter().any(|t| t.contains("Nantes")));
+        assert!(obras_bourb.iter().any(|t| t.contains("Versalhes")));
+        assert!(obras_bourb.iter().any(|t| t.contains("23-F")));
+
+        let obras_yamato: Vec<String> = sqlx::query_scalar(
+            "SELECT titulo FROM obras_culturais WHERE pessoa_id IN ('pub_casa_imperial_japao_imperador_meiji', 'pub_casa_imperial_japao_imperador_showa')"
+        )
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+        assert!(obras_yamato.iter().any(|t| t.contains("Meiji")));
+        assert!(obras_yamato.iter().any(|t| t.contains("Gyokuon")));
+
+        // Validação Lote 12: Antiguidade, Tradição Bíblica & Genealogias Ficcionais
+        let obras_antiguidade: Vec<String> = sqlx::query_scalar(
+            "SELECT titulo FROM obras_culturais WHERE pessoa_id IN ('pub_dinastia_19_ramesses_ii', 'pub_kong_confucio_confucio', 'pub_moises_moises', 'pub_rei_david', 'pub_rei_salomao')"
+        )
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+        assert!(obras_antiguidade.iter().any(|t| t.contains("Qadesh")));
+        assert!(obras_antiguidade.iter().any(|t| t.contains("Analectos")));
+        assert!(obras_antiguidade.iter().any(|t| t.contains("Torá") || t.contains("Pentateuco")));
+        assert!(obras_antiguidade.iter().any(|t| t.contains("Salmos")));
+        assert!(obras_antiguidade.iter().any(|t| t.contains("Provérbios")));
+
+        let obras_ficcao: Vec<String> = sqlx::query_scalar(
+            "SELECT titulo FROM obras_culturais WHERE pessoa_id IN ('pub_buendia_coronel_aureliano_buendia', 'pub_corleone_vito_corleone', 'pub_karamazov_ivan_karamazov', 'pub_skywalker_luke_skywalker', 'pub_terra_cambara_capitao_rodrigo_cambara')"
+        )
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+        assert!(obras_ficcao.iter().any(|t| t.contains("Peixinhos de Ouro")));
+        assert!(obras_ficcao.iter().any(|t| t.contains("Genco Pura")));
+        assert!(obras_ficcao.iter().any(|t| t.contains("Grande Inquisidor")));
+        assert!(obras_ficcao.iter().any(|t| t.contains("Cavaleiros Jedi")));
+        assert!(obras_ficcao.iter().any(|t| t.contains("Farroupilha")));
+
+        // Verifica que árvores e membros ficcionais estão marcados como 'ficticio'
+        let tipo_arv_buendia: String = sqlx::query_scalar("SELECT tipo_tempo FROM arvores WHERE id = 'pub_arv_buendia'")
+            .fetch_one(&pool)
+            .await
+            .unwrap();
+        assert_eq!(tipo_arv_buendia, "ficticio");
+
+        let tipo_arv_skywalker: String = sqlx::query_scalar("SELECT tipo_tempo FROM arvores WHERE id = 'pub_arv_skywalker'")
+            .fetch_one(&pool)
+            .await
+            .unwrap();
+        assert_eq!(tipo_arv_skywalker, "ficticio");
     }
 }
 

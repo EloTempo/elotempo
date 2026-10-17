@@ -1,168 +1,270 @@
 # FAMILIA: Rockefeller (EUA)
 # CONFIABILIDADE geral: documentada
-# FONTES: Britannica; Wikipedia; PBS "American Experience"; Encyclopedia.com
+# FONTES PRIMÁRIAS/INSTITUCIONAIS: Rockefeller Archive Center (rockarch.org e
+#   dimes.rockarch.org — acervo público da família); Britannica; Encyclopedia of
+#   Cleveland History (Case Western Reserve); Biography.com; National Governors
+#   Association; PBS American Experience
+# BIBLIOGRAFIA: Ron Chernow, "Titan: The Life of John D. Rockefeller, Sr." (1998)
 # FORMATO: um bloco por pessoa (ver _MODELO-PESSOA.txt)
-# LGPD: dinastia com muitos vivos — apenas figuras públicas e dados públicos;
-#       vivos marcados "# LGPD: pessoa viva".
+# CAMPOS NOVOS: nascimento_local, falecimento_local, sepultamento, obras,
+#   eventos_historicos
+# LGPD: vivos marcados; apenas figuras públicas e dados públicos.
 # ---
 
-# --- ASCENDÊNCIA ---
 == William Avery Rockefeller Sr. ==
+identidade: Pai do fundador; caixeiro-viajante e vendedor de remédios populares.
 nome_publico: William A. Rockefeller Sr.
-apelidos: "Devil Bill"
+apelidos: "Big Bill"; "Devil Bill"
 nascimento: 1810
 falecimento: 1906
-profissoes: vendedor ambulante
+profissoes: caixeiro-viajante; vendedor de remédios ("snake oil"); proprietário rural
 nacionalidades: EUA
-relacoes: pai de John D. Rockefeller; casado com Eliza Davison   # -> Parentesco
-fonte: Wikipedia
+idiomas: inglês
+PAIS: (a verificar)
+FILHOS: com Eliza Davison — seis filhos, entre eles John D. (1839), William Jr. (1841), Frank
+relacoes: pai de [[john-d-rockefeller]]; casado com Eliza Davison   # -> Parentesco
+fonte: Britannica; Encyclopedia.com
 confiabilidade: documentada
 
-# --- GERAÇÃO 1 — o fundador ---
-== John D. Rockefeller ==
-identidade: Fundador da Standard Oil; primeiro bilionário do mundo (1916) e grande filantropo.
-nome_publico: John D. Rockefeller
-nome_registro: John Davison Rockefeller
-apelidos: JDR Sr.
-nascimento: 1839
-falecimento: 1937
-profissoes: empresário (petróleo); filantropo
+== Eliza Davison ==
+nome_publico: Eliza Davison Rockefeller
+profissoes: dona de casa
 nacionalidades: EUA
-foto: fotos/john-d-rockefeller.webp
-relacoes: casado (1864) com Laura Spelman; irmão de William; pai de John Jr.   # -> Parentesco
-fonte: Britannica; Wikipedia
+religioes: batista devota — criou os filhos com disciplina rígida
+FILHOS: seis, entre eles John D. e William Jr.
+relacoes: mãe de John D. Rockefeller   # -> Parentesco
+fonte: Britannica; Encyclopedia.com
+confiabilidade: documentada
+
+== John D. Rockefeller ==
+identidade: Fundador da Standard Oil; considerado o americano mais rico e o maior filantropo da história.
+nome_publico: John D. Rockefeller
+nome_registro: John Davison Rockefeller Sr.
+apelidos: JDR Sr.
+nascimento: 1839   # 8 de julho
+nascimento_local: Richford, Nova York, EUA (fazenda)
+falecimento: 1937   # 23 de maio, seis semanas antes de completar 98 anos
+falecimento_local: The Casements, sua casa de inverno em Ormond Beach, Flórida
+sepultamento: Lake View Cemetery, Cleveland, Ohio
+escolaridade: Owego Academy; Central High School de Cleveland (abandonou); curso avulso de negócios no Folsom Mercantile College
+idiomas: inglês
+profissoes: guarda-livros (assistente, 1855, na Hewitt & Tuttle); comerciante comissário (1859, com Maurice Clark); refinador de petróleo (a partir de 1863); industrial; filantropo
+nacionalidades: EUA
+religioes: batista devoto; defensor da temperança
+obras: não deixou obra autoral relevante; sua "obra" é institucional — fundou a Standard Oil (1870), a Universidade de Chicago, a Rockefeller University, o General Education Board, a Central Philippine University e a Fundação Rockefeller
+eventos_historicos: guerra civil americana (seu negócio comissário prosperou no período); formação do 1º grande truste dos EUA — em 1882 a Standard Oil detinha quase o monopólio do petróleo no país; controlou cerca de 90% das refinarias e oleodutos; em 1911 a Suprema Corte declarou a empresa em violação das leis antitruste e ordenou sua dissolução; doou mais de US$ 500 milhões em vida
+foto: fotos/john-d-rockefeller.webp   # retrato fotográfico de 1895
+PAIS: William Avery Rockefeller Sr. e Eliza Davison
+FILHOS: com Laura Spelman — Elizabeth "Bessie", Alice (morreu na infância), Alta, Edith e John D. Jr.
+relacoes: casado (8/9/1864, Cleveland) com [[laura-spelman]]; irmão e sócio de [[william-rockefeller]]   # -> Parentesco
+fonte: Rockefeller Archive Center; Britannica; Case Western Reserve
 confiabilidade: documentada
 
 == Laura Spelman Rockefeller ==
+identidade: Professora; esposa do fundador e nome de uma das grandes fundações da família.
 nome_publico: Laura "Cettie" Spelman Rockefeller
 nome_registro: Laura Celestia Spelman
 nascimento: 1839
 falecimento: 1915
 profissoes: professora
 nacionalidades: EUA
-relacoes: esposa de John D. Rockefeller; mãe de cinco filhos   # -> Parentesco
-fonte: Wikipedia; PBS
+religioes: batista; família abolicionista e defensora da temperança
+obras: legado institucional — a Laura Spelman Rockefeller Memorial e o Spelman College (Atlanta) levam seu nome de família
+PAIS: Harvey Buel Spelman e Lucy Henry
+FILHOS: Bessie, Alice, Alta, Edith, John D. Jr.
+relacoes: casada com John D. Rockefeller   # -> Parentesco
+fonte: Rockefeller Archive Center
 confiabilidade: documentada
 
 == William Rockefeller ==
-nome_publico: William Rockefeller
-nascimento: 1841
-falecimento: 1922
-profissoes: empresário (cofundador da Standard Oil)
+identidade: Irmão do fundador e cofundador da Standard Oil; financista.
+nome_publico: William Rockefeller Jr.
+nome_registro: William Avery Rockefeller Jr.
+nascimento: 1841   # 31 de maio
+nascimento_local: Richford, Nova York, EUA
+falecimento: 1922   # 24 de junho
+falecimento_local: Rockwood Hall, Mount Pleasant, Nova York
+sepultamento: Sleepy Hollow Cemetery, Nova York
+profissoes: empresário; financista; cofundador da Standard Oil
 nacionalidades: EUA
-relacoes: irmão de John D. Rockefeller   # -> Parentesco
-fonte: Britannica
+idiomas: inglês
+PAIS: William Avery Rockefeller Sr. e Eliza Davison
+FILHOS: seis, entre eles William Goodsell, Percy Avery e Geraldine Rockefeller Dodge
+relacoes: irmão de John D. Rockefeller; casado com Almira Geraldine Goodsell   # -> Parentesco
+fonte: Wikipedia; Britannica
 confiabilidade: documentada
 
-# --- GERAÇÃO 2 ---
 == John D. Rockefeller Jr. ==
-identidade: Financista e filantropo; único filho homem do fundador; financiou o Rockefeller Center e a doação do terreno da ONU.
+identidade: Único filho homem do fundador; financista e filantropo que deu forma ao legado da família.
 nome_publico: John D. Rockefeller Jr.
 nome_registro: John Davison Rockefeller Jr.
 apelidos: JDR Jr.
-nascimento: 1874
-falecimento: 1960
-escolaridade: Universidade Brown
+nascimento: 1874   # 29 de janeiro
+nascimento_local: Cleveland, Ohio, EUA
+falecimento: 1960   # 11 de maio
+falecimento_local: Tucson, Arizona, EUA
+escolaridade: Universidade Brown (bacharelado)
+idiomas: inglês
 profissoes: financista; filantropo
 nacionalidades: EUA
-foto: fotos/john-d-rockefeller-jr.webp
-relacoes: filho de JDR e Laura; casado (1901) com Abby Aldrich e (1951) com Martha Baird; 6 filhos   # -> Parentesco
-fonte: Wikipedia
+religioes: batista
+obras: legado institucional — Rockefeller Center; doação do terreno da sede da ONU em Nova York; restauração da Colonial Williamsburg; The Cloisters; Bureau of Social Hygiene (1913)
+eventos_historicos: em 1910 foi presidente de júri especial em Manhattan que investigou tráfico de pessoas, o que o levou a criar o Bureau of Social Hygiene; na 1ª Guerra percorreu o país falando a soldados e presidiu a United War Work Campaign em NY, que arrecadou US$ 35 milhões; associado à repercussão do Massacre de Ludlow (1914) nas minas do Colorado, episódio que o levou a reformular as relações trabalhistas da família
+foto: fotos/john-d-rockefeller-jr.webp   # fotografia de 1920
+PAIS: John D. Rockefeller e Laura Spelman
+FILHOS: com Abby Aldrich — Abby "Babs", John III, Nelson, Laurance, Winthrop e David
+relacoes: casado (1901) com [[abby-aldrich]] e (1951) com Martha Baird   # -> Parentesco
+fonte: Rockefeller Archive Center (DIMES); Wikipedia
 confiabilidade: documentada
 
 == Abby Aldrich Rockefeller ==
-identidade: Socialite e filantropa; força motriz na criação do MoMA.
+identidade: Filantropa e colecionadora; principal força na criação do MoMA.
 nome_publico: Abby Aldrich Rockefeller
 nome_registro: Abigail Greene Aldrich
 nascimento: 1874
 falecimento: 1948
+profissoes: filantropa; colecionadora de arte
 nacionalidades: EUA
-relacoes: filha do senador Nelson W. Aldrich; esposa de John Jr.; mãe dos "cinco irmãos" e de Abby   # -> Parentesco
-fonte: Wikipedia
+idiomas: inglês; francês
+obras: legado institucional — cofundadora do Museum of Modern Art (MoMA, 1929); o Abby Aldrich Rockefeller Folk Art Museum, em Williamsburg, leva seu nome
+PAIS: senador Nelson Wilmarth Aldrich (Rhode Island) e Abigail Pearce Truman Chapman
+FILHOS: Abby "Babs", John III, Nelson, Laurance, Winthrop, David
+relacoes: esposa de John D. Rockefeller Jr.   # -> Parentesco
+fonte: Rockefeller Archive Center
 confiabilidade: documentada
 
-# --- GERAÇÃO 3 — a filha e os cinco irmãos ---
 == Abby Rockefeller Mauzé ==
+identidade: Única filha de John Jr.; filantropa dedicada aos parques de Nova York.
 nome_publico: Abby "Babs" Rockefeller Mauzé
 apelidos: Babs
 nascimento: 1903
 falecimento: 1976
 profissoes: filantropa
 nacionalidades: EUA
-relacoes: filha primogênita de John Jr. e Abby   # -> Parentesco
-fonte: Wikipedia
+obras: fundou e presidiu a Greenacre Foundation (1968); criou em 1971 o Greenacre Park, "pocket park" com cascata no centro de Manhattan
+PAIS: John D. Rockefeller Jr. e Abby Aldrich
+relacoes: irmã mais velha dos "cinco irmãos"   # -> Parentesco
+fonte: Rockefeller Archive Center (REsource)
 confiabilidade: documentada
 
 == John D. Rockefeller III ==
-identidade: Filantropo; fundou a Asia Society e foi decisivo no Lincoln Center.
+identidade: Filantropo voltado às artes e à Ásia; liderou a criação do Lincoln Center.
 nome_publico: John D. Rockefeller III
 nascimento: 1906
-falecimento: 1978
+falecimento: 1978   # acidente de automóvel
 profissoes: filantropo
 nacionalidades: EUA
-relacoes: filho de John Jr. e Abby; casado com Blanchette Hooker; pai de Jay Rockefeller   # -> Parentesco
-fonte: Wikipedia; Britannica
+idiomas: inglês
+obras: legado institucional — fundou a Asia Society (1956) e o Population Council; liderou a captação e a construção do Lincoln Center for the Performing Arts, em Nova York
+PAIS: John D. Rockefeller Jr. e Abby Aldrich
+FILHOS: com Blanchette Hooker — quatro, entre eles John D. "Jay" Rockefeller IV
+relacoes: primogênito dos "cinco irmãos"   # -> Parentesco
+fonte: Rockefeller Archive Center; Britannica
 confiabilidade: documentada
 
 == Nelson Rockefeller ==
-identidade: 41º vice-presidente dos EUA e governador de Nova York.
+identidade: Governador de Nova York por quatro mandatos e 41º vice-presidente dos EUA.
 nome_publico: Nelson Rockefeller
 nome_registro: Nelson Aldrich Rockefeller
-nascimento: 1908
-falecimento: 1979
-profissoes: político (vice-presidente; governador de NY)
+nascimento: 1908   # 8 de julho
+nascimento_local: Bar Harbor, Maine, EUA
+falecimento: 1979   # 26 de janeiro
+falecimento_local: Cidade de Nova York
+sepultamento: cinzas na propriedade da família em Pocantico Hills, NY
+escolaridade: Lincoln School (Teachers College, Columbia), 1926; Dartmouth College, A.B. em economia cum laude, Phi Beta Kappa (1930)
+idiomas: inglês; espanhol (falava-o em razão dos negócios na Venezuela)
+profissoes: empresário (Chase National Bank, Rockefeller Center, Creole Petroleum); administrador público; colecionador de arte; político (governador de NY, 1959–73; vice-presidente dos EUA, 1974–77)
 nacionalidades: EUA
+obras: legado institucional — criou o Museum of Primitive Art (cujo acervo foi depois ao Metropolitan); grande colecionador de arte moderna e pré-colombiana
+eventos_historicos: coordenador de Assuntos Interamericanos na 2ª Guerra (política de boa vizinhança); disputou sem sucesso a indicação republicana à presidência em 1964, 1968 e 1972; como governador, ratificação das 24ª e 25ª Emendas pelo legislativo estadual; associado à repressão da rebelião de Attica (1971); indicado por Gerald Ford à vice-presidência
 foto: fotos/nelson-rockefeller.webp
-relacoes: filho de John Jr. e Abby   # -> Parentesco
-fonte: Wikipedia
+PAIS: John D. Rockefeller Jr. e Abby Aldrich
+FILHOS: com Mary Todhunter Clark — cinco (duas filhas e três filhos), entre eles Michael, desaparecido em 1961 na Nova Guiné; com Margaretta "Happy" Fitler Murphy — dois filhos
+relacoes: casou (1930) com Mary Todhunter Clark, divorciou-se em 1962; casou (1963) com Happy Murphy   # -> Parentesco
+fonte: Rockefeller Archive Center; Britannica; National Governors Association
 confiabilidade: documentada
 
 == Laurance Rockefeller ==
-identidade: Financista e conservacionista; capital de risco pioneiro (Intel, Apple).
+identidade: Financista e conservacionista; pioneiro do capital de risco nos EUA.
 nome_publico: Laurance Rockefeller
 nome_registro: Laurance Spelman Rockefeller
-nascimento: 1910
-falecimento: 2004
-profissoes: financista; conservacionista
+nascimento: 1910   # 26 de maio
+nascimento_local: Cidade de Nova York, EUA
+falecimento: 2004   # 11 de julho
+falecimento_local: Cidade de Nova York, EUA
+escolaridade: Universidade Princeton (A.B., 1932); dois anos na Harvard Law School, sem concluir
+idiomas: inglês
+profissoes: financista; capitalista de risco; conservacionista; filantropo
 nacionalidades: EUA
-relacoes: filho de John Jr. e Abby; casado com Mary French   # -> Parentesco
-fonte: Wikipedia
+obras: legado institucional — investimentos pioneiros em aviação e tecnologia; criou resorts de baixo impacto ambiental; conselheiro de conservação de cinco presidentes dos EUA
+eventos_historicos: assessorou cinco presidentes americanos em conservação; papel decisivo na criação e ampliação de parques nacionais (Virgin Islands, Grand Teton)
+PAIS: John D. Rockefeller Jr. e Abby Aldrich
+FILHOS: Laura Spelman, Marion French, Lucy Rockefeller Waletzky e Laurance S. Jr.
+relacoes: casou (22/8/1934, Woodstock, Vermont) com Mary French   # -> Parentesco
+fonte: Wikipedia; Rockefeller Archive Center
 confiabilidade: documentada
 
 == Winthrop Rockefeller ==
-identidade: Governador do Arkansas.
+identidade: Governador do Arkansas; primeiro republicano no cargo desde a Reconstrução.
 nome_publico: Winthrop Rockefeller
 nascimento: 1912
 falecimento: 1973
-profissoes: político (governador do Arkansas); empresário
+escolaridade: Universidade Yale (não concluiu)
+idiomas: inglês
+profissoes: trabalhador de campos de petróleo (começou "de baixo", no Texas); militar; pecuarista; político (governador do Arkansas, 1967–71)
 nacionalidades: EUA
-relacoes: filho de John Jr. e Abby; pai de Winthrop Paul   # -> Parentesco
-fonte: Wikipedia
+eventos_historicos: serviu na 2ª Guerra Mundial no Pacífico (ferido em Okinawa); como governador, atuou na modernização do Arkansas e em pautas de direitos civis; trabalhou pela conservação dos Ozarks e do rio Buffalo
+PAIS: John D. Rockefeller Jr. e Abby Aldrich
+FILHOS: Winthrop Paul Rockefeller (1948–2006), depois vice-governador do Arkansas
+relacoes: quarto dos "cinco irmãos"   # -> Parentesco
+fonte: Rockefeller Archive Center; Wikipedia
 confiabilidade: documentada
 
 == David Rockefeller ==
-identidade: Banqueiro; presidente do Chase Manhattan e figura de projeção internacional.
+identidade: Banqueiro; presidente do Chase Manhattan e figura central da diplomacia econômica americana.
 nome_publico: David Rockefeller
-nascimento: 1915
-falecimento: 2017
-escolaridade: Universidade Harvard; doutorado pela Universidade de Chicago
-profissoes: banqueiro (Chase Manhattan)
+nascimento: 1915   # 12 de junho
+nascimento_local: Cidade de Nova York (casa de oito andares na 10 West 54th Street, a maior residência particular já construída na cidade)
+falecimento: 2017   # 20 de março, aos 101 anos, de insuficiência cardíaca congestiva
+falecimento_local: sua casa em Pocantico Hills, Nova York
+escolaridade: Universidade Harvard (BA, 1936); London School of Economics; Universidade de Chicago (PhD em economia, 1940)
+idiomas: inglês; francês; alemão; espanhol
+profissoes: economista; banqueiro (35 anos no Chase Manhattan, chegando a CEO); escritor; capitão do Exército dos EUA (1942–45)
 nacionalidades: EUA
+obras: autor de "Memoirs" (2002), autobiografia; também "Unusual Life" e discursos publicados; colecionador de arte e entomologista amador com uma das maiores coleções de besouros do mundo
+eventos_historicos: serviu na 2ª Guerra Mundial (norte da África e França, inteligência militar); presidiu o Council on Foreign Relations (1970–85); cofundador da Comissão Trilateral (1973); último neto vivo do fundador
 foto: fotos/david-rockefeller.webp
-relacoes: caçula de John Jr. e Abby   # -> Parentesco
-fonte: Wikipedia
+PAIS: John D. Rockefeller Jr. e Abby Aldrich
+FILHOS: David Jr., Abigail, Neva, Margaret, Richard e Eileen
+relacoes: caçula dos seis filhos de John Jr.; casado (1940) com Margaret McGrath   # -> Parentesco
+fonte: Wikipedia; Rockefeller Archive Center
 confiabilidade: documentada
 
-# --- GERAÇÃO 4 — descendente público (seleção) ---
 == John D. Rockefeller IV ==
+identidade: Senador dos EUA pela Virgínia Ocidental por cerca de 30 anos.
 nome_publico: Jay Rockefeller
 apelidos: Jay
 nascimento: 1937
-profissoes: político (senador dos EUA pela Virgínia Ocidental; governador)
+nascimento_local: Cidade de Nova York, EUA
+escolaridade: Universidade Harvard; estudos de língua e cultura japonesa
+idiomas: inglês; japonês
+profissoes: político (voluntário do VISTA; deputado estadual; governador da Virgínia Ocidental, 1977–85; senador, 1985–2015)
 nacionalidades: EUA
-relacoes: filho de John D. Rockefeller III   # -> Parentesco
+eventos_historicos: presidiu a Comissão de Inteligência do Senado; atuação em saúde pública e mineração de carvão
+PAIS: John D. Rockefeller III e Blanchette Hooker
+relacoes: bisneto do fundador   # -> Parentesco
 fonte: Wikipedia   # LGPD: pessoa viva
 confiabilidade: documentada
 
-# Outros da 4ª geração (expandir): Winthrop Paul Rockefeller (1948–2006,
-# vice-governador do Arkansas); demais netos de John Jr.
+# ============================================================
+# NOTAS DE PESQUISA
+# ============================================================
+# 1. FONTE PÚBLICA DE REFERÊNCIA: o Rockefeller Archive Center (rockarch.org)
+#    disponibiliza publicamente biografias, coleções e o catálogo DIMES.
+# 2. HOMÔNIMOS: John D. Rockefeller Sr., Jr., III e IV; William Sr. e Jr.
+#    Desambiguar por nome_registro + datas, nunca pelo nome público.
+# 3. FILHOS DE JDR SR.: as fontes variam entre quatro e cinco filhos citados;
+#    o Rockefeller Archive Center lista cinco (Bessie, Alice, Alta, Edith,
+#    John Jr.), sendo Alice falecida na infância.  [divergente]
+# 4. Nenhum membro da 1ª geração deixou obra autoral; o legado é institucional.
+#    A exceção é David Rockefeller, autor de "Memoirs" (2002).

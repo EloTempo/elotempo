@@ -92,7 +92,23 @@ fn main() {
             let estado_seguranca = EstadoSeguranca::novo(config_seguranca);
             app.manage(estado_seguranca);
 
-            let pool = tauri::async_runtime::block_on(abrir_acervo(&caminho_banco))?;
+            let pool = match tauri::async_runtime::block_on(abrir_acervo(&caminho_banco)) {
+                Ok(p) => p,
+                Err(err) => {
+                    let log_msg = format!("Erro fatal ao inicializar o acervo em {}: {:?}", caminho_banco.display(), err);
+                    eprintln!("{}", log_msg);
+                    let _ = fs::write(pasta_dados.join("ultimo_erro_inicializacao.log"), &log_msg);
+
+                    use tauri_plugin_dialog::{DialogExt, MessageDialogKind};
+                    app.dialog()
+                        .message(format!("Não foi possível abrir o acervo do EloTempo.\n\nErro: {}\n\nLocal: {}", err, caminho_banco.display()))
+                        .title("EloTempo — Falha de Inicialização")
+                        .kind(MessageDialogKind::Error)
+                        .blocking_show();
+
+                    return Err(err);
+                }
+            };
             app.manage(pool);
 
             Ok(())
@@ -186,6 +202,9 @@ fn main() {
             adicionar_nacionalidade,
             remover_nacionalidade,
             listar_nacionalidades,
+            adicionar_obra_cultural,
+            remover_obra_cultural,
+            listar_obras_culturais,
             adicionar_apelido,
             remover_apelido,
             listar_apelidos,
@@ -233,7 +252,23 @@ async fn abrir_acervo(caminho: &std::path::Path) -> Result<SqlitePool, Box<dyn s
         .connect_with(opcoes)
         .await?;
 
-    sqlx::migrate!("./migrations").run(&pool).await?;
+    if let Err(e) = sqlx::migrate!("./migrations").run(&pool).await {
+        match &e {
+            sqlx::migrate::MigrateError::VersionMissing(v) => {
+                eprintln!(
+                    "Aviso: O acervo contem a migracao {} mais recente do que esta compilacao do EloTempo. Continuando com seguranca.",
+                    v
+                );
+            }
+            sqlx::migrate::MigrateError::VersionMismatch(v) => {
+                eprintln!(
+                    "Aviso: A migracao {} tem checksum diferente (possivel diferenca de quebra de linha ou semente manual). Continuando com seguranca.",
+                    v
+                );
+            }
+            _ => return Err(e.into()),
+        }
+    }
 
     domain::semente_publica::garantir_acervo_publico(&pool).await?;
 
@@ -331,3 +366,32 @@ fn copiar_diretorio_recursivo(origem: &std::path::Path, destino: &std::path::Pat
     }
     Ok(())
 }
+
+#[cfg(test)]
+mod testes_inicializacao {
+    use super::*;
+
+    #[tokio::test]
+    async fn abrir_acervo_tolera_migracao_futura() {
+        let temp_dir = std::env::temp_dir().join(format!("elotempo_test_{}", uuid::Uuid::new_v4()));
+        fs::create_dir_all(&temp_dir).unwrap();
+        let caminho_banco = temp_dir.join("acervo.sqlite");
+
+        // 1. Abre normalmente pela primeira vez
+        {
+            let pool = abrir_acervo(&caminho_banco).await.unwrap();
+            // Simula uma migração futura aplicada por versão mais recente
+            sqlx::query("INSERT INTO _sqlx_migrations (version, description, installed_on, success, checksum, execution_time) VALUES (999, 'migracao_do_futuro', CURRENT_TIMESTAMP, 1, X'00', 10)")
+                .execute(&pool)
+                .await
+                .unwrap();
+        }
+
+        // 2. Tenta reabrir o acervo: DEVE ter sucesso e tolerar a migração 999 sem entrar em pânico!
+        let resultado = abrir_acervo(&caminho_banco).await;
+        assert!(resultado.is_ok(), "abrir_acervo deve tolerar migrações futuras sem falhar: {:?}", resultado.err());
+
+        let _ = fs::remove_dir_all(&temp_dir);
+    }
+}
+

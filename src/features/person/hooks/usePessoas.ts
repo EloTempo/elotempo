@@ -7,6 +7,7 @@ import {
   removerPessoa,
   restaurarPessoa,
   adicionarNacionalidade,
+  adicionarNome,
 } from '../../../lib/api';
 import { useHistorico } from '../../../contexts/HistoricoContext';
 import { TIPOS_EVENTO, type DataEscolhida } from '../../../types';
@@ -77,6 +78,20 @@ export function useCriarPessoa() {
           tipo_evento: TIPOS_EVENTO.falecimento,
           data: dados.falecimento,
         });
+      }
+
+      if (dados.nome_completo?.trim()) {
+        try {
+          await adicionarNome({
+            pessoa_id: id,
+            tipo: 'nascimento',
+            nome: dados.nome_completo.trim(),
+            sobrenome: null,
+            periodo: null,
+          });
+        } catch {
+          // tolera duplicação/falha silenciosa para não travar a criação
+        }
       }
 
       registrarAcao({

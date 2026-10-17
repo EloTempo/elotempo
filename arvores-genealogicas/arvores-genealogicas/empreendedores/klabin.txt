@@ -1,105 +1,222 @@
 # FAMILIA: Klabin–Lafer (São Paulo) — imigração lituana
 # CONFIABILIDADE geral: documentada
-# FONTES: Wikipedia; USP-Pioneiros; Klabin (Centro de Memória); CPDOC-FGV;
-#         Arquivo Histórico Judaico Brasileiro
+# FONTES: USP "Pioneiros & Empreendedores" (pioneiros.fea.usp.br); Museu Lasar
+#   Segall (mls.gov.br, federal); Arquivo Histórico Judaico Brasileiro; Klabin
+#   S.A. (Centro de Memória); CPDOC-FGV; Wikipedia; Instituto Ema Klabin
+# BIBLIOGRAFIA: Roney Cytrynowicz, "Maurício Klabin" (Ed. Sêfer) — primeira
+#   biografia do patriarca
 # FORMATO: um bloco por pessoa (ver _MODELO-PESSOA.txt)
-# NOTA: família judaica de origem lituana (Pazelva/Želva). Klabin e Lafer são
-#       ramos entrelaçados por sangue e casamento (Miguel Lafer casou com a
-#       prima Nessel Klabin) — consanguinidade recorrente.
-# LGPD: descendentes vivos marcados "# LGPD: pessoa viva".
+# NOTA: família judaica lituana do shtetl de Pazelva (Želva). Klabin e Lafer são
+#   ramos entrelaçados por sangue e casamento.
+# LGPD: vivos marcados.
 # ---
 
-# --- GERAÇÃO 1 — o fundador ---
 == Maurício Freeman Klabin ==
 identidade: Imigrante lituano; fundou a Klabin Irmãos & Cia, origem da maior papeleira do Brasil.
 nome_publico: Maurício Freeman Klabin
 nome_registro: Moishe Elkana
-nascimento: 1860   # Pazelva/Želva (Lituânia), 1º de março
-falecimento: 1923  # Heidelberg (Alemanha), 21 de setembro
-profissoes: empresário (papel, tipografia, importação)
-nacionalidades: Lituânia; Brasil
+mudanca_nome: adotou "Klabin"; segundo a tradição familiar, o sobrenome original era LAFER, e um antepassado inventou "Klabin" (nome de uma floresta local) para livrar o filho do serviço militar czarista
+nascimento: 1860   # 1º de março  [divergente: a biografia de Cytrynowicz indica 1861]
+nascimento_local: aldeia de Pazelva (Posselva), localidade de Želva, Lituânia — então Império Russo
+falecimento: 1923   # 21 de setembro, aos 63 anos, de câncer no estômago
+falecimento_local: Heidelberg, Alemanha, onde fora tratar da saúde
+escolaridade: formação judaica tradicional do shtetl
+idiomas: ídiche; russo; português; alemão
+profissoes: comerciante; tipógrafo (Empreza Graphica Klabin, 1890); importador de artigos de escritório; industrial de papel e celulose; investidor imobiliário
+nacionalidades: Lituânia (Império Russo); Brasil
+obras: legado institucional — fundou a M.F. Klabin & Irmão (1890) e a Klabin Irmãos & Cia (1º/2/1899); criador e patrocinador das primeiras instituições da comunidade judaica de São Paulo
+eventos_historicos: por decreto do czar Alexandre III, judeus não podiam possuir terras — denunciado após comprar um terreno, fugiu de carroça e a pé pela Polônia e Alemanha até a Inglaterra, chegando ao Brasil em 1889; suas atividades imobiliárias transformaram a urbanização de São Paulo; o bairro paulistano do Jardim Klabin leva o nome da família
 foto: fotos/mauricio-klabin.webp
-relacoes: casado com Bertha Osband; irmão de Nessel, Salomão e Hessel; fundou a KIC (1899)   # -> Parentesco
-fonte: Wikipedia; Klabin
+PAIS: (Leon Klabin e Sara, segundo fontes familiares — a verificar)
+FILHOS: com Bertha Obstand — quatro filhos, entre eles Jenny (1899), Mina e Luisa
+relacoes: irmãos Salomão e Hessel; primo/cunhado Miguel Lafer; tio de [[wolff-klabin]]   # -> Parentesco
+fonte: Wikipedia; Klabin; Editora Sêfer (Cytrynowicz)
 confiabilidade: documentada
 
-== Nessel Klabin ==
-nome_publico: Nessel Klabin
-nascimento: 1880
-falecimento: 1955
-nacionalidades: Lituânia; Brasil
-relacoes: irmã de Maurício; casou com o primo Miguel Lafer; mãe de Horácio Lafer   # -> Parentesco [CONSANGUINIDADE]
-fonte: klabin-lafer
+== Bertha Obstand ==
+nome_publico: Bertha Obstand Klabin
+nacionalidades: Lituânia/Império Russo; Brasil
+idiomas: ídiche; português
+FILHOS: quatro, entre eles Jenny Klabin Segall, Mina Klabin Warchavchik e Luisa
+relacoes: esposa de Maurício Klabin   # -> Parentesco
+fonte: Wikipedia (Jenny Klabin Segall)
 confiabilidade: documentada
 
 == Miguel Lafer ==
 nome_publico: Miguel Lafer
 nascimento: 1876
-falecimento: 1926   # São Paulo, 12 de fevereiro
-profissoes: empresário (cofundador da KIC)
+falecimento: 1926   # 12 de fevereiro
+falecimento_local: São Paulo, SP, Brasil
+profissoes: empresário; cofundador da Klabin Irmãos & Cia (1899)
 nacionalidades: Lituânia; Brasil
-relacoes: primo de Maurício; casado com a prima Nessel Klabin; pai de Horácio Lafer   # -> Parentesco [CONSANGUINIDADE]
-fonte: Wikipedia
+idiomas: ídiche; russo; português
+PAIS: Zelman Lafer (a confirmar)
+FILHOS: com Nessel Klabin — entre eles Horácio Lafer (1900)
+relacoes: primo e cunhado de Maurício; casado com a prima Nessel Klabin [CONSANGUINIDADE]; criou o sobrinho Wolff   # -> Parentesco
+fonte: Wikipedia; USP-Pioneiros
 confiabilidade: documentada
 
-# --- GERAÇÃO 2 — os gestores ---
+== Nessel Klabin ==
+nome_publico: Nessel Klabin Lafer
+nascimento: 1880
+falecimento: 1955
+nacionalidades: Lituânia; Brasil
+FILHOS: Horácio Lafer, entre outros
+relacoes: irmã de Maurício; casada com o primo Miguel Lafer [CONSANGUINIDADE]   # -> Parentesco
+fonte: Arquivo Histórico Judaico Brasileiro
+confiabilidade: documentada
+
 == Wolff Klabin ==
-identidade: Dirigiu o grupo Klabin e, com Horácio Lafer, criou nos anos 1940 a primeira grande indústria de celulose do Brasil (Monte Alegre, PR).
+identidade: O empreendedor pragmático da 2ª geração; com Horácio Lafer, criou a primeira grande indústria de celulose do Brasil.
 nome_publico: Wolff Klabin
 nome_registro: Wolff Kadischevitz
 mudanca_nome: adotou "Klabin" nos anos 1930
 nascimento: 1880
+nascimento_local: Lituânia
 falecimento: 1957
-profissoes: empresário
+escolaridade: pouca formação escolar — "self made man", voltado à vida prática
+idiomas: ídiche; russo; português
+profissoes: empresário; industrial de papel e celulose
 nacionalidades: Lituânia; Brasil
-relacoes: sobrinho de Maurício (filho de Fanny Lafer); criado pelo tio Miguel Lafer   # -> Parentesco
-fonte: Wikipedia; USP-Pioneiros
+obras: legado industrial — comprou a Fábrica de Papel Santo Antônio (RJ); participou da criação da Nitro Química (com José Ermírio de Moraes e Numa de Oliveira); conduziu a implantação da Fazenda Monte Alegre
+eventos_historicos: em 1934, com financiamento do governo Vargas, o grupo adquiriu a Fazenda Monte Alegre (Tibagi, hoje Telêmaco Borba, PR) e ali construiu o maior complexo papeleiro da América Latina; suas conexões com políticos gaúchos e cariocas foram decisivas para a expansão da empresa
+PAIS: filho de Fanny Lafer (irmã da mãe de Miguel Lafer)
+relacoes: sobrinho de Maurício; criado na mesma casa que o primo Horácio Lafer   # -> Parentesco
+fonte: USP-Pioneiros; Wikipedia
 confiabilidade: documentada
 
 == Horácio Lafer ==
-identidade: Empresário e estadista; ministro da Fazenda (1951) e das Relações Exteriores (1959).
+identidade: Empresário, intelectual e estadista; ministro da Fazenda e das Relações Exteriores.
 nome_publico: Horácio Lafer
-nascimento: 1900   # São Paulo, 3 de maio
+nascimento: 1900   # 3 de maio
+nascimento_local: São Paulo, SP, Brasil
 falecimento: 1965
-escolaridade: Faculdade de Direito do Largo de São Francisco
-profissoes: empresário; político (ministro); cofundador da FIESP
-nacionalidades: Brasil
+escolaridade: Faculdade de Direito do Largo de São Francisco (USP); estudos de filosofia
 idiomas: português; inglês; francês; alemão; ídiche; italiano; espanhol
+profissoes: advogado; empresário; economista; político (deputado federal; ministro da Fazenda, 1951–53; ministro das Relações Exteriores, 1959–61); cofundador da FIESP
+nacionalidades: Brasil
+obras: autor de obras sobre economia e política brasileira, entre elas "Tendências e Problemas da Economia Brasileira" e discursos e conferências publicadas; formulador do Plano Lafer (1951), primeiro plano de desenvolvimento econômico brasileiro
+eventos_historicos: participou da Revolução Constitucionalista de 1932; ministro da Fazenda no 2º governo Vargas, quando formulou o Plano Lafer e participou da criação do BNDE (1952); chanceler no governo Juscelino Kubitschek, quando formulou a Operação Pan-Americana; com Wolff Klabin, criou nos anos 1940 a primeira grande indústria de celulose do país
 foto: fotos/horacio-lafer.webp
-relacoes: filho de Miguel Lafer e Nessel Klabin; casado com Maria Luísa "Mimi" Salles; pai de Sylvia e Graziela   # -> Parentesco
-fonte: Wikipedia; klabin-lafer
+PAIS: Miguel Lafer e Nessel Klabin
+FILHOS: com Maria Luísa "Mimi" Salles — Sylvia e Graziela
+relacoes: primo e sócio de Wolff Klabin, com quem foi criado   # -> Parentesco
+fonte: USP-Pioneiros; CPDOC-FGV; Wikipedia
 confiabilidade: documentada
 
-# --- DESCENDENTES VIVOS (seleção) ---
-== Israel Klabin ==
-identidade: Engenheiro, ambientalista e ex-prefeito do Rio de Janeiro (1979–1980).
-nome_publico: Israel Klabin
-nascimento: 1926   # Rio de Janeiro, 20 de setembro
-profissoes: engenheiro civil; matemático; ambientalista; político
+== Jenny Klabin Segall ==
+identidade: Escritora, tradutora e pianista; verteu o "Fausto" de Goethe para o português e idealizou o Museu Lasar Segall.
+nome_publico: Jenny Klabin Segall
+nome_registro: Eugênia Klabin
+mudanca_nome: Segall, por casamento (1925)
+nascimento: 1899   # 15 de fevereiro
+nascimento_local: São Paulo, SP, Brasil
+falecimento: 1967   # 5 de agosto
+falecimento_local: São Paulo, SP, Brasil
+escolaridade: formação europeia — a família viveu em Berlim (1904) e Genebra (até 1909)
+idiomas: português; alemão; francês; ídiche
+profissoes: tradutora; escritora; pianista; aquarelista; arquiteta amadora; museóloga
 nacionalidades: Brasil
+obras: TRADUÇÕES — do alemão, "Fausto" de Goethe, partes I e II, trabalho de três décadas, até hoje uma das traduções canônicas em português; do francês, "Escola de Maridos", "O Marido da Fidalga", "As Sabichonas", "Escola de Mulheres", "O Tartufo" e "O Misantropo", de Molière; "Ester", "Atalia", "Andrômaca", "Britânico" e "Fedra", de Racine; "Polieucto", "O Cid" e "Horácio", de Corneille. Também ilustrou um livro de histórias infantis para os netos e projetou imóveis modernistas em São Paulo
+eventos_historicos: participou ativamente da SPAM (Sociedade Pró-Arte Moderna), desdobramento do Modernismo de 22; atuou nos movimentos antinazistas em São Paulo durante a 2ª Guerra; após a morte de Lasar Segall (1957), organizou o acervo de cerca de 8.000 obras do marido e preparou a criação do MUSEU LASAR SEGALL, inaugurado em 21/9/1967, pouco depois de sua morte; suas traduções foram elogiadas por Sérgio Buarque de Holanda, Paulo Rónai, Guilherme de Almeida e Tarsila do Amaral
+PAIS: Maurício Freeman Klabin e Bertha Obstand
+FILHOS: com Lasar Segall — Maurício (1926, Berlim) e Oscar (1930, Paris)
+relacoes: segunda dos quatro filhos de Maurício; casada (1925) com o pintor Lasar Segall, que conhecera ainda em Berlim   # -> Parentesco
+fonte: Museu Lasar Segall; Wikipedia; IBRAM/Ministério da Cultura; Editora 34
+confiabilidade: documentada
+
+== Mina Klabin Warchavchik ==
+identidade: Filha de Maurício; ligada à introdução da arquitetura modernista no Brasil.
+nome_publico: Mina Klabin Warchavchik
+profissoes: cantora; paisagista
+nacionalidades: Brasil
+obras: assinou o paisagismo (com cactos e plantas tropicais) da Casa Modernista da Rua Santa Cruz, em São Paulo
+eventos_historicos: casada com o arquiteto ucraniano Gregori Warchavchik, autor da PRIMEIRA RESIDÊNCIA MODERNISTA DO BRASIL (1927-28)
+PAIS: Maurício Freeman Klabin e Bertha Obstand
+relacoes: irmã de Jenny; cunhada de Lasar Segall   # -> Parentesco
+fonte: Russia Beyond; Museu Lasar Segall
+confiabilidade: documentada
+
+== Luisa Klabin ==
+nome_publico: Luisa Klabin
+profissoes: violinista
+nacionalidades: Brasil
+PAIS: Maurício Freeman Klabin e Bertha Obstand
+relacoes: irmã de Jenny e Mina   # -> Parentesco
+fonte: Russia Beyond
+confiabilidade: documentada
+
+== Israel Klabin ==
+identidade: Engenheiro, ambientalista e ex-prefeito do Rio de Janeiro.
+nome_publico: Israel Klabin
+nascimento: 1926   # 20 de setembro
+nascimento_local: Rio de Janeiro, RJ, Brasil
+escolaridade: engenharia civil; matemática
+idiomas: português; inglês; francês
+profissoes: engenheiro civil; matemático; empresário; ambientalista; político (prefeito do Rio de Janeiro, 1979–80)
+nacionalidades: Brasil
+obras: autor de "A Urgência do Presente: biografia da crise ambiental" (2016); presidente da Fundação Brasileira para o Desenvolvimento Sustentável (FBDS)
+eventos_historicos: prefeito do Rio no período de reabertura política; participação na articulação da Rio-92 (Conferência das Nações Unidas sobre Meio Ambiente e Desenvolvimento)
+PAIS: (ramo Klabin da 3ª geração — filiação exata a verificar)
 relacoes: da 3ª geração Klabin-Lafer   # -> Parentesco
-fonte: Wikipedia; CPDOC-FGV   # LGPD: pessoa viva
+fonte: CPDOC-FGV; Wikipedia   # LGPD: pessoa viva
+confiabilidade: documentada
+
+== Ema Gordon Klabin ==
+identidade: Colecionadora de arte; sua casa-museu é hoje aberta ao público em São Paulo.
+nome_publico: Ema Gordon Klabin
+nascimento: 1907
+falecimento: 1994
+profissoes: colecionadora de arte; filantropa
+nacionalidades: Brasil
+obras: legado institucional — reuniu acervo de cerca de 1.500 obras (de Rembrandt e Renoir a Portinari e Di Cavalcanti); criou a Fundação Cultural Ema Gordon Klabin, que mantém sua casa-museu no Jardim Europa, São Paulo
+PAIS: Hessel Klabin (irmão de Maurício) e Fanny Gordon
+relacoes: sobrinha de Maurício Klabin; irmã de Eva Klabin, também colecionadora (casa-museu no Rio)   # -> Parentesco
+fonte: Instituto Ema Klabin
 confiabilidade: documentada
 
 == Celso Lafer ==
-identidade: Jurista e diplomata; ministro das Relações Exteriores (1992 e 2001–02); membro da ABL.
+identidade: Jurista, filósofo e diplomata; duas vezes ministro das Relações Exteriores.
 nome_publico: Celso Lafer
 nascimento: 1941
-profissoes: jurista; professor (USP); político (ministro)
+nascimento_local: São Paulo, SP, Brasil
+escolaridade: Faculdade de Direito da USP; doutorado em ciência política pela Cornell University
+idiomas: português; inglês; francês; italiano
+profissoes: jurista; professor titular da USP; diplomata; político (ministro das Relações Exteriores, 1992 e 2001–02; ministro do Desenvolvimento, 1999)
 nacionalidades: Brasil
+obras: autor de vasta obra jurídica e filosófica, entre ela "A Reconstrução dos Direitos Humanos: um diálogo com o pensamento de Hannah Arendt" (1988), "Hannah Arendt: pensamento, persuasão e poder" e "O Sistema Político Brasileiro"; membro da Academia Brasileira de Letras (cadeira 14) e presidente da FAPESP
+eventos_historicos: chanceler no governo Collor durante a Rio-92; chanceler no governo FHC; representante do Brasil na OMC
+PAIS: (ramo Lafer — filiação exata a verificar)
 relacoes: da família Lafer-Klabin   # -> Parentesco
-fonte: Wikipedia   # LGPD: pessoa viva
+fonte: Wikipedia; ABL   # LGPD: pessoa viva
 confiabilidade: documentada
 
 == Horácio Lafer Piva ==
 nome_publico: Horácio Lafer Piva
 nascimento: 1957
-profissoes: empresário (ex-presidente da FIESP)
+profissoes: empresário; ex-presidente da FIESP (1998–2004); conselheiro da Klabin
 nacionalidades: Brasil
-relacoes: neto de Horácio Lafer (filho de Sylvia Lafer e Pedro Franco Piva)   # -> Parentesco
+idiomas: português; inglês
+PAIS: Sylvia Lafer e Pedro Franco Piva
+relacoes: neto de Horácio Lafer   # -> Parentesco
 fonte: klabin-lafer   # LGPD: pessoa viva
 confiabilidade: documentada
 
-# Ascendência (expandir): Leon Klabin e Sara (pais de Maurício); Zelman Lafer
-# (tio de Maurício, pai de Miguel). Demais gestores/irmãos: Salomão, Hessel e
-# Luiz Klabin; Samuel Klabin.
+# ============================================================
+# NOTAS DE PESQUISA
+# ============================================================
+# 1. A FAMÍLIA É UM SÓ GRAFO: Klabin e Lafer se entrelaçam por sangue E
+#    casamento. Miguel Lafer casou com a prima Nessel Klabin; Wolff (sobrinho de
+#    Maurício) foi criado por Miguel Lafer junto com o primo Horácio.
+# 2. ORIGEM DO SOBRENOME: segundo a tradição familiar relatada por descendentes,
+#    o nome original era LAFER; "Klabin" foi inventado (do nome de uma floresta)
+#    para evitar o recrutamento czarista. Tratar como tradição familiar.
+# 3. A GERAÇÃO ARTÍSTICA: as filhas de Maurício foram artistas — Jenny
+#    (tradutora do Fausto), Mina (paisagista, casada com Warchavchik) e Luisa
+#    (violinista). Após a morte do pai, foram afastadas da gestão do grupo e
+#    ficaram apenas com terras. É um contraste marcante com os primos homens,
+#    que tocaram a indústria.
+# 4. DATA DE NASCIMENTO DE MAURÍCIO: 1860 (Wikipedia, com data completa) x 1861
+#    (título da biografia de Cytrynowicz).  [divergente]
+# 5. ORIGEM JUDAICA LITUANA: registrada como contexto histórico coletivo e
+#    documentado da família, sem etiquetar a prática religiosa individual.

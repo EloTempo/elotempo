@@ -13,6 +13,7 @@ import type {
   Nickname,
   Nationality,
   Country,
+  ObraCultural,
 } from '../../types';
 
 // Religião
@@ -101,3 +102,31 @@ export const listarApelidos = (pessoaId: string): Promise<Nickname[]> =>
 
 /** Países, com os de imigração no topo (seção 2.4). */
 export const listarPaises = (): Promise<Country[]> => chamar<Country[]>('listar_paises');
+
+// Obras Culturais
+export const adicionarObraCultural = (
+  pessoaId: string,
+  categoria: string,
+  titulo: string,
+  subtipo?: string | null,
+  ano?: number | null,
+  anoFim?: number | null,
+  detalhes?: string | null,
+  localId?: string | null,
+): Promise<string> =>
+  chamar<string>('adicionar_obra_cultural', {
+    pessoaId,
+    categoria,
+    titulo,
+    subtipo: subtipo ?? null,
+    ano: ano ?? null,
+    anoFim: anoFim ?? null,
+    detalhes: detalhes ?? null,
+    localId: localId ?? null,
+  });
+
+export const removerObraCultural = (id: string): Promise<void> =>
+  chamar<void>('remover_obra_cultural', { id });
+
+export const listarObrasCulturais = (pessoaId: string): Promise<ObraCultural[]> =>
+  chamar<ObraCultural[]>('listar_obras_culturais', { pessoaId });

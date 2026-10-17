@@ -6,13 +6,15 @@ import { Input } from '../../../components/ui/Input';
 import { Select } from '../../../components/ui/Select';
 import { CampoDeData, previaDoTexto } from '../../../components/ui/CampoDeData';
 import { SeletorDeLocal } from './SeletorDeLocal';
-import { useSalvarPessoa, useEventos, nacionalidades, usePaises } from '../hooks/useFicha';
+import { useSalvarPessoa, useEventos, nacionalidades, usePaises, useNomes } from '../hooks/useFicha';
 import {
   ErroDoAcervo,
   criarEvento,
   atualizarEvento,
   obterLocal,
   adicionarNacionalidade,
+  adicionarNome,
+  removerNome,
 } from '../../../lib/api';
 import { DATA_VAZIA, type DataEscolhida, type Person, type Place, type Sex, type TipoTempo } from '../../../types';
 
@@ -33,11 +35,14 @@ export function ModalEditarIdentidade({ pessoa, aberto, aoFechar }: ModalEditarI
   const [rascunho, setRascunho] = useState<Person>({ ...pessoa });
   const salvar = useSalvarPessoa(pessoa.id);
   const { data: eventos } = useEventos(pessoa.id);
+  const { data: listaNomes } = useNomes(pessoa.id);
   const listaNacs = nacionalidades.useLista(pessoa.id);
   const { data: paises } = usePaises();
 
   const eventoNasc = eventos?.find((e) => e.tipo_evento === 'nascimento');
+  const nomeRegistroExistente = listaNomes?.find((n) => n.tipo === 'nascimento');
 
+  const [nomeCompletoRegistro, setNomeCompletoRegistro] = useState('');
   const [dataNasc, setDataNasc] = useState<DataEscolhida>({ ...DATA_VAZIA });
   const [localNasc, setLocalNasc] = useState<Place | null>(null);
   const [rotuloHistoricoNasc, setRotuloHistoricoNasc] = useState('');
@@ -49,6 +54,16 @@ export function ModalEditarIdentidade({ pessoa, aberto, aoFechar }: ModalEditarI
     if (aberto) {
       setRascunho({ ...pessoa });
       setErroExtra(null);
+
+      // Carrega nome completo de certidão/nascimento
+      const nomeReg = listaNomes?.find((n) => n.tipo === 'nascimento');
+      if (nomeReg) {
+        setNomeCompletoRegistro(
+          [nomeReg.prefixo, nomeReg.nome, nomeReg.sufixo, nomeReg.sobrenome].filter(Boolean).join(' ')
+        );
+      } else {
+        setNomeCompletoRegistro('');
+      }
 
       // Carrega data de nascimento inicial
       if (eventoNasc) {
@@ -92,7 +107,7 @@ export function ModalEditarIdentidade({ pessoa, aberto, aoFechar }: ModalEditarI
         setNacionalidadeId('');
       }
     }
-  }, [aberto, pessoa, eventoNasc, listaNacs.data]);
+  }, [aberto, pessoa, eventoNasc, listaNacs.data, listaNomes]);
 
   if (!aberto) return null;
 
@@ -137,8 +152,30 @@ export function ModalEditarIdentidade({ pessoa, aberto, aoFechar }: ModalEditarI
         }
       }
 
+      // 4. Salva ou atualiza o nome completo de registro civil / certidão
+      const nomeCompletoLimpo = nomeCompletoRegistro.trim();
+      const nomeCompletoAnterior = nomeRegistroExistente
+        ? [nomeRegistroExistente.prefixo, nomeRegistroExistente.nome, nomeRegistroExistente.sufixo, nomeRegistroExistente.sobrenome].filter(Boolean).join(' ')
+        : '';
+
+      if (nomeCompletoLimpo !== nomeCompletoAnterior) {
+        if (nomeRegistroExistente) {
+          await removerNome(nomeRegistroExistente.id);
+        }
+        if (nomeCompletoLimpo) {
+          await adicionarNome({
+            pessoa_id: pessoa.id,
+            tipo: 'nascimento',
+            nome: nomeCompletoLimpo,
+            sobrenome: null,
+            periodo: null,
+          });
+        }
+      }
+
       // Invalida caches pertinentes
       queryClient.invalidateQueries({ queryKey: ['pessoa', pessoa.id] });
+      queryClient.invalidateQueries({ queryKey: ['nomes', pessoa.id] });
       queryClient.invalidateQueries({ queryKey: ['eventos', pessoa.id] });
       queryClient.invalidateQueries({ queryKey: ['nacionalidades', pessoa.id] });
       queryClient.invalidateQueries({ queryKey: ['arvore'] });
@@ -163,7 +200,7 @@ export function ModalEditarIdentidade({ pessoa, aberto, aoFechar }: ModalEditarI
           <div className="flex items-center gap-2">
             <User className="w-4 h-4 text-acento" />
             <h3 className="font-tit font-bold text-base text-tinta m-0">
-              Editar Identidade & Biografia
+              Editar Identidade & Nomes
             </h3>
           </div>
           <button
@@ -183,21 +220,50 @@ export function ModalEditarIdentidade({ pessoa, aberto, aoFechar }: ModalEditarI
             </p>
           )}
 
-          {/* Nome e Sobrenome */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <Input
-              label="Nome"
-              value={rascunho.nome}
-              onChange={(e) => setRascunho({ ...rascunho, nome: e.target.value })}
-              required
-              placeholder="Ex: Maria, Joaquim"
-            />
-            <Input
-              label="Sobrenome"
-              value={rascunho.sobrenome ?? ''}
-              onChange={(e) => setRascunho({ ...rascunho, sobrenome: e.target.value })}
-              placeholder="Ex: Silva, Ferreira"
-            />
+          {/* Nomes: Nome Público e Nome Completo */}
+          <div className="p-3.5 bg-sup/40 rounded-raio-s border border-borda flex flex-col gap-3">
+            <span className="text-xs font-semibold text-tinta flex items-center gap-1.5">
+              <User className="w-3.5 h-3.5 text-acento" />
+              Identificação e Nomes
+            </span>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <Input
+                  label="Nome público *"
+                  value={rascunho.nome}
+                  onChange={(e) => setRascunho({ ...rascunho, nome: e.target.value })}
+                  required
+                  placeholder="Ex: Santos Dumont, D. Pedro II, Maria"
+                />
+                <span className="text-[11px] text-tinta3 mt-1 block">
+                  Como a pessoa aparece no card e na árvore
+                </span>
+              </div>
+              <div>
+                <Input
+                  label="Sobrenome"
+                  value={rascunho.sobrenome ?? ''}
+                  onChange={(e) => setRascunho({ ...rascunho, sobrenome: e.target.value })}
+                  placeholder="Ex: Silva, Ferreira (opcional)"
+                />
+                <span className="text-[11px] text-tinta3 mt-1 block">
+                  Sobrenome da família (opcional)
+                </span>
+              </div>
+            </div>
+
+            <div>
+              <Input
+                label="Nome completo (certidão / registro civil)"
+                value={nomeCompletoRegistro}
+                onChange={(e) => setNomeCompletoRegistro(e.target.value)}
+                placeholder="Ex: Alberto Santos-Dumont, Pedro de Alcântara João Carlos..."
+              />
+              <span className="text-[11px] text-tinta3 mt-1 block">
+                Nome oficial de certidão civil ou batismo, se diferente do nome público
+              </span>
+            </div>
           </div>
 
           {/* Sexo e Visibilidade */}

@@ -1,95 +1,212 @@
-# FAMILIA: Hitler (Alemanha/Áustria)
+# FAMILIA: Hitler (Áustria / Alemanha)
 # CONFIABILIDADE geral: documentada
-# FONTES: Wikipedia; biografias históricas
+# FONTES: Britannica; History.com; United States Holocaust Memorial Museum;
+#   Wikipedia; registros paroquiais de Braunau am Inn e Döllersheim
 # FORMATO: um bloco por pessoa (ver _MODELO-PESSOA.txt)
-# NOTA: Adolf Hitler não teve filhos. Os pais eram parentes (primos em grau
-#       afastado) e precisaram de dispensa papal para casar. A linhagem se
-#       encerra nos sobrinhos-netos vivos, nenhum com filhos.
-# LGPD: descendentes vivos tratados coletivamente, sem individualizar (privados).
+# NOTA: registro histórico factual, sem juízo de valor. Adolf Hitler não teve
+#   filhos; a linhagem se encerra nos sobrinhos-netos vivos, nenhum com filhos.
+# LGPD: descendentes vivos são pessoas privadas que evitam publicidade e NÃO são
+#   individualizados aqui.
 # ---
 
+== Johann Georg Hiedler ==
+nome_publico: Johann Georg Hiedler
+nascimento: 1792
+falecimento: 1857
+profissoes: moleiro itinerante
+nacionalidades: Áustria
+eventos_historicos: reconheceu tardiamente a paternidade de Alois, permitindo a mudança do sobrenome de "Schicklgruber" para "Hitler" em 1876
+FILHOS: Alois (reconhecido em 1876, dezenove anos após sua morte, por declaração de testemunhas)
+relacoes: avô (legal) de Adolf Hitler   # -> Parentesco  [paternidade biológica disputada]
+fonte: Wikipedia; registros de Döllersheim
+confiabilidade: documentada
+
+== Maria Anna Schicklgruber ==
+nome_publico: Maria Anna Schicklgruber
+nascimento: 1795
+falecimento: 1847
+profissoes: camponesa
+nacionalidades: Áustria
+FILHOS: Alois (1837), nascido fora do casamento
+relacoes: avó paterna de Adolf Hitler   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
 == Alois Hitler ==
+identidade: Funcionário aduaneiro austríaco; pai de Adolf.
 nome_publico: Alois Hitler
 nome_registro: Alois Schicklgruber
-mudanca_nome: adotou "Hitler" (do padrasto) aos ~39 anos
-nascimento: 1837
-falecimento: 1903
-profissoes: funcionário aduaneiro
+mudanca_nome: passou a "Hitler" em 1876, aos 39 anos, com o reconhecimento póstumo da paternidade
+nascimento: 1837   # 7 de junho
+nascimento_local: Strones, Baixa Áustria, Império Austríaco
+falecimento: 1903   # 3 de janeiro
+falecimento_local: Leonding, perto de Linz, Áustria
+escolaridade: aprendiz de sapateiro; formação no serviço aduaneiro
+idiomas: alemão
+profissoes: sapateiro (aprendiz); funcionário da alfândega imperial (carreira de cerca de 40 anos); apicultor na aposentadoria
 nacionalidades: Áustria-Hungria
-relacoes: pai de Adolf; casou com a parenta Klara Pölzl (dispensa papal)   # -> Parentesco [CONSANGUINIDADE]
-fonte: Wikipedia
+religioes: católico
+PAIS: Maria Anna Schicklgruber e (legalmente) Johann Georg Hiedler
+FILHOS: com Franziska Matzelsberger — Alois Jr. e Angela; com Klara Pölzl — seis, dos quais só Adolf e Paula chegaram à vida adulta
+relacoes: casou-se três vezes; a terceira esposa, Klara Pölzl, era sua parenta e o casamento exigiu DISPENSA PAPAL [CONSANGUINIDADE]   # -> Parentesco
+fonte: Britannica; Wikipedia
 confiabilidade: documentada
 
 == Klara Pölzl ==
 nome_publico: Klara Hitler
 nome_registro: Klara Pölzl
-nascimento: 1860
-falecimento: 1907
+nascimento: 1860   # 12 de agosto
+nascimento_local: Spital, Baixa Áustria
+falecimento: 1907   # 21 de dezembro, de câncer de mama, aos 47 anos
+falecimento_local: Linz, Áustria
+escolaridade: escolaridade básica
+idiomas: alemão
+profissoes: empregada doméstica (trabalhou na casa de Alois antes do casamento); dona de casa
 nacionalidades: Áustria-Hungria
-relacoes: mãe de Adolf; prima em 1º grau afastado do marido Alois   # -> Parentesco [CONSANGUINIDADE]
-fonte: Wikipedia
+religioes: católica
+PAIS: Johann Baptist Pölzl e Johanna Hiedler
+FILHOS: seis com Alois — Gustav, Ida, Otto (mortos na infância), Adolf (1889), Edmund (morto aos 6) e Paula (1896)
+relacoes: terceira esposa de Alois, de quem era parenta (prima em grau afastado) — casamento com dispensa papal [CONSANGUINIDADE]   # -> Parentesco
+fonte: Britannica; Wikipedia
 confiabilidade: documentada
 
 == Adolf Hitler ==
-identidade: Ditador da Alemanha nazista (1933–1945); responsável pela 2ª Guerra e pelo Holocausto.
+identidade: Ditador da Alemanha nazista (1933–1945); responsável pela Segunda Guerra Mundial na Europa e pelo Holocausto.
 nome_publico: Adolf Hitler
-nascimento: 1889
-falecimento: 1945
-profissoes: político (ditador); militar
-nacionalidades: Áustria; Alemanha
-relacoes: filho de Alois e Klara; sem filhos   # -> Parentesco
-fonte: Wikipedia
+nome_registro: Adolfus Hitler (forma latinizada no registro de batismo, sem nome do meio)
+apelidos: Führer
+nascimento: 1889   # 20 de abril
+nascimento_local: Braunau am Inn, Alta Áustria, Áustria-Hungria — cidade fronteiriça com o Império Alemão
+falecimento: 1945   # 30 de abril, suicídio, aos 56 anos
+falecimento_local: Führerbunker, Berlim, Alemanha — o corpo foi queimado
+escolaridade: escola primária (bom desempenho); Realschule em Linz (1900–1905), SEM concluir o Matura; REPROVADO duas vezes no exame de admissão da Academia de Belas Artes de Viena (1907 e 1908), por "inaptidão para a pintura"
+idiomas: alemão (com sotaque austríaco); conhecimento rudimentar de francês
+profissoes: trabalhador ocasional em Viena; PINTOR — vendia aquarelas de paisagens urbanas de Viena (1908–1913); soldado do Exército Bávaro na 1ª Guerra (posto de Gefreiter, cabo); agitador e orador político; chanceler da Alemanha (1933); Führer und Reichskanzler (1934–45); comandante supremo das Forças Armadas
+nacionalidades: Áustria por nascimento; APÁTRIDA de 1925 a 1932; cidadão alemão a partir de 1932
+religioes: batizado católico; rompeu com a prática religiosa na vida adulta
+obras: LIVRO — "Mein Kampf" (1925–26), escrito durante a prisão após o Putsch da Cervejaria, obra autobiográfica e programática do nazismo; "Zweites Buch" (1928, não publicado em vida). PINTURA — várias centenas de aquarelas e desenhos, sobretudo arquitetônicos, produzidos entre 1908 e 1914, de valor artístico considerado medíocre pela crítica
+eventos_historicos: serviu na 1ª Guerra Mundial e recebeu a Cruz de Ferro de 2ª Classe (1914) e de 1ª Classe (1918), além do Distintivo de Ferido; Putsch da Cervejaria em Munique (1923) e prisão; nomeado chanceler em 30/1/1933; Incêndio do Reichstag e Lei de Concessão de Plenos Poderes (1933); Noite das Facas Longas (1934); Leis de Nuremberg (1935); Anexação da Áustria e Acordo de Munique (1938); Pacto Molotov-Ribbentrop e INVASÃO DA POLÔNIA em 1/9/1939, início da 2ª Guerra Mundial; Operação Barbarossa (1941); HOLOCAUSTO — genocídio de cerca de seis milhões de judeus e milhões de outras vítimas; sobreviveu ao atentado de 20 de julho de 1944; casou-se com Eva Braun em 29/4/1945, um dia antes do suicídio de ambos
+PAIS: Alois Hitler e Klara Pölzl
+FILHOS: NENHUM
+relacoes: quarto dos seis filhos de Alois e Klara; meio-irmãos Alois Jr. e Angela; irmã Paula   # -> Parentesco
+fonte: Britannica; History.com; USHMM; Wikipedia
+confiabilidade: documentada
+
+== Eva Braun ==
+nome_publico: Eva Braun
+nascimento: 1912   # 6 de fevereiro
+nascimento_local: Munique, Alemanha
+falecimento: 1945   # 30 de abril, suicídio
+falecimento_local: Führerbunker, Berlim
+escolaridade: escola comercial de convento (Simbach am Inn)
+idiomas: alemão
+profissoes: assistente e modelo do fotógrafo Heinrich Hoffmann; fotógrafa e cinegrafista amadora
+nacionalidades: Alemanha
+obras: extenso acervo de FOTOGRAFIAS e FILMES CASEIROS EM CORES do círculo de Hitler no Berghof — hoje fonte histórica relevante, preservada nos Arquivos Nacionais dos EUA
+FILHOS: nenhum
+relacoes: companheira de Adolf Hitler por cerca de 14 anos; casaram-se em 29/4/1945   # -> Parentesco
+fonte: Wikipedia; National Archives (EUA)
 confiabilidade: documentada
 
 == Paula Hitler ==
 nome_publico: Paula Hitler
-nascimento: 1896
-falecimento: 1960
+mudanca_nome: viveu sob o nome "Paula Wolff" após a guerra
+nascimento: 1896   # 21 de janeiro
+nascimento_local: Hafeld, Áustria
+falecimento: 1960   # 1º de junho
+falecimento_local: Berchtesgaden, Alemanha
+escolaridade: escolaridade básica
+idiomas: alemão
+profissoes: secretária; funcionária de escritório
 nacionalidades: Áustria
-relacoes: única irmã de Adolf a chegar à vida adulta; sem filhos   # -> Parentesco
-fonte: Wikipedia
-confiabilidade: documentada
-
-== Angela Hitler ==
-nome_publico: Angela Hitler
-nascimento: 1883
-falecimento: 1949
-nacionalidades: Áustria
-relacoes: meia-irmã de Adolf; mãe de Geli Raubal   # -> Parentesco
+FILHOS: nenhum
+relacoes: única irmã germana de Adolf a chegar à vida adulta; interrogada pelos Aliados em 1945   # -> Parentesco
 fonte: Wikipedia
 confiabilidade: documentada
 
 == Alois Hitler Jr. ==
 nome_publico: Alois Hitler Jr.
+nascimento: 1882
+nascimento_local: Viena, Áustria
+falecimento: 1956
+falecimento_local: Hamburgo, Alemanha
+profissoes: garçom; proprietário de restaurante em Berlim
 nacionalidades: Áustria; Alemanha
-relacoes: meio-irmão de Adolf; pai de William Patrick e de Heinz   # -> Parentesco
+PAIS: Alois Hitler e Franziska Matzelsberger
+FILHOS: William Patrick (1911, com Bridget Dowling) e Heinz (1920, morto em cativeiro soviético em 1942)
+relacoes: meio-irmão de Adolf   # -> Parentesco
+fonte: Wikipedia
+confiabilidade: documentada
+
+== Angela Hitler ==
+nome_publico: Angela Hitler Raubal
+nascimento: 1883
+nascimento_local: Viena, Áustria
+falecimento: 1949
+falecimento_local: Dresden, Alemanha
+profissoes: governanta — administrou a residência do irmão no Berghof (Obersalzberg) de 1928 a 1935
+nacionalidades: Áustria; Alemanha
+PAIS: Alois Hitler e Franziska Matzelsberger
+FILHOS: Leo, Angela Maria "Geli" (1908) e Elfriede
+relacoes: meia-irmã de Adolf; a única parente próxima com quem ele conviveu de perto   # -> Parentesco
 fonte: Wikipedia
 confiabilidade: documentada
 
 == Geli Raubal ==
 nome_publico: Geli Raubal
 nome_registro: Angela Maria Raubal
-nascimento: 1908
-falecimento: 1931   # morte em circunstâncias controversas no apartamento de Hitler
+nascimento: 1908   # 4 de junho
+nascimento_local: Linz, Áustria
+falecimento: 1931   # 18 de setembro, por arma de fogo, em circunstâncias nunca esclarecidas
+falecimento_local: apartamento de Hitler na Prinzregentenplatz, Munique
+escolaridade: estudou medicina, sem concluir; aulas de canto
+idiomas: alemão
+profissoes: estudante
 nacionalidades: Áustria
-relacoes: filha de Angela; meia-sobrinha de Adolf   # -> Parentesco
+PAIS: Angela Hitler e Leo Raubal
+relacoes: meia-sobrinha de Adolf Hitler; morava no apartamento dele em Munique   # -> Parentesco
 fonte: Wikipedia
 confiabilidade: documentada
 
 == William Patrick Hitler ==
-identidade: Sobrinho que rompeu publicamente com o tio e emigrou para os EUA.
+identidade: Sobrinho britânico que rompeu publicamente com o tio e serviu na Marinha dos EUA.
 nome_publico: William Patrick Stuart-Houston
 nome_registro: William Patrick Hitler
-mudanca_nome: adotou "Stuart-Houston" após a 2ª Guerra
-nascimento: 1911
-falecimento: 1987
-profissoes: técnico de laboratório; militar (Marinha dos EUA)
-nacionalidades: Reino Unido; EUA
-relacoes: filho de Alois Jr.; meio-sobrinho de Adolf   # -> Parentesco
+mudanca_nome: adotou "Stuart-Houston" após a 2ª Guerra Mundial
+nascimento: 1911   # 12 de março
+nascimento_local: Liverpool, Inglaterra
+falecimento: 1987   # 14 de julho
+falecimento_local: Patchogue, Long Island, Nova York, EUA
+escolaridade: escolaridade básica na Inglaterra
+idiomas: inglês; alemão
+profissoes: funcionário de banco; representante comercial; conferencista; enfermeiro da Marinha dos EUA (1944–47); técnico de laboratório de análises clínicas
+nacionalidades: Reino Unido; EUA (naturalizado)
+obras: artigo "Why I Hate My Uncle" (revista Look, 1939), em que rompeu publicamente com o tio; realizou turnê de palestras antinazistas nos EUA
+eventos_historicos: emigrou para os EUA em 1939; alistou-se na Marinha americana em 1944, após autorização pessoal do presidente Roosevelt, e foi ferido em serviço
+PAIS: Alois Hitler Jr. e Bridget Dowling
+FILHOS: quatro filhos, nascidos nos EUA
+relacoes: meio-sobrinho de Adolf Hitler   # -> Parentesco
 fonte: Wikipedia
 confiabilidade: documentada
 
-# LINHAGEM EM EXTINÇÃO: restam ~5 sobrinhos-netos vivos (EUA e Áustria),
-# descendentes de Alois Jr. e Angela. São pessoas privadas que evitam
-# publicidade; nenhum teve filhos. (LGPD: não individualizados aqui.)
-# Filho ilegítimo alegado (Jean-Marie Loret): não comprovado; historiadores duvidam.
+# ============================================================
+# NOTAS DE PESQUISA
+# ============================================================
+# 1. LINHAGEM EM EXTINÇÃO: Adolf Hitler não teve filhos. Restam poucos
+#    sobrinhos-netos vivos (EUA e Áustria), descendentes de Alois Jr. e Angela.
+#    São pessoas privadas que evitam publicidade e, segundo relatos de imprensa,
+#    nenhum teve filhos. NÃO individualizados aqui, por LGPD e por não serem
+#    figuras públicas.
+# 2. CONSANGUINIDADE: Alois e Klara eram parentes e precisaram de dispensa
+#    papal para casar. É a mesma estrutura vista nos Habsburgo e nos Prado.
+# 3. SOBRENOME: a família usou as grafias Hiedler, Hüttler, Huetler e
+#    Schicklgruber. "Hitler" só se fixa em 1876. A paternidade biológica de
+#    Alois nunca foi estabelecida com certeza documental.  [DIVERGENTE]
+# 4. HOMÔNIMOS: dois Alois (pai e meio-irmão); duas Angelas (a meia-irmã e a
+#    sobrinha Angela Maria "Geli").
+# 5. FILHO ALEGADO: Jean-Marie Loret (1918–1985) alegou ser filho de Hitler com
+#    uma francesa. A tese é rejeitada pela maioria dos historiadores e nunca foi
+#    comprovada.  [NÃO COMPROVADO]
+# 6. AS OBRAS: "Mein Kampf" e as aquarelas são registrados aqui como fato
+#    bibliográfico e documental. A publicação de "Mein Kampf" é regulada por lei
+#    em vários países; no Brasil, sua venda exige edição com aparato crítico.

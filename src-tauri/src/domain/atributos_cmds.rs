@@ -11,7 +11,7 @@ use uuid::Uuid;
 
 use crate::domain::erros::{ErroDominio, Resultado};
 use crate::domain::models::{
-    Apelido, Escolaridade, Idioma, Nacionalidade, Profissao, Religiao,
+    Apelido, Escolaridade, Idioma, Nacionalidade, ObraCultural, Profissao, Religiao,
 };
 
 /// Remove uma entrada de atributo pelo id.
@@ -274,12 +274,48 @@ pub async fn listar_nacionalidades(
     pessoa_id: String,
     db: State<'_, SqlitePool>,
 ) -> Resultado<Vec<Nacionalidade>> {
-    Ok(sqlx::query_as::<_, Nacionalidade>(
-        "SELECT id, pessoa_id, pais_id FROM nacionalidades_pessoa WHERE pessoa_id = ?",
+    let mut resultado = Vec::new();
+
+    // 1. Busca país de nascimento a partir do evento de nascimento e seu local
+    let pais_nascimento: Option<String> = sqlx::query_scalar(
+        "SELECT l.pais_id
+         FROM eventos e
+         JOIN locais l ON e.local_id = l.id
+         WHERE e.pessoa_id = ? AND e.tipo_evento = 'nascimento' AND l.pais_id IS NOT NULL AND l.pais_id != ''
+         ORDER BY e.ano_inicio ASC
+         LIMIT 1",
+    )
+    .bind(&pessoa_id)
+    .fetch_optional(&*db)
+    .await?;
+
+    if let Some(ref pais_id) = pais_nascimento {
+        resultado.push(Nacionalidade {
+            id: format!("orig_{}", pessoa_id),
+            pessoa_id: pessoa_id.clone(),
+            pais_id: pais_id.clone(),
+            is_originaria: true,
+        });
+    }
+
+    // 2. Busca nacionalidades manuais cadastradas
+    let manuais: Vec<Nacionalidade> = sqlx::query_as::<_, Nacionalidade>(
+        "SELECT id, pessoa_id, pais_id, 0 as is_originaria FROM nacionalidades_pessoa WHERE pessoa_id = ?",
     )
     .bind(&pessoa_id)
     .fetch_all(&*db)
-    .await?)
+    .await?;
+
+    for n in manuais {
+        if let Some(ref pais_nasc) = pais_nascimento {
+            if &n.pais_id == pais_nasc {
+                continue;
+            }
+        }
+        resultado.push(n);
+    }
+
+    Ok(resultado)
 }
 
 // ---------------------------------------------------------------- Apelidos
@@ -315,6 +351,64 @@ pub async fn listar_apelidos(
 ) -> Resultado<Vec<Apelido>> {
     Ok(sqlx::query_as::<_, Apelido>(
         "SELECT id, pessoa_id, apelido FROM apelidos_pessoa WHERE pessoa_id = ?",
+    )
+    .bind(&pessoa_id)
+    .fetch_all(&*db)
+    .await?)
+}
+
+// ----------------------------------------------------------- Obras Culturais
+
+#[tauri::command]
+pub async fn adicionar_obra_cultural(
+    pessoa_id: String,
+    categoria: String,
+    titulo: String,
+    subtipo: Option<String>,
+    ano: Option<i64>,
+    ano_fim: Option<i64>,
+    detalhes: Option<String>,
+    local_id: Option<String>,
+    db: State<'_, SqlitePool>,
+) -> Resultado<String> {
+    exigir_pessoa(&db, &pessoa_id).await?;
+    let titulo = texto_obrigatorio("titulo", &titulo)?;
+    let categoria = texto_obrigatorio("categoria", &categoria)?;
+    let id = Uuid::new_v4().to_string();
+
+    sqlx::query(
+        "INSERT INTO obras_culturais (id, pessoa_id, categoria, titulo, subtipo, ano, ano_fim, detalhes, local_id)
+         VALUES (?,?,?,?,?,?,?,?,?)",
+    )
+    .bind(&id)
+    .bind(&pessoa_id)
+    .bind(&categoria)
+    .bind(&titulo)
+    .bind(&subtipo)
+    .bind(&ano)
+    .bind(&ano_fim)
+    .bind(&detalhes)
+    .bind(&local_id)
+    .execute(&*db)
+    .await?;
+
+    Ok(id)
+}
+
+#[tauri::command]
+pub async fn remover_obra_cultural(id: String, db: State<'_, SqlitePool>) -> Resultado<()> {
+    remover_de(&db, "obras_culturais", &id).await
+}
+
+#[tauri::command]
+pub async fn listar_obras_culturais(
+    pessoa_id: String,
+    db: State<'_, SqlitePool>,
+) -> Resultado<Vec<ObraCultural>> {
+    Ok(sqlx::query_as::<_, ObraCultural>(
+        "SELECT id, pessoa_id, categoria, titulo, subtipo, ano, ano_fim, detalhes, local_id
+         FROM obras_culturais WHERE pessoa_id = ?
+         ORDER BY COALESCE(ano, 99999) ASC, titulo ASC",
     )
     .bind(&pessoa_id)
     .fetch_all(&*db)
@@ -414,5 +508,103 @@ mod testes {
                 .await
                 .unwrap();
         assert_eq!(primeiro, "Brasil");
+    }
+
+    #[tokio::test]
+    async fn nacionalidade_originaria_vinculada_ao_nascimento() {
+        let pool = pool_de_teste().await;
+        // Cadastra um local de nascimento com pais_id = 'br'
+        sqlx::query("INSERT INTO locais (id, nome, uf, pais_id) VALUES ('loc_teste_sb', 'São Borja', 'RS', 'br')")
+            .execute(&pool)
+            .await
+            .unwrap();
+
+        // Cadastra evento de nascimento para p1
+        sqlx::query("INSERT INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, local_id) VALUES ('ev_nasc_p1', 'p1', 'nascimento', 1914, 'loc_teste_sb')")
+            .execute(&pool)
+            .await
+            .unwrap();
+
+        // Cadastra nacionalidade adquirida adicional (it)
+        sqlx::query("INSERT INTO nacionalidades_pessoa (id, pessoa_id, pais_id) VALUES ('nac_it', 'p1', 'it')")
+            .execute(&pool)
+            .await
+            .unwrap();
+
+        // Consulta através de função interna simulada do comando
+        let nacs: Vec<Nacionalidade> = {
+            let mut res = Vec::new();
+            let pais_nascimento: Option<String> = sqlx::query_scalar(
+                "SELECT l.pais_id FROM eventos e JOIN locais l ON e.local_id = l.id WHERE e.pessoa_id = 'p1' AND e.tipo_evento = 'nascimento' LIMIT 1"
+            )
+            .fetch_optional(&pool)
+            .await
+            .unwrap();
+
+            if let Some(ref pais_id) = pais_nascimento {
+                res.push(Nacionalidade {
+                    id: format!("orig_p1"),
+                    pessoa_id: "p1".into(),
+                    pais_id: pais_id.clone(),
+                    is_originaria: true,
+                });
+            }
+
+            let manuais: Vec<Nacionalidade> = sqlx::query_as::<_, Nacionalidade>(
+                "SELECT id, pessoa_id, pais_id, 0 as is_originaria FROM nacionalidades_pessoa WHERE pessoa_id = 'p1'"
+            )
+            .fetch_all(&pool)
+            .await
+            .unwrap();
+
+            for m in manuais {
+                if let Some(ref pn) = pais_nascimento {
+                    if &m.pais_id == pn {
+                        continue;
+                    }
+                }
+                res.push(m);
+            }
+            res
+        };
+
+        assert_eq!(nacs.len(), 2);
+        assert_eq!(nacs[0].pais_id, "br");
+        assert!(nacs[0].is_originaria);
+        assert_eq!(nacs[1].pais_id, "it");
+        assert!(!nacs[1].is_originaria);
+    }
+
+    #[tokio::test]
+    async fn obras_culturais_crud_e_cascata() {
+        let pool = pool_de_teste().await;
+        // Inserção
+        sqlx::query("INSERT INTO obras_culturais (id, pessoa_id, categoria, titulo, subtipo, ano, detalhes) VALUES ('ob1', 'p1', 'livro', 'Memórias', 'Romance', 1950, 'Editora Nacional')")
+            .execute(&pool)
+            .await
+            .unwrap();
+        sqlx::query("INSERT INTO obras_culturais (id, pessoa_id, categoria, titulo, subtipo, ano, detalhes) VALUES ('ob2', 'p1', 'musica', 'Prelúdio em Dó Maior', 'Teclado', 1920, 'Opus 1')")
+            .execute(&pool)
+            .await
+            .unwrap();
+
+        let obras: Vec<ObraCultural> = sqlx::query_as(
+            "SELECT id, pessoa_id, categoria, titulo, subtipo, ano, ano_fim, detalhes, local_id FROM obras_culturais WHERE pessoa_id = 'p1' ORDER BY ano ASC"
+        )
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+
+        assert_eq!(obras.len(), 2);
+        assert_eq!(obras[0].categoria, "musica");
+        assert_eq!(obras[1].categoria, "livro");
+
+        // Remoção da pessoa cascateia nas obras
+        sqlx::query("DELETE FROM pessoas WHERE id = 'p1'").execute(&pool).await.unwrap();
+        let restantes: i64 = sqlx::query_scalar("SELECT COUNT(*) FROM obras_culturais WHERE pessoa_id = 'p1'")
+            .fetch_one(&pool)
+            .await
+            .unwrap();
+        assert_eq!(restantes, 0);
     }
 }

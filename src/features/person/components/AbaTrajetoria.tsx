@@ -7,6 +7,14 @@ import {
   Church,
   Plus,
   X,
+  BookOpen,
+  Music,
+  Theater,
+  FlaskConical,
+  Palette,
+  Sparkles,
+  ChevronDown,
+  ChevronRight,
 } from 'lucide-react';
 import {
   profissoes,
@@ -14,6 +22,7 @@ import {
   nacionalidades,
   idiomas,
   religioes,
+  obrasCulturais,
   usePaises,
 } from '../hooks/useFicha';
 import {
@@ -21,6 +30,7 @@ import {
   IDIOMAS,
   RELIGIOES,
 } from '../taxonomias';
+import type { CategoriaObraCultural } from '../../../types';
 
 interface AbaTrajetoriaProps {
   pessoaId: string;
@@ -63,6 +73,95 @@ export function AbaTrajetoria({ pessoaId }: AbaTrajetoriaProps) {
   const delReligiao = religioes.useRemover(pessoaId);
   const [formRelAberto, setFormRelAberto] = useState(false);
   const [novaReligiao, setNovaReligiao] = useState({ denominacao: '', periodo: '' });
+
+  // Obras Culturais
+  const listaObras = obrasCulturais.useLista(pessoaId);
+  const addObra = obrasCulturais.useAdicionar(pessoaId);
+  const delObra = obrasCulturais.useRemover(pessoaId);
+  const [formObraAberto, setFormObraAberto] = useState(false);
+  const [novaObra, setNovaObra] = useState<{
+    categoria: CategoriaObraCultural;
+    titulo: string;
+    subtipo: string;
+    ano: string;
+    detalhes: string;
+  }>({
+    categoria: 'livro',
+    titulo: '',
+    subtipo: '',
+    ano: '',
+    detalhes: '',
+  });
+  const [categoriasRecolhidas, setCategoriasRecolhidas] = useState<Record<string, boolean>>({});
+
+  const toggleCategoriaRecolhida = (catId: string) => {
+    setCategoriasRecolhidas((prev) => ({ ...prev, [catId]: !prev[catId] }));
+  };
+
+  const recolherTodas = () => {
+    const novo: Record<string, boolean> = {};
+    CATEGORIAS_OBRAS.forEach((c) => {
+      novo[c.id] = true;
+    });
+    setCategoriasRecolhidas(novo);
+  };
+
+  const expandirTodas = () => {
+    setCategoriasRecolhidas({});
+  };
+
+  const CATEGORIAS_OBRAS = [
+    {
+      id: 'livro' as CategoriaObraCultural,
+      nome: 'Livros, Poesias & Literatura',
+      descricao: 'Romances, poesias, ensaios, memórias e crônicas',
+      Icone: BookOpen,
+      cor: 'text-amber-600 dark:text-amber-400',
+      badge: 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20',
+    },
+    {
+      id: 'musica' as CategoriaObraCultural,
+      nome: 'Músicas & Composições',
+      descricao: 'Concertos, cantatas, sonatas, sinfonias, suítes e partituras',
+      Icone: Music,
+      cor: 'text-emerald-600 dark:text-emerald-400',
+      badge: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
+    },
+    {
+      id: 'teatro' as CategoriaObraCultural,
+      nome: 'Teatro & Dramaturgia',
+      descricao: 'Peças teatrais, autos, roteiros e textos cênicos',
+      Icone: Theater,
+      cor: 'text-purple-600 dark:text-purple-400',
+      badge: 'bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20',
+    },
+    {
+      id: 'pesquisa' as CategoriaObraCultural,
+      nome: 'Pesquisas Acadêmicas & Ciência',
+      descricao: 'Teses de doutorado, tratados, artigos científicos e monografias',
+      Icone: FlaskConical,
+      cor: 'text-sky-600 dark:text-sky-400',
+      badge: 'bg-sky-500/10 text-sky-600 dark:text-sky-400 border-sky-500/20',
+    },
+    {
+      id: 'arte' as CategoriaObraCultural,
+      nome: 'Artes Visuais & Plásticas',
+      descricao: 'Pinturas, esculturas, gravuras e mecenato cultural',
+      Icone: Palette,
+      cor: 'text-rose-600 dark:text-rose-400',
+      badge: 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
+    },
+    {
+      id: 'outro' as CategoriaObraCultural,
+      nome: 'Outras Obras & Contribuições',
+      descricao: 'Discursos históricos, manifestos e produções diversas',
+      Icone: Sparkles,
+      cor: 'text-indigo-600 dark:text-indigo-400',
+      badge: 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/20',
+    },
+  ];
+
+  const totalObras = (listaObras.data ?? []).length;
 
   const nomeDoPais = (paisId: string) => paises?.find((p) => p.id === paisId)?.nome ?? paisId;
 
@@ -374,17 +473,33 @@ export function AbaTrajetoria({ pessoaId }: AbaTrajetoriaProps) {
               {(listaNacionalidades.data ?? []).map((n) => (
                 <span
                   key={n.id}
-                  className="px-2.5 py-1 rounded-full bg-sup border border-borda text-xs font-medium text-tinta flex items-center gap-1.5"
+                  className={`px-2.5 py-1 rounded-full border text-xs font-medium flex items-center gap-1.5 ${
+                    n.is_originaria
+                      ? 'bg-acento/10 border-acento/30 text-acento'
+                      : 'bg-sup border-borda text-tinta'
+                  }`}
+                  title={
+                    n.is_originaria
+                      ? 'Nacionalidade originária do local de nascimento registrado em Fatos Vitais'
+                      : undefined
+                  }
                 >
                   <Globe className="w-3 h-3 text-acento" />
                   <span>{nomeDoPais(n.pais_id)}</span>
-                  <button
-                    type="button"
-                    onClick={() => delNacionalidade.mutate(n.id)}
-                    className="text-tinta3 hover:text-fem p-0.5 border-none bg-transparent cursor-pointer"
-                  >
-                    <X className="w-3 h-3" />
-                  </button>
+                  {n.is_originaria ? (
+                    <span className="text-[9px] uppercase tracking-wider font-bold px-1.5 py-0.2 rounded-full bg-acento/20 text-acento">
+                      Nascimento
+                    </span>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => delNacionalidade.mutate(n.id)}
+                      className="text-tinta3 hover:text-fem p-0.5 border-none bg-transparent cursor-pointer"
+                      title="Remover nacionalidade adicional"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  )}
                 </span>
               ))}
             </div>
@@ -572,6 +687,269 @@ export function AbaTrajetoria({ pessoaId }: AbaTrajetoriaProps) {
             </div>
           )}
         </div>
+      </div>
+
+      {/* ---------------- Painel 3: Obras & Produções Culturais ---------------- */}
+      <div className="lg:col-span-2 p-4 rounded-raio bg-card border border-borda shadow-2xs flex flex-col gap-4">
+        <div className="flex items-center justify-between border-b border-borda/50 pb-2.5 flex-wrap gap-2">
+          <div className="flex items-center gap-2">
+            <Sparkles className="w-4 h-4 text-acento" />
+            <h3 className="font-tit font-bold text-sm text-tinta m-0">Obras Culturais & Intelectuais</h3>
+            {totalObras > 0 && (
+              <span className="text-[11px] font-num px-2 py-0.5 rounded-full bg-acento/10 text-acento border border-acento/20 font-semibold">
+                {totalObras} {totalObras === 1 ? 'obra' : 'obras'}
+              </span>
+            )}
+          </div>
+          <div className="flex items-center gap-2">
+            {totalObras > 0 && (
+              <div className="flex items-center gap-1 text-[11px] text-tinta3 mr-1">
+                <button
+                  type="button"
+                  onClick={recolherTodas}
+                  className="hover:text-tinta px-1.5 py-0.5 rounded border border-borda/60 hover:bg-sup bg-transparent cursor-pointer"
+                  title="Recolher todas as seções"
+                >
+                  Recolher todas
+                </button>
+                <button
+                  type="button"
+                  onClick={expandirTodas}
+                  className="hover:text-tinta px-1.5 py-0.5 rounded border border-borda/60 hover:bg-sup bg-transparent cursor-pointer"
+                  title="Expandir todas as seções"
+                >
+                  Expandir todas
+                </button>
+              </div>
+            )}
+            <button
+              type="button"
+              onClick={() => setFormObraAberto((a) => !a)}
+              className="text-xs text-acento hover:text-tinta font-medium flex items-center gap-1 bg-transparent border-none cursor-pointer p-0"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              {formObraAberto ? 'Fechar' : 'Adicionar Obra'}
+            </button>
+          </div>
+        </div>
+
+        {/* Formulário de Adição */}
+        {formObraAberto && (
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (!novaObra.titulo.trim()) return;
+              addObra.mutate(
+                [
+                  novaObra.categoria,
+                  novaObra.titulo.trim(),
+                  novaObra.subtipo.trim() || null,
+                  novaObra.ano ? parseInt(novaObra.ano, 10) : null,
+                  null, // ano_fim
+                  novaObra.detalhes.trim() || null,
+                  null, // local_id
+                ],
+                {
+                  onSuccess: () => {
+                    setNovaObra({
+                      categoria: 'livro',
+                      titulo: '',
+                      subtipo: '',
+                      ano: '',
+                      detalhes: '',
+                    });
+                    setFormObraAberto(false);
+                  },
+                },
+              );
+            }}
+            className="p-3.5 rounded-raio bg-sup/60 border border-borda flex flex-col gap-2.5"
+          >
+            <div className="text-xs font-semibold text-tinta flex items-center gap-1.5">
+              <span>Nova Obra ou Produção Cultural</span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+              <div>
+                <label className="text-[10px] font-semibold text-tinta3 block mb-1">Categoria *</label>
+                <select
+                  value={novaObra.categoria}
+                  onChange={(e) =>
+                    setNovaObra({ ...novaObra, categoria: e.target.value as CategoriaObraCultural })
+                  }
+                  className="w-full text-xs px-2.5 py-1.5 rounded-raio-s border border-borda bg-card text-tinta focus:outline-none focus:border-acento"
+                >
+                  {CATEGORIAS_OBRAS.map((cat) => (
+                    <option key={cat.id} value={cat.id}>
+                      {cat.nome}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="md:col-span-2">
+                <label className="text-[10px] font-semibold text-tinta3 block mb-1">Título da Obra *</label>
+                <input
+                  type="text"
+                  value={novaObra.titulo}
+                  onChange={(e) => setNovaObra({ ...novaObra, titulo: e.target.value })}
+                  placeholder="Ex: O Cravo Bem Temperado, A Origem das Espécies..."
+                  required
+                  className="w-full text-xs px-2.5 py-1.5 rounded-raio-s border border-borda bg-card text-tinta focus:outline-none focus:border-acento"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+              <div>
+                <label className="text-[10px] font-semibold text-tinta3 block mb-1">Subtipo / Formato</label>
+                <input
+                  type="text"
+                  value={novaObra.subtipo}
+                  onChange={(e) => setNovaObra({ ...novaObra, subtipo: e.target.value })}
+                  placeholder="Ex: Cantata, Ensaio, Romance, Tese"
+                  className="w-full text-xs px-2.5 py-1.5 rounded-raio-s border border-borda bg-card text-tinta focus:outline-none focus:border-acento"
+                />
+              </div>
+              <div>
+                <label className="text-[10px] font-semibold text-tinta3 block mb-1">Ano de Criação/Publicação</label>
+                <input
+                  type="number"
+                  value={novaObra.ano}
+                  onChange={(e) => setNovaObra({ ...novaObra, ano: e.target.value })}
+                  placeholder="Ex: 1722"
+                  className="w-full text-xs px-2.5 py-1.5 rounded-raio-s border border-borda bg-card text-tinta focus:outline-none focus:border-acento font-num"
+                />
+              </div>
+              <div>
+                <label className="text-[10px] font-semibold text-tinta3 block mb-1">Notas / Detalhes</label>
+                <input
+                  type="text"
+                  value={novaObra.detalhes}
+                  onChange={(e) => setNovaObra({ ...novaObra, detalhes: e.target.value })}
+                  placeholder="Ex: Catálogo BWV 846, Editora..."
+                  className="w-full text-xs px-2.5 py-1.5 rounded-raio-s border border-borda bg-card text-tinta focus:outline-none focus:border-acento"
+                />
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-2 pt-1">
+              <button
+                type="button"
+                onClick={() => setFormObraAberto(false)}
+                className="text-xs px-3 py-1.5 rounded-raio-s border border-borda bg-card text-tinta hover:bg-sup cursor-pointer"
+              >
+                Cancelar
+              </button>
+              <button
+                type="submit"
+                disabled={addObra.isPending || !novaObra.titulo.trim()}
+                className="text-xs font-semibold px-3 py-1.5 rounded-raio-s bg-acento text-acento-tinta border-none cursor-pointer disabled:opacity-50"
+              >
+                {addObra.isPending ? 'Salvando…' : 'Salvar Obra'}
+              </button>
+            </div>
+          </form>
+        )}
+
+        {/* Lista de Categorias com Accordion e Contadores */}
+        {totalObras === 0 ? (
+          <div className="p-4 rounded-raio border border-dashed border-borda text-center flex flex-col items-center gap-1 text-tinta3">
+            <Sparkles className="w-5 h-5 text-tinta3/50 mb-0.5" />
+            <span className="text-xs italic">Nenhuma obra cultural registrada.</span>
+            <span className="text-[11px]">
+              Utilize o botão acima para catalogar livros, composições musicais, peças, teses e produções culturais.
+            </span>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-3">
+            {CATEGORIAS_OBRAS.map((cat) => {
+              const obrasDaCategoria = (listaObras.data ?? []).filter((o) => o.categoria === cat.id);
+              if (obrasDaCategoria.length === 0) return null;
+
+              const isRecolhida = !!categoriasRecolhidas[cat.id];
+              const Icone = cat.Icone;
+
+              return (
+                <div
+                  key={cat.id}
+                  className="rounded-raio border border-borda bg-card overflow-hidden transition-all shadow-2xs"
+                >
+                  {/* Cabeçalho do Accordion */}
+                  <button
+                    type="button"
+                    onClick={() => toggleCategoriaRecolhida(cat.id)}
+                    className="w-full px-3.5 py-2.5 bg-sup/40 hover:bg-sup/80 flex items-center justify-between text-left transition-colors border-none cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div className={`p-1.5 rounded-raio-s bg-card border border-borda/60 ${cat.cor}`}>
+                        <Icone className="w-4 h-4" />
+                      </div>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="text-xs font-bold text-tinta">{cat.nome}</span>
+                        <span
+                          className={`text-[10px] font-num font-semibold px-2 py-0.2 rounded-full border ${cat.badge}`}
+                        >
+                          {obrasDaCategoria.length}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1 text-tinta3">
+                      <span className="text-[11px] hidden sm:inline text-tinta3">
+                        {isRecolhida ? 'Expandir' : 'Recolher'}
+                      </span>
+                      {isRecolhida ? (
+                        <ChevronRight className="w-4 h-4" />
+                      ) : (
+                        <ChevronDown className="w-4 h-4" />
+                      )}
+                    </div>
+                  </button>
+
+                  {/* Lista de Itens (se expandido) */}
+                  {!isRecolhida && (
+                    <div className="p-3 grid grid-cols-1 md:grid-cols-2 gap-2 border-t border-borda/40 bg-card">
+                      {obrasDaCategoria.map((obra) => (
+                        <div
+                          key={obra.id}
+                          className="p-2.5 rounded-raio-s bg-sup/30 hover:bg-sup/60 border border-borda/60 flex items-start justify-between gap-2 text-xs transition-colors"
+                        >
+                          <div className="min-w-0 flex-1 flex flex-col gap-1">
+                            <div className="flex items-center gap-1.5 flex-wrap">
+                              <span className="font-bold text-tinta leading-snug">{obra.titulo}</span>
+                              {obra.ano && (
+                                <span className="text-[10px] font-num font-semibold px-1.5 py-0.2 rounded bg-acento/10 text-acento border border-acento/20">
+                                  {obra.ano}
+                                </span>
+                              )}
+                              {obra.subtipo && (
+                                <span className="text-[10px] text-tinta3 px-1.5 py-0.2 rounded bg-sup border border-borda">
+                                  {obra.subtipo}
+                                </span>
+                              )}
+                            </div>
+                            {obra.detalhes && (
+                              <p className="text-[11px] text-tinta2 m-0 line-clamp-2 leading-relaxed">
+                                {obra.detalhes}
+                              </p>
+                            )}
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => delObra.mutate(obra.id)}
+                            disabled={delObra.isPending}
+                            title="Remover obra"
+                            className="p-1 text-tinta3 hover:text-fem transition-colors border-none bg-transparent cursor-pointer shrink-0"
+                          >
+                            <X className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );

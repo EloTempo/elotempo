@@ -1461,83 +1461,152 @@ VALUES ('pub_u_pub_arv_franco_pub_franco_carmen_martinez_bordiu_pub_f', 'pub_fra
 -- ÁRVORE: Genealogia de Adolf Hitler
 -- =====================================================================
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
-VALUES ('pub_hitler_alois_hitler', 'Alois', 'Hitler', 'M', 'Atuação: funcionário aduaneiro.', 0, 0, 1, 'Figuras Históricas do Século XX');
+VALUES ('pub_hitler_johann_georg_hiedler', 'Johann Georg', 'Hiedler', 'M', 'Moleiro itinerante; reconheceu tardiamente a paternidade de Alois em 1876; avô legal de Adolf Hitler.', 0, 0, 1, 'Figuras Históricas do Século XX');
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
-VALUES ('pub_hitler_klara_polzl', 'Klara', 'Hitler', 'U', '', 0, 0, 1, 'Figuras Históricas do Século XX');
+VALUES ('pub_hitler_maria_anna_schicklgruber', 'Maria Anna', 'Schicklgruber', 'F', 'Camponesa austríaca; mãe de Alois Hitler.', 0, 0, 1, 'Figuras Históricas do Século XX');
+INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
+VALUES ('pub_hitler_alois_hitler', 'Alois', 'Hitler', 'M', 'Atuação: funcionário aduaneiro imperial e apicultor.', 0, 0, 1, 'Figuras Históricas do Século XX');
+INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
+VALUES ('pub_hitler_franziska_matzelsberger', 'Franziska', 'Matzelsberger', 'F', 'Segunda esposa de Alois Hitler; mãe de Alois Jr. e Angela Hitler.', 0, 0, 1, 'Figuras Históricas do Século XX');
+INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
+VALUES ('pub_hitler_klara_polzl', 'Klara', 'Hitler', 'F', 'Terceira esposa de Alois Hitler; mãe de Adolf e Paula.', 0, 0, 1, 'Figuras Históricas do Século XX');
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
 VALUES ('pub_hitler_adolf_hitler', 'Adolf', 'Hitler', 'M', 'Ditador da Alemanha nazista (1933–1945); responsável pela 2ª Guerra e pelo Holocausto.', 0, 0, 1, 'Figuras Históricas do Século XX');
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
-VALUES ('pub_hitler_paula_hitler', 'Paula', 'Hitler', 'F', '', 0, 0, 1, 'Figuras Históricas do Século XX');
+VALUES ('pub_hitler_eva_braun', 'Eva', 'Braun', 'F', 'Companheira de Adolf Hitler por 14 anos; casaram-se no Führerbunker em 29/04/1945.', 0, 0, 1, 'Figuras Históricas do Século XX');
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
-VALUES ('pub_hitler_angela_hitler', 'Angela', 'Hitler', 'F', '', 0, 0, 1, 'Figuras Históricas do Século XX');
+VALUES ('pub_hitler_paula_hitler', 'Paula', 'Hitler', 'F', 'Única irmã germana de Adolf a chegar à vida adulta.', 0, 0, 1, 'Figuras Históricas do Século XX');
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
-VALUES ('pub_hitler_alois_hitler_jr', 'Alois Hitler', 'Jr.', 'M', '', 0, 0, 1, 'Figuras Históricas do Século XX');
+VALUES ('pub_hitler_angela_hitler', 'Angela', 'Hitler Raubal', 'F', 'Meia-irmã de Adolf; administrou a residência do Berghof; mãe de Geli.', 0, 0, 1, 'Figuras Históricas do Século XX');
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
-VALUES ('pub_hitler_geli_raubal', 'Geli', 'Raubal', 'F', '', 0, 0, 1, 'Figuras Históricas do Século XX');
+VALUES ('pub_hitler_alois_hitler_jr', 'Alois Hitler', 'Jr.', 'M', 'Meio-irmão de Adolf; proprietário de restaurante em Berlim.', 0, 0, 1, 'Figuras Históricas do Século XX');
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
-VALUES ('pub_hitler_william_patrick_hitler', 'William Patrick', 'Stuart-Houston', 'M', 'Sobrinho que rompeu publicamente com o tio e emigrou para os EUA.', 0, 0, 1, 'Figuras Históricas do Século XX');
+VALUES ('pub_hitler_bridget_dowling', 'Bridget', 'Dowling', 'F', 'Esposa de Alois Hitler Jr.; mãe de William Patrick Hitler.', 0, 0, 1, 'Figuras Históricas do Século XX');
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
-VALUES ('pub_ph_pub_hitler_angela_hitler', 'Desconhecido', NULL, 'M', NULL, 0, 1, 1, 'Figuras Históricas do Século XX');
+VALUES ('pub_hitler_leo_raubal', 'Leo', 'Raubal Sr.', 'M', 'Funcionário fiscal; marido de Angela Hitler e pai de Geli Raubal.', 0, 0, 1, 'Figuras Históricas do Século XX');
+INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
+VALUES ('pub_hitler_geli_raubal', 'Geli', 'Raubal', 'F', 'Meia-sobrinha de Adolf Hitler; faleceu tragicamente em Munique em 1931.', 0, 0, 1, 'Figuras Históricas do Século XX');
+INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
+VALUES ('pub_hitler_william_patrick_hitler', 'William Patrick', 'Stuart-Houston', 'M', 'Sobrinho que rompeu publicamente com o tio e serviu na Marinha dos EUA.', 0, 0, 1, 'Figuras Históricas do Século XX');
+
 INSERT OR IGNORE INTO arvores (id, nome, descricao, raiz_pessoa_id, is_publico, categoria, pais, periodo)
-VALUES ('pub_arv_hitler', 'Genealogia de Adolf Hitler', 'Ancestralidade e familiares imediatos de Adolf Hitler em Waldviertel e Linz.', 'pub_hitler_alois_hitler', 1, 'Chefes de Estado e Lideranças Políticas', 'Áustria / Alemanha', '1837 – 1960');
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_hitler', 'pub_hitler_alois_hitler', NULL);
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_hitler', 'pub_hitler_klara_polzl', NULL);
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_hitler', 'pub_hitler_adolf_hitler', NULL);
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_hitler', 'pub_hitler_paula_hitler', NULL);
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_hitler', 'pub_hitler_angela_hitler', NULL);
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_hitler', 'pub_hitler_alois_hitler_jr', NULL);
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_hitler', 'pub_hitler_geli_raubal', NULL);
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_hitler', 'pub_hitler_william_patrick_hitler', NULL);
+VALUES ('pub_arv_hitler', 'Genealogia de Adolf Hitler', 'Ancestralidade e familiares imediatos de Adolf Hitler em Waldviertel e Linz.', 'pub_hitler_johann_georg_hiedler', 1, 'Chefes de Estado e Lideranças Políticas', 'Áustria / Alemanha', '1792 – 1987');
+
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_hitler', 'pub_hitler_johann_georg_hiedler', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_hitler', 'pub_hitler_maria_anna_schicklgruber', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_hitler', 'pub_hitler_alois_hitler', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_hitler', 'pub_hitler_franziska_matzelsberger', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_hitler', 'pub_hitler_klara_polzl', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_hitler', 'pub_hitler_adolf_hitler', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_hitler', 'pub_hitler_eva_braun', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_hitler', 'pub_hitler_paula_hitler', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_hitler', 'pub_hitler_angela_hitler', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_hitler', 'pub_hitler_alois_hitler_jr', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_hitler', 'pub_hitler_bridget_dowling', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_hitler', 'pub_hitler_leo_raubal', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_hitler', 'pub_hitler_geli_raubal', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_hitler', 'pub_hitler_william_patrick_hitler', NULL);
+
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
-VALUES ('ev_b_pub_hitler_alois_hitler', 'pub_hitler_alois_hitler', 'nascimento', 1837, 1837, 'exata', '1837');
+VALUES ('ev_b_pub_hitler_johann', 'pub_hitler_johann_georg_hiedler', 'nascimento', 1792, 1792, 'exata', '1792');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
-VALUES ('ev_d_pub_hitler_alois_hitler', 'pub_hitler_alois_hitler', 'falecimento', 1903, 1903, 'exata', '1903');
+VALUES ('ev_d_pub_hitler_johann', 'pub_hitler_johann_georg_hiedler', 'falecimento', 1857, 1857, 'exata', '1857');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
-VALUES ('ev_b_pub_hitler_klara_polzl', 'pub_hitler_klara_polzl', 'nascimento', 1860, 1860, 'exata', '1860');
+VALUES ('ev_b_pub_hitler_maria_anna', 'pub_hitler_maria_anna_schicklgruber', 'nascimento', 1795, 1795, 'exata', '1795');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
-VALUES ('ev_d_pub_hitler_klara_polzl', 'pub_hitler_klara_polzl', 'falecimento', 1907, 1907, 'exata', '1907');
+VALUES ('ev_d_pub_hitler_maria_anna', 'pub_hitler_maria_anna_schicklgruber', 'falecimento', 1847, 1847, 'exata', '1847');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
-VALUES ('ev_b_pub_hitler_adolf_hitler', 'pub_hitler_adolf_hitler', 'nascimento', 1889, 1889, 'exata', '1889');
+VALUES ('ev_b_pub_hitler_alois_hitler', 'pub_hitler_alois_hitler', 'nascimento', 1837, 1837, 'exata', '7 de junho de 1837');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
-VALUES ('ev_d_pub_hitler_adolf_hitler', 'pub_hitler_adolf_hitler', 'falecimento', 1945, 1945, 'exata', '1945');
+VALUES ('ev_d_pub_hitler_alois_hitler', 'pub_hitler_alois_hitler', 'falecimento', 1903, 1903, 'exata', '3 de janeiro de 1903');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
-VALUES ('ev_b_pub_hitler_paula_hitler', 'pub_hitler_paula_hitler', 'nascimento', 1896, 1896, 'exata', '1896');
+VALUES ('ev_b_pub_hitler_franziska', 'pub_hitler_franziska_matzelsberger', 'nascimento', 1861, 1861, 'exata', '1861');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
-VALUES ('ev_d_pub_hitler_paula_hitler', 'pub_hitler_paula_hitler', 'falecimento', 1960, 1960, 'exata', '1960');
+VALUES ('ev_d_pub_hitler_franziska', 'pub_hitler_franziska_matzelsberger', 'falecimento', 1884, 1884, 'exata', '1884');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_b_pub_hitler_klara_polzl', 'pub_hitler_klara_polzl', 'nascimento', 1860, 1860, 'exata', '12 de agosto de 1860');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_d_pub_hitler_klara_polzl', 'pub_hitler_klara_polzl', 'falecimento', 1907, 1907, 'exata', '21 de dezembro de 1907');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_b_pub_hitler_adolf_hitler', 'pub_hitler_adolf_hitler', 'nascimento', 1889, 1889, 'exata', '20 de abril de 1889');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_d_pub_hitler_adolf_hitler', 'pub_hitler_adolf_hitler', 'falecimento', 1945, 1945, 'exata', '30 de abril de 1945');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_b_pub_hitler_eva', 'pub_hitler_eva_braun', 'nascimento', 1912, 1912, 'exata', '6 de fevereiro de 1912');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_d_pub_hitler_eva', 'pub_hitler_eva_braun', 'falecimento', 1945, 1945, 'exata', '30 de abril de 1945');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_b_pub_hitler_paula_hitler', 'pub_hitler_paula_hitler', 'nascimento', 1896, 1896, 'exata', '21 de janeiro de 1896');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_d_pub_hitler_paula_hitler', 'pub_hitler_paula_hitler', 'falecimento', 1960, 1960, 'exata', '1º de junho de 1960');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
 VALUES ('ev_b_pub_hitler_angela_hitler', 'pub_hitler_angela_hitler', 'nascimento', 1883, 1883, 'exata', '1883');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
 VALUES ('ev_d_pub_hitler_angela_hitler', 'pub_hitler_angela_hitler', 'falecimento', 1949, 1949, 'exata', '1949');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
-VALUES ('ev_b_pub_hitler_geli_raubal', 'pub_hitler_geli_raubal', 'nascimento', 1908, 1908, 'exata', '1908');
+VALUES ('ev_b_pub_hitler_alois_hitler_jr', 'pub_hitler_alois_hitler_jr', 'nascimento', 1882, 1882, 'exata', '1882');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
-VALUES ('ev_d_pub_hitler_geli_raubal', 'pub_hitler_geli_raubal', 'falecimento', 1931, 1931, 'exata', '1931');
+VALUES ('ev_d_pub_hitler_alois_hitler_jr', 'pub_hitler_alois_hitler_jr', 'falecimento', 1956, 1956, 'exata', '1956');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
-VALUES ('ev_b_pub_hitler_william_patrick_hitler', 'pub_hitler_william_patrick_hitler', 'nascimento', 1911, 1911, 'exata', '1911');
+VALUES ('ev_b_pub_hitler_bridget', 'pub_hitler_bridget_dowling', 'nascimento', 1891, 1891, 'exata', '1891');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
-VALUES ('ev_d_pub_hitler_william_patrick_hitler', 'pub_hitler_william_patrick_hitler', 'falecimento', 1987, 1987, 'exata', '1987');
+VALUES ('ev_d_pub_hitler_bridget', 'pub_hitler_bridget_dowling', 'falecimento', 1969, 1969, 'exata', '1969');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_b_pub_hitler_leo', 'pub_hitler_leo_raubal', 'nascimento', 1879, 1879, 'exata', '1879');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_d_pub_hitler_leo', 'pub_hitler_leo_raubal', 'falecimento', 1910, 1910, 'exata', '1910');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_b_pub_hitler_geli_raubal', 'pub_hitler_geli_raubal', 'nascimento', 1908, 1908, 'exata', '4 de junho de 1908');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_d_pub_hitler_geli_raubal', 'pub_hitler_geli_raubal', 'falecimento', 1931, 1931, 'exata', '18 de setembro de 1931');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_b_pub_hitler_william_patrick_hitler', 'pub_hitler_william_patrick_hitler', 'nascimento', 1911, 1911, 'exata', '12 de março de 1911');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_d_pub_hitler_william_patrick_hitler', 'pub_hitler_william_patrick_hitler', 'falecimento', 1987, 1987, 'exata', '14 de julho de 1987');
+
+INSERT OR IGNORE INTO unioes (id, slot_masculino_id, slot_feminino_id, estado_vinculo, nota)
+VALUES ('pub_u_pub_arv_hitler_johann_maria', 'pub_hitler_johann_georg_hiedler', 'pub_hitler_maria_anna_schicklgruber', 'casamento', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
+VALUES ('pub_arv_hitler', NULL, 'pub_u_pub_arv_hitler_johann_maria');
+INSERT OR IGNORE INTO uniao_filhos (uniao_id, pessoa_id, tipo_vinculo, ordem)
+VALUES ('pub_u_pub_arv_hitler_johann_maria', 'pub_hitler_alois_hitler', 'biologico', 1);
+
+INSERT OR IGNORE INTO unioes (id, slot_masculino_id, slot_feminino_id, estado_vinculo, nota)
+VALUES ('pub_u_pub_arv_hitler_alois_franziska', 'pub_hitler_alois_hitler', 'pub_hitler_franziska_matzelsberger', 'casamento', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
+VALUES ('pub_arv_hitler', NULL, 'pub_u_pub_arv_hitler_alois_franziska');
+INSERT OR IGNORE INTO uniao_filhos (uniao_id, pessoa_id, tipo_vinculo, ordem)
+VALUES ('pub_u_pub_arv_hitler_alois_franziska', 'pub_hitler_alois_hitler_jr', 'biologico', 1);
+INSERT OR IGNORE INTO uniao_filhos (uniao_id, pessoa_id, tipo_vinculo, ordem)
+VALUES ('pub_u_pub_arv_hitler_alois_franziska', 'pub_hitler_angela_hitler', 'biologico', 2);
+
 INSERT OR IGNORE INTO unioes (id, slot_masculino_id, slot_feminino_id, estado_vinculo, nota)
 VALUES ('pub_u_pub_arv_hitler_pub_hitler_alois_hitler_pub_hitler_klar', 'pub_hitler_alois_hitler', 'pub_hitler_klara_polzl', 'casamento', NULL);
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
 VALUES ('pub_arv_hitler', NULL, 'pub_u_pub_arv_hitler_pub_hitler_alois_hitler_pub_hitler_klar');
-INSERT OR IGNORE INTO unioes (id, slot_masculino_id, slot_feminino_id, estado_vinculo, nota)
-VALUES ('pub_u_pub_arv_hitler_pub_ph_pub_hitler_angela_hitler_pub_hit', 'pub_ph_pub_hitler_angela_hitler', 'pub_hitler_angela_hitler', 'casamento', NULL);
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_hitler', NULL, 'pub_u_pub_arv_hitler_pub_ph_pub_hitler_angela_hitler_pub_hit');
 INSERT OR IGNORE INTO uniao_filhos (uniao_id, pessoa_id, tipo_vinculo, ordem)
 VALUES ('pub_u_pub_arv_hitler_pub_hitler_alois_hitler_pub_hitler_klar', 'pub_hitler_adolf_hitler', 'biologico', 1);
 INSERT OR IGNORE INTO uniao_filhos (uniao_id, pessoa_id, tipo_vinculo, ordem)
-VALUES ('pub_u_pub_arv_hitler_pub_ph_pub_hitler_angela_hitler_pub_hit', 'pub_hitler_geli_raubal', 'biologico', 1);
+VALUES ('pub_u_pub_arv_hitler_pub_hitler_alois_hitler_pub_hitler_klar', 'pub_hitler_paula_hitler', 'biologico', 2);
+
+INSERT OR IGNORE INTO unioes (id, slot_masculino_id, slot_feminino_id, estado_vinculo, nota)
+VALUES ('pub_u_pub_arv_hitler_adolf_eva', 'pub_hitler_adolf_hitler', 'pub_hitler_eva_braun', 'casamento', 'Casamento no Führerbunker em 29/04/1945');
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
+VALUES ('pub_arv_hitler', NULL, 'pub_u_pub_arv_hitler_adolf_eva');
+
+INSERT OR IGNORE INTO unioes (id, slot_masculino_id, slot_feminino_id, estado_vinculo, nota)
+VALUES ('pub_u_pub_arv_hitler_alois_jr_bridget', 'pub_hitler_alois_hitler_jr', 'pub_hitler_bridget_dowling', 'casamento', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
+VALUES ('pub_arv_hitler', NULL, 'pub_u_pub_arv_hitler_alois_jr_bridget');
 INSERT OR IGNORE INTO uniao_filhos (uniao_id, pessoa_id, tipo_vinculo, ordem)
-VALUES ('pub_u_pub_arv_hitler_pub_hitler_alois_hitler_pub_hitler_klar', 'pub_hitler_william_patrick_hitler', 'biologico', 2);
+VALUES ('pub_u_pub_arv_hitler_alois_jr_bridget', 'pub_hitler_william_patrick_hitler', 'biologico', 1);
+
+INSERT OR IGNORE INTO unioes (id, slot_masculino_id, slot_feminino_id, estado_vinculo, nota)
+VALUES ('pub_u_pub_arv_hitler_leo_angela', 'pub_hitler_leo_raubal', 'pub_hitler_angela_hitler', 'casamento', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
+VALUES ('pub_arv_hitler', NULL, 'pub_u_pub_arv_hitler_leo_angela');
+INSERT OR IGNORE INTO uniao_filhos (uniao_id, pessoa_id, tipo_vinculo, ordem)
+VALUES ('pub_u_pub_arv_hitler_leo_angela', 'pub_hitler_geli_raubal', 'biologico', 1);
 
 -- =====================================================================
 -- ÁRVORE: Família de Mao Tsé-Tung
@@ -1768,45 +1837,52 @@ VALUES ('pub_u_pub_arv_mussolini_pub_mussolini_romano_mussolini_pub_p', 'pub_mus
 -- ÁRVORE: Família Stalin (Jughashvili)
 -- =====================================================================
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
-VALUES ('pub_stalin_besarion_jughashvili', 'Besarion', 'Jughashvili', 'M', 'Atuação: sapateiro.', 0, 0, 1, 'Figuras Históricas do Século XX');
+VALUES ('pub_stalin_besarion_jughashvili', 'Besarion "Beso"', 'Jughashvili', 'M', 'Sapateiro; pai de Josef Stalin.', 0, 0, 1, 'Figuras Históricas do Século XX');
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
-VALUES ('pub_stalin_stalin', 'Josef', 'Stalin', 'M', 'Líder da União Soviética de meados dos anos 1920 até 1953.', 0, 0, 1, 'Figuras Históricas do Século XX');
+VALUES ('pub_stalin_ekaterine_geladze', 'Ekaterine "Keke"', 'Geladze', 'F', 'Mãe de Stalin; costureira devota que sonhava ver o filho bispo.', 0, 0, 1, 'Figuras Históricas do Século XX');
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
-VALUES ('pub_stalin_kato_svanidze', 'Kato', 'Svanidze', 'F', '', 0, 0, 1, 'Figuras Históricas do Século XX');
+VALUES ('pub_stalin_stalin', 'Josef', 'Stalin', 'M', 'Líder da União Soviética de meados dos anos 1920 até 1953; na juventude, poeta.', 0, 0, 1, 'Figuras Históricas do Século XX');
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
-VALUES ('pub_stalin_nadezhda_alliluyeva', 'Nadezhda', 'Alliluyeva', 'F', '', 0, 0, 1, 'Figuras Históricas do Século XX');
+VALUES ('pub_stalin_kato_svanidze', 'Kato', 'Svanidze', 'F', 'Primeira esposa de Stalin; mãe de Yakov.', 0, 0, 1, 'Figuras Históricas do Século XX');
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
-VALUES ('pub_stalin_yakov_dzhugashvili', 'Yakov', 'Dzhugashvili', 'M', 'Atuação: militar.', 0, 0, 1, 'Figuras Históricas do Século XX');
+VALUES ('pub_stalin_nadezhda_alliluyeva', 'Nadezhda', 'Alliluyeva', 'F', 'Segunda esposa de Stalin; mãe de Vasily e Svetlana.', 0, 0, 1, 'Figuras Históricas do Século XX');
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
-VALUES ('pub_stalin_vasily_stalin', 'Vasily', 'Stalin', 'M', 'Atuação: militar (general da Força Aérea).', 0, 0, 1, 'Figuras Históricas do Século XX');
+VALUES ('pub_stalin_yakov_dzhugashvili', 'Yakov', 'Dzhugashvili', 'M', 'Filho mais velho de Stalin; oficial de artilharia; morreu prisioneiro em Sachsenhausen.', 0, 0, 1, 'Figuras Históricas do Século XX');
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
-VALUES ('pub_stalin_svetlana_alliluyeva', 'Svetlana', 'Alliluyeva', 'F', 'Filha de Stalin; causou sensação ao desertar para os EUA em 1967.', 0, 0, 1, 'Figuras Históricas do Século XX');
+VALUES ('pub_stalin_vasily_stalin', 'Vasily', 'Stalin', 'M', 'Piloto militar; tenente-general da Força Aérea Soviética.', 0, 0, 1, 'Figuras Históricas do Século XX');
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
-VALUES ('pub_stalin_chrese_evans', 'Chrese', 'Evans', 'F', '', 0, 0, 1, 'Figuras Históricas do Século XX');
+VALUES ('pub_stalin_svetlana_alliluyeva', 'Svetlana', 'Alliluyeva', 'F', 'Filha de Stalin; escritora; desertou para os EUA em 1967.', 0, 0, 1, 'Figuras Históricas do Século XX');
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
-VALUES ('pub_ph_pub_stalin_svetlana_alliluyeva', 'Desconhecido', NULL, 'M', NULL, 0, 1, 1, 'Figuras Históricas do Século XX');
+VALUES ('pub_stalin_william_wesley_peters', 'William Wesley', 'Peters', 'M', 'Arquiteto prestigiado; discípulo de Frank Lloyd Wright; marido de Svetlana Alliluyeva.', 0, 0, 1, 'Figuras Históricas do Século XX');
+INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
+VALUES ('pub_stalin_chrese_evans', 'Chrese', 'Evans', 'F', 'Neta de Stalin; filha de Svetlana Alliluyeva e William Wesley Peters.', 1, 0, 1, 'Figuras Históricas do Século XX');
+
 INSERT OR IGNORE INTO arvores (id, nome, descricao, raiz_pessoa_id, is_publico, categoria, pais, periodo)
-VALUES ('pub_arv_stalin', 'Família Stalin (Jughashvili)', 'Família de Josef Stalin, suas duas esposas e filhos na União Soviética.', 'pub_stalin_besarion_jughashvili', 1, 'Chefes de Estado e Lideranças Políticas', 'União Soviética / Geórgia', '1850 – 2011');
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_stalin', 'pub_stalin_besarion_jughashvili', NULL);
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_stalin', 'pub_stalin_stalin', NULL);
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_stalin', 'pub_stalin_kato_svanidze', NULL);
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_stalin', 'pub_stalin_nadezhda_alliluyeva', NULL);
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_stalin', 'pub_stalin_yakov_dzhugashvili', NULL);
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_stalin', 'pub_stalin_vasily_stalin', NULL);
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_stalin', 'pub_stalin_svetlana_alliluyeva', NULL);
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_stalin', 'pub_stalin_chrese_evans', NULL);
+VALUES ('pub_arv_stalin', 'Família Stalin (Jughashvili)', 'Família de Josef Stalin, suas duas esposas, filhos e descendentes.', 'pub_stalin_besarion_jughashvili', 1, 'Chefes de Estado e Lideranças Políticas', 'União Soviética / Geórgia', '1850 – 2011');
+
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_stalin', 'pub_stalin_besarion_jughashvili', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_stalin', 'pub_stalin_ekaterine_geladze', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_stalin', 'pub_stalin_stalin', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_stalin', 'pub_stalin_kato_svanidze', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_stalin', 'pub_stalin_nadezhda_alliluyeva', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_stalin', 'pub_stalin_yakov_dzhugashvili', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_stalin', 'pub_stalin_vasily_stalin', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_stalin', 'pub_stalin_svetlana_alliluyeva', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_stalin', 'pub_stalin_william_wesley_peters', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_stalin', 'pub_stalin_chrese_evans', NULL);
+
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
-VALUES ('ev_b_pub_stalin_stalin', 'pub_stalin_stalin', 'nascimento', 1878, 1878, 'exata', '1878');
+VALUES ('ev_b_pub_stalin_besarion', 'pub_stalin_besarion_jughashvili', 'nascimento', 1850, 1850, 'cerca_de', 'cerca de 1850');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
-VALUES ('ev_d_pub_stalin_stalin', 'pub_stalin_stalin', 'falecimento', 1953, 1953, 'exata', '1953');
+VALUES ('ev_d_pub_stalin_besarion', 'pub_stalin_besarion_jughashvili', 'falecimento', 1891, 1891, 'exata', '1891');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_b_pub_stalin_ekaterine', 'pub_stalin_ekaterine_geladze', 'nascimento', 1856, 1856, 'cerca_de', 'cerca de 1856');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_d_pub_stalin_ekaterine', 'pub_stalin_ekaterine_geladze', 'falecimento', 1937, 1937, 'exata', '4 de junho de 1937');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_b_pub_stalin_stalin', 'pub_stalin_stalin', 'nascimento', 1878, 1878, 'exata', '18 de dezembro de 1878');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_d_pub_stalin_stalin', 'pub_stalin_stalin', 'falecimento', 1953, 1953, 'exata', '5 de março de 1953');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
 VALUES ('ev_b_pub_stalin_kato_svanidze', 'pub_stalin_kato_svanidze', 'nascimento', 1885, 1885, 'exata', '1885');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
@@ -1814,41 +1890,55 @@ VALUES ('ev_d_pub_stalin_kato_svanidze', 'pub_stalin_kato_svanidze', 'faleciment
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
 VALUES ('ev_b_pub_stalin_nadezhda_alliluyeva', 'pub_stalin_nadezhda_alliluyeva', 'nascimento', 1901, 1901, 'exata', '1901');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
-VALUES ('ev_d_pub_stalin_nadezhda_alliluyeva', 'pub_stalin_nadezhda_alliluyeva', 'falecimento', 1932, 1932, 'exata', '1932');
+VALUES ('ev_d_pub_stalin_nadezhda_alliluyeva', 'pub_stalin_nadezhda_alliluyeva', 'falecimento', 1932, 1932, 'exata', '9 de novembro de 1932');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
 VALUES ('ev_b_pub_stalin_yakov_dzhugashvili', 'pub_stalin_yakov_dzhugashvili', 'nascimento', 1907, 1907, 'exata', '1907');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
-VALUES ('ev_d_pub_stalin_yakov_dzhugashvili', 'pub_stalin_yakov_dzhugashvili', 'falecimento', 1943, 1943, 'exata', '1943');
+VALUES ('ev_d_pub_stalin_yakov_dzhugashvili', 'pub_stalin_yakov_dzhugashvili', 'falecimento', 1943, 1943, 'exata', '14 de abril de 1943');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
 VALUES ('ev_b_pub_stalin_vasily_stalin', 'pub_stalin_vasily_stalin', 'nascimento', 1921, 1921, 'exata', '1921');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
 VALUES ('ev_d_pub_stalin_vasily_stalin', 'pub_stalin_vasily_stalin', 'falecimento', 1962, 1962, 'exata', '1962');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
-VALUES ('ev_b_pub_stalin_svetlana_alliluyeva', 'pub_stalin_svetlana_alliluyeva', 'nascimento', 1926, 1926, 'exata', '1926');
+VALUES ('ev_b_pub_stalin_svetlana_alliluyeva', 'pub_stalin_svetlana_alliluyeva', 'nascimento', 1926, 1926, 'exata', '28 de fevereiro de 1926');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
-VALUES ('ev_d_pub_stalin_svetlana_alliluyeva', 'pub_stalin_svetlana_alliluyeva', 'falecimento', 2011, 2011, 'exata', '2011');
+VALUES ('ev_d_pub_stalin_svetlana_alliluyeva', 'pub_stalin_svetlana_alliluyeva', 'falecimento', 2011, 2011, 'exata', '22 de novembro de 2011');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_b_pub_stalin_peters', 'pub_stalin_william_wesley_peters', 'nascimento', 1912, 1912, 'exata', '12 de junho de 1912');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_d_pub_stalin_peters', 'pub_stalin_william_wesley_peters', 'falecimento', 1991, 1991, 'exata', '17 de julho de 1991');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
 VALUES ('ev_b_pub_stalin_chrese_evans', 'pub_stalin_chrese_evans', 'nascimento', 1971, 1971, 'exata', '1971');
+
+INSERT OR IGNORE INTO unioes (id, slot_masculino_id, slot_feminino_id, estado_vinculo, nota)
+VALUES ('pub_u_pub_arv_stalin_besarion_ekaterine', 'pub_stalin_besarion_jughashvili', 'pub_stalin_ekaterine_geladze', 'casamento', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
+VALUES ('pub_arv_stalin', NULL, 'pub_u_pub_arv_stalin_besarion_ekaterine');
+INSERT OR IGNORE INTO uniao_filhos (uniao_id, pessoa_id, tipo_vinculo, ordem)
+VALUES ('pub_u_pub_arv_stalin_besarion_ekaterine', 'pub_stalin_stalin', 'biologico', 1);
+
 INSERT OR IGNORE INTO unioes (id, slot_masculino_id, slot_feminino_id, estado_vinculo, nota)
 VALUES ('pub_u_pub_arv_stalin_pub_stalin_stalin_pub_stalin_kato_svani', 'pub_stalin_stalin', 'pub_stalin_kato_svanidze', 'casamento', NULL);
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
 VALUES ('pub_arv_stalin', NULL, 'pub_u_pub_arv_stalin_pub_stalin_stalin_pub_stalin_kato_svani');
+INSERT OR IGNORE INTO uniao_filhos (uniao_id, pessoa_id, tipo_vinculo, ordem)
+VALUES ('pub_u_pub_arv_stalin_pub_stalin_stalin_pub_stalin_kato_svani', 'pub_stalin_yakov_dzhugashvili', 'biologico', 1);
+
 INSERT OR IGNORE INTO unioes (id, slot_masculino_id, slot_feminino_id, estado_vinculo, nota)
 VALUES ('pub_u_pub_arv_stalin_pub_stalin_stalin_pub_stalin_nadezhda_a', 'pub_stalin_stalin', 'pub_stalin_nadezhda_alliluyeva', 'casamento', NULL);
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
 VALUES ('pub_arv_stalin', NULL, 'pub_u_pub_arv_stalin_pub_stalin_stalin_pub_stalin_nadezhda_a');
-INSERT OR IGNORE INTO unioes (id, slot_masculino_id, slot_feminino_id, estado_vinculo, nota)
-VALUES ('pub_u_pub_arv_stalin_pub_ph_pub_stalin_svetlana_alliluyeva_p', 'pub_ph_pub_stalin_svetlana_alliluyeva', 'pub_stalin_svetlana_alliluyeva', 'casamento', NULL);
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_stalin', NULL, 'pub_u_pub_arv_stalin_pub_ph_pub_stalin_svetlana_alliluyeva_p');
-INSERT OR IGNORE INTO uniao_filhos (uniao_id, pessoa_id, tipo_vinculo, ordem)
-VALUES ('pub_u_pub_arv_stalin_pub_stalin_stalin_pub_stalin_kato_svani', 'pub_stalin_yakov_dzhugashvili', 'biologico', 1);
 INSERT OR IGNORE INTO uniao_filhos (uniao_id, pessoa_id, tipo_vinculo, ordem)
 VALUES ('pub_u_pub_arv_stalin_pub_stalin_stalin_pub_stalin_nadezhda_a', 'pub_stalin_vasily_stalin', 'biologico', 1);
 INSERT OR IGNORE INTO uniao_filhos (uniao_id, pessoa_id, tipo_vinculo, ordem)
 VALUES ('pub_u_pub_arv_stalin_pub_stalin_stalin_pub_stalin_nadezhda_a', 'pub_stalin_svetlana_alliluyeva', 'biologico', 2);
+
+INSERT OR IGNORE INTO unioes (id, slot_masculino_id, slot_feminino_id, estado_vinculo, nota)
+VALUES ('pub_u_pub_arv_stalin_peters_svetlana', 'pub_stalin_william_wesley_peters', 'pub_stalin_svetlana_alliluyeva', 'casamento', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
+VALUES ('pub_arv_stalin', NULL, 'pub_u_pub_arv_stalin_peters_svetlana');
 INSERT OR IGNORE INTO uniao_filhos (uniao_id, pessoa_id, tipo_vinculo, ordem)
-VALUES ('pub_u_pub_arv_stalin_pub_ph_pub_stalin_svetlana_alliluyeva_p', 'pub_stalin_chrese_evans', 'biologico', 1);
+VALUES ('pub_u_pub_arv_stalin_peters_svetlana', 'pub_stalin_chrese_evans', 'biologico', 1);
 
 -- =====================================================================
 -- ÁRVORE: Dinastia Bush
@@ -2120,41 +2210,99 @@ VALUES ('pub_u_pub_arv_guinle_pub_guinle_carlos_guinle_pub_ph_pub_gui', 'pub_gui
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
 VALUES ('pub_klabin_mauricio_freeman_klabin', 'Maurício Freeman', 'Klabin', 'M', 'Imigrante lituano; fundou a Klabin Irmãos & Cia, origem da maior papeleira do Brasil.', 0, 0, 1, 'Grandes Empreendedores');
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
-VALUES ('pub_klabin_nessel_klabin', 'Nessel', 'Klabin', 'F', '', 0, 0, 1, 'Grandes Empreendedores');
+VALUES ('pub_klabin_bertha_obstand', 'Bertha Obstand', 'Klabin', 'F', 'Esposa de Maurício Freeman Klabin; mãe de Jenny, Mina e Luisa.', 0, 0, 1, 'Grandes Empreendedores');
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
-VALUES ('pub_klabin_miguel_lafer', 'Miguel', 'Lafer', 'M', 'Atuação: empresário (cofundador da KIC).', 0, 0, 1, 'Grandes Empreendedores');
+VALUES ('pub_klabin_mina_klabin_warchavchik', 'Mina Klabin', 'Warchavchik', 'F', 'Paisagista pioneira do modernismo; assinou o paisagismo da Casa Modernista.', 0, 0, 1, 'Grandes Empreendedores');
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
-VALUES ('pub_klabin_wolff_klabin', 'Wolff', 'Klabin', 'M', 'Dirigiu o grupo Klabin e, com Horácio Lafer, criou nos anos 1940 a primeira grande indústria de celulose do Brasil (Monte Alegre, PR).', 0, 0, 1, 'Grandes Empreendedores');
+VALUES ('pub_klabin_gregori_warchavchik', 'Gregori', 'Warchavchik', 'M', 'Arquiteto modernista pioneiro no Brasil; autor da primeira residência modernista.', 0, 0, 1, 'Grandes Empreendedores');
+INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
+VALUES ('pub_klabin_jenny_klabin_segall', 'Jenny Klabin', 'Segall', 'F', 'Escritora, tradutora consagrada do Fausto de Goethe, pianista e idealizadora do Museu Lasar Segall.', 0, 0, 1, 'Grandes Empreendedores');
+INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
+VALUES ('pub_klabin_lasar_segall', 'Lasar', 'Segall', 'M', 'Pintor, escultor e gravurista modernista de projeção internacional; casado com Jenny Klabin.', 0, 0, 1, 'Grandes Empreendedores');
+INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
+VALUES ('pub_klabin_luisa_klabin', 'Luisa', 'Klabin', 'F', 'Violinista de concerto; filha de Maurício Freeman Klabin.', 0, 0, 1, 'Grandes Empreendedores');
+INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
+VALUES ('pub_klabin_nessel_klabin', 'Nessel', 'Klabin Lafer', 'F', 'Irmã de Maurício Klabin; casada com o primo Miguel Lafer.', 0, 0, 1, 'Grandes Empreendedores');
+INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
+VALUES ('pub_klabin_miguel_lafer', 'Miguel', 'Lafer', 'M', 'Empresário cofundador da Klabin Irmãos & Cia (1899).', 0, 0, 1, 'Grandes Empreendedores');
+INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
+VALUES ('pub_klabin_wolff_klabin', 'Wolff', 'Klabin', 'M', 'Criou com Horácio Lafer a grande indústria de celulose de Monte Alegre, PR.', 0, 0, 1, 'Grandes Empreendedores');
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
 VALUES ('pub_klabin_horacio_lafer', 'Horácio', 'Lafer', 'M', 'Empresário e estadista; ministro da Fazenda (1951) e das Relações Exteriores (1959).', 0, 0, 1, 'Grandes Empreendedores');
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
-VALUES ('pub_klabin_israel_klabin', 'Israel', 'Klabin', 'U', 'Engenheiro, ambientalista e ex-prefeito do Rio de Janeiro (1979–1980).', 0, 0, 1, 'Grandes Empreendedores');
+VALUES ('pub_klabin_maria_luisa_salles', 'Maria Luísa "Mimi"', 'Salles Lafer', 'F', 'Esposa do ministro Horácio Lafer; mãe de Sylvia.', 0, 0, 1, 'Grandes Empreendedores');
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
-VALUES ('pub_klabin_celso_lafer', 'Celso', 'Lafer', 'U', 'Jurista e diplomata; ministro das Relações Exteriores (1992 e 2001–02); membro da ABL.', 0, 0, 1, 'Grandes Empreendedores');
+VALUES ('pub_klabin_sylvia_lafer', 'Sylvia Lafer', 'Piva', 'F', 'Filha de Horácio Lafer; mãe de Horácio Lafer Piva.', 0, 0, 1, 'Grandes Empreendedores');
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
-VALUES ('pub_klabin_horacio_lafer_piva', 'Horácio Lafer', 'Piva', 'M', 'Atuação: empresário (ex-presidente da FIESP).', 0, 0, 1, 'Grandes Empreendedores');
+VALUES ('pub_klabin_pedro_franco_piva', 'Pedro Franco', 'Piva', 'M', 'Empresário e senador da República por São Paulo.', 0, 0, 1, 'Grandes Empreendedores');
+INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
+VALUES ('pub_klabin_horacio_lafer_piva', 'Horácio Lafer', 'Piva', 'M', 'Empresário; ex-presidente da FIESP.', 1, 0, 1, 'Grandes Empreendedores');
+INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
+VALUES ('pub_klabin_hessel_klabin', 'Hessel', 'Klabin', 'M', 'Irmão de Maurício e Nessel; cofundador da KIC.', 0, 0, 1, 'Grandes Empreendedores');
+INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
+VALUES ('pub_klabin_fanny_gordon', 'Fanny Gordon', 'Klabin', 'F', 'Esposa de Hessel Klabin; mãe de Ema e Eva Klabin.', 0, 0, 1, 'Grandes Empreendedores');
+INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
+VALUES ('pub_klabin_ema_gordon_klabin', 'Ema Gordon', 'Klabin', 'F', 'Colecionadora de arte e filantropa; criadora da Fundação Cultural Ema Gordon Klabin.', 0, 0, 1, 'Grandes Empreendedores');
+INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
+VALUES ('pub_klabin_eva_klabin', 'Eva', 'Klabin', 'F', 'Colecionadora de arte; criadora da Fundação Eva Klabin no Rio de Janeiro.', 0, 0, 1, 'Grandes Empreendedores');
+INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
+VALUES ('pub_klabin_israel_klabin', 'Israel', 'Klabin', 'M', 'Engenheiro, ambientalista e ex-prefeito do Rio de Janeiro (1979–1980).', 1, 0, 1, 'Grandes Empreendedores');
+INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
+VALUES ('pub_klabin_celso_lafer', 'Celso', 'Lafer', 'M', 'Jurista e diplomata; ministro das Relações Exteriores (1992 e 2001–02); membro da ABL.', 1, 0, 1, 'Grandes Empreendedores');
+
 INSERT OR IGNORE INTO arvores (id, nome, descricao, raiz_pessoa_id, is_publico, categoria, pais, periodo)
-VALUES ('pub_arv_klabin', 'Família Klabin-Lafer', 'Fundadores da maior indústria papeleira do Brasil e diplomatas proeminentes.', 'pub_klabin_miguel_lafer', 1, 'Grandes Empreendedores e Pioneiros', 'Brasil / Lituânia', '1850 – presente');
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_klabin', 'pub_klabin_mauricio_freeman_klabin', NULL);
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_klabin', 'pub_klabin_nessel_klabin', NULL);
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_klabin', 'pub_klabin_miguel_lafer', NULL);
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_klabin', 'pub_klabin_wolff_klabin', NULL);
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_klabin', 'pub_klabin_horacio_lafer', NULL);
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_klabin', 'pub_klabin_israel_klabin', NULL);
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_klabin', 'pub_klabin_celso_lafer', NULL);
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_klabin', 'pub_klabin_horacio_lafer_piva', NULL);
+VALUES ('pub_arv_klabin', 'Família Klabin-Lafer', 'Fundadores da maior indústria papeleira do Brasil, intelectuais, artistas e diplomatas.', 'pub_klabin_mauricio_freeman_klabin', 1, 'Grandes Empreendedores e Pioneiros', 'Brasil / Lituânia', '1860 – presente');
+
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_klabin', 'pub_klabin_mauricio_freeman_klabin', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_klabin', 'pub_klabin_bertha_obstand', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_klabin', 'pub_klabin_mina_klabin_warchavchik', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_klabin', 'pub_klabin_gregori_warchavchik', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_klabin', 'pub_klabin_jenny_klabin_segall', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_klabin', 'pub_klabin_lasar_segall', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_klabin', 'pub_klabin_luisa_klabin', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_klabin', 'pub_klabin_nessel_klabin', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_klabin', 'pub_klabin_miguel_lafer', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_klabin', 'pub_klabin_wolff_klabin', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_klabin', 'pub_klabin_horacio_lafer', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_klabin', 'pub_klabin_maria_luisa_salles', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_klabin', 'pub_klabin_sylvia_lafer', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_klabin', 'pub_klabin_pedro_franco_piva', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_klabin', 'pub_klabin_horacio_lafer_piva', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_klabin', 'pub_klabin_hessel_klabin', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_klabin', 'pub_klabin_fanny_gordon', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_klabin', 'pub_klabin_ema_gordon_klabin', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_klabin', 'pub_klabin_eva_klabin', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_klabin', 'pub_klabin_israel_klabin', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_klabin', 'pub_klabin_celso_lafer', NULL);
+
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
-VALUES ('ev_b_pub_klabin_mauricio_freeman_klabin', 'pub_klabin_mauricio_freeman_klabin', 'nascimento', 1860, 1860, 'exata', '1860');
+VALUES ('ev_b_pub_klabin_mauricio_freeman_klabin', 'pub_klabin_mauricio_freeman_klabin', 'nascimento', 1860, 1860, 'exata', '1º de março de 1860');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
-VALUES ('ev_d_pub_klabin_mauricio_freeman_klabin', 'pub_klabin_mauricio_freeman_klabin', 'falecimento', 1923, 1923, 'exata', '1923');
+VALUES ('ev_d_pub_klabin_mauricio_freeman_klabin', 'pub_klabin_mauricio_freeman_klabin', 'falecimento', 1923, 1923, 'exata', '21 de setembro de 1923');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_b_pub_klabin_bertha', 'pub_klabin_bertha_obstand', 'nascimento', 1865, 1865, 'cerca_de', 'cerca de 1865');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_d_pub_klabin_bertha', 'pub_klabin_bertha_obstand', 'falecimento', 1933, 1933, 'exata', '1933');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_b_pub_klabin_mina', 'pub_klabin_mina_klabin_warchavchik', 'nascimento', 1896, 1896, 'cerca_de', 'cerca de 1896');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_d_pub_klabin_mina', 'pub_klabin_mina_klabin_warchavchik', 'falecimento', 1969, 1969, 'exata', '1969');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_b_pub_klabin_gregori', 'pub_klabin_gregori_warchavchik', 'nascimento', 1896, 1896, 'exata', '2 de abril de 1896');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_d_pub_klabin_gregori', 'pub_klabin_gregori_warchavchik', 'falecimento', 1972, 1972, 'exata', '27 de julho de 1972');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_b_pub_klabin_jenny', 'pub_klabin_jenny_klabin_segall', 'nascimento', 1899, 1899, 'exata', '15 de fevereiro de 1899');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_d_pub_klabin_jenny', 'pub_klabin_jenny_klabin_segall', 'falecimento', 1967, 1967, 'exata', '5 de agosto de 1967');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_b_pub_klabin_lasar', 'pub_klabin_lasar_segall', 'nascimento', 1891, 1891, 'exata', '21 de julho de 1891');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_d_pub_klabin_lasar', 'pub_klabin_lasar_segall', 'falecimento', 1957, 1957, 'exata', '2 de agosto de 1957');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_b_pub_klabin_luisa', 'pub_klabin_luisa_klabin', 'nascimento', 1906, 1906, 'cerca_de', 'cerca de 1906');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_d_pub_klabin_luisa', 'pub_klabin_luisa_klabin', 'falecimento', 1989, 1989, 'exata', '1989');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
 VALUES ('ev_b_pub_klabin_nessel_klabin', 'pub_klabin_nessel_klabin', 'nascimento', 1880, 1880, 'exata', '1880');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
@@ -2162,27 +2310,84 @@ VALUES ('ev_d_pub_klabin_nessel_klabin', 'pub_klabin_nessel_klabin', 'faleciment
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
 VALUES ('ev_b_pub_klabin_miguel_lafer', 'pub_klabin_miguel_lafer', 'nascimento', 1876, 1876, 'exata', '1876');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
-VALUES ('ev_d_pub_klabin_miguel_lafer', 'pub_klabin_miguel_lafer', 'falecimento', 1926, 1926, 'exata', '1926');
+VALUES ('ev_d_pub_klabin_miguel_lafer', 'pub_klabin_miguel_lafer', 'falecimento', 1926, 1926, 'exata', '12 de fevereiro de 1926');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
 VALUES ('ev_b_pub_klabin_wolff_klabin', 'pub_klabin_wolff_klabin', 'nascimento', 1880, 1880, 'exata', '1880');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
 VALUES ('ev_d_pub_klabin_wolff_klabin', 'pub_klabin_wolff_klabin', 'falecimento', 1957, 1957, 'exata', '1957');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
-VALUES ('ev_b_pub_klabin_horacio_lafer', 'pub_klabin_horacio_lafer', 'nascimento', 1900, 1900, 'exata', '1900');
+VALUES ('ev_b_pub_klabin_horacio_lafer', 'pub_klabin_horacio_lafer', 'nascimento', 1900, 1900, 'exata', '3 de maio de 1900');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
 VALUES ('ev_d_pub_klabin_horacio_lafer', 'pub_klabin_horacio_lafer', 'falecimento', 1965, 1965, 'exata', '1965');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
-VALUES ('ev_b_pub_klabin_israel_klabin', 'pub_klabin_israel_klabin', 'nascimento', 1926, 1926, 'exata', '1926');
+VALUES ('ev_b_pub_klabin_hessel', 'pub_klabin_hessel_klabin', 'nascimento', 1867, 1867, 'exata', '1867');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_d_pub_klabin_hessel', 'pub_klabin_hessel_klabin', 'falecimento', 1946, 1946, 'exata', '1946');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_b_pub_klabin_ema', 'pub_klabin_ema_gordon_klabin', 'nascimento', 1907, 1907, 'exata', '1907');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_d_pub_klabin_ema', 'pub_klabin_ema_gordon_klabin', 'falecimento', 1994, 1994, 'exata', '1994');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_b_pub_klabin_eva', 'pub_klabin_eva_klabin', 'nascimento', 1903, 1903, 'exata', '1903');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_d_pub_klabin_eva', 'pub_klabin_eva_klabin', 'falecimento', 1991, 1991, 'exata', '1991');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_b_pub_klabin_israel_klabin', 'pub_klabin_israel_klabin', 'nascimento', 1926, 1926, 'exata', '20 de setembro de 1926');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
 VALUES ('ev_b_pub_klabin_celso_lafer', 'pub_klabin_celso_lafer', 'nascimento', 1941, 1941, 'exata', '1941');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
 VALUES ('ev_b_pub_klabin_horacio_lafer_piva', 'pub_klabin_horacio_lafer_piva', 'nascimento', 1957, 1957, 'exata', '1957');
+
+INSERT OR IGNORE INTO unioes (id, slot_masculino_id, slot_feminino_id, estado_vinculo, nota)
+VALUES ('pub_u_pub_arv_klabin_mauricio_bertha', 'pub_klabin_mauricio_freeman_klabin', 'pub_klabin_bertha_obstand', 'casamento', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
+VALUES ('pub_arv_klabin', NULL, 'pub_u_pub_arv_klabin_mauricio_bertha');
+INSERT OR IGNORE INTO uniao_filhos (uniao_id, pessoa_id, tipo_vinculo, ordem)
+VALUES ('pub_u_pub_arv_klabin_mauricio_bertha', 'pub_klabin_mina_klabin_warchavchik', 'biologico', 1);
+INSERT OR IGNORE INTO uniao_filhos (uniao_id, pessoa_id, tipo_vinculo, ordem)
+VALUES ('pub_u_pub_arv_klabin_mauricio_bertha', 'pub_klabin_jenny_klabin_segall', 'biologico', 2);
+INSERT OR IGNORE INTO uniao_filhos (uniao_id, pessoa_id, tipo_vinculo, ordem)
+VALUES ('pub_u_pub_arv_klabin_mauricio_bertha', 'pub_klabin_luisa_klabin', 'biologico', 3);
+
+INSERT OR IGNORE INTO unioes (id, slot_masculino_id, slot_feminino_id, estado_vinculo, nota)
+VALUES ('pub_u_pub_arv_klabin_lasar_jenny', 'pub_klabin_lasar_segall', 'pub_klabin_jenny_klabin_segall', 'casamento', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
+VALUES ('pub_arv_klabin', NULL, 'pub_u_pub_arv_klabin_lasar_jenny');
+
+INSERT OR IGNORE INTO unioes (id, slot_masculino_id, slot_feminino_id, estado_vinculo, nota)
+VALUES ('pub_u_pub_arv_klabin_gregori_mina', 'pub_klabin_gregori_warchavchik', 'pub_klabin_mina_klabin_warchavchik', 'casamento', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
+VALUES ('pub_arv_klabin', NULL, 'pub_u_pub_arv_klabin_gregori_mina');
+
 INSERT OR IGNORE INTO unioes (id, slot_masculino_id, slot_feminino_id, estado_vinculo, nota)
 VALUES ('pub_u_pub_arv_klabin_pub_klabin_miguel_lafer_pub_klabin_ness', 'pub_klabin_miguel_lafer', 'pub_klabin_nessel_klabin', 'casamento', NULL);
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
 VALUES ('pub_arv_klabin', NULL, 'pub_u_pub_arv_klabin_pub_klabin_miguel_lafer_pub_klabin_ness');
 INSERT OR IGNORE INTO uniao_filhos (uniao_id, pessoa_id, tipo_vinculo, ordem)
 VALUES ('pub_u_pub_arv_klabin_pub_klabin_miguel_lafer_pub_klabin_ness', 'pub_klabin_horacio_lafer', 'biologico', 1);
+
+INSERT OR IGNORE INTO unioes (id, slot_masculino_id, slot_feminino_id, estado_vinculo, nota)
+VALUES ('pub_u_pub_arv_klabin_horacio_mimi', 'pub_klabin_horacio_lafer', 'pub_klabin_maria_luisa_salles', 'casamento', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
+VALUES ('pub_arv_klabin', NULL, 'pub_u_pub_arv_klabin_horacio_mimi');
+INSERT OR IGNORE INTO uniao_filhos (uniao_id, pessoa_id, tipo_vinculo, ordem)
+VALUES ('pub_u_pub_arv_klabin_horacio_mimi', 'pub_klabin_sylvia_lafer', 'biologico', 1);
+
+INSERT OR IGNORE INTO unioes (id, slot_masculino_id, slot_feminino_id, estado_vinculo, nota)
+VALUES ('pub_u_pub_arv_klabin_pedro_sylvia', 'pub_klabin_pedro_franco_piva', 'pub_klabin_sylvia_lafer', 'casamento', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
+VALUES ('pub_arv_klabin', NULL, 'pub_u_pub_arv_klabin_pedro_sylvia');
+INSERT OR IGNORE INTO uniao_filhos (uniao_id, pessoa_id, tipo_vinculo, ordem)
+VALUES ('pub_u_pub_arv_klabin_pedro_sylvia', 'pub_klabin_horacio_lafer_piva', 'biologico', 1);
+
+INSERT OR IGNORE INTO unioes (id, slot_masculino_id, slot_feminino_id, estado_vinculo, nota)
+VALUES ('pub_u_pub_arv_klabin_hessel_fanny', 'pub_klabin_hessel_klabin', 'pub_klabin_fanny_gordon', 'casamento', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
+VALUES ('pub_arv_klabin', NULL, 'pub_u_pub_arv_klabin_hessel_fanny');
+INSERT OR IGNORE INTO uniao_filhos (uniao_id, pessoa_id, tipo_vinculo, ordem)
+VALUES ('pub_u_pub_arv_klabin_hessel_fanny', 'pub_klabin_eva_klabin', 'biologico', 1);
+INSERT OR IGNORE INTO uniao_filhos (uniao_id, pessoa_id, tipo_vinculo, ordem)
+VALUES ('pub_u_pub_arv_klabin_hessel_fanny', 'pub_klabin_ema_gordon_klabin', 'biologico', 2);
 
 -- =====================================================================
 -- ÁRVORE: Família Matarazzo
@@ -2274,79 +2479,79 @@ VALUES ('pub_u_pub_arv_matarazzo_pub_ph_pub_matarazzo_maria_pia_matar', 'pub_mat
 -- ÁRVORE: Família Rockefeller
 -- =====================================================================
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
-VALUES ('pub_rockefeller_william_avery_rockefeller_sr', 'William A. Rockefeller', 'Sr.', 'M', 'Atuação: vendedor ambulante.', 0, 0, 1, 'Grandes Empreendedores');
+VALUES ('pub_rockefeller_william_avery_rockefeller_sr', 'William A.', 'Rockefeller Sr.', 'M', 'Caixeiro-viajante e comerciante de remédios populares; pai do fundador.', 0, 0, 1, 'Grandes Empreendedores');
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
-VALUES ('pub_rockefeller_john_d_rockefeller', 'John D.', 'Rockefeller', 'M', 'Fundador da Standard Oil; primeiro bilionário do mundo (1916) e grande filantropo.', 0, 0, 1, 'Grandes Empreendedores');
+VALUES ('pub_rockefeller_eliza_davison', 'Eliza', 'Davison Rockefeller', 'F', 'Mãe de John D. Rockefeller e William Jr.; batista devota.', 0, 0, 1, 'Grandes Empreendedores');
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
-VALUES ('pub_rockefeller_laura_spelman_rockefeller', 'Laura "Cettie" Spelman', 'Rockefeller', 'F', 'Atuação: professora.', 0, 0, 1, 'Grandes Empreendedores');
+VALUES ('pub_rockefeller_john_d_rockefeller', 'John D.', 'Rockefeller', 'M', 'Fundador da Standard Oil; considerado o americano mais rico e o maior filantropo da história.', 0, 0, 1, 'Grandes Empreendedores');
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
-VALUES ('pub_rockefeller_william_rockefeller', 'William', 'Rockefeller', 'M', 'Atuação: empresário (cofundador da Standard Oil).', 0, 0, 1, 'Grandes Empreendedores');
+VALUES ('pub_rockefeller_laura_spelman_rockefeller', 'Laura "Cettie" Spelman', 'Rockefeller', 'F', 'Professora e filantropa; esposa do fundador.', 0, 0, 1, 'Grandes Empreendedores');
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
-VALUES ('pub_rockefeller_john_d_rockefeller_jr', 'John D. Rockefeller', 'Jr.', 'M', 'Financista e filantropo; único filho homem do fundador; financiou o Rockefeller Center e a doação do terreno da ONU.', 0, 0, 1, 'Grandes Empreendedores');
+VALUES ('pub_rockefeller_william_rockefeller', 'William', 'Rockefeller Jr.', 'M', 'Empresário e financista; cofundador da Standard Oil.', 0, 0, 1, 'Grandes Empreendedores');
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
-VALUES ('pub_rockefeller_abby_aldrich_rockefeller', 'Abby Aldrich', 'Rockefeller', 'F', 'Socialite e filantropa; força motriz na criação do MoMA.', 0, 0, 1, 'Grandes Empreendedores');
+VALUES ('pub_rockefeller_john_d_rockefeller_jr', 'John D. Rockefeller', 'Jr.', 'M', 'Financista e filantropo; único filho homem do fundador; financiou o Rockefeller Center e a sede da ONU.', 0, 0, 1, 'Grandes Empreendedores');
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
-VALUES ('pub_rockefeller_abby_rockefeller_mauze', 'Abby "Babs" Rockefeller', 'Mauzé', 'F', 'Atuação: filantropa.', 0, 0, 1, 'Grandes Empreendedores');
+VALUES ('pub_rockefeller_abby_aldrich_rockefeller', 'Abby Aldrich', 'Rockefeller', 'F', 'Filantropa e colecionadora de arte; força motriz na criação do MoMA.', 0, 0, 1, 'Grandes Empreendedores');
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
-VALUES ('pub_rockefeller_john_d_rockefeller_iii', 'John D. Rockefeller', 'III', 'M', 'Filantropo; fundou a Asia Society e foi decisivo no Lincoln Center.', 0, 0, 1, 'Grandes Empreendedores');
+VALUES ('pub_rockefeller_abby_rockefeller_mauze', 'Abby "Babs" Rockefeller', 'Mauzé', 'F', 'Filantropa; fundadora da Greenacre Foundation e do Greenacre Park em Manhattan.', 0, 0, 1, 'Grandes Empreendedores');
+INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
+VALUES ('pub_rockefeller_john_d_rockefeller_iii', 'John D. Rockefeller', 'III', 'M', 'Filantropo; fundou a Asia Society e liderou a criação do Lincoln Center.', 0, 0, 1, 'Grandes Empreendedores');
+INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
+VALUES ('pub_rockefeller_blanchette_hooker', 'Blanchette Ferry', 'Hooker Rockefeller', 'F', 'Filantropa; presidente do MoMA; esposa de John D. III e mãe de Jay Rockefeller.', 0, 0, 1, 'Grandes Empreendedores');
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
 VALUES ('pub_rockefeller_nelson_rockefeller', 'Nelson', 'Rockefeller', 'M', '41º vice-presidente dos EUA e governador de Nova York.', 0, 0, 1, 'Grandes Empreendedores');
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
-VALUES ('pub_rockefeller_laurance_rockefeller', 'Laurance', 'Rockefeller', 'M', 'Financista e conservacionista; capital de risco pioneiro (Intel, Apple).', 0, 0, 1, 'Grandes Empreendedores');
+VALUES ('pub_rockefeller_laurance_rockefeller', 'Laurance', 'Rockefeller', 'M', 'Financista e conservacionista; capital de risco pioneiro.', 0, 0, 1, 'Grandes Empreendedores');
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
-VALUES ('pub_rockefeller_winthrop_rockefeller', 'Winthrop', 'Rockefeller', 'M', 'Governador do Arkansas.', 0, 0, 1, 'Grandes Empreendedores');
+VALUES ('pub_rockefeller_winthrop_rockefeller', 'Winthrop', 'Rockefeller', 'M', 'Governador do Arkansas e pecuarista.', 0, 0, 1, 'Grandes Empreendedores');
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
 VALUES ('pub_rockefeller_david_rockefeller', 'David', 'Rockefeller', 'M', 'Banqueiro; presidente do Chase Manhattan e figura de projeção internacional.', 0, 0, 1, 'Grandes Empreendedores');
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
-VALUES ('pub_rockefeller_john_d_rockefeller_iv', 'Jay', 'Rockefeller', 'M', 'Atuação: político (senador dos EUA pela Virgínia Ocidental; governador).', 0, 0, 1, 'Grandes Empreendedores');
+VALUES ('pub_rockefeller_john_d_rockefeller_iv', 'Jay', 'Rockefeller', 'M', 'Senador dos EUA pela Virgínia Ocidental e governador.', 1, 0, 1, 'Grandes Empreendedores');
+
 INSERT OR IGNORE INTO arvores (id, nome, descricao, raiz_pessoa_id, is_publico, categoria, pais, periodo)
-VALUES ('pub_arv_rockefeller', 'Família Rockefeller', 'Fundadores da Standard Oil, pioneiros da filantropia moderna, finanças e política norte-americana.', 'pub_rockefeller_john_d_rockefeller', 1, 'Grandes Empreendedores e Pioneiros', 'Estados Unidos', '1810 – presente');
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_rockefeller', 'pub_rockefeller_william_avery_rockefeller_sr', NULL);
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_rockefeller', 'pub_rockefeller_john_d_rockefeller', NULL);
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_rockefeller', 'pub_rockefeller_laura_spelman_rockefeller', NULL);
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_rockefeller', 'pub_rockefeller_william_rockefeller', NULL);
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_rockefeller', 'pub_rockefeller_john_d_rockefeller_jr', NULL);
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_rockefeller', 'pub_rockefeller_abby_aldrich_rockefeller', NULL);
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_rockefeller', 'pub_rockefeller_abby_rockefeller_mauze', NULL);
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_rockefeller', 'pub_rockefeller_john_d_rockefeller_iii', NULL);
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_rockefeller', 'pub_rockefeller_nelson_rockefeller', NULL);
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_rockefeller', 'pub_rockefeller_laurance_rockefeller', NULL);
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_rockefeller', 'pub_rockefeller_winthrop_rockefeller', NULL);
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_rockefeller', 'pub_rockefeller_david_rockefeller', NULL);
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_rockefeller', 'pub_rockefeller_john_d_rockefeller_iv', NULL);
+VALUES ('pub_arv_rockefeller', 'Família Rockefeller', 'Fundadores da Standard Oil, pioneiros da filantropia moderna, finanças e política norte-americana.', 'pub_rockefeller_william_avery_rockefeller_sr', 1, 'Grandes Empreendedores e Pioneiros', 'Estados Unidos', '1810 – presente');
+
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_rockefeller', 'pub_rockefeller_william_avery_rockefeller_sr', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_rockefeller', 'pub_rockefeller_eliza_davison', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_rockefeller', 'pub_rockefeller_john_d_rockefeller', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_rockefeller', 'pub_rockefeller_laura_spelman_rockefeller', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_rockefeller', 'pub_rockefeller_william_rockefeller', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_rockefeller', 'pub_rockefeller_john_d_rockefeller_jr', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_rockefeller', 'pub_rockefeller_abby_aldrich_rockefeller', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_rockefeller', 'pub_rockefeller_abby_rockefeller_mauze', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_rockefeller', 'pub_rockefeller_john_d_rockefeller_iii', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_rockefeller', 'pub_rockefeller_blanchette_hooker', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_rockefeller', 'pub_rockefeller_nelson_rockefeller', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_rockefeller', 'pub_rockefeller_laurance_rockefeller', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_rockefeller', 'pub_rockefeller_winthrop_rockefeller', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_rockefeller', 'pub_rockefeller_david_rockefeller', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_rockefeller', 'pub_rockefeller_john_d_rockefeller_iv', NULL);
+
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
 VALUES ('ev_b_pub_rockefeller_william_avery_rockefeller_sr', 'pub_rockefeller_william_avery_rockefeller_sr', 'nascimento', 1810, 1810, 'exata', '1810');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
 VALUES ('ev_d_pub_rockefeller_william_avery_rockefeller_sr', 'pub_rockefeller_william_avery_rockefeller_sr', 'falecimento', 1906, 1906, 'exata', '1906');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
-VALUES ('ev_b_pub_rockefeller_john_d_rockefeller', 'pub_rockefeller_john_d_rockefeller', 'nascimento', 1839, 1839, 'exata', '1839');
+VALUES ('ev_b_pub_rockefeller_eliza', 'pub_rockefeller_eliza_davison', 'nascimento', 1813, 1813, 'exata', '1813');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
-VALUES ('ev_d_pub_rockefeller_john_d_rockefeller', 'pub_rockefeller_john_d_rockefeller', 'falecimento', 1937, 1937, 'exata', '1937');
+VALUES ('ev_d_pub_rockefeller_eliza', 'pub_rockefeller_eliza_davison', 'falecimento', 1889, 1889, 'exata', '1889');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_b_pub_rockefeller_john_d_rockefeller', 'pub_rockefeller_john_d_rockefeller', 'nascimento', 1839, 1839, 'exata', '8 de julho de 1839');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_d_pub_rockefeller_john_d_rockefeller', 'pub_rockefeller_john_d_rockefeller', 'falecimento', 1937, 1937, 'exata', '23 de maio de 1937');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
 VALUES ('ev_b_pub_rockefeller_laura_spelman_rockefeller', 'pub_rockefeller_laura_spelman_rockefeller', 'nascimento', 1839, 1839, 'exata', '1839');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
 VALUES ('ev_d_pub_rockefeller_laura_spelman_rockefeller', 'pub_rockefeller_laura_spelman_rockefeller', 'falecimento', 1915, 1915, 'exata', '1915');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
-VALUES ('ev_b_pub_rockefeller_william_rockefeller', 'pub_rockefeller_william_rockefeller', 'nascimento', 1841, 1841, 'exata', '1841');
+VALUES ('ev_b_pub_rockefeller_william_rockefeller', 'pub_rockefeller_william_rockefeller', 'nascimento', 1841, 1841, 'exata', '31 de maio de 1841');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
-VALUES ('ev_d_pub_rockefeller_william_rockefeller', 'pub_rockefeller_william_rockefeller', 'falecimento', 1922, 1922, 'exata', '1922');
+VALUES ('ev_d_pub_rockefeller_william_rockefeller', 'pub_rockefeller_william_rockefeller', 'falecimento', 1922, 1922, 'exata', '24 de junho de 1922');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
-VALUES ('ev_b_pub_rockefeller_john_d_rockefeller_jr', 'pub_rockefeller_john_d_rockefeller_jr', 'nascimento', 1874, 1874, 'exata', '1874');
+VALUES ('ev_b_pub_rockefeller_john_d_rockefeller_jr', 'pub_rockefeller_john_d_rockefeller_jr', 'nascimento', 1874, 1874, 'exata', '29 de janeiro de 1874');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
-VALUES ('ev_d_pub_rockefeller_john_d_rockefeller_jr', 'pub_rockefeller_john_d_rockefeller_jr', 'falecimento', 1960, 1960, 'exata', '1960');
+VALUES ('ev_d_pub_rockefeller_john_d_rockefeller_jr', 'pub_rockefeller_john_d_rockefeller_jr', 'falecimento', 1960, 1960, 'exata', '11 de maio de 1960');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
 VALUES ('ev_b_pub_rockefeller_abby_aldrich_rockefeller', 'pub_rockefeller_abby_aldrich_rockefeller', 'nascimento', 1874, 1874, 'exata', '1874');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
@@ -2360,29 +2565,67 @@ VALUES ('ev_b_pub_rockefeller_john_d_rockefeller_iii', 'pub_rockefeller_john_d_r
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
 VALUES ('ev_d_pub_rockefeller_john_d_rockefeller_iii', 'pub_rockefeller_john_d_rockefeller_iii', 'falecimento', 1978, 1978, 'exata', '1978');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
-VALUES ('ev_b_pub_rockefeller_nelson_rockefeller', 'pub_rockefeller_nelson_rockefeller', 'nascimento', 1908, 1908, 'exata', '1908');
+VALUES ('ev_b_pub_rockefeller_blanchette', 'pub_rockefeller_blanchette_hooker', 'nascimento', 1909, 1909, 'exata', '1909');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
-VALUES ('ev_d_pub_rockefeller_nelson_rockefeller', 'pub_rockefeller_nelson_rockefeller', 'falecimento', 1979, 1979, 'exata', '1979');
+VALUES ('ev_d_pub_rockefeller_blanchette', 'pub_rockefeller_blanchette_hooker', 'falecimento', 1992, 1992, 'exata', '1992');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
-VALUES ('ev_b_pub_rockefeller_laurance_rockefeller', 'pub_rockefeller_laurance_rockefeller', 'nascimento', 1910, 1910, 'exata', '1910');
+VALUES ('ev_b_pub_rockefeller_nelson_rockefeller', 'pub_rockefeller_nelson_rockefeller', 'nascimento', 1908, 1908, 'exata', '8 de julho de 1908');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
-VALUES ('ev_d_pub_rockefeller_laurance_rockefeller', 'pub_rockefeller_laurance_rockefeller', 'falecimento', 2004, 2004, 'exata', '2004');
+VALUES ('ev_d_pub_rockefeller_nelson_rockefeller', 'pub_rockefeller_nelson_rockefeller', 'falecimento', 1979, 1979, 'exata', '26 de janeiro de 1979');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_b_pub_rockefeller_laurance_rockefeller', 'pub_rockefeller_laurance_rockefeller', 'nascimento', 1910, 1910, 'exata', '26 de maio de 1910');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_d_pub_rockefeller_laurance_rockefeller', 'pub_rockefeller_laurance_rockefeller', 'falecimento', 2004, 2004, 'exata', '11 de julho de 2004');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
 VALUES ('ev_b_pub_rockefeller_winthrop_rockefeller', 'pub_rockefeller_winthrop_rockefeller', 'nascimento', 1912, 1912, 'exata', '1912');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
 VALUES ('ev_d_pub_rockefeller_winthrop_rockefeller', 'pub_rockefeller_winthrop_rockefeller', 'falecimento', 1973, 1973, 'exata', '1973');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
-VALUES ('ev_b_pub_rockefeller_david_rockefeller', 'pub_rockefeller_david_rockefeller', 'nascimento', 1915, 1915, 'exata', '1915');
+VALUES ('ev_b_pub_rockefeller_david_rockefeller', 'pub_rockefeller_david_rockefeller', 'nascimento', 1915, 1915, 'exata', '12 de junho de 1915');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
-VALUES ('ev_d_pub_rockefeller_david_rockefeller', 'pub_rockefeller_david_rockefeller', 'falecimento', 2017, 2017, 'exata', '2017');
+VALUES ('ev_d_pub_rockefeller_david_rockefeller', 'pub_rockefeller_david_rockefeller', 'falecimento', 2017, 2017, 'exata', '20 de março de 2017');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
 VALUES ('ev_b_pub_rockefeller_john_d_rockefeller_iv', 'pub_rockefeller_john_d_rockefeller_iv', 'nascimento', 1937, 1937, 'exata', '1937');
+
 INSERT OR IGNORE INTO unioes (id, slot_masculino_id, slot_feminino_id, estado_vinculo, nota)
-VALUES ('pub_u_pub_arv_rockefeller_pub_rockefeller_john_d_rockefeller', 'pub_rockefeller_john_d_rockefeller_iii', 'pub_rockefeller_laura_spelman_rockefeller', 'casamento', NULL);
+VALUES ('pub_u_pub_arv_rockefeller_william_eliza', 'pub_rockefeller_william_avery_rockefeller_sr', 'pub_rockefeller_eliza_davison', 'casamento', NULL);
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_rockefeller', NULL, 'pub_u_pub_arv_rockefeller_pub_rockefeller_john_d_rockefeller');
+VALUES ('pub_arv_rockefeller', NULL, 'pub_u_pub_arv_rockefeller_william_eliza');
 INSERT OR IGNORE INTO uniao_filhos (uniao_id, pessoa_id, tipo_vinculo, ordem)
-VALUES ('pub_u_pub_arv_rockefeller_pub_rockefeller_john_d_rockefeller', 'pub_rockefeller_john_d_rockefeller_iv', 'biologico', 1);
+VALUES ('pub_u_pub_arv_rockefeller_william_eliza', 'pub_rockefeller_john_d_rockefeller', 'biologico', 1);
+INSERT OR IGNORE INTO uniao_filhos (uniao_id, pessoa_id, tipo_vinculo, ordem)
+VALUES ('pub_u_pub_arv_rockefeller_william_eliza', 'pub_rockefeller_william_rockefeller', 'biologico', 2);
+
+INSERT OR IGNORE INTO unioes (id, slot_masculino_id, slot_feminino_id, estado_vinculo, nota)
+VALUES ('pub_u_pub_arv_rockefeller_jdr_laura', 'pub_rockefeller_john_d_rockefeller', 'pub_rockefeller_laura_spelman_rockefeller', 'casamento', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
+VALUES ('pub_arv_rockefeller', NULL, 'pub_u_pub_arv_rockefeller_jdr_laura');
+INSERT OR IGNORE INTO uniao_filhos (uniao_id, pessoa_id, tipo_vinculo, ordem)
+VALUES ('pub_u_pub_arv_rockefeller_jdr_laura', 'pub_rockefeller_john_d_rockefeller_jr', 'biologico', 1);
+
+INSERT OR IGNORE INTO unioes (id, slot_masculino_id, slot_feminino_id, estado_vinculo, nota)
+VALUES ('pub_u_pub_arv_rockefeller_jdr_jr_abby', 'pub_rockefeller_john_d_rockefeller_jr', 'pub_rockefeller_abby_aldrich_rockefeller', 'casamento', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
+VALUES ('pub_arv_rockefeller', NULL, 'pub_u_pub_arv_rockefeller_jdr_jr_abby');
+INSERT OR IGNORE INTO uniao_filhos (uniao_id, pessoa_id, tipo_vinculo, ordem)
+VALUES ('pub_u_pub_arv_rockefeller_jdr_jr_abby', 'pub_rockefeller_abby_rockefeller_mauze', 'biologico', 1);
+INSERT OR IGNORE INTO uniao_filhos (uniao_id, pessoa_id, tipo_vinculo, ordem)
+VALUES ('pub_u_pub_arv_rockefeller_jdr_jr_abby', 'pub_rockefeller_john_d_rockefeller_iii', 'biologico', 2);
+INSERT OR IGNORE INTO uniao_filhos (uniao_id, pessoa_id, tipo_vinculo, ordem)
+VALUES ('pub_u_pub_arv_rockefeller_jdr_jr_abby', 'pub_rockefeller_nelson_rockefeller', 'biologico', 3);
+INSERT OR IGNORE INTO uniao_filhos (uniao_id, pessoa_id, tipo_vinculo, ordem)
+VALUES ('pub_u_pub_arv_rockefeller_jdr_jr_abby', 'pub_rockefeller_laurance_rockefeller', 'biologico', 4);
+INSERT OR IGNORE INTO uniao_filhos (uniao_id, pessoa_id, tipo_vinculo, ordem)
+VALUES ('pub_u_pub_arv_rockefeller_jdr_jr_abby', 'pub_rockefeller_winthrop_rockefeller', 'biologico', 5);
+INSERT OR IGNORE INTO uniao_filhos (uniao_id, pessoa_id, tipo_vinculo, ordem)
+VALUES ('pub_u_pub_arv_rockefeller_jdr_jr_abby', 'pub_rockefeller_david_rockefeller', 'biologico', 6);
+
+INSERT OR IGNORE INTO unioes (id, slot_masculino_id, slot_feminino_id, estado_vinculo, nota)
+VALUES ('pub_u_pub_arv_rockefeller_jdr_iii_blanchette', 'pub_rockefeller_john_d_rockefeller_iii', 'pub_rockefeller_blanchette_hooker', 'casamento', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
+VALUES ('pub_arv_rockefeller', NULL, 'pub_u_pub_arv_rockefeller_jdr_iii_blanchette');
+INSERT OR IGNORE INTO uniao_filhos (uniao_id, pessoa_id, tipo_vinculo, ordem)
+VALUES ('pub_u_pub_arv_rockefeller_jdr_iii_blanchette', 'pub_rockefeller_john_d_rockefeller_iv', 'biologico', 1);
 
 -- =====================================================================
 -- ÁRVORE: 18ª Dinastia do Egito (Tutmésides e Amarna)
@@ -3291,85 +3534,111 @@ VALUES ('pub_u_pub_arv_kennedy_pub_kennedy_edward_m_kennedy_pub_ph_pu', 'pub_ken
 -- ÁRVORE: Família Perón
 -- =====================================================================
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
-VALUES ('pub_peron_mario_tomas_peron', 'Mario Tomás', 'Perón', 'M', 'Atuação: agricultor.', 0, 0, 1, 'Chefes de Estado e Política');
+VALUES ('pub_peron_mario_tomas_peron', 'Mario Tomás', 'Perón', 'M', 'Produtor agropecuário; pai do general Juan Domingo Perón.', 0, 0, 1, 'Chefes de Estado e Política');
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
-VALUES ('pub_peron_juana_sosa_toledo', 'Juana', 'Sosa', 'F', '', 0, 0, 1, 'Chefes de Estado e Política');
+VALUES ('pub_peron_juana_sosa_toledo', 'Juana', 'Sosa Toledo', 'F', 'Mãe de Juan Domingo Perón; de ascendência indígena tehuelche.', 0, 0, 1, 'Chefes de Estado e Política');
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
-VALUES ('pub_peron_juan_domingo_peron', 'Juan Domingo', 'Perón', 'M', 'Militar e político; três vezes presidente da Argentina e fundador do peronismo.', 0, 0, 1, 'Chefes de Estado e Política');
+VALUES ('pub_peron_mario_avelino_peron', 'Mario Avelino', 'Perón', 'M', 'Irmão mais velho de Juan Domingo Perón.', 0, 0, 1, 'Chefes de Estado e Política');
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
-VALUES ('pub_peron_mario_avelino_peron', 'Mario Avelino', 'Perón', 'M', '', 0, 0, 1, 'Chefes de Estado e Política');
+VALUES ('pub_peron_juan_domingo_peron', 'Juan Domingo', 'Perón', 'M', 'Militar, escritor político e três vezes presidente da Argentina; fundador do peronismo.', 0, 0, 1, 'Chefes de Estado e Política');
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
-VALUES ('pub_peron_aurelia_tizon', 'Aurelia', 'Tizón', 'F', 'Primeira esposa de Perón; professora, pintora e tradutora.', 0, 0, 1, 'Chefes de Estado e Política');
+VALUES ('pub_peron_aurelia_tizon', 'Aurelia "Potota"', 'Tizón', 'F', 'Primeira esposa de Perón; professora, pintora, tradutora e violonista.', 0, 0, 1, 'Chefes de Estado e Política');
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
-VALUES ('pub_peron_eva_peron', 'Eva', 'Perón', 'F', 'Atriz e líder política; primeira-dama, símbolo do peronismo e da conquista do voto feminino.', 0, 0, 1, 'Chefes de Estado e Política');
+VALUES ('pub_peron_eva_peron', 'Eva "Evita"', 'Perón', 'F', 'Atriz e líder política; primeira-dama, símbolo do peronismo e da conquista do voto feminino.', 0, 0, 1, 'Chefes de Estado e Política');
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
-VALUES ('pub_peron_isabel_peron', 'Isabel', 'Perón', 'F', 'Bailarina; vice e depois presidenta da Argentina (1974–1976), a primeira mulher chefe de Estado do país.', 0, 0, 1, 'Chefes de Estado e Política');
+VALUES ('pub_peron_isabel_peron', 'Isabel', 'Perón', 'F', 'Bailarina; vice e depois presidenta da Argentina (1974–1976), a primeira mulher chefe de Estado das Américas.', 1, 0, 1, 'Chefes de Estado e Política');
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
-VALUES ('pub_peron_juana_ibarguren', 'Juana', 'Ibarguren', 'F', '', 0, 0, 1, 'Chefes de Estado e Política');
+VALUES ('pub_peron_juana_ibarguren', 'Juana', 'Ibarguren', 'F', 'Costureira; mãe de Eva Perón e Juan Ramón Duarte.', 0, 0, 1, 'Chefes de Estado e Política');
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
-VALUES ('pub_peron_juan_duarte_pai', 'Juan', 'Duarte', 'M', 'Atuação: fazendeiro.', 0, 0, 1, 'Chefes de Estado e Política');
+VALUES ('pub_peron_juan_duarte_pai', 'Juan', 'Duarte', 'M', 'Fazendeiro e produtor rural; pai natural de Eva Perón.', 0, 0, 1, 'Chefes de Estado e Política');
 INSERT OR IGNORE INTO pessoas (id, nome, sobrenome, sexo, minibiografia, is_vivo, is_placeholder, is_publico, categoria)
-VALUES ('pub_peron_juan_duarte_irmao', 'Juan "Juancito"', 'Duarte', 'M', 'Atuação: secretário particular de Juan Perón.', 0, 0, 1, 'Chefes de Estado e Política');
+VALUES ('pub_peron_juan_duarte_irmao', 'Juan "Juancito"', 'Duarte', 'M', 'Secretário particular do presidente Juan Perón.', 0, 0, 1, 'Chefes de Estado e Política');
+
 INSERT OR IGNORE INTO arvores (id, nome, descricao, raiz_pessoa_id, is_publico, categoria, pais, periodo)
-VALUES ('pub_arv_peron', 'Família Perón', 'O general Juan Domingo Perón, suas esposas (incluindo Evita) e familiares na Argentina.', 'pub_peron_juan_domingo_peron', 1, 'Chefes de Estado e Lideranças Políticas', 'Argentina', '1867 – 1974');
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_peron', 'pub_peron_mario_tomas_peron', NULL);
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_peron', 'pub_peron_juana_sosa_toledo', NULL);
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_peron', 'pub_peron_juan_domingo_peron', NULL);
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_peron', 'pub_peron_mario_avelino_peron', NULL);
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_peron', 'pub_peron_aurelia_tizon', NULL);
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_peron', 'pub_peron_eva_peron', NULL);
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_peron', 'pub_peron_isabel_peron', NULL);
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_peron', 'pub_peron_juana_ibarguren', NULL);
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_peron', 'pub_peron_juan_duarte_pai', NULL);
-INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_peron', 'pub_peron_juan_duarte_irmao', NULL);
+VALUES ('pub_arv_peron', 'Família Perón', 'O general Juan Domingo Perón, suas esposas (incluindo Evita) e familiares na Argentina.', 'pub_peron_mario_tomas_peron', 1, 'Chefes de Estado e Lideranças Políticas', 'Argentina', '1867 – 1974');
+
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_peron', 'pub_peron_mario_tomas_peron', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_peron', 'pub_peron_juana_sosa_toledo', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_peron', 'pub_peron_mario_avelino_peron', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_peron', 'pub_peron_juan_domingo_peron', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_peron', 'pub_peron_aurelia_tizon', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_peron', 'pub_peron_eva_peron', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_peron', 'pub_peron_isabel_peron', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_peron', 'pub_peron_juana_ibarguren', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_peron', 'pub_peron_juan_duarte_pai', NULL);
+INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id) VALUES ('pub_arv_peron', 'pub_peron_juan_duarte_irmao', NULL);
+
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
-VALUES ('ev_b_pub_peron_juan_domingo_peron', 'pub_peron_juan_domingo_peron', 'nascimento', 1895, 1895, 'exata', '1895');
+VALUES ('ev_b_pub_peron_mario_tomas', 'pub_peron_mario_tomas_peron', 'nascimento', 1867, 1867, 'exata', '1867');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
-VALUES ('ev_d_pub_peron_juan_domingo_peron', 'pub_peron_juan_domingo_peron', 'falecimento', 1974, 1974, 'exata', '1974');
+VALUES ('ev_d_pub_peron_mario_tomas', 'pub_peron_mario_tomas_peron', 'falecimento', 1928, 1928, 'exata', '1928');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_b_pub_peron_juana_sosa', 'pub_peron_juana_sosa_toledo', 'nascimento', 1874, 1874, 'exata', '1874');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_d_pub_peron_juana_sosa', 'pub_peron_juana_sosa_toledo', 'falecimento', 1953, 1953, 'exata', '1953');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_b_pub_peron_mario_avelino', 'pub_peron_mario_avelino_peron', 'nascimento', 1891, 1891, 'exata', '30 de novembro de 1891');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_d_pub_peron_mario_avelino', 'pub_peron_mario_avelino_peron', 'falecimento', 1955, 1955, 'exata', '1955');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_b_pub_peron_juan_domingo_peron', 'pub_peron_juan_domingo_peron', 'nascimento', 1895, 1895, 'exata', '8 de outubro de 1895');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_d_pub_peron_juan_domingo_peron', 'pub_peron_juan_domingo_peron', 'falecimento', 1974, 1974, 'exata', '1º de julho de 1974');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
 VALUES ('ev_b_pub_peron_aurelia_tizon', 'pub_peron_aurelia_tizon', 'nascimento', 1902, 1902, 'exata', '1902');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
-VALUES ('ev_d_pub_peron_aurelia_tizon', 'pub_peron_aurelia_tizon', 'falecimento', 1938, 1938, 'exata', '1938');
+VALUES ('ev_d_pub_peron_aurelia_tizon', 'pub_peron_aurelia_tizon', 'falecimento', 1938, 1938, 'exata', '10 de setembro de 1938');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
-VALUES ('ev_b_pub_peron_eva_peron', 'pub_peron_eva_peron', 'nascimento', 1919, 1919, 'exata', '1919');
+VALUES ('ev_b_pub_peron_eva_peron', 'pub_peron_eva_peron', 'nascimento', 1919, 1919, 'exata', '7 de maio de 1919');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
-VALUES ('ev_d_pub_peron_eva_peron', 'pub_peron_eva_peron', 'falecimento', 1952, 1952, 'exata', '1952');
+VALUES ('ev_d_pub_peron_eva_peron', 'pub_peron_eva_peron', 'falecimento', 1952, 1952, 'exata', '26 de julho de 1952');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
-VALUES ('ev_b_pub_peron_isabel_peron', 'pub_peron_isabel_peron', 'nascimento', 1931, 1931, 'exata', '1931');
+VALUES ('ev_b_pub_peron_isabel_peron', 'pub_peron_isabel_peron', 'nascimento', 1931, 1931, 'exata', '4 de fevereiro de 1931');
 INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
-VALUES ('ev_d_pub_peron_juan_duarte_irmao', 'pub_peron_juan_duarte_irmao', 'falecimento', 1953, 1953, 'exata', '1953');
+VALUES ('ev_b_pub_peron_juan_duarte_pai', 'pub_peron_juan_duarte_pai', 'nascimento', 1872, 1872, 'cerca_de', 'cerca de 1872');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_d_pub_peron_juan_duarte_pai', 'pub_peron_juan_duarte_pai', 'falecimento', 1926, 1926, 'exata', '1926');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_b_pub_peron_juana_ibarguren', 'pub_peron_juana_ibarguren', 'nascimento', 1894, 1894, 'cerca_de', 'cerca de 1894');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_d_pub_peron_juana_ibarguren', 'pub_peron_juana_ibarguren', 'falecimento', 1971, 1971, 'exata', '1971');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_b_pub_peron_juan_duarte_irmao', 'pub_peron_juan_duarte_irmao', 'nascimento', 1914, 1914, 'exata', '1914');
+INSERT OR IGNORE INTO eventos (id, pessoa_id, tipo_evento, ano_inicio, ano_fim, data_qualificador, data_texto)
+VALUES ('ev_d_pub_peron_juan_duarte_irmao', 'pub_peron_juan_duarte_irmao', 'falecimento', 1953, 1953, 'exata', '9 de abril de 1953');
+
 INSERT OR IGNORE INTO unioes (id, slot_masculino_id, slot_feminino_id, estado_vinculo, nota)
 VALUES ('pub_u_pub_arv_peron_pub_peron_mario_tomas_peron_pub_peron_ju', 'pub_peron_mario_tomas_peron', 'pub_peron_juana_sosa_toledo', 'casamento', NULL);
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
 VALUES ('pub_arv_peron', NULL, 'pub_u_pub_arv_peron_pub_peron_mario_tomas_peron_pub_peron_ju');
+INSERT OR IGNORE INTO uniao_filhos (uniao_id, pessoa_id, tipo_vinculo, ordem)
+VALUES ('pub_u_pub_arv_peron_pub_peron_mario_tomas_peron_pub_peron_ju', 'pub_peron_mario_avelino_peron', 'biologico', 1);
+INSERT OR IGNORE INTO uniao_filhos (uniao_id, pessoa_id, tipo_vinculo, ordem)
+VALUES ('pub_u_pub_arv_peron_pub_peron_mario_tomas_peron_pub_peron_ju', 'pub_peron_juan_domingo_peron', 'biologico', 2);
+
 INSERT OR IGNORE INTO unioes (id, slot_masculino_id, slot_feminino_id, estado_vinculo, nota)
 VALUES ('pub_u_pub_arv_peron_pub_peron_juan_domingo_peron_pub_peron_a', 'pub_peron_juan_domingo_peron', 'pub_peron_aurelia_tizon', 'casamento', NULL);
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
 VALUES ('pub_arv_peron', NULL, 'pub_u_pub_arv_peron_pub_peron_juan_domingo_peron_pub_peron_a');
+
 INSERT OR IGNORE INTO unioes (id, slot_masculino_id, slot_feminino_id, estado_vinculo, nota)
-VALUES ('pub_u_pub_arv_peron_pub_peron_mario_tomas_peron_pub_peron_ev', 'pub_peron_mario_tomas_peron', 'pub_peron_eva_peron', 'casamento', NULL);
+VALUES ('pub_u_pub_arv_peron_juan_eva', 'pub_peron_juan_domingo_peron', 'pub_peron_eva_peron', 'casamento', NULL);
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_peron', NULL, 'pub_u_pub_arv_peron_pub_peron_mario_tomas_peron_pub_peron_ev');
+VALUES ('pub_arv_peron', NULL, 'pub_u_pub_arv_peron_juan_eva');
+
 INSERT OR IGNORE INTO unioes (id, slot_masculino_id, slot_feminino_id, estado_vinculo, nota)
-VALUES ('pub_u_pub_arv_peron_pub_peron_mario_tomas_peron_pub_peron_is', 'pub_peron_mario_tomas_peron', 'pub_peron_isabel_peron', 'casamento', NULL);
+VALUES ('pub_u_pub_arv_peron_juan_isabel', 'pub_peron_juan_domingo_peron', 'pub_peron_isabel_peron', 'casamento', NULL);
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
-VALUES ('pub_arv_peron', NULL, 'pub_u_pub_arv_peron_pub_peron_mario_tomas_peron_pub_peron_is');
+VALUES ('pub_arv_peron', NULL, 'pub_u_pub_arv_peron_juan_isabel');
+
 INSERT OR IGNORE INTO unioes (id, slot_masculino_id, slot_feminino_id, estado_vinculo, nota)
 VALUES ('pub_u_pub_arv_peron_pub_peron_juan_duarte_pai_pub_peron_juan', 'pub_peron_juan_duarte_pai', 'pub_peron_juana_ibarguren', 'casamento', NULL);
 INSERT OR IGNORE INTO arvore_membros (arvore_id, pessoa_id, uniao_id)
 VALUES ('pub_arv_peron', NULL, 'pub_u_pub_arv_peron_pub_peron_juan_duarte_pai_pub_peron_juan');
 INSERT OR IGNORE INTO uniao_filhos (uniao_id, pessoa_id, tipo_vinculo, ordem)
-VALUES ('pub_u_pub_arv_peron_pub_peron_juan_duarte_pai_pub_peron_juan', 'pub_peron_eva_peron', 'biologico', 1);
+VALUES ('pub_u_pub_arv_peron_pub_peron_juan_duarte_pai_pub_peron_juan', 'pub_peron_juan_duarte_irmao', 'biologico', 1);
+INSERT OR IGNORE INTO uniao_filhos (uniao_id, pessoa_id, tipo_vinculo, ordem)
+VALUES ('pub_u_pub_arv_peron_pub_peron_juan_duarte_pai_pub_peron_juan', 'pub_peron_eva_peron', 'biologico', 2);
 
 -- =====================================================================
 -- ÁRVORE: Dinastia Roosevelt (Oyster Bay e Hyde Park)

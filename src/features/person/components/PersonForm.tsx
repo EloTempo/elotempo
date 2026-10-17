@@ -23,6 +23,7 @@ import type { ArvoreInfo } from '../../../lib/api';
 export interface DadosPessoaForm {
   nome: string;
   sobrenome: string;
+  nome_completo?: string;
   sexo: Sex;
   is_vivo: boolean;
   minibiografia: string;
@@ -72,6 +73,7 @@ export function PersonForm({
   const [dados, setDados] = useState<DadosPessoaForm>({
     nome: '',
     sobrenome: '',
+    nome_completo: '',
     sexo: 'M',
     is_vivo: true,
     minibiografia: '',
@@ -87,6 +89,7 @@ export function PersonForm({
     setDados({
       nome: inicial.nome ?? '',
       sobrenome: inicial.sobrenome ?? '',
+      nome_completo: '',
       sexo: (inicial.sexo as Sex) ?? 'U',
       is_vivo: inicial.is_vivo ?? true,
       minibiografia: inicial.minibiografia ?? '',
@@ -106,7 +109,12 @@ export function PersonForm({
       return;
     }
     setErroLocal(null);
-    onSalvar({ ...dados, nome: dados.nome.trim(), sobrenome: dados.sobrenome.trim() });
+    onSalvar({
+      ...dados,
+      nome: dados.nome.trim(),
+      sobrenome: dados.sobrenome.trim(),
+      nome_completo: dados.nome_completo?.trim() || undefined,
+    });
   };
 
   const mensagem = erroLocal ?? mensagemDeErro(erro);
@@ -122,20 +130,45 @@ export function PersonForm({
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Input
-          label={`${t('ficha', 'nome')} *`}
-          placeholder={t('ficha', 'nomePlaceholder')}
-          value={dados.nome}
-          onChange={(e) => alterar('nome', e.target.value)}
-          autoFocus
-        />
-        <Input
-          label={t('ficha', 'sobrenome')}
-          placeholder={t('ficha', 'sobrenomePlaceholder')}
-          value={dados.sobrenome}
-          onChange={(e) => alterar('sobrenome', e.target.value)}
-        />
+      {/* Bloco de Nomes: Nome Público e Nome Completo */}
+      <div className="p-3.5 bg-sup/30 rounded-raio-s border border-borda/60 space-y-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <Input
+              label="Nome público *"
+              placeholder={t('ficha', 'nomePlaceholder')}
+              value={dados.nome}
+              onChange={(e) => alterar('nome', e.target.value)}
+              autoFocus
+            />
+            <span className="text-[11px] text-tinta3 mt-0.5 block">
+              Como a pessoa aparece no card e na árvore
+            </span>
+          </div>
+          <div>
+            <Input
+              label={t('ficha', 'sobrenome')}
+              placeholder={t('ficha', 'sobrenomePlaceholder')}
+              value={dados.sobrenome}
+              onChange={(e) => alterar('sobrenome', e.target.value)}
+            />
+            <span className="text-[11px] text-tinta3 mt-0.5 block">
+              Sobrenome da família (opcional)
+            </span>
+          </div>
+        </div>
+
+        <div>
+          <Input
+            label="Nome completo (certidão / registro civil)"
+            placeholder="Ex: Alberto Santos-Dumont, Pedro de Alcântara João Carlos..."
+            value={dados.nome_completo ?? ''}
+            onChange={(e) => alterar('nome_completo', e.target.value)}
+          />
+          <span className="text-[11px] text-tinta3 mt-0.5 block">
+            Nome oficial de registro ou batismo, se diferente do nome público
+          </span>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

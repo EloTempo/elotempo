@@ -280,28 +280,51 @@ export function AbaVisaoGeral({
               <FileText className="w-4 h-4 text-acento" />
               <h3 className="font-tit font-bold text-sm text-tinta m-0">{t('perfil', 'nomesIdentidade')}</h3>
             </div>
+            <button
+              type="button"
+              onClick={onAbrirEditarIdentidade}
+              className="text-xs font-semibold px-2 py-0.5 rounded-raio-s text-acento hover:text-acento/80 bg-acento/10 hover:bg-acento/15 border border-acento/30 transition-colors flex items-center gap-1 cursor-pointer"
+              title="Editar nome público e nome completo"
+            >
+              <Pencil className="w-3.5 h-3.5" />
+              {t('comum', 'editar')}
+            </button>
           </div>
 
           <div className="flex flex-col gap-2.5">
-            {/* Nome de Exibição */}
+            {/* Nome de Exibição / Público */}
             <div>
               <span className="text-[10px] font-num uppercase tracking-wider text-tinta3 block">
-                {t('perfil', 'nomeUsual')}
+                Nome público (o do card)
               </span>
               <span className="text-sm font-semibold text-tinta block">{nomeCompleto}</span>
             </div>
 
             {/* Nome de Registro Civil */}
-            {nomeRegistro && (
+            {nomeRegistro ? (
               <div className="pt-2 border-t border-borda/40">
                 <span className="text-[10px] font-num uppercase tracking-wider text-tinta3 block">
-                  {t('perfil', 'nomeCompletoRegistro')}
+                  Nome completo (certidão / registro)
                 </span>
                 <span className="text-xs font-medium text-tinta block mt-0.5">
                   {[nomeRegistro.prefixo, nomeRegistro.nome, nomeRegistro.sufixo, nomeRegistro.sobrenome]
                     .filter(Boolean)
                     .join(' ')}
                 </span>
+              </div>
+            ) : (
+              <div className="pt-2 border-t border-borda/40">
+                <span className="text-[10px] font-num uppercase tracking-wider text-tinta3 block">
+                  Nome completo (certidão / registro)
+                </span>
+                <button
+                  type="button"
+                  onClick={onAbrirEditarIdentidade}
+                  className="text-xs text-acento hover:underline flex items-center gap-1 mt-0.5 bg-transparent border-none cursor-pointer p-0"
+                >
+                  <Plus className="w-3 h-3" />
+                  <span>Cadastrar nome completo de certidão</span>
+                </button>
               </div>
             )}
 

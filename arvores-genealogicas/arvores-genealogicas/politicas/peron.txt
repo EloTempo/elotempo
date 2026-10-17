@@ -1,57 +1,81 @@
 # FAMILIA: Perón (Argentina)
 # CONFIABILIDADE geral: documentada
-# FONTES: Wikipedia; BBC Mundo; Infobae; Perfil; Diario de Cuyo
+# FONTES: Instituto Nacional Juan Domingo Perón (jdperon.gov.ar — órgão oficial
+#   argentino); Biblioteca del Congreso de la Nación Argentina (bcn.gob.ar);
+#   Museo Evita; BBC Mundo; Wikipedia
 # FORMATO: um bloco por pessoa (ver _MODELO-PESSOA.txt)
 # NOTA: Juan Perón não teve filhos nos três casamentos — a continuidade é
-#       política, não de sangue. O núcleo reúne as três esposas e a família de Evita.
-# LGPD: Isabel Perón está viva — apenas dados públicos.
+#   política, não de sangue.
+# LGPD: Isabel Perón está viva.
 # ---
 
-# --- ASCENDÊNCIA ---
 == Mario Tomás Perón ==
 nome_publico: Mario Tomás Perón
-profissoes: agricultor
+profissoes: pequeno produtor agrícola e pecuário
 nacionalidades: Argentina
-relacoes: pai de Juan Domingo Perón; casou com Juana Sosa Toledo (formalizado em 1901)   # -> Parentesco
-fonte: Wikipedia
+idiomas: espanhol
+PAIS: Tomás Liberato Perón, um dos médicos mais célebres de seu tempo (professor e senador)
+FILHOS: Avelino Mario (1891) e Juan Domingo
+relacoes: pai de Juan Domingo Perón; uniu-se a Juana Sosa, formalizando o casamento em 1901   # -> Parentesco
+fonte: Instituto Nacional Juan Domingo Perón; Wikipedia
 confiabilidade: documentada
 
 == Juana Sosa Toledo ==
 nome_publico: Juana Sosa
+nacionalidades: Argentina — de ascendência indígena (tehuelche), segundo diversas fontes
+idiomas: espanhol
+FILHOS: Avelino Mario e Juan Domingo
 relacoes: mãe de Juan Domingo Perón   # -> Parentesco
-fonte: Wikipedia
+fonte: Instituto Nacional Juan Domingo Perón
 confiabilidade: documentada
 
-# --- GERAÇÃO 1 ---
 == Juan Domingo Perón ==
-identidade: Militar e político; três vezes presidente da Argentina e fundador do peronismo.
+identidade: Militar, escritor político e três vezes presidente da Argentina; fundador do peronismo.
 nome_publico: Juan Domingo Perón
-apelidos: o General
-nascimento: 1895   # Lobos, 8 de outubro
-falecimento: 1974
-profissoes: militar; político (presidente da Argentina)
+apelidos: el General; el Conductor
+nascimento: 1895   # 8 de outubro (versão oficial)  [DIVERGENTE: o pesquisador Hipólito Barreiro sustenta 7 de outubro de 1893, em Roque Pérez]
+nascimento_local: Lobos, província de Buenos Aires, Argentina  [DIVERGENTE: Roque Pérez, segundo Barreiro]
+falecimento: 1974   # 1º de julho, no exercício do mandato presidencial
+falecimento_local: Quinta de Olivos, residência presidencial, Buenos Aires
+sepultamento: jazigo da família no Cemitério da Chacarita; em 1987 suas MÃOS foram roubadas do túmulo por desconhecidos; restos transferidos em 2006 para a Quinta de San Vicente
+escolaridade: Colégio Militar da Nação (1911–13); Escola Superior de Guerra
+idiomas: espanhol; italiano; francês (adquiridos na missão de estudos na Europa)
+profissoes: militar de carreira (chegou a tenente-general); PROFESSOR de história militar na Escola Superior de Guerra; ESPORTISTA — foi esgrimista campeão militar, boxeador e esquiador; adido militar no Chile; observador militar na Itália (1939–41); secretário do Trabalho; ministro da Guerra; vice-presidente; presidente da Nação (1946–52, 1952–55, 1973–74); ESCRITOR
 nacionalidades: Argentina
+religioes: católico — EXCOMUNGADO em 1955, no conflito com a Igreja; a excomunhão foi depois revogada
+obras: LIVROS — "La Comunidad Organizada" (1949, conferência no 1º Congresso Nacional de Filosofia de Mendoza; fundamento filosófico da doutrina peronista); "Conducción Política" (1952, teoria e técnica da condução política); "Modelo Argentino para un Proyecto Nacional" (1974, seu testamento político); "La Hora de los Pueblos" (1968); "Apuntes de Historia Militar"; "Toponimia Patagónica de Etimología Araucana" (1935, estudo linguístico sobre nomes de lugares da Patagônia); "Doctrina Peronista"; numerosos discursos publicados
+eventos_historicos: participou do golpe de 1930 e do golpe de 1943 (GOU); como secretário do Trabalho (1943-45), criou o aguinaldo, as férias pagas e os tribunais do trabalho; preso em outubro de 1945, foi libertado pela mobilização popular do 17 DE OUTUBRO, data fundadora do peronismo; instituiu o VOTO FEMININO (1947, por impulso de Evita); derrubado pelo golpe da "Revolução Libertadora" (1955); 18 ANOS DE EXÍLIO (Paraguai, Panamá, Venezuela, República Dominicana e Espanha); retorno em 1973 e o massacre de Ezeiza; eleito com mais de 60% dos votos na fórmula Perón-Perón
 foto: fotos/juan-domingo-peron.webp
-relacoes: irmão de Mario Avelino; casou com Aurelia Tizón, Eva Duarte e Isabel Martínez; sem filhos   # -> Parentesco
-fonte: Wikipedia
+PAIS: Mario Tomás Perón e Juana Sosa Toledo
+FILHOS: NENHUM, nos três casamentos
+relacoes: irmão mais velho Avelino Mario; casado com [[aurelia-tizon]], [[eva-peron]] e [[isabel-peron]]   # -> Parentesco
+fonte: Instituto Nacional Juan Domingo Perón (oficial); Biblioteca del Congreso; Wikipedia
 confiabilidade: documentada
 
-== Mario Avelino Perón ==
-nome_publico: Mario Avelino Perón
-relacoes: irmão mais velho de Juan Domingo Perón   # -> Parentesco
-fonte: Wikipedia
+== Avelino Mario Perón ==
+nome_publico: Avelino Mario Perón
+nascimento: 1891   # 30 de novembro
+nascimento_local: Lobos, Buenos Aires, Argentina
+nacionalidades: Argentina
+relacoes: único irmão de Juan Domingo Perón   # -> Parentesco
+fonte: Wikipedia (Early life of Juan Perón)
 confiabilidade: documentada
 
-# --- AS TRÊS ESPOSAS ---
 == Aurelia Tizón ==
-identidade: Primeira esposa de Perón; professora, pintora e tradutora.
+identidade: Primeira esposa de Perón; professora, pintora, tradutora e violonista.
 nome_publico: Aurelia Tizón
 apelidos: Potota
 nascimento: 1902
-falecimento: 1938   # câncer
-profissoes: professora; pintora; tradutora
+nascimento_local: Buenos Aires, Argentina
+falecimento: 1938   # 10 de setembro, de câncer no útero, aos 36 anos
+falecimento_local: Buenos Aires, Argentina
+escolaridade: magistério (professora normalista)
+idiomas: espanhol; inglês (traduzia do inglês)
+profissoes: professora; pintora; tradutora; violonista; fotógrafa amadora
 nacionalidades: Argentina
-relacoes: 1ª esposa de Juan Domingo Perón (1929–1938); sem filhos   # -> Parentesco
+obras: pinturas e traduções; acompanhou Perón em suas primeiras publicações militares
+FILHOS: nenhum
+relacoes: 1ª esposa de Perón (1929–1938)   # -> Parentesco
 fonte: Infobae; Wikipedia
 confiabilidade: documentada
 
@@ -59,51 +83,90 @@ confiabilidade: documentada
 identidade: Atriz e líder política; primeira-dama, símbolo do peronismo e da conquista do voto feminino.
 nome_publico: Eva Perón
 nome_registro: María Eva Duarte
-apelidos: Evita
-nascimento: 1919   # Los Toldos, 7 de maio
-falecimento: 1952   # câncer cervical, aos 33
-profissoes: atriz; política; primeira-dama
+apelidos: Evita; "a abanderada dos humildes"
+nascimento: 1919   # 7 de maio
+nascimento_local: Los Toldos (Junín), província de Buenos Aires, Argentina
+falecimento: 1952   # 26 de julho, de câncer cervical, aos 33 anos
+falecimento_local: residência presidencial, Buenos Aires
+sepultamento: após embalsamamento, o corpo foi SEQUESTRADO pelo regime militar em 1955 e ocultado por 16 anos na Itália; hoje no Cemitério da Recoleta
+escolaridade: escolaridade básica; sem formação superior
+idiomas: espanhol
+profissoes: atriz de rádio, teatro e cinema; locutora; empresária de radiodifusão; primeira-dama; presidente do Partido Peronista Feminino e da Fundação Eva Perón
 nacionalidades: Argentina
+religioes: católica
+obras: LIVRO — "La Razón de mi Vida" (1951), autobiografia doutrinária que se tornou leitura obrigatória nas escolas argentinas; "Mi Mensaje" (1952, póstumo, de autenticidade discutida); protagonizou filmes como "La Prodiga" (1945); inspirou o musical "Evita" (1978), de Andrew Lloyd Webber e Tim Rice
+eventos_historicos: peça central na mobilização do 17 de outubro de 1945; a "Gira del Arco Iris" pela Europa (1947), quando foi recebida por Franco e pelo Papa Pio XII; conquistou a LEI DO VOTO FEMININO (Lei 13.010, de 1947); fundou a Fundação Eva Perón, de enorme alcance assistencial; renunciou à candidatura a vice-presidente no "Cabildo Abierto" de agosto de 1951, já doente; recebeu o título de "Jefa Espiritual de la Nación"
 foto: fotos/eva-peron.webp
-relacoes: 2ª esposa de Perón (1945–1952); filha de Juana Ibarguren e Juan Duarte; sem filhos   # -> Parentesco
-fonte: Wikipedia; Diario de Cuyo
+PAIS: Juan Duarte (fazendeiro) e Juana Ibarguren — filha natural, não reconhecida em vida pelo pai
+FILHOS: nenhum
+relacoes: 2ª esposa de Perón (1945–1952)   # -> Parentesco
+fonte: Museo Evita; Wikipedia; Diario de Cuyo
 confiabilidade: documentada
 
 == Isabel Perón ==
-identidade: Bailarina; vice e depois presidenta da Argentina (1974–1976), a primeira mulher chefe de Estado do país.
+identidade: Bailarina que se tornou a primeira mulher chefe de Estado da Argentina.
 nome_publico: Isabel Perón
 nome_registro: María Estela Martínez Cartas
 apelidos: Isabelita
-nascimento: 1931   # La Rioja
-profissoes: bailarina; política (presidenta da Argentina)
-nacionalidades: Argentina
-relacoes: 3ª esposa de Perón (1961); sem filhos   # -> Parentesco
+nascimento: 1931   # 4 de fevereiro
+nascimento_local: La Rioja, Argentina
+escolaridade: escolaridade básica; formação em dança
+idiomas: espanhol
+profissoes: bailarina; secretária política; vice-presidente (1973-74); PRESIDENTE DA ARGENTINA (1974–1976)
+nacionalidades: Argentina; Espanha (reside em Madri)
+religioes: católica
+eventos_historicos: conheceu Perón no Panamá durante o exílio; assumiu a presidência com a morte dele em 1974 — a primeira mulher chefe de Estado das Américas; seu governo foi marcado pela crise econômica ("Rodrigazo") e pela atuação da Triple A; DEPOSTA pelo golpe militar de 24 de março de 1976, ficou cinco anos em prisão domiciliar; exilou-se na Espanha em 1981
+FILHOS: nenhum
+relacoes: 3ª esposa de Perón (casados em 1961)   # -> Parentesco
 fonte: BBC Mundo; Wikipedia   # LGPD: pessoa viva
 confiabilidade: documentada
 
-# --- FAMÍLIA DE EVITA ---
 == Juana Ibarguren ==
 nome_publico: Juana Ibarguren
+nacionalidades: Argentina
+profissoes: costureira
+FILHOS: cinco com Juan Duarte — Blanca, Elisa, Juan Ramón ("Juancito"), Erminda e Eva
 relacoes: mãe de Eva Perón   # -> Parentesco
-fonte: Wikipedia
+fonte: Museo Evita; Wikipedia
 confiabilidade: documentada
 
 == Juan Duarte (pai) ==
 nome_publico: Juan Duarte
-profissoes: fazendeiro
+falecimento: 1926
+profissoes: fazendeiro; produtor rural
 nacionalidades: Argentina
-relacoes: pai (natural) de Eva Perón; faleceu quando ela tinha ~6 anos   # -> Parentesco
-fonte: Diario de Cuyo
+eventos_historicos: mantinha duas famílias; a família legítima impediu que Juana e os filhos participassem plenamente do velório — episódio marcante na formação de Evita
+FILHOS: com Juana Ibarguren — cinco, entre eles Eva
+relacoes: pai natural de Eva Perón; morreu quando ela tinha cerca de 6 anos   # -> Parentesco
+fonte: Museo Evita; Diario de Cuyo
 confiabilidade: documentada
 
-== Juan Duarte (irmão) ==
+== Juan Ramón Duarte ==
 nome_publico: Juan "Juancito" Duarte
-apelidos: Juancito
-falecimento: 1953
-profissoes: secretário particular de Juan Perón
+falecimento: 1953   # 9 de abril, morte por arma de fogo, oficialmente suicídio, em circunstâncias nunca esclarecidas
+falecimento_local: Buenos Aires, Argentina
+profissoes: vendedor de sabonetes; secretário particular do presidente Perón
 nacionalidades: Argentina
+eventos_historicos: investigado por corrupção após a morte de Evita; sua morte, meses depois, permanece controversa
+PAIS: Juan Duarte e Juana Ibarguren
 relacoes: único irmão homem de Eva Perón   # -> Parentesco
 fonte: Diario de Cuyo; Wikipedia
 confiabilidade: documentada
 
-# Irmãs de Evita (expandir): Elisa, Blanca e Erminda Duarte.
+# ============================================================
+# NOTAS DE PESQUISA
+# ============================================================
+# 1. NASCIMENTO DE PERÓN: a versão oficial é 8/10/1895 em Lobos. O pesquisador
+#    Hipólito Barreiro sustenta 7/10/1893 em Roque Pérez, alegando que o
+#    nascimento não foi registrado à época porque os pais ainda não eram
+#    casados. Registrar as duas versões.  [DIVERGENTE]
+# 2. LINHAGEM SEM DESCENDENTES: nenhum dos três casamentos gerou filhos. É um
+#    caso-limite para o modelo de dados: um nó central sem descendência, cuja
+#    "continuidade" é institucional (o Partido Justicialista) e não genealógica.
+# 3. PERÓN ESCRITOR: sua obra é extensa e continua sendo texto de consulta
+#    acadêmica. Vale destacar a "Toponimia Patagónica de Etimología Araucana"
+#    (1935), estudo linguístico anterior à carreira política.
+# 4. CORPOS COMO OBJETO POLÍTICO: tanto o cadáver de Evita (sequestrado por 16
+#    anos) quanto o de Perón (mãos roubadas em 1987) tiveram destinos
+#    excepcionais. Se o app registrar sepultamento, este é um caso extremo.
+# 5. AS IRMÃS DE EVITA (expandir): Blanca, Elisa e Erminda Duarte.

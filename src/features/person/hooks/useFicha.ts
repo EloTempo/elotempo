@@ -32,6 +32,9 @@ import {
   listarNacionalidades,
   adicionarNacionalidade,
   removerNacionalidade,
+  listarObrasCulturais,
+  adicionarObraCultural,
+  removerObraCultural,
   listarPaises,
   listarNomesPessoa,
   adicionarNome,
@@ -267,6 +270,32 @@ export const nacionalidades = criarHooksDeAtributo(
   listarNacionalidades,
   (pessoaId, paisId: string) => adicionarNacionalidade(pessoaId, paisId),
   removerNacionalidade,
+);
+
+export const obrasCulturais = criarHooksDeAtributo(
+  'obras-culturais',
+  listarObrasCulturais,
+  (
+    pessoaId,
+    categoria: string,
+    titulo: string,
+    subtipo?: string | null,
+    ano?: number | null,
+    anoFim?: number | null,
+    detalhes?: string | null,
+    localId?: string | null,
+  ) =>
+    adicionarObraCultural(
+      pessoaId,
+      categoria,
+      titulo,
+      subtipo,
+      ano,
+      anoFim,
+      detalhes,
+      localId,
+    ),
+  removerObraCultural,
 );
 
 // ---------------------------------------------------------------------------

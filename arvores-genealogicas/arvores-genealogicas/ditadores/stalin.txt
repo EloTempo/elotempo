@@ -1,89 +1,180 @@
-# FAMILIA: Stalin / Dzhugashvili (Geórgia / URSS)
+# FAMILIA: Stalin / Jughashvili (Geórgia — URSS)
 # CONFIABILIDADE geral: documentada
-# FONTES: Wikipedia; biografias históricas
+# FONTES: Museu Stalin de Gori (stalinmuseumi.ge); Britannica; Wikipedia;
+#   Ioseb Iremashvili, "Stalin und die Tragödie Georgiens" (1932) — único relato
+#   independente contemporâneo da juventude de Stalin
 # FORMATO: um bloco por pessoa (ver _MODELO-PESSOA.txt)
-# LGPD: descendentes vivos marcados.
+# NOTA: as datas oficiais soviéticas (21/12/1879) divergem do registro paroquial
+#   encontrado depois (18/12/1878). Ver notas.
+# LGPD: vivos marcados.
 # ---
 
 == Besarion Jughashvili ==
-nome_publico: Besarion Jughashvili
+nome_publico: Besarion "Beso" Jughashvili
+falecimento: 1891   # [divergente: algumas fontes indicam 1909]
 profissoes: sapateiro
 nacionalidades: Geórgia (Império Russo)
-relacoes: pai de Stalin; casado com Ekaterine Geladze   # -> Parentesco
-fonte: Wikipedia
+idiomas: georgiano
+eventos_historicos: alcoolista; abandonou a família; opôs-se aos estudos religiosos do filho, querendo que seguisse o ofício de sapateiro
+PAIS: (a verificar)
+FILHOS: três com Ekaterine Geladze; só o caçula, Ioseb, sobreviveu
+relacoes: pai de Stalin   # -> Parentesco
+fonte: Wikipedia; ww2db
+confiabilidade: documentada
+
+== Ekaterine Geladze ==
+identidade: Mãe de Stalin; costureira que sonhava ver o filho bispo.
+nome_publico: Ekaterine "Keke" Geladze
+nascimento: cerca de 1856   # [divergente: 1856 ou 1858]
+nascimento_local: arredores de Gori, Geórgia, Império Russo
+falecimento: 1937   # 4 de junho
+falecimento_local: Tbilisi, União Soviética
+escolaridade: analfabeta
+idiomas: georgiano
+profissoes: costureira
+nacionalidades: Geórgia
+religioes: ortodoxa devota
+eventos_historicos: matriculou o filho na escola eclesiástica de Gori em 1888 esperando que se tornasse bispo
+PAIS: família camponesa
+FILHOS: três; apenas Ioseb (Stalin) sobreviveu
+relacoes: mãe de Stalin   # -> Parentesco
+fonte: Wikipedia; Museu Stalin de Gori
 confiabilidade: documentada
 
 == Stalin ==
-identidade: Líder da União Soviética de meados dos anos 1920 até 1953.
+identidade: Líder da União Soviética de meados dos anos 1920 até 1953; na juventude, poeta publicado em georgiano.
 nome_publico: Josef Stalin
-nome_registro: Ioseb Jughashvili
-apelidos: Koba
-nascimento: 1878
-falecimento: 1953
-profissoes: político (líder da URSS); revolucionário
-nacionalidades: Geórgia; URSS
+nome_registro: Ioseb Besarionis dze Jughashvili
+mudanca_nome: adotou "Stalin" ("de aço") como nome de guerra revolucionário
+apelidos: Soso (infância); Koba; Soselo (pseudônimo literário)
+nascimento: 1878   # 18 de dezembro (registro paroquial). A data OFICIAL soviética era 21/12/1879  [DIVERGENTE]
+nascimento_local: Gori, província de Tiflis, Império Russo (atual Geórgia)
+falecimento: 1953   # 5 de março, após derrame
+falecimento_local: sua datcha em Kuntsevo, arredores de Moscou
+escolaridade: Escola Eclesiástica de Gori (1888–1894, aluno excelente); Seminário Ortodoxo de Tiflis (1894–1899, com bolsa) — EXPULSO em 1899 por atividade marxista e por faltar aos exames
+idiomas: georgiano (nativo); russo (falado com sotaque georgiano acentuado por toda a vida)
+profissoes: coroinha e seminarista; POETA; meteorologista (observatório de Tiflis); jornalista e editor (Pravda); revolucionário profissional; comissário do povo para as Nacionalidades; secretário-geral do Partido Comunista (a partir de 1922); chefe de governo da URSS; generalíssimo
+nacionalidades: Geórgia; União Soviética
+religioes: criado na ortodoxia russa; ateu a partir da juventude
+obras: POESIA — cinco poemas publicados sob o pseudônimo "Soselo" no jornal Iveria, de Ilia Chavchavadze (1895), sobre natureza, terra e patriotismo; o poema "Dila" ("A Manhã") foi incluído por Iakob Gogebashvili na cartilha escolar georgiana "Deda Ena" (1912). PROSA POLÍTICA — "O Marxismo e a Questão Nacional" (1913); "Fundamentos do Leninismo" (1924); "Breve Curso de História do PCUS" (1938, sob sua supervisão); artigos sobre linguística (1950)
+eventos_historicos: aderiu ao movimento revolucionário em 1895; membro da 1ª organização social-democrata georgiana (1898); Revolução de Outubro (1917); Guerra Civil Russa; sucessão de Lênin e expulsão de Trótski; coletivização forçada e Holodomor (1932-33); Grande Expurgo (1936-38); Pacto Molotov-Ribbentrop (1939); Grande Guerra Patriótica (1941-45); conferências de Teerã, Yalta e Potsdam; início da Guerra Fria; denunciado por Khruschov no XX Congresso (1956)
 foto: fotos/stalin.webp
-relacoes: casou com Kato Svanidze e depois com Nadezhda Alliluyeva; três filhos   # -> Parentesco
-fonte: Wikipedia
+PAIS: Besarion Jughashvili e Ekaterine Geladze
+FILHOS: com Kato Svanidze — Yakov; com Nadezhda Alliluyeva — Vasily e Svetlana; (paternidade atribuída, não reconhecida: Konstantin Kuzakov e Alexander Davydov)
+relacoes: casado com [[kato-svanidze]] e depois com [[nadezhda-alliluyeva]]   # -> Parentesco
+fonte: Museu Stalin de Gori; Britannica; Wikipedia
 confiabilidade: documentada
 
 == Kato Svanidze ==
-nome_publico: Kato Svanidze
+nome_publico: Ekaterine "Kato" Svanidze
 nascimento: 1885
-falecimento: 1907   # tifo
+falecimento: 1907   # tifo, poucos meses após o parto
+falecimento_local: Tiflis (Tbilisi), Geórgia
+profissoes: costureira
 nacionalidades: Geórgia
-relacoes: 1ª esposa de Stalin; mãe de Yakov   # -> Parentesco
+religioes: ortodoxa
+FILHOS: Yakov Dzhugashvili
+relacoes: 1ª esposa de Stalin (casados em 1906)   # -> Parentesco
 fonte: Wikipedia
 confiabilidade: documentada
 
 == Nadezhda Alliluyeva ==
 nome_publico: Nadezhda Alliluyeva
 nascimento: 1901
-falecimento: 1932   # suicídio
-nacionalidades: URSS
-relacoes: 2ª esposa de Stalin; mãe de Vasily e Svetlana   # -> Parentesco
+falecimento: 1932   # 9 de novembro, suicídio com arma de fogo, após discussão pública com Stalin
+falecimento_local: Kremlin, Moscou
+escolaridade: Academia Industrial de Moscou (estudava química de fibras sintéticas)
+idiomas: russo
+profissoes: secretária (trabalhou no secretariado de Lênin); estudante
+nacionalidades: União Soviética
+FILHOS: Vasily e Svetlana
+relacoes: 2ª esposa de Stalin (casados em 1919); filha do revolucionário Sergei Alliluyev   # -> Parentesco
 fonte: Wikipedia
 confiabilidade: documentada
 
 == Yakov Dzhugashvili ==
+identidade: Filho mais velho de Stalin; morreu prisioneiro dos alemães.
 nome_publico: Yakov Dzhugashvili
 nascimento: 1907
-falecimento: 1943   # morreu prisioneiro na Alemanha
-profissoes: militar
+nascimento_local: Baji, Geórgia
+falecimento: 1943   # 14 de abril, no campo de Sachsenhausen
+falecimento_local: campo de concentração de Sachsenhausen, Alemanha
+escolaridade: engenharia; academia de artilharia
+idiomas: georgiano; russo
+profissoes: engenheiro; oficial de artilharia do Exército Vermelho
 nacionalidades: URSS
-relacoes: filho de Stalin e Kato   # -> Parentesco
+eventos_historicos: capturado pelos alemães em 1941, no cerco de Smolensk; os alemães propuseram trocá-lo pelo marechal Paulus, capturado em Stalingrado, e Stalin recusou; morreu ao avançar contra a cerca eletrificada do campo
+PAIS: Stalin e Kato Svanidze
+FILHOS: Yevgeny Dzhugashvili (1936–2016) e Galina (1938–2007)
+relacoes: criado pela família materna na Geórgia; relação difícil com o pai   # -> Parentesco
 fonte: Wikipedia
 confiabilidade: documentada
 
 == Vasily Stalin ==
 nome_publico: Vasily Stalin
 nascimento: 1921
+nascimento_local: Moscou
 falecimento: 1962
-profissoes: militar (general da Força Aérea)
+falecimento_local: Kazan, URSS
+escolaridade: escola de aviação militar
+idiomas: russo
+profissoes: piloto militar; tenente-general da Força Aérea Soviética
 nacionalidades: URSS
-relacoes: filho de Stalin e Nadezhda   # -> Parentesco
+eventos_historicos: combateu na 2ª Guerra Mundial como piloto; após a morte do pai, foi preso e degradado; morreu no exílio interno, alcoolista
+PAIS: Stalin e Nadezhda Alliluyeva
+relacoes: irmão de Svetlana   # -> Parentesco
 fonte: Wikipedia
 confiabilidade: documentada
 
 == Svetlana Alliluyeva ==
-identidade: Filha de Stalin; causou sensação ao desertar para os EUA em 1967.
+identidade: Filha de Stalin; sua deserção para os EUA em 1967 foi um dos maiores escândalos da Guerra Fria.
 nome_publico: Svetlana Alliluyeva
-mudanca_nome: passou a usar "Lana Peters" nos EUA
-nascimento: 1926
-falecimento: 2011
-profissoes: escritora
-nacionalidades: URSS; EUA
-relacoes: filha de Stalin e Nadezhda   # -> Parentesco
-fonte: Wikipedia
+nome_registro: Svetlana Iosifovna Stalina
+mudanca_nome: adotou o sobrenome materno Alliluyeva em 1957; passou a "Lana Peters" após casar-se nos EUA (1970)
+nascimento: 1926   # 28 de fevereiro
+nascimento_local: Moscou, União Soviética
+falecimento: 2011   # 22 de novembro
+falecimento_local: Richland Center, Wisconsin, EUA
+escolaridade: Universidade Estatal de Moscou (história e literatura)
+idiomas: russo; inglês; georgiano (básico); francês
+profissoes: escritora; tradutora; professora
+nacionalidades: URSS; EUA (naturalizada em 1978)
+obras: "Vinte Cartas a um Amigo" (1967), memórias escritas ainda na URSS e publicadas no Ocidente após a deserção — best-seller mundial; "Apenas Um Ano" (1969); "A Distant Music" (1984); "The Faraway Music"
+eventos_historicos: DESERTOU para o Ocidente em março de 1967, entrando na embaixada dos EUA em Nova Délhi — episódio de enorme repercussão na Guerra Fria; retornou brevemente à URSS em 1984 e voltou a sair; sua mãe suicidou-se quando ela tinha 6 anos, e ela só descobriu a verdade dez anos depois, pela imprensa estrangeira
+PAIS: Stalin e Nadezhda Alliluyeva
+FILHOS: Joseph Alliluyev (1945–2008), Yekaterina Zhdanova (1950) e Olga Peters / Chrese Evans (1971)
+relacoes: única filha de Stalin   # -> Parentesco
+fonte: Wikipedia; Britannica
 confiabilidade: documentada
 
 == Chrese Evans ==
 nome_publico: Chrese Evans
-nome_registro: Olga Peters
+nome_registro: Olga Margaret Peters
+mudanca_nome: adotou "Chrese Evans"
 nascimento: 1971
+nascimento_local: EUA
+idiomas: inglês
+profissoes: comerciante (antiquária/lojista, Portland, Oregon)
 nacionalidades: EUA
-relacoes: filha de Svetlana; neta de Stalin   # -> Parentesco
+PAIS: Svetlana Alliluyeva e William Wesley Peters (arquiteto, discípulo de Frank Lloyd Wright)
+relacoes: neta de Stalin   # -> Parentesco
 fonte: Wikipedia   # LGPD: pessoa viva
 confiabilidade: documentada
 
-# Outros netos (expandir): Yevgeny Dzhugashvili (1936–2016), Galina (1938–2007).
+# ============================================================
+# NOTAS DE PESQUISA
+# ============================================================
+# 1. DATA DE NASCIMENTO: a data oficial soviética era 21 de dezembro de 1879,
+#    celebrada em toda a URSS. O registro de batismo da igreja de Gori indica
+#    18 de dezembro de 1878. Historiadores modernos adotam 1878. O Museu Stalin
+#    de Gori ainda apresenta 1879.  [DIVERGENTE — registrar as duas]
+# 2. O POETA: é fato documentado e pouco lembrado que Stalin publicou poesia em
+#    georgiano na juventude, elogiada por Ilia Chavchavadze, o "pai da nação"
+#    georgiana. Um de seus poemas entrou na cartilha escolar "Deda Ena".
+# 3. IDIOMAS: apesar de governar a Rússia por 30 anos, Stalin falou russo com
+#    forte sotaque georgiano a vida toda; o georgiano era sua língua materna.
+# 4. FONTE INDEPENDENTE: as memórias de Ioseb Iremashvili (1932, em alemão) são
+#    consideradas o único relato contemporâneo independente sobre sua juventude,
+#    por terem sido publicadas no exílio, fora da censura soviética.
+# 5. PATERNIDADES ATRIBUÍDAS: Konstantin Kuzakov e Alexander Davydov são citados
+#    como filhos de relações do período de exílio; não reconhecidos oficialmente.
