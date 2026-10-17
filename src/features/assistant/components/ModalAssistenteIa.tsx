@@ -610,21 +610,56 @@ export function ModalAssistenteIa({
         ) : (
           /* Aba de Gerenciamento de Modelos Locais Sob Demanda */
           <div className="flex-1 overflow-y-auto space-y-4 pr-1 text-xs">
+            {/* Esta caixa existe para evitar uma frustração concreta: baixar 1 GB
+                e descobrir que o botão "Ativar" não tem o que ativar. O modelo
+                são os pesos; quem os executa é um motor à parte, que o EloTempo
+                não embarca. Dizer isso antes do download é o mínimo. */}
             <div className="rounded-lg border border-borda bg-fundo/50 p-3.5">
               <div className="flex items-start gap-2.5">
-                <ShieldCheck className="h-5 w-5 text-acento shrink-0 mt-0.5" />
-                <div className="space-y-1">
+                <ShieldCheck className="h-5 w-5 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
+                <div className="space-y-2">
                   <div className="font-bold text-tinta text-sm">
-                    Arquitetura Leve Sob Demanda (100% Offline & Privada)
+                    O assistente já funciona. Esta aba é opcional.
                   </div>
                   <p className="text-tinta-suave leading-relaxed">
-                    O EloTempo já inclui de fábrica os algoritmos em Rust puro (
-                    <strong>Jaro-Winkler Record Linkage</strong>,{' '}
-                    <strong>Portão de Abstenção</strong>,{' '}
-                    <strong>Extrator Genealógico/Cronológico</strong> e{' '}
-                    <strong>Verificador Quote-and-Verify</strong>) sem ocupar espaço extra. Se
-                    desejar síntese neural completa via LLM local, você pode baixar um modelo{' '}
-                    <code>.gguf</code> abaixo ou conectar ao seu servidor local.
+                    Sem baixar nada, o EloTempo já responde perguntas sobre quem está no
+                    seu acervo e já monta árvores e linhas do tempo a partir de um texto
+                    colado no chat. Tudo isso roda dentro do programa, sem internet, e é o
+                    que a maioria das pessoas vai usar.
+                  </p>
+                  <p className="text-tinta-suave leading-relaxed">
+                    Um modelo de linguagem acrescenta <strong>respostas mais fluentes</strong> e
+                    ajuda com textos biográficos longos e confusos. Ele nunca inventa fatos:
+                    continua preso aos mesmos registros do seu acervo.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-lg border border-amber-500/40 bg-amber-500/10 p-3.5">
+              <div className="flex items-start gap-2.5">
+                <AlertTriangle className="h-5 w-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+                <div className="space-y-2">
+                  <div className="font-bold text-tinta text-sm">
+                    Antes de baixar: o modelo sozinho não roda
+                  </div>
+                  <p className="text-tinta-suave leading-relaxed">
+                    O arquivo <code>.gguf</code> são os pesos do modelo. Para usá-lo é preciso
+                    um <strong>motor de execução</strong> instalado à parte, que o EloTempo não
+                    acompanha. Sem ele, o download ocupa espaço e o botão{' '}
+                    <strong>Ativar</strong> não tem o que ativar.
+                  </p>
+                  <p className="text-tinta-suave leading-relaxed">
+                    Os dois motores compatíveis são o <strong>Ollama</strong> e o{' '}
+                    <strong>llama-server</strong>, do projeto llama.cpp. Instalado qualquer um
+                    dos dois, o EloTempo o encontra sozinho em{' '}
+                    <code>127.0.0.1:11434</code> ou <code>127.0.0.1:8080</code>. O endereço só
+                    aceita a sua própria máquina — é o que garante que nome e data nenhuma
+                    saia do computador.
+                  </p>
+                  <p className="text-tinta-suave leading-relaxed">
+                    Se não quiser instalar nada, pode fechar esta aba sem perder recurso
+                    algum: o assistente continua respondendo e criando árvores.
                   </p>
                 </div>
               </div>
