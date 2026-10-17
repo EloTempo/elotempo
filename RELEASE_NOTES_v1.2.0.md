@@ -26,34 +26,29 @@ dentro da árvore, e o localizador leva a qualquer membro com foco suave.
 
 | Arquivo | Tipo | Tamanho | SHA-256 |
 | :--- | :---: | :---: | :--- |
-| `EloTempo_1.2.0_x64-setup.exe` | Instalador Windows (NSIS) | 5,27 MB | `88a7bb06d10254f9d24d2f8317f0cbd5886c3f3ec48d48c86f72def12b0d3d04` |
+| `EloTempo_1.2.0_x64-setup.exe` | Instalador Windows (NSIS) | 4,82 MB | `e0fc2e37107d06f26ce0daa78d5d94b365721a971c14bb848a128908301bf0dd` |
 
-O instalador cresceu de 3,6 MB para 5,3 MB porque passa a embarcar a
-`libcrypto-4-x64.dll` do OpenSSL, exigida pelo SQLCipher.
+O instalador cresceu de 3,6 MB para 4,8 MB: o OpenSSL exigido pelo SQLCipher
+agora é compilado junto e linkado estaticamente dentro do executável, que subiu
+para 14,1 MB. Nenhuma DLL acompanha o pacote — conferido com `dumpbin` no
+executável e por varredura no próprio instalador.
 
-**Esta versão sai só para Windows.** O `.msi`, o `.deb` e o `.AppImage` dependem
-do release automático, que está quebrado — ver abaixo. Usuários de Linux
-continuam na v1.0.3.
+## 3. Correções de build que esta versão traz junto
 
-## 3. Antes de publicar: o CI não compila esta versão
+A cifragem quebrou o release automático de duas formas, e as duas estão
+resolvidas neste mesmo lote:
 
-O `release.yml` roda `npm run verificar` e **não configura OpenSSL no runner do
-Windows**. Como a v1.2.0 passou a compilar o SQLCipher a partir do fonte, a
-build falha com `Missing environment variable OPENSSL_DIR`. Empurrar a tag
-`v1.2.0` hoje produz um release vazio.
+1. **OpenSSL.** A feature passou para `bundled-sqlcipher-vendored-openssl`, que
+   compila o OpenSSL do fonte. Antes exigia OpenSSL instalado e `OPENSSL_DIR`
+   apontando para ele — variável que o runner do Windows não exporta.
+2. **Pilha do parser do SQLite.** A expressão que normaliza acento na busca
+   estourava o `YYSTACKDEPTH` padrão. A opção foi para `/.cargo/config.toml`,
+   agora versionado; antes vivia só num arquivo local que o CI nunca teve.
 
-Três coisas precisam ser resolvidas antes:
+Verificado nas condições do runner — sem `OPENSSL_DIR` e sem config local:
+typecheck limpo, 180 testes de TypeScript e 261 de Rust passando, entre eles
+`validar_criptografia_real_sqlcipher` e
+`migra_sqlite_texto_claro_para_sqlcipher_sem_perder_dados`.
 
-1. **OpenSSL no runner do Windows**, com `OPENSSL_DIR` exportado para o passo
-   de testes e para o de build.
-2. **`npm run verificar` lê o config errado.** O script chama
-   `cargo test --manifest-path src-tauri/Cargo.toml` a partir da raiz, e o cargo
-   só lê `src-tauri/.cargo/config.toml` quando é invocado de dentro de
-   `src-tauri/`. Enquanto não for corrigido, o comando falha em qualquer máquina
-   que dependa daquele arquivo — inclusive nesta.
-3. **O resource da DLL não tem condicional de plataforma.** O `tauri.conf.json`
-   declara `bin/libcrypto-4-x64.dll` para todos os alvos; no runner do Linux
-   esse caminho existe no repositório, mas empacotar uma DLL de Windows num
-   `.deb` é lixo no pacote.
-
-Os detalhes do pré-requisito local estão em `DISTRIBUICAO.md`, seção 0.
+O pré-requisito local agora é **Perl nativo de Windows** (Strawberry), detalhado
+na seção 0 do `DISTRIBUICAO.md`.
