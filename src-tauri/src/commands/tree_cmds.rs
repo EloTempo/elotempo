@@ -125,19 +125,27 @@ pub async fn buscar_grafo_arvore_db(
             JOIN ascendencia a ON vinculo.filho = a.id
             WHERE a.nivel < ?2
         ),
-        descendencia(id, nivel) AS (
+        descendencia(id, nivel_relativo) AS (
             SELECT ?1, 0
             UNION
-            SELECT f.pessoa_id, d.nivel + 1
+            SELECT id, -nivel FROM ascendencia WHERE ?2 > 0 AND ?3 > 0
+            UNION
+            SELECT f.pessoa_id, d.nivel_relativo + 1
             FROM descendencia d
             JOIN unioes u ON u.slot_masculino_id = d.id OR u.slot_feminino_id = d.id
             JOIN uniao_filhos f ON f.uniao_id = u.id
-            WHERE d.nivel < ?3
+            WHERE ?3 > 0 AND d.nivel_relativo < ?3
         ),
         nucleo(id) AS (
             SELECT id FROM ascendencia
             UNION
             SELECT id FROM descendencia
+            UNION
+            SELECT am.pessoa_id
+            FROM arvore_membros am
+            WHERE ?2 >= 4 AND ?3 >= 4
+              AND am.pessoa_id IS NOT NULL
+              AND am.arvore_id IN (SELECT arvore_id FROM arvore_membros WHERE pessoa_id = ?1)
         )
         SELECT id FROM nucleo
         UNION

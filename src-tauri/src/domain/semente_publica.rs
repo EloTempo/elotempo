@@ -943,6 +943,10 @@ pub async fn sanear_e_sincronizar_acervo(pool: &SqlitePool) -> Resultado<()> {
     const SQL_ANTIGUIDADE_BIBLIA_FICCAO: &str = include_str!("seeds/antiguidade_biblia_ficcao.sql");
     sqlx::raw_sql(SQL_ANTIGUIDADE_BIBLIA_FICCAO).execute(pool).await?;
 
+    // 28. Saneamento estrutural definitivo: elimina ciclos de cônjuges, conecta pessoas solitárias e ajusta raízes
+    const SQL_SANEAMENTO_ESTRUTURAL: &str = include_str!("seeds/saneamento_estrutural_definitivo.sql");
+    sqlx::raw_sql(SQL_SANEAMENTO_ESTRUTURAL).execute(pool).await?;
+
     Ok(())
 }
 
@@ -1500,5 +1504,147 @@ mod testes {
             .unwrap();
         assert_eq!(tipo_arv_skywalker, "ficticio");
     }
+
+    #[tokio::test]
+    async fn diagnostico_estrutural_todas_arvores() {
+        let pool = SqlitePoolOptions::new()
+            .connect("sqlite::memory:")
+            .await
+            .unwrap();
+        sqlx::migrate!("./migrations").run(&pool).await.unwrap();
+        garantir_acervo_publico(&pool).await.unwrap();
+
+        let arvores: Vec<(String, String, Option<String>)> = sqlx::query_as(
+            "SELECT id, nome, raiz_pessoa_id FROM arvores WHERE is_publico = 1 ORDER BY nome"
+        )
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+
+        println!("=== DIAGNOSTICO DE {} ARVORES PUBLICAS ===", arvores.len());
+        let mut total_solitarias = 0;
+        let mut arvores_multi_comp = 0;
+
+        for (arv_id, arv_nome, raiz_id) in &arvores {
+            let membros: Vec<(String, String, Option<String>, bool)> = sqlx::query_as(
+                "SELECT p.id, p.nome, p.sobrenome, p.is_placeholder
+                 FROM arvore_membros am
+                 JOIN pessoas p ON p.id = am.pessoa_id
+                 WHERE am.arvore_id = ? AND am.pessoa_id IS NOT NULL"
+            )
+            .bind(arv_id)
+            .fetch_all(&pool)
+            .await
+            .unwrap();
+
+            let mut solitarias = Vec::new();
+            for (pid, pnome, psob, _) in &membros {
+                let tem_uniao: i64 = sqlx::query_scalar(
+                    "SELECT COUNT(*) FROM unioes WHERE slot_masculino_id = ? OR slot_feminino_id = ?"
+                )
+                .bind(pid)
+                .bind(pid)
+                .fetch_one(&pool)
+                .await
+                .unwrap();
+
+                let tem_pais: i64 = sqlx::query_scalar(
+                    "SELECT COUNT(*) FROM uniao_filhos WHERE pessoa_id = ?"
+                )
+                .bind(pid)
+                .fetch_one(&pool)
+                .await
+                .unwrap();
+
+                if tem_uniao == 0 && tem_pais == 0 {
+                    solitarias.push(format!("{} {} ({})", pnome, psob.clone().unwrap_or_default(), pid));
+                }
+            }
+
+            let mut grafo_count = 0;
+            let mut componentes = 0;
+            let mut ilhas: Vec<Vec<String>> = Vec::new();
+            if let Some(rid) = raiz_id {
+                let g4 = crate::commands::tree_cmds::buscar_grafo_arvore_db(&pool, rid, Some(4), Some(4)).await.unwrap();
+                grafo_count = g4.nodes.len();
+
+                let mut adj: std::collections::HashMap<String, Vec<String>> = std::collections::HashMap::new();
+                for n in &g4.nodes {
+                    adj.entry(n.id.clone()).or_default();
+                }
+                for u in &g4.unions {
+                    let p1 = &u.slot_masculino_id;
+                    let p2 = &u.slot_feminino_id;
+                    if adj.contains_key(p1) && adj.contains_key(p2) {
+                        adj.entry(p1.clone()).or_default().push(p2.clone());
+                        adj.entry(p2.clone()).or_default().push(p1.clone());
+                    }
+                }
+                let mut union_map: std::collections::HashMap<String, (String, String)> = std::collections::HashMap::new();
+                for u in &g4.unions {
+                    union_map.insert(u.id.clone(), (u.slot_masculino_id.clone(), u.slot_feminino_id.clone()));
+                }
+                for l in &g4.links {
+                    if let Some((pa, pb)) = union_map.get(&l.source) {
+                        if adj.contains_key(pa) && adj.contains_key(&l.target) {
+                            adj.entry(pa.clone()).or_default().push(l.target.clone());
+                            adj.entry(l.target.clone()).or_default().push(pa.clone());
+                        }
+                        if adj.contains_key(pb) && adj.contains_key(&l.target) {
+                            adj.entry(pb.clone()).or_default().push(l.target.clone());
+                            adj.entry(l.target.clone()).or_default().push(pb.clone());
+                        }
+                    }
+                }
+                let mut visitados = std::collections::HashSet::new();
+                for n in &g4.nodes {
+                    if visitados.insert(n.id.clone()) {
+                        componentes += 1;
+                        let mut comp = Vec::new();
+                        let mut fila = std::collections::VecDeque::new();
+                        fila.push_back(n.id.clone());
+                        while let Some(atual) = fila.pop_front() {
+                            comp.push(atual.clone());
+                            if let Some(vizinhos) = adj.get(&atual) {
+                                for v in vizinhos {
+                                    if visitados.insert(v.clone()) {
+                                        fila.push_back(v.clone());
+                                    }
+                                }
+                            }
+                        }
+                        ilhas.push(comp);
+                    }
+                }
+            }
+
+            if !solitarias.is_empty() || grafo_count < membros.len() || componentes > 1 {
+                println!(
+                    "ARVORE: {} ({}) | Membros={} | Grafo(g=4)={} | Componentes={} | Solitarias={:?} | Ilhas={:?}",
+                    arv_nome, arv_id, membros.len(), grafo_count, componentes, solitarias, ilhas
+                );
+            }
+            if componentes > 1 {
+                arvores_multi_comp += 1;
+            }
+            total_solitarias += solitarias.len();
+        }
+
+        let ciclos_conjuge: Vec<(String, String, String)> = sqlx::query_as(
+            "SELECT u1.id, u2.id, u1.slot_feminino_id
+             FROM unioes u1
+             JOIN uniao_filhos uf ON uf.uniao_id = u1.id
+             JOIN unioes u2 ON (u2.slot_masculino_id = uf.pessoa_id AND u2.slot_feminino_id = u1.slot_feminino_id)
+                            OR (u2.slot_feminino_id = uf.pessoa_id AND u2.slot_masculino_id = u1.slot_masculino_id)"
+        )
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+        println!("CICLOS CONJUGE-FILHO: {:?}", ciclos_conjuge);
+        assert_eq!(total_solitarias, 0, "Existem pessoas solitarias!");
+        assert!(ciclos_conjuge.is_empty(), "Existem ciclos conjuge-filho!");
+        assert_eq!(arvores_multi_comp, 0, "Existem arvores com multiplas ilhas desconexas!");
+    }
 }
+
 
