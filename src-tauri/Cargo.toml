@@ -1,6 +1,6 @@
 [package]
 name = "elotempo"
-version = "1.2.0"
+version = "1.3.0"
 description = "Elotempo — Software desktop offline para árvores genealógicas e contexto de vidas, compatível com GEDCOM 7.0"
 authors = ["Gabriel Nascimento"]
 license = "GPL-3.0-or-later"
