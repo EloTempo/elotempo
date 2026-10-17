@@ -23,7 +23,16 @@ serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 tokio = { version = "1", features = ["rt-multi-thread", "macros"] }
 sqlx = { version = "0.8", features = ["sqlite", "runtime-tokio", "macros", "migrate"] }
-libsqlite3-sys = { version = "0.30", features = ["bundled-sqlcipher"] }
+# bundled-sqlcipher-vendored-openssl, e nao bundled-sqlcipher: a variante
+# vendored compila o OpenSSL junto, do fonte, e linka estaticamente. Com a
+# outra, a build exige OpenSSL ja instalado e OPENSSL_DIR apontando para ele
+# -- o runner do Windows no CI tem OpenSSL mas nao exporta a variavel, e era
+# ali que o release automatico parava desde que a cifragem entrou.
+#
+# Precisa de um Perl nativo de Windows (Strawberry) para configurar o OpenSSL;
+# o perl do Git for Windows e MSYS e nao serve. NASM nao e preciso: o
+# openssl-src configura com no-asm.
+libsqlite3-sys = { version = "0.30", features = ["bundled-sqlcipher-vendored-openssl"] }
 uuid = { version = "1", features = ["v4"] }
 # GEDZip: o zip com o .ged e a pasta de mídia, exigido pela seção 4.
 # Sem `default-features`, para não arrastar codecs que não usamos — o formato

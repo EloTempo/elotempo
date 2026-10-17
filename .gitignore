@@ -56,8 +56,3 @@ _imagens_elotempo/
 # Repositório separado do site
 elotempo-site/
 
-# Configuracao local do cargo: aponta para a instalacao de OpenSSL desta
-# maquina (o SQLCipher precisa dela para compilar no Windows). O caminho e
-# especifico de quem compila -- versionar quebraria a build de todo mundo,
-# inclusive a do Linux no CI. O requisito esta documentado em DISTRIBUICAO.md.
-src-tauri/.cargo/config.toml

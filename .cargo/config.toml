@@ -1,0 +1,20 @@
+# Opcoes de compilacao do SQLite embutido.
+#
+# YYSTACKDEPTH e a pilha do parser do SQLite, e o padrao (100) nao aguenta a
+# expressao de normalizacao de acento: `sem_acento_sql` gera um encadeamento
+# longo de replace(replace(replace(...))) a partir da tabela SUBSTITUICOES, e
+# o banco responde "parser stack overflow". Sem esta linha, 9 testes de busca
+# e estatisticas falham -- e falhariam tambem no CI, que nunca teve o arquivo.
+#
+# Fica na RAIZ, e nao em src-tauri/, de proposito: o cargo procura o config
+# subindo a partir do diretorio de onde foi chamado. O `npm run verificar` usa
+# `cargo test --manifest-path src-tauri/Cargo.toml` a partir da raiz; um
+# config dentro de src-tauri/ nao seria lido nesse caso. Aqui vale para as
+# duas formas de invocar.
+#
+# LIBSQLITE3_FLAGS, e nao CFLAGS: assim a opcao chega so na compilacao do
+# SQLite, em vez de vazar para todo C compilado no projeto -- inclusive o
+# OpenSSL, que agora e compilado junto.
+
+[env]
+LIBSQLITE3_FLAGS = "-DYYSTACKDEPTH=500"
