@@ -199,6 +199,16 @@ export interface TranslationSchema {
     abaTrajetoria: string;
     abaGaleria: string;
     abaMapa: string;
+    abaFontes: string;
+    fontesTitulo: string;
+    fontesDescricao: string;
+    adicionarFonte: string;
+    nenhumaFonte: string;
+    nenhumaFonteDesc: string;
+    certezaAlta: string;
+    certezaMedia: string;
+    certezaBaixa: string;
+    certezaQuestionavel: string;
     verNoMapa: string;
     mapaVidaTitulo: string;
     trajetoriaDeVida: string;

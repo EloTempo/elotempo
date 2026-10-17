@@ -8,6 +8,7 @@ pub mod erros;
 pub mod estatisticas_cmds;
 pub mod eventos_cmds;
 pub mod exportacao_grafica_cmds;
+pub mod fontes_cmds;
 pub mod fusao_cmds;
 pub mod gedcom;
 pub mod linhas_tempo_cmds;

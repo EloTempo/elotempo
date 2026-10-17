@@ -57,3 +57,4 @@ export * from './estatisticas';
 export * from './arvores';
 export * from './marcadores';
 export * from './seguranca';
+export * from './fontes';

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import {
   X,
   Users,
@@ -9,6 +10,7 @@ import {
   UserCheck,
   Globe,
   Compass,
+  Scroll,
 } from 'lucide-react';
 import { IconeArvore, IconeRelacoes } from '../../../components/icons';
 import { Button } from '../../../components/ui/Button';
@@ -34,10 +36,11 @@ import { AbaVisaoGeral } from './AbaVisaoGeral';
 import { AbaLinhaTempo } from './AbaLinhaTempo';
 import { AbaTrajetoria } from './AbaTrajetoria';
 import { AbaGaleria } from './AbaGaleria';
+import { AbaFontes } from './AbaFontes';
 import { MapaTrajetoriaVida } from './MapaTrajetoriaVida';
 import { ModalEditarIdentidade } from './ModalEditarIdentidade';
 import { ModalAdicionarEventoVida } from '../../timeline/components/ModalAdicionarEventoVida';
-import { ErroDoAcervo } from '../../../lib/api';
+import { ErroDoAcervo, listarCitacoesDoAlvo } from '../../../lib/api';
 
 interface PersonDetailsProps {
   pessoaId: string;
@@ -48,7 +51,7 @@ interface PersonDetailsProps {
   isRaizAtual?: boolean;
 }
 
-type AbaTipo = 'visao_geral' | 'linha_tempo' | 'mapa' | 'trajetoria' | 'galeria';
+type AbaTipo = 'visao_geral' | 'linha_tempo' | 'mapa' | 'trajetoria' | 'galeria' | 'fontes';
 
 function mensagemDeErro(erro: unknown): string | null {
   if (!erro) return null;
@@ -94,6 +97,12 @@ export function PersonDetails({
   const listaNomes = useNomes(idPessoaAtiva);
   const listaApelidos = apelidos.useLista(idPessoaAtiva);
   const listaDocumentos = useDocumentos(idPessoaAtiva);
+
+  // Citações e fontes da pessoa
+  const { data: citacoes = [] } = useQuery({
+    queryKey: ['citacoes', 'pessoa', idPessoaAtiva],
+    queryFn: () => listarCitacoesDoAlvo('pessoa', idPessoaAtiva),
+  });
 
   // Atributos para contadores
   const listaProfissoes = profissoes.useLista(idPessoaAtiva);
@@ -433,6 +442,30 @@ export function PersonDetails({
             </span>
           )}
         </button>
+
+        <button
+          type="button"
+          onClick={() => setAbaAtiva('fontes')}
+          className={`px-3 py-1.5 rounded-raio-s text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer border ${
+            abaAtiva === 'fontes'
+              ? 'bg-acento text-acento-tinta border-acento shadow-xs'
+              : 'bg-sup/40 text-tinta2 hover:text-tinta hover:bg-sup border-borda/60'
+          }`}
+        >
+          <Scroll className="w-3.5 h-3.5" />
+          <span>{t('perfil', 'abaFontes')}</span>
+          {citacoes.length > 0 && (
+            <span
+              className={`text-[10px] font-num px-1.5 py-0.2 rounded-full ${
+                abaAtiva === 'fontes'
+                  ? 'bg-black/20 text-white'
+                  : 'bg-acento/10 text-acento'
+              }`}
+            >
+              {citacoes.length}
+            </span>
+          )}
+        </button>
       </nav>
 
       {/* ---------------- CORPO DAS ABAS (Scroll Suave) ---------------- */}
@@ -480,6 +513,10 @@ export function PersonDetails({
         {abaAtiva === 'trajetoria' && <AbaTrajetoria pessoaId={idPessoaAtiva} />}
 
         {abaAtiva === 'galeria' && <AbaGaleria pessoa={pessoa} />}
+
+        {abaAtiva === 'fontes' && (
+          <AbaFontes pessoaId={idPessoaAtiva} nomePessoa={nomeCompleto} />
+        )}
       </div>
 
       {/* ---------------- Modais e Formulários Flutuantes ---------------- */}

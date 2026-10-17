@@ -16,9 +16,11 @@ pub async fn salvar_arquivo_bytes(
     bytes: Vec<u8>,
     ticket_autorizacao: Option<String>,
     seguranca: State<'_, EstadoSeguranca>,
-) -> Resultado<()> {
-    crate::domain::seguranca::autorizar_acao_sensivel(&seguranca, None, ticket_autorizacao.as_deref()).await?;
-    salvar_bytes(&caminho, bytes)
+) -> Result<(), String> {
+    crate::domain::seguranca::autorizar_acao_sensivel(&seguranca, None, ticket_autorizacao.as_deref())
+        .await
+        .map_err(|e| e.to_string())?;
+    salvar_bytes(&caminho, bytes).map_err(|e| e.to_string())
 }
 
 pub fn salvar_bytes(caminho: &str, bytes: Vec<u8>) -> Resultado<()> {
@@ -54,9 +56,11 @@ pub async fn salvar_arquivo_texto(
     conteudo: String,
     ticket_autorizacao: Option<String>,
     seguranca: State<'_, EstadoSeguranca>,
-) -> Resultado<()> {
-    crate::domain::seguranca::autorizar_acao_sensivel(&seguranca, None, ticket_autorizacao.as_deref()).await?;
-    salvar_texto(&caminho, &conteudo)
+) -> Result<(), String> {
+    crate::domain::seguranca::autorizar_acao_sensivel(&seguranca, None, ticket_autorizacao.as_deref())
+        .await
+        .map_err(|e| e.to_string())?;
+    salvar_texto(&caminho, &conteudo).map_err(|e| e.to_string())
 }
 
 pub fn salvar_texto(caminho: &str, conteudo: &str) -> Resultado<()> {

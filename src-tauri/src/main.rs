@@ -45,6 +45,10 @@ use domain::nomes_cmds::{
 };
 use domain::trajetoria_cmds::obter_trajetoria_pessoa;
 use domain::parentesco_cmds::calcular_parentesco;
+use domain::fontes_cmds::{
+    atualizar_fonte, criar_citacao, criar_fonte, listar_citacoes_do_alvo, listar_fontes,
+    obter_fonte, remover_citacao, remover_fonte,
+};
 use domain::exportacao_grafica_cmds::{salvar_arquivo_bytes, salvar_arquivo_texto};
 use domain::fusao_cmds::{buscar_duplicatas_potenciais, fundir_pessoas};
 use domain::seguranca::{
@@ -219,6 +223,15 @@ fn main() {
             atualizar_marcador,
             deletar_marcador,
             obter_trajetoria_pessoa,
+            // Fontes e Citações Probatórias
+            listar_fontes,
+            obter_fonte,
+            criar_fonte,
+            atualizar_fonte,
+            remover_fonte,
+            listar_citacoes_do_alvo,
+            criar_citacao,
+            remover_citacao,
             // Sistema de Segurança, Criptografia e Modo Híbrido
             obter_status_seguranca,
             gerar_chave_recuperacao,
