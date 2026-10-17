@@ -15,9 +15,9 @@ fonte e precisa do OpenSSL. No Windows isso exige duas coisas:
 
 ```toml
 [env]
-OPENSSL_DIR = "C:\Program Files\OpenSSL-Win64"
-OPENSSL_INCLUDE_DIR = "C:\Program Files\OpenSSL-Win64\include"
-OPENSSL_LIB_DIR = "C:\Program Files\OpenSSL-Win64\lib\VC\x64\MD"
+OPENSSL_DIR = 'C:\Program Files\OpenSSL-Win64'
+OPENSSL_INCLUDE_DIR = 'C:\Program Files\OpenSSL-Win64\include'
+OPENSSL_LIB_DIR = 'C:\Program Files\OpenSSL-Win64\lib\VC\x64\MD'
 CFLAGS = "-DYYSTACKDEPTH=500"
 ```
 
