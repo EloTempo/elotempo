@@ -4,37 +4,43 @@ Este guia orienta como compilar e distribuir os instaladores oficiais do **EloTe
 
 ---
 
-## 0. Pre-requisito desde a v1.2.0: OpenSSL no Windows
+## 0. Pre-requisito desde a v1.2.0: Perl no Windows
 
-O banco passou a ser cifrado com **SQLCipher**, que compila o SQLite a partir do
-fonte e precisa do OpenSSL. No Windows isso exige duas coisas:
+O banco passou a ser cifrado com **SQLCipher**, e o OpenSSL de que ele depende e
+**compilado junto, a partir do fonte** (feature `bundled-sqlcipher-vendored-openssl`).
+Isso dispensa OpenSSL instalado e dispensa a variavel `OPENSSL_DIR` -- de proposito,
+porque o runner do Windows no CI tem OpenSSL mas nao exporta essa variavel.
 
-1. **OpenSSL instalado** (por exemplo em `C:\Program Files\OpenSSL-Win64`).
-2. Um **`src-tauri/.cargo/config.toml`** apontando para ele. O arquivo nao e
-   versionado, porque o caminho e de cada maquina:
+O que o OpenSSL exige para se configurar e um **Perl nativo de Windows**:
+
+- **Strawberry Perl** (`winget install StrawberryPerl.StrawberryPerl`).
+- O perl que vem com o Git for Windows **nao serve**: ele e MSYS e falta o
+  modulo `Locale::Maketext::Simple`, o que faz o `./Configure` abortar.
+- **NASM nao e necessario**: o `openssl-src` configura com `no-asm`.
+
+O runner `windows-latest` ja traz Perl 5.32 instalado, entao o CI nao precisa de
+passo extra.
+
+> A primeira compilacao fica bem mais lenta, porque constroi o OpenSSL inteiro
+> (cerca de 10 minutos em perfil debug). Depois disso o cargo reaproveita.
+
+### A opcao do parser do SQLite
+
+O arquivo **`/.cargo/config.toml`**, na raiz do repositorio, define:
 
 ```toml
 [env]
-OPENSSL_DIR = 'C:\Program Files\OpenSSL-Win64'
-OPENSSL_INCLUDE_DIR = 'C:\Program Files\OpenSSL-Win64\include'
-OPENSSL_LIB_DIR = 'C:\Program Files\OpenSSL-Win64\lib\VC\x64\MD'
-CFLAGS = "-DYYSTACKDEPTH=500"
+LIBSQLITE3_FLAGS = "-DYYSTACKDEPTH=500"
 ```
 
-**Atencao ao rodar os testes.** O cargo so le esse arquivo quando e invocado de
-dentro de `src-tauri/`. O `npm run verificar` usa
-`cargo test --manifest-path src-tauri/Cargo.toml` **a partir da raiz**, nao le o
-config e falha com `Missing environment variable OPENSSL_DIR`. Enquanto o script
-nao for corrigido, rode os testes do dominio assim:
+**Nao apague nem mova.** A expressao que normaliza acento na busca gera um
+encadeamento longo de `replace()`, e com o `YYSTACKDEPTH` padrao o SQLite
+responde `parser stack overflow` -- 9 testes de busca e estatisticas falham.
 
-```bash
-cd src-tauri && cargo test
-```
-
-O mesmo vale para o **CI**: o `release.yml` chama `npm run verificar` e nao
-configura OpenSSL no runner do Windows. Publicar uma tag `v*` hoje quebra o
-release. O runner do Linux instala `libssl-dev`, mas o bundle declara
-`bin/libcrypto-4-x64.dll` como resource sem condicional de plataforma.
+Ele fica na **raiz** porque o cargo procura o config subindo a partir do
+diretorio de onde foi chamado: `npm run verificar` invoca o cargo com
+`--manifest-path` a partir da raiz, e um config dentro de `src-tauri/` nao
+seria lido nesse caso.
 
 ---
 
