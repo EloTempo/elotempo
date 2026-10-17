@@ -889,10 +889,11 @@ dependencies = [
 
 [[package]]
 name = "elotempo"
-version = "1.1.0"
+version = "1.2.0"
 dependencies = [
  "aes-gcm",
  "argon2",
+ "libsqlite3-sys",
  "rand",
  "serde",
  "serde_json",

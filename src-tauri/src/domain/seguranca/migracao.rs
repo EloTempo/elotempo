@@ -104,10 +104,12 @@ pub async fn migrar_para_modo_blindado(
         }
     };
 
-    // Valida se o cabeçalho SQLite começa com "SQLite format 3\0"
-    if bytes_decifrados.len() < 16 || &bytes_decifrados[..16] != b"SQLite format 3\0" {
+    // Valida se o payload decifrado corresponde byte a byte ao arquivo original (SQLCipher ou legado)
+    let bytes_originais = fs::read(&caminho_sqlite)
+        .map_err(|e| ErroDominio::Persistencia(format!("Erro ao ler acervo para prova de integridade: {e}")))?;
+    if bytes_decifrados.len() < 16 || bytes_decifrados != bytes_originais {
         let _ = fs::remove_file(&caminho_vault_tmp);
-        return Err(ErroDominio::Persistencia("Erro na prova de integridade: cabeçalho SQLite inválido após decifrar.".into()));
+        return Err(ErroDominio::Persistencia("Erro na prova de integridade: bytes decifrados divergem do acervo.".into()));
     }
 
     // -------------------------------------------------------------------------

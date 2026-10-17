@@ -246,11 +246,23 @@ fn main() {
         .expect("erro ao iniciar a aplicação");
 }
 
-/// Abre (ou cria) o acervo e aplica as migrations pendentes.
+/// Abre (ou cria) o acervo criptografado com SQLCipher e aplica as migrations pendentes.
 async fn abrir_acervo(caminho: &std::path::Path) -> Result<SqlitePool, Box<dyn std::error::Error>> {
+    let pasta_pai = caminho.parent().unwrap_or_else(|| std::path::Path::new("."));
+    let chave_acervo = crate::domain::seguranca::chave_acervo::obter_ou_criar_chave_acervo(pasta_pai)
+        .map_err(|e| format!("{e:?}"))?;
+
+    // Se existir um acervo.sqlite de versão anterior em texto claro, cifra-o com SQLCipher
+    crate::domain::seguranca::chave_acervo::migrar_sqlite_legado_para_cifrado(caminho, &chave_acervo)
+        .await
+        .map_err(|e| format!("{e:?}"))?;
+
+    let pragma_key = crate::domain::seguranca::chave_acervo::formatar_sqlcipher_key(&chave_acervo);
+
     let opcoes = SqliteConnectOptions::new()
         .filename(caminho)
         .create_if_missing(true)
+        .pragma("key", pragma_key)
         // WAL: leituras não bloqueiam a escrita. Numa árvore grande, é a
         // diferença entre a interface travar ou não durante um salvamento.
         .journal_mode(sqlx::sqlite::SqliteJournalMode::Wal)
