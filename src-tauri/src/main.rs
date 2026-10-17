@@ -251,6 +251,9 @@ fn main() {
             bloquear_acervo,
             validar_senha_gatekeeper,
             recuperar_acervo_com_chave,
+            // Exportacao do acervo publico para o portal web
+            domain::exportar_web::exportar_acervo_web,
+
             // Assistente de IA Local Sob Demanda + Pipeline Neuro-Simbólico
             obter_status_ia_local,
             iniciar_download_modelo_ia,

@@ -9,6 +9,7 @@ pub mod documentos_cmds;
 pub mod erros;
 pub mod estatisticas_cmds;
 pub mod eventos_cmds;
+pub mod exportar_web;
 pub mod exportacao_grafica_cmds;
 pub mod fontes_cmds;
 pub mod fusao_cmds;
