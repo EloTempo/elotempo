@@ -103,6 +103,13 @@ export interface TranslationSchema {
     geracoesAbrev: string;
     ahnentafel: string;
     poster: string;
+    minimapa: string;
+    minimapaAbrir: string;
+    minimapaFechar: string;
+    radarTitulo: string;
+    localizarMembro: string;
+    buscarMembroPlaceholder: string;
+    nenhumMembroEncontrado: string;
     alternar: string;
     alternarArvores: string;
     arvoresDoAcervo: string;

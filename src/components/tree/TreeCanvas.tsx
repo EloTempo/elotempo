@@ -2,12 +2,14 @@
  * Superfície de desenho da árvore com navegação e visões auxiliares (Fatia 13).
  */
 
-import { useEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import * as d3 from 'd3';
 import { calcularLayout, caminhoOrtogonal, METRICAS } from '../../lib/tree/layout';
 import type { TreeGraph } from '../../types';
 import { NodeCard } from './NodeCard';
 import { BarraControlesArvore, type ModoVisaoArvore } from './BarraControlesArvore';
+import { MinimapaArvore } from './MinimapaArvore';
+import { LocalizadorArvoreModal } from './LocalizadorArvoreModal';
 
 interface TreeCanvasProps {
   grafo: TreeGraph;
@@ -65,6 +67,11 @@ export function TreeCanvas({
   const palcoRef = useRef<SVGGElement>(null);
   const zoomRef = useRef<d3.ZoomBehavior<SVGSVGElement, unknown> | null>(null);
 
+  // Estados para sincronização do Minimapa e Localizador
+  const [viewportTransform, setViewportTransform] = useState({ x: 0, y: 0, k: 1 });
+  const [containerDimensoes, setContainerDimensoes] = useState({ largura: 1000, altura: 800 });
+  const [localizadorAberto, setLocalizadorAberto] = useState(false);
+
   const layout = useMemo(
     () => calcularLayout(grafo, unioesColapsadas),
     [grafo, unioesColapsadas],
@@ -80,6 +87,11 @@ export function TreeCanvas({
       .scaleExtent([0.15, 2.5])
       .on('zoom', (evento) => {
         palco.setAttribute('transform', evento.transform.toString());
+        setViewportTransform({
+          x: evento.transform.x,
+          y: evento.transform.y,
+          k: evento.transform.k,
+        });
 
         // Zoom semântico: o CSS em globals.css reage a estas classes,
         // escondendo detalhe quando os cards ficam pequenos demais para ler.
@@ -96,18 +108,49 @@ export function TreeCanvas({
     // Enquadramento inicial: a árvore inteira visível, sem passar de 100%.
     const largura = svg.clientWidth || 1;
     const altura = svg.clientHeight || 1;
+    setContainerDimensoes({ largura, altura });
     const escala = Math.min(largura / layout.largura, altura / layout.altura, 1);
     const deslocX = (largura - layout.largura * escala) / 2;
 
-    selecao.call(
-      zoom.transform,
-      d3.zoomIdentity.translate(deslocX, METRICAS.margem * escala).scale(escala),
-    );
+    const transformInicial = d3.zoomIdentity.translate(deslocX, METRICAS.margem * escala).scale(escala);
+    selecao.call(zoom.transform, transformInicial);
+    setViewportTransform({
+      x: transformInicial.x,
+      y: transformInicial.y,
+      k: transformInicial.k,
+    });
+
+    const atualizarDimensoes = () => {
+      if (svg) {
+        setContainerDimensoes({
+          largura: svg.clientWidth || 1000,
+          altura: svg.clientHeight || 800,
+        });
+      }
+    };
+    window.addEventListener('resize', atualizarDimensoes);
 
     return () => {
       selecao.on('.zoom', null);
+      window.removeEventListener('resize', atualizarDimensoes);
     };
   }, [layout]);
+
+  // Atalho de teclado global Ctrl+F / Cmd+F para abrir o localizador da árvore
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'f') {
+        const tag = (e.target as HTMLElement)?.tagName?.toLowerCase();
+        if (tag !== 'input' && tag !== 'textarea') {
+          e.preventDefault();
+          setLocalizadorAberto(true);
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   const zoomIn = () => {
     if (!svgRef.current || !zoomRef.current) return;
@@ -154,6 +197,56 @@ export function TreeCanvas({
         d3.zoomIdentity.translate(largura / 2 - foco.x, altura / 2 - foco.y).scale(1),
       );
   };
+
+  const navegarPara = useCallback(
+    (targetX: number, targetY: number) => {
+      const svg = svgRef.current;
+      const zoom = zoomRef.current;
+      if (!svg || !zoom) return;
+
+      const largura = svg.clientWidth || containerDimensoes.largura;
+      const altura = svg.clientHeight || containerDimensoes.altura;
+      const k = viewportTransform.k || 1;
+
+      d3.select(svg)
+        .transition()
+        .duration(280)
+        .call(
+          zoom.transform,
+          d3.zoomIdentity
+            .translate(largura / 2 - targetX * k, altura / 2 - targetY * k)
+            .scale(k),
+        );
+    },
+    [containerDimensoes, viewportTransform.k],
+  );
+
+  const centralizarEmPessoa = useCallback(
+    (id: string) => {
+      const svg = svgRef.current;
+      const zoom = zoomRef.current;
+      if (!svg || !zoom) return;
+
+      const alvo = layout.pessoas.find((p) => p.id === id);
+      if (!alvo) return;
+
+      onSelecionarPessoa?.(id);
+
+      const largura = svg.clientWidth || containerDimensoes.largura;
+      const altura = svg.clientHeight || containerDimensoes.altura;
+
+      d3.select(svg)
+        .transition()
+        .duration(450)
+        .call(
+          zoom.transform,
+          d3.zoomIdentity
+            .translate(largura / 2 - alvo.x, altura / 2 - alvo.y)
+            .scale(1),
+        );
+    },
+    [layout.pessoas, containerDimensoes, onSelecionarPessoa],
+  );
 
   return (
     <div className="relative w-full h-full overflow-hidden bg-bg">
@@ -281,8 +374,31 @@ export function TreeCanvas({
           onCentralizarRaiz={centralizarRaiz}
           onAbrirAhnentafel={onAbrirAhnentafel}
           onExportarPoster={onExportarPoster}
+          onLocalizarMembro={() => setLocalizadorAberto(true)}
         />
       )}
+
+      {/* Radar / Minimapa flutuante interativo */}
+      {layout.pessoas.length > 0 && (
+        <MinimapaArvore
+          layout={layout}
+          viewportTransform={viewportTransform}
+          containerWidth={containerDimensoes.largura}
+          containerHeight={containerDimensoes.altura}
+          pessoaSelecionadaId={pessoaSelecionadaId}
+          onNavegarPara={navegarPara}
+          abertoPadrao={layout.pessoas.length >= 8}
+        />
+      )}
+
+      {/* Modal Localizador Rápido de Membros (Ctrl+F) */}
+      <LocalizadorArvoreModal
+        aberto={localizadorAberto}
+        onFechar={() => setLocalizadorAberto(false)}
+        pessoas={layout.pessoas}
+        pessoaSelecionadaId={pessoaSelecionadaId}
+        onSelecionarPessoa={centralizarEmPessoa}
+      />
     </div>
   );
 }

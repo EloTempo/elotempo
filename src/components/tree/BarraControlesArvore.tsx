@@ -1,12 +1,14 @@
 import {
   ArrowDown,
   ArrowUp,
+  Compass,
   FileImage,
   GitFork,
   ListOrdered,
   Maximize2,
   Minus,
   Plus,
+  Search,
   Target,
   ZoomIn,
   ZoomOut,
@@ -26,6 +28,9 @@ interface BarraControlesArvoreProps {
   onCentralizarRaiz: () => void;
   onAbrirAhnentafel?: () => void;
   onExportarPoster?: () => void;
+  onLocalizarMembro?: () => void;
+  onToggleMinimapa?: () => void;
+  minimapaAberto?: boolean;
   className?: string;
 }
 
@@ -40,6 +45,9 @@ export function BarraControlesArvore({
   onCentralizarRaiz,
   onAbrirAhnentafel,
   onExportarPoster,
+  onLocalizarMembro,
+  onToggleMinimapa,
+  minimapaAberto = false,
   className = '',
 }: BarraControlesArvoreProps) {
   const { t } = useI18n();
@@ -162,6 +170,17 @@ export function BarraControlesArvore({
         >
           <Target className="w-3.5 h-3.5" />
         </button>
+
+        {onLocalizarMembro && (
+          <button
+            type="button"
+            onClick={onLocalizarMembro}
+            className="p-1.5 text-tinta2 hover:text-acento rounded hover:bg-sup cursor-pointer transition-colors"
+            title={t('arvore', 'localizarMembro')}
+          >
+            <Search className="w-3.5 h-3.5" />
+          </button>
+        )}
       </div>
 
       {onAbrirAhnentafel && (
@@ -190,6 +209,24 @@ export function BarraControlesArvore({
           >
             <FileImage className="w-3.5 h-3.5 text-acento" />
             <span>{t('arvore', 'poster')}</span>
+          </button>
+        </>
+      )}
+
+      {onToggleMinimapa && (
+        <>
+          <div className="h-4 w-px bg-borda flex-none" />
+          <button
+            type="button"
+            onClick={onToggleMinimapa}
+            className={`p-1.5 rounded cursor-pointer transition-colors ${
+              minimapaAberto
+                ? 'bg-acento/15 text-acento border border-acento/30'
+                : 'text-tinta2 hover:text-tinta hover:bg-sup'
+            }`}
+            title={t('arvore', 'radarTitulo')}
+          >
+            <Compass className="w-3.5 h-3.5" />
           </button>
         </>
       )}
