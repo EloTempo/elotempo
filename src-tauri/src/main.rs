@@ -56,6 +56,12 @@ use domain::seguranca::{
     desbloquear_acervo, gerar_chave_recuperacao, obter_status_seguranca, recuperar_acervo_com_chave,
     validar_senha_gatekeeper, EstadoSeguranca,
 };
+use domain::assistente_ia::{
+    cancelar_download_modelo_ia, configurar_endpoint_ia_local, consultar_assistente_ia,
+    executar_proposta_ia, importar_modelo_gguf_local, iniciar_download_modelo_ia,
+    iniciar_motor_ia_local, obter_status_ia_local, parar_motor_ia_local, remover_modelo_ia,
+    EstadoIaLocal,
+};
 
 /// Nome do arquivo de acervo dentro da pasta de dados do app.
 const ARQUIVO_ACERVO: &str = "acervo.sqlite";
@@ -95,6 +101,10 @@ fn main() {
             let config_seguranca = carregar_config_seguranca(&pasta_dados);
             let estado_seguranca = EstadoSeguranca::novo(config_seguranca);
             app.manage(estado_seguranca);
+
+            let estado_ia_local = EstadoIaLocal::novo(&pasta_dados);
+            app.manage(estado_ia_local);
+
 
             let pool = match tauri::async_runtime::block_on(abrir_acervo(&caminho_banco)) {
                 Ok(p) => p,
@@ -241,8 +251,20 @@ fn main() {
             bloquear_acervo,
             validar_senha_gatekeeper,
             recuperar_acervo_com_chave,
+            // Assistente de IA Local Sob Demanda + Pipeline Neuro-Simbólico
+            obter_status_ia_local,
+            iniciar_download_modelo_ia,
+            cancelar_download_modelo_ia,
+            importar_modelo_gguf_local,
+            remover_modelo_ia,
+            configurar_endpoint_ia_local,
+            iniciar_motor_ia_local,
+            parar_motor_ia_local,
+            consultar_assistente_ia,
+            executar_proposta_ia,
         ])
         .run(tauri::generate_context!())
+
         .expect("erro ao iniciar a aplicação");
 }
 

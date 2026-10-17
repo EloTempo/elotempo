@@ -1,5 +1,7 @@
 pub mod arvores_cmds;
+pub mod assistente_ia;
 pub mod atributos_cmds;
+
 pub mod busca_cmds;
 pub mod core_cmds;
 pub mod datas;

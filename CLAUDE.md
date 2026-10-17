@@ -99,10 +99,20 @@ Os `#[tauri::command]` em `core_cmds.rs` são cascas finas. Regra nova vai em
   um bug em que a query procurava com maiúscula e a UI gravava com minúscula.
 - **Linhas do tempo de contexto são somente leitura.** Nunca gere fluxo que
   permita o usuário editá-las (`is_bloqueada`).
-- **Nada de rede em tempo de execução.** A única exceção é
+- **Nada de rede em tempo de execução**, com duas exceções escritas:
   `scripts/gerar-seed-ibge.mjs`, que roda na máquina de quem desenvolve e cujo
-  resultado é versionado. Fontes são embarcadas via `@fontsource`; se você se
-  pegar escrevendo uma URL `https://` em código de runtime, está errado.
+  resultado é versionado; e o **download sob demanda do modelo de IA**
+  (`assistente_ia::gerenciador_modelo`), que só acontece quando o usuário clica
+  para baixar, vai para uma revisão fixa no Hugging Face e é conferido por
+  SHA-256 antes de ser aceito. Fora isso, se você se pegar escrevendo uma URL
+  `https://` em código de runtime, está errado.
+
+  **O endpoint do motor de IA é só de laço de retorno, e há teste prendendo
+  isso.** Cada pergunta ao assistente carrega nomes e datas da família no corpo
+  da requisição; apontar o endpoint para um host externo mandaria o acervo para
+  fora em silêncio, contra a promessa da seção 1 e contra o que o site anuncia.
+  `validar_endpoint_local` recusa qualquer coisa que não seja `127.0.0.0/8`,
+  `::1` ou `localhost`. Não afrouxe para "facilitar teste".
 
 ---
 

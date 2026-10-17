@@ -14,6 +14,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   ArrowUpDown,
   BarChart3,
+  Bot,
   FileDown,
   FileImage,
   FileUp,
@@ -53,6 +54,7 @@ import { ModalAhnentafel } from './features/trees/components/ModalAhnentafel';
 import { ModalHistoricoAcoes } from './features/history/components/ModalHistoricoAcoes';
 import { ModalCalculadoraParentesco } from './features/kinship/components/ModalCalculadoraParentesco';
 import { ModalFusaoPessoas } from './features/person/components/ModalFusaoPessoas';
+import { ModalAssistenteIa } from './features/assistant/components/ModalAssistenteIa';
 import { useHistorico } from './contexts/HistoricoContext';
 import { useI18n } from './i18n/I18nContext';
 import { type ModoVisaoArvore } from './components/tree/BarraControlesArvore';
@@ -107,6 +109,8 @@ export default function App() {
   const [fusaoAberta, setFusaoAberta] = useState(false);
   const [pessoaInicialFusao, setPessoaInicialFusao] = useState<string | null>(null);
   const [sobreAberto, setSobreAberto] = useState(false);
+  const [assistenteIaAberto, setAssistenteIaAberto] = useState(false);
+
   const [splashAberta, setSplashAberta] = useState<boolean>(() => {
     try {
       return localStorage.getItem('elotempo-mostrar-splash') !== 'false';
@@ -589,8 +593,19 @@ export default function App() {
 
           <div className="h-5 w-px bg-borda/60 mx-0.5" />
 
-          {/* Ilha de Botões de Sistema: Segurança, Boas-Vindas, Sobre */}
+          {/* Ilha de Botões de Sistema: Assistente IA, Segurança, Boas-Vindas, Sobre */}
           <div className="flex items-center gap-1">
+            <button
+              type="button"
+              onClick={() => setAssistenteIaAberto(true)}
+              title="Assistente de IA Local & Motor Neuro-Simbólico"
+              aria-label="Assistente de IA Local"
+              className="px-2 py-1 rounded-raio-s border border-acento/50 bg-acento/10 hover:bg-acento/20 text-acento font-semibold text-xs transition-colors cursor-pointer flex items-center gap-1.5 shadow-xs"
+            >
+              <Bot className="w-3.5 h-3.5 text-acento" />
+              <span className="hidden sm:inline">Assistente IA</span>
+            </button>
+
             <button
               type="button"
               onClick={() => setSegurancaAberta(true)}
@@ -604,6 +619,7 @@ export default function App() {
                 <Shield className="w-3.5 h-3.5 text-tinta3" />
               )}
             </button>
+
 
             <button
               type="button"
@@ -910,6 +926,28 @@ export default function App() {
         isOpen={segurancaAberta}
         onClose={() => setSegurancaAberta(false)}
       />
+
+      <ModalAssistenteIa
+        aberto={assistenteIaAberto}
+        onFechar={() => setAssistenteIaAberto(false)}
+        onSelecionarPessoa={(id) => {
+          setRaizId(id);
+          setSelecionadaId(id);
+        }}
+        onArvoreCriada={(arvoreId, novaRaizId) => {
+          setArvoreAtivaId(arvoreId);
+          if (novaRaizId) {
+            setRaizId(novaRaizId);
+            setSelecionadaId(novaRaizId);
+          }
+          setAssistenteIaAberto(false);
+        }}
+        onLinhaTempoCriada={() => {
+          setTimelineAberta(true);
+          setAssistenteIaAberto(false);
+        }}
+      />
+
 
       <Modal
         isOpen={formAberto}
