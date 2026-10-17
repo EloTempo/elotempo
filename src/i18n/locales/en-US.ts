@@ -48,6 +48,8 @@ export const enUS: TranslationSchema = {
     importarGedcomDesc: 'Import data from .ged file (v5.5.1 or v7.0)',
     exportarGedcom: 'Export GEDCOM…',
     exportarGedcomDesc: 'Export collection in universal GEDCOM 7.0 standard',
+    exportarAcervoWeb: 'Export public historical collection…',
+    exportarAcervoWebDesc: 'Generates the web portal files with the public trees. Does not include your family.',
     imprimirMenu: 'Print',
     imprimirArvore: 'Tree & Family Reports…',
     imprimirArvoreDesc: 'A4 report, biographical records, and chart',

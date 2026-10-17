@@ -56,6 +56,8 @@ export interface TranslationSchema {
     importarGedcomDesc: string;
     exportarGedcom: string;
     exportarGedcomDesc: string;
+    exportarAcervoWeb: string;
+    exportarAcervoWebDesc: string;
     imprimirMenu: string;
     imprimirArvore: string;
     imprimirArvoreDesc: string;

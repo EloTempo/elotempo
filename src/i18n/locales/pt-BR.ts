@@ -48,6 +48,11 @@ export const ptBR: TranslationSchema = {
     importarGedcomDesc: 'Importar dados de arquivo .ged (v5.5.1 ou v7.0)',
     exportarGedcom: 'Exportar GEDCOM…',
     exportarGedcomDesc: 'Exportar acervo no padrão universal GEDCOM 7.0',
+    // "Acervo histórico público", e não só "acervo": o menu fica ao lado do
+    // GEDCOM, que exporta a família do usuário. Sem a distinção no rótulo, quem
+    // clicasse esperaria exportar os próprios dados.
+    exportarAcervoWeb: 'Exportar acervo histórico público…',
+    exportarAcervoWebDesc: 'Gera os arquivos do portal web com as árvores públicas. Não inclui a sua família.',
     imprimirMenu: 'Imprimir',
     imprimirArvore: 'Árvore e Relatórios Familiares…',
     imprimirArvoreDesc: 'Relatório em A4, fichas biográficas e diagrama',
