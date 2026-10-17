@@ -674,5 +674,66 @@ describe('caminhoOrtogonal', () => {
     // a distância horizontal para o pai deve ser moderada e não um abismo de milhares de pixels
     expect(Math.abs(pAvoPaterno.x - pPai.x)).toBeLessThan(500);
   });
+
+  it('compacta irmão sem filhos próximo ao irmão com grande descendência (caso Silva Prado)', () => {
+    // Pai + Mãe têm 2 filhos:
+    // - Irmão 1 (Martinho, 1811 + Veridiana) tem 4 filhos na geração 2
+    // - Irmão 2 (Caio, 1815) não tem filhos (ocupa apenas geração 1)
+    const pai = pessoa('antonio', 'M', 1780);
+    const mae = pessoa('maria', 'F', 1785);
+    const martinho = pessoa('martinho', 'M', 1811);
+    const veridiana = pessoa('veridiana', 'F', 1825);
+    const caio = pessoa('caio', 'M', 1815);
+    const n1 = pessoa('n1', 'M', 1840);
+    const n2 = pessoa('n2', 'M', 1842);
+    const n3 = pessoa('n3', 'M', 1844);
+    const n4 = pessoa('n4', 'F', 1846);
+
+    const uPais = uniao('uPais', 'antonio', 'maria');
+    const uMartinho = uniao('uMartinho', 'martinho', 'veridiana');
+
+    const g = grafo(
+      [pai, mae, martinho, veridiana, caio, n1, n2, n3, n4],
+      [uPais, uMartinho],
+      [
+        ['uPais', 'martinho'],
+        ['uPais', 'caio'],
+        ['uMartinho', 'n1'],
+        ['uMartinho', 'n2'],
+        ['uMartinho', 'n3'],
+        ['uMartinho', 'n4'],
+      ],
+    );
+    const layout = calcularLayout(g);
+
+    const pVeridiana = layout.pessoas.find((p) => p.id === 'veridiana')!;
+    const pCaio = layout.pessoas.find((p) => p.id === 'caio')!;
+
+    // Caio deve ficar imediatamente ao lado de Veridiana na geração 1 (separados por espacoIrmaos),
+    // e não empurrado para além da borda direita dos 4 sobrinhos na geração 2.
+    const distanciaBorda = pCaio.x - (pVeridiana.x + METRICAS.larguraNo);
+    expect(distanciaBorda).toBeCloseTo(METRICAS.espacoIrmaos, 0);
+  });
+
+  it('protege contra ciclos genealógicos em grafos importados sem espiral vertical', () => {
+    const a = pessoa('a', 'M');
+    const b = pessoa('b', 'F');
+    const c = pessoa('c', 'M');
+    // a + b -> c, mas c tem união com b (ciclo cônjuge-mãe)
+    const u1 = uniao('u1', 'a', 'b');
+    const u2 = uniao('u2', 'c', 'b');
+
+    const g = grafo([a, b, c], [u1, u2], [['u1', 'c']]);
+    const layout = calcularLayout(g);
+
+    expect(layout.pessoas).toHaveLength(3);
+    // Diferença máxima de Y não deve ultrapassar 2 gerações
+    const ys = layout.pessoas.map((p) => p.y);
+    const spanVertical = Math.max(...ys) - Math.min(...ys);
+    expect(spanVertical).toBeLessThanOrEqual(2 * (METRICAS.alturaNo + METRICAS.alturaGeracao));
+  });
 });
+
+
+
 

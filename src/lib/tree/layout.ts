@@ -246,6 +246,27 @@ function calcularGeracoes(idx: Indice): Map<string, number> {
   const geracao = new Map<string, number>();
   for (const id of idx.pessoas.keys()) geracao.set(id, 0);
 
+  function ehAncestral(ancestralId: string, descendenteId: string): boolean {
+    if (ancestralId === descendenteId) return true;
+    const visitados = new Set<string>();
+    const fila = [descendenteId];
+    while (fila.length > 0) {
+      const atual = fila.pop()!;
+      if (visitados.has(atual)) continue;
+      visitados.add(atual);
+      const uOrigem = idx.uniaoDeOrigem.get(atual);
+      if (!uOrigem) continue;
+      const u = idx.unioes.get(uOrigem);
+      if (!u) continue;
+      if (u.slot_masculino_id === ancestralId || u.slot_feminino_id === ancestralId) {
+        return true;
+      }
+      if (idx.pessoas.has(u.slot_masculino_id)) fila.push(u.slot_masculino_id);
+      if (idx.pessoas.has(u.slot_feminino_id)) fila.push(u.slot_feminino_id);
+    }
+    return false;
+  }
+
   const MAX_ITERACOES = idx.pessoas.size + 10;
 
   for (let i = 0; i < MAX_ITERACOES; i++) {
@@ -259,16 +280,22 @@ function calcularGeracoes(idx: Indice): Map<string, number> {
       const gMae = geracao.get(u.slot_feminino_id) ?? 0;
       const alvo = Math.max(gPai, gMae) + 1;
       for (const f of filhos) {
-        if ((geracao.get(f) ?? 0) < alvo) {
+        if ((geracao.get(f) ?? 0) < alvo && !ehAncestral(f, u.slot_masculino_id) && !ehAncestral(f, u.slot_feminino_id)) {
           geracao.set(f, alvo);
           mudou = true;
         }
       }
     }
 
-    // Cônjuges se alinham na mesma geração.
+    // Cônjuges se alinham na mesma geração (exceto se houver ciclo ancestral-descendente).
     for (const u of idx.unioes.values()) {
       if (u.slot_masculino_id === u.slot_feminino_id) continue;
+      if (
+        ehAncestral(u.slot_masculino_id, u.slot_feminino_id) ||
+        ehAncestral(u.slot_feminino_id, u.slot_masculino_id)
+      ) {
+        continue;
+      }
       const gM = geracao.get(u.slot_masculino_id);
       const gF = geracao.get(u.slot_feminino_id);
       if (gM === undefined || gF === undefined) continue;
@@ -328,7 +355,7 @@ function calcularGeracoes(idx: Indice): Map<string, number> {
             const gMae = geracao.get(u.slot_feminino_id) ?? 0;
             const alvo = Math.max(gPai, gMae) + 1;
             for (const f of filhos) {
-              if ((geracao.get(f) ?? 0) < alvo) {
+              if ((geracao.get(f) ?? 0) < alvo && !ehAncestral(f, u.slot_masculino_id) && !ehAncestral(f, u.slot_feminino_id)) {
                 geracao.set(f, alvo);
                 mudou = true;
               }
@@ -336,6 +363,12 @@ function calcularGeracoes(idx: Indice): Map<string, number> {
           }
           for (const u of idx.unioes.values()) {
             if (u.slot_masculino_id === u.slot_feminino_id) continue;
+            if (
+              ehAncestral(u.slot_masculino_id, u.slot_feminino_id) ||
+              ehAncestral(u.slot_feminino_id, u.slot_masculino_id)
+            ) {
+              continue;
+            }
             const gM = geracao.get(u.slot_masculino_id);
             const gF = geracao.get(u.slot_feminino_id);
             if (gM === undefined || gF === undefined) continue;
@@ -352,6 +385,24 @@ function calcularGeracoes(idx: Indice): Map<string, number> {
           if (!mudou) break;
         }
       }
+    }
+  }
+
+  // Compressão de gerações vazias: garante que não haja faixas verticais em branco
+  const geracoesOcupadas = [
+    ...new Set(
+      [...geracao.entries()]
+        .filter(([id]) => !idx.ocultados.has(id))
+        .map(([, g]) => g),
+    ),
+  ].sort((a, b) => a - b);
+
+  if (geracoesOcupadas.length > 0) {
+    const mapaCompacto = new Map<number, number>(
+      geracoesOcupadas.map((g, idxComp) => [g, idxComp]),
+    );
+    for (const [id, g] of geracao) {
+      geracao.set(id, mapaCompacto.get(g) ?? 0);
     }
   }
 
@@ -649,6 +700,98 @@ export function calcularLayout(
     return (geracao.get(id) ?? 0) * alturaGeracao;
   }
 
+  function posicionarFilhosCompactados(uid: string, cursorBloco: number, larguraBloco: number): void {
+    const filhos = idx.filhosDaUniao.get(uid) ?? [];
+    if (filhos.length === 0) return;
+
+    const larguraFilhos = medirFilhos(uid);
+    let cursorFilho = cursorBloco + (larguraBloco - larguraFilhos) / 2;
+
+    const pessoasDosIrmaosAnteriores: string[] = [];
+    const todasPessoasDosFilhos: string[] = [];
+    const todasUnioesDosFilhos: string[] = [];
+
+    for (let i = 0; i < filhos.length; i++) {
+      const f = filhos[i];
+      const larguraFilho = medirPessoa(f);
+      const pessoasAntes = new Set(posPessoa.keys());
+      const unioesAntes = new Set(posUniao.keys());
+
+      colocarPessoa(f, cursorFilho);
+      cursorFilho += larguraFilho + espacoIrmaos;
+
+      const novasPessoas = [...posPessoa.keys()].filter((k) => !pessoasAntes.has(k));
+      const novasUnioes = [...posUniao.keys()].filter((k) => !unioesAntes.has(k));
+
+      if (i > 0 && novasPessoas.length > 0 && pessoasDosIrmaosAnteriores.length > 0) {
+        let menorFolga = Number.POSITIVE_INFINITY;
+        for (const pNovo of novasPessoas) {
+          const g = geracao.get(pNovo) ?? 0;
+          const esqNovo = posPessoa.get(pNovo)!.x - larguraNo / 2;
+          for (const pAnt of pessoasDosIrmaosAnteriores) {
+            if ((geracao.get(pAnt) ?? 0) !== g) continue;
+            const dirAnt = posPessoa.get(pAnt)!.x + larguraNo / 2;
+            const folga = esqNovo - dirAnt;
+            if (folga < menorFolga) menorFolga = folga;
+          }
+        }
+
+        if (menorFolga < Number.POSITIVE_INFINITY && menorFolga > espacoIrmaos) {
+          const recuo = menorFolga - espacoIrmaos;
+          for (const pNovo of novasPessoas) {
+            const pos = posPessoa.get(pNovo)!;
+            posPessoa.set(pNovo, { x: pos.x - recuo, y: pos.y });
+          }
+          for (const uNovo of novasUnioes) {
+            const pos = posUniao.get(uNovo)!;
+            posUniao.set(uNovo, { x: pos.x - recuo, y: pos.y });
+          }
+        }
+      }
+
+      pessoasDosIrmaosAnteriores.push(...novasPessoas);
+      todasPessoasDosFilhos.push(...novasPessoas);
+      todasUnioesDosFilhos.push(...novasUnioes);
+    }
+
+    // Se houve compactação entre os irmãos na geração direta dos filhos,
+    // centraliza o grupo de filhos sob o anel da união (mantendo dentro dos limites do bloco).
+    const posAnel = posUniao.get(uid);
+    const filhosColocados = filhos.filter((f) => posPessoa.has(f));
+    if (posAnel && filhosColocados.length > 1 && todasPessoasDosFilhos.length > 0) {
+      const xPrimeiroFilho = posPessoa.get(filhosColocados[0])!.x;
+      const xUltimoFilho = posPessoa.get(filhosColocados[filhosColocados.length - 1])!.x;
+      const centroFilhos = (xPrimeiroFilho + xUltimoFilho) / 2;
+      let delta = posAnel.x - centroFilhos;
+
+      let minEsq = Number.POSITIVE_INFINITY;
+      let maxDir = Number.NEGATIVE_INFINITY;
+      for (const p of todasPessoasDosFilhos) {
+        const x = posPessoa.get(p)!.x;
+        if (x - larguraNo / 2 < minEsq) minEsq = x - larguraNo / 2;
+        if (x + larguraNo / 2 > maxDir) maxDir = x + larguraNo / 2;
+      }
+
+      if (minEsq + delta < cursorBloco) {
+        delta = Math.max(0, cursorBloco - minEsq);
+      }
+      if (maxDir + delta > cursorBloco + larguraBloco) {
+        delta = Math.min(0, cursorBloco + larguraBloco - maxDir);
+      }
+
+      if (Math.abs(delta) > 1) {
+        for (const p of todasPessoasDosFilhos) {
+          const pos = posPessoa.get(p)!;
+          posPessoa.set(p, { x: pos.x + delta, y: pos.y });
+        }
+        for (const uId of todasUnioesDosFilhos) {
+          const pos = posUniao.get(uId)!;
+          posUniao.set(uId, { x: pos.x + delta, y: pos.y });
+        }
+      }
+    }
+  }
+
   function colocarPessoa(id: string, x0: number): void {
     if (colocadas.has(id) || idx.ocultados.has(id)) return;
     colocadas.add(id);
@@ -712,16 +855,7 @@ export function calcularLayout(
         posUniao.set(uPrincipal, { x: (xPessoa + xConjuge) / 2, y: y(id) });
       }
 
-      const filhos = idx.filhosDaUniao.get(uPrincipal) ?? [];
-      if (filhos.length > 0) {
-        const larguraFilhos = medirFilhos(uPrincipal);
-        let cursorFilho = cursorPrincipal + (blocoPrincipal - larguraFilhos) / 2;
-        for (const f of filhos) {
-          const larguraFilho = medirPessoa(f);
-          colocarPessoa(f, cursorFilho);
-          cursorFilho += larguraFilho + espacoIrmaos;
-        }
-      }
+      posicionarFilhosCompactados(uPrincipal, cursorPrincipal, blocoPrincipal);
 
       // Posiciona os cônjuges sem filhos no lado livre
       const xId = posPessoa.get(id)!.x;
@@ -816,17 +950,8 @@ export function calcularLayout(
         posUniao.set(uid, { x: xAnel, y: y(id) });
       }
 
-      // Filhos: centralizados sob o bloco, não sob um dos pais.
-      const filhos = idx.filhosDaUniao.get(uid) ?? [];
-      if (filhos.length > 0) {
-        const larguraFilhos = medirFilhos(uid);
-        let cursorFilho = cursor + (bloco - larguraFilhos) / 2;
-        for (const f of filhos) {
-          const larguraFilho = medirPessoa(f);
-          colocarPessoa(f, cursorFilho);
-          cursorFilho += larguraFilho + espacoIrmaos;
-        }
-      }
+      // Filhos: centralizados e compactados por contorno por geração sob o bloco
+      posicionarFilhosCompactados(uid, cursor, bloco);
 
       cursor += bloco + espacoBlocos;
     }

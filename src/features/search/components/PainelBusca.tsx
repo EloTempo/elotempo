@@ -25,6 +25,7 @@ import {
   Users,
   X,
   Folder,
+  FolderOpen,
   Check,
 } from 'lucide-react';
 import { IconeArvore } from '../../../components/icons';
@@ -139,6 +140,16 @@ export function PainelBusca({
     () => todasArvores?.find((a) => a.id === arvoreAtivaId) ?? null,
     [todasArvores, arvoreAtivaId]
   );
+
+  // Mantém a categoria da árvore ativa expandida automaticamente ao selecionar uma árvore
+  useEffect(() => {
+    if (arvoreAtiva?.categoria) {
+      setCategoriasAbertas((prev) => ({
+        ...prev,
+        [arvoreAtiva.categoria!]: true,
+      }));
+    }
+  }, [arvoreAtiva?.id, arvoreAtiva?.categoria]);
 
   // Sincroniza escopo 'atual' com a árvore ativa
   useEffect(() => {
@@ -692,23 +703,36 @@ export function PainelBusca({
                           const arvObj = todasArvores?.find(
                             (a) => a.nome === arvNome || a.id === pessoas[0]?.arvore_id
                           );
-                          const isAtiva = arvObj && arvObj.id === arvoreAtivaId;
+                          const isAtiva = Boolean(arvObj && arvObj.id === arvoreAtivaId);
 
                           return (
-                            <div key={arvNome} className="flex flex-col border-b border-borda/30 last:border-b-0">
+                            <div
+                              key={arvNome}
+                              className={`flex flex-col border-b border-borda/30 last:border-b-0 transition-colors ${
+                                isAtiva
+                                  ? 'bg-acento/15 border-l-4 border-l-acento'
+                                  : aberto
+                                    ? 'bg-sup/40 border-l-4 border-l-acento/50'
+                                    : 'bg-card border-l-4 border-l-transparent'
+                              }`}
+                            >
                               <div
                                 onClick={() => toggleGrupo(arvNome)}
-                                className="w-full px-3 py-2 bg-card hover:bg-sup/70 flex items-center justify-between gap-2 text-left cursor-pointer transition-colors"
+                                className="w-full px-3 py-2 hover:bg-sup/70 flex items-center justify-between gap-2 text-left cursor-pointer transition-colors"
                               >
-                                <span className="flex items-center gap-1.5 min-w-0 text-xs font-semibold text-tinta">
+                                <span
+                                  className={`flex items-center gap-1.5 min-w-0 text-xs ${
+                                    isAtiva ? 'font-bold text-acento' : 'font-semibold text-tinta'
+                                  }`}
+                                >
                                   <IconeArvore className="w-3.5 h-3.5 text-acento flex-none" />
                                   <span className="truncate">{arvNome}</span>
                                 </span>
 
                                 <div className="flex items-center gap-1.5 flex-none">
                                   {isAtiva ? (
-                                    <span className="px-1.5 py-0.2 rounded bg-acento/15 text-acento text-[9px] font-bold flex items-center gap-0.5">
-                                      <Check className="w-2.5 h-2.5" />
+                                    <span className="px-2 py-0.5 rounded bg-acento text-acento-tinta text-[9.5px] font-bold flex items-center gap-1 shadow-2xs">
+                                      <Check className="w-3 h-3 stroke-[2.5]" />
                                       {t('busca', 'arvoreAtivaBadge')}
                                     </span>
                                   ) : (
@@ -720,19 +744,25 @@ export function PainelBusca({
                                           onSelecionarArvore(arvObj);
                                         }}
                                         title={t('busca', 'abrirArvore')}
-                                        className="px-1.5 py-0.5 rounded bg-sup hover:bg-card border border-borda text-[9.5px] font-medium text-tinta3 hover:text-acento cursor-pointer transition-colors"
+                                        className="px-1.5 py-0.5 rounded bg-sup hover:bg-acento hover:text-acento-tinta border border-borda text-[9.5px] font-medium text-tinta2 cursor-pointer transition-colors"
                                       >
                                         {t('busca', 'abrirArvore')}
                                       </button>
                                     )
                                   )}
 
-                                  <span className="px-1.5 py-0.2 rounded-full bg-sup border border-borda text-[9.5px] font-bold text-tinta3 font-num">
+                                  <span
+                                    className={`px-1.5 py-0.2 rounded-full border text-[9.5px] font-bold font-num ${
+                                      isAtiva
+                                        ? 'bg-acento/20 border-acento/50 text-acento'
+                                        : 'bg-sup border-borda text-tinta3'
+                                    }`}
+                                  >
                                     {pessoas.length}
                                   </span>
 
                                   {aberto ? (
-                                    <ChevronDown className="w-3.5 h-3.5 text-tinta3" />
+                                    <ChevronDown className="w-3.5 h-3.5 text-acento" />
                                   ) : (
                                     <ChevronRight className="w-3.5 h-3.5 text-tinta3" />
                                   )}
@@ -740,7 +770,7 @@ export function PainelBusca({
                               </div>
 
                               {aberto && (
-                                <ul className="list-none m-0 p-0 divide-y divide-borda/30 bg-sup/20">
+                                <ul className="list-none m-0 p-0 ml-3 pl-2 border-l-2 border-acento/40 divide-y divide-borda/30 bg-bg/70">
                                   {pessoas.map((p) => renderPessoaItem(p))}
                                 </ul>
                               )}
@@ -771,35 +801,71 @@ export function PainelBusca({
                             (sum, arr) => sum + arr.length,
                             0
                           );
+                          const contemArvoreAtiva = Object.entries(arvoresDaCat).some(
+                            ([arvNome, pessoas]) => {
+                              const arvObj = todasArvores?.find(
+                                (a) => a.nome === arvNome || a.id === pessoas[0]?.arvore_id
+                              );
+                              return arvObj && arvObj.id === arvoreAtivaId;
+                            }
+                          );
 
                           return (
-                            <div key={catNome} className="flex flex-col border-b border-borda/30">
-                              {/* Cabeçalho da Categoria Temática */}
+                            <div key={catNome} className="flex flex-col border-b border-borda/40">
+                              {/* Cabeçalho da Categoria Temática (Alto Contraste quando aberta ou com árvore ativa) */}
                               <div
                                 onClick={() => toggleCategoria(catNome)}
-                                className="w-full px-3 py-1.5 bg-sup/60 hover:bg-sup flex items-center justify-between gap-2 text-left cursor-pointer transition-colors border-b border-borda/20"
+                                className={`w-full px-3 py-2 flex items-center justify-between gap-2 text-left cursor-pointer transition-all border-l-4 ${
+                                  catAberta
+                                    ? 'bg-acento/15 border-l-acento text-tinta shadow-2xs'
+                                    : contemArvoreAtiva
+                                      ? 'bg-acento/10 border-l-acento/70 text-tinta hover:bg-acento/15'
+                                      : 'bg-sup/40 border-l-transparent text-tinta2 hover:bg-sup/80 hover:text-tinta'
+                                }`}
                               >
-                                <span className="flex items-center gap-1.5 min-w-0 text-[11px] font-bold text-tinta2">
-                                  <Folder className="w-3 h-3 text-acento flex-none" />
+                                <span
+                                  className={`flex items-center gap-2 min-w-0 text-[11.5px] ${
+                                    catAberta || contemArvoreAtiva
+                                      ? 'font-bold text-tinta'
+                                      : 'font-semibold text-tinta2'
+                                  }`}
+                                >
+                                  {catAberta ? (
+                                    <FolderOpen className="w-3.5 h-3.5 text-acento flex-none" />
+                                  ) : (
+                                    <Folder
+                                      className={`w-3.5 h-3.5 flex-none ${
+                                        contemArvoreAtiva ? 'text-acento' : 'text-tinta3'
+                                      }`}
+                                    />
+                                  )}
                                   <span className="truncate">{catNome}</span>
                                 </span>
 
                                 <div className="flex items-center gap-1.5 flex-none">
-                                  <span className="px-1.5 py-0.2 rounded bg-card border border-borda text-[9px] font-semibold text-tinta3 font-num">
-                                    {Object.keys(arvoresDaCat).length} {Object.keys(arvoresDaCat).length === 1 ? 'árvore' : 'árvores'} · {totalPessoasCat}
+                                  <span
+                                    className={`px-1.5 py-0.5 rounded border text-[9px] font-num ${
+                                      catAberta || contemArvoreAtiva
+                                        ? 'bg-acento/20 border-acento/40 text-acento font-bold'
+                                        : 'bg-card border-borda text-tinta3 font-semibold'
+                                    }`}
+                                  >
+                                    {Object.keys(arvoresDaCat).length}{' '}
+                                    {Object.keys(arvoresDaCat).length === 1 ? 'árvore' : 'árvores'} ·{' '}
+                                    {totalPessoasCat}
                                   </span>
 
                                   {catAberta ? (
-                                    <ChevronDown className="w-3.5 h-3.5 text-tinta3" />
+                                    <ChevronDown className="w-3.5 h-3.5 text-acento" />
                                   ) : (
                                     <ChevronRight className="w-3.5 h-3.5 text-tinta3" />
                                   )}
                                 </div>
                               </div>
 
-                              {/* Árvores da Categoria */}
+                              {/* Árvores da Categoria (Indentadas com guia lateral de alto contraste) */}
                               {catAberta && (
-                                <div className="flex flex-col divide-y divide-borda/20 pl-2">
+                                <div className="flex flex-col gap-1 ml-2.5 pl-2 pr-1.5 py-1.5 border-l-2 border-acento/40 bg-sup/20">
                                   {Object.entries(arvoresDaCat).map(([arvNome, pessoas]) => {
                                     const arvAberta = gruposAbertos[arvNome] !== undefined
                                       ? gruposAbertos[arvNome]
@@ -807,20 +873,46 @@ export function PainelBusca({
                                     const arvObj = todasArvores?.find(
                                       (a) => a.nome === arvNome || a.id === pessoas[0]?.arvore_id
                                     );
-                                    const isAtiva = arvObj && arvObj.id === arvoreAtivaId;
+                                    const isAtiva = Boolean(arvObj && arvObj.id === arvoreAtivaId);
 
                                     return (
-                                      <div key={arvNome} className="flex flex-col bg-card/60">
+                                      <div
+                                        key={arvNome}
+                                        className={`flex flex-col rounded-r-raio-s transition-all ${
+                                          isAtiva
+                                            ? 'bg-acento/15 border border-acento/60 border-l-4 border-l-acento shadow-xs'
+                                            : arvAberta
+                                              ? 'bg-card border border-borda/60 border-l-4 border-l-acento/50'
+                                              : 'bg-card/70 border border-borda/30 border-l-4 border-l-transparent hover:bg-card hover:border-borda'
+                                        }`}
+                                      >
                                         <div
                                           onClick={() => toggleGrupo(arvNome)}
-                                          className="w-full px-3 py-1.5 hover:bg-sup flex items-center justify-between gap-2 text-left cursor-pointer transition-colors"
+                                          className="w-full px-2.5 py-2 flex items-center justify-between gap-2 text-left cursor-pointer transition-colors"
                                         >
                                           <div className="flex flex-col min-w-0 flex-1">
-                                            <span className="text-xs font-medium text-tinta truncate">
-                                              {arvNome}
+                                            <span
+                                              className={`text-xs truncate flex items-center gap-1.5 ${
+                                                isAtiva
+                                                  ? 'font-bold text-acento'
+                                                  : arvAberta
+                                                    ? 'font-semibold text-tinta'
+                                                    : 'font-medium text-tinta'
+                                              }`}
+                                            >
+                                              <IconeArvore
+                                                className={`w-3 h-3 flex-none ${
+                                                  isAtiva || arvAberta ? 'text-acento' : 'text-tinta3'
+                                                }`}
+                                              />
+                                              <span className="truncate">{arvNome}</span>
                                             </span>
                                             {arvObj && (arvObj.pais || arvObj.periodo) && (
-                                              <span className="text-[10px] text-tinta3 truncate">
+                                              <span
+                                                className={`text-[10px] truncate pl-4.5 ${
+                                                  isAtiva ? 'text-tinta2 font-medium' : 'text-tinta3'
+                                                }`}
+                                              >
                                                 {[arvObj.pais, arvObj.periodo].filter(Boolean).join(' · ')}
                                               </span>
                                             )}
@@ -828,8 +920,8 @@ export function PainelBusca({
 
                                           <div className="flex items-center gap-1.5 flex-none">
                                             {isAtiva ? (
-                                              <span className="px-1.5 py-0.2 rounded bg-acento/15 text-acento text-[9px] font-bold flex items-center gap-0.5">
-                                                <Check className="w-2.5 h-2.5" />
+                                              <span className="px-2 py-0.5 rounded bg-acento text-acento-tinta text-[9.5px] font-bold flex items-center gap-1 shadow-2xs">
+                                                <Check className="w-3 h-3 stroke-[2.5]" />
                                                 {t('busca', 'arvoreAtivaBadge')}
                                               </span>
                                             ) : (
@@ -841,19 +933,25 @@ export function PainelBusca({
                                                     onSelecionarArvore(arvObj);
                                                   }}
                                                   title={t('busca', 'abrirArvore')}
-                                                  className="px-1.5 py-0.5 rounded bg-sup hover:bg-card border border-borda text-[9.5px] font-medium text-tinta3 hover:text-acento cursor-pointer transition-colors"
+                                                  className="px-1.5 py-0.5 rounded bg-sup hover:bg-acento hover:text-acento-tinta border border-borda text-[9.5px] font-medium text-tinta2 cursor-pointer transition-colors"
                                                 >
                                                   {t('busca', 'abrirArvore')}
                                                 </button>
                                               )
                                             )}
 
-                                            <span className="px-1.5 py-0.2 rounded-full bg-sup border border-borda text-[9px] font-bold text-tinta3 font-num">
+                                            <span
+                                              className={`px-1.5 py-0.2 rounded-full border text-[9px] font-bold font-num ${
+                                                isAtiva
+                                                  ? 'bg-acento/20 border-acento/50 text-acento'
+                                                  : 'bg-sup border-borda text-tinta3'
+                                              }`}
+                                            >
                                               {pessoas.length}
                                             </span>
 
                                             {arvAberta ? (
-                                              <ChevronDown className="w-3 h-3 text-tinta3" />
+                                              <ChevronDown className="w-3 h-3 text-acento" />
                                             ) : (
                                               <ChevronRight className="w-3 h-3 text-tinta3" />
                                             )}
@@ -861,7 +959,7 @@ export function PainelBusca({
                                         </div>
 
                                         {arvAberta && (
-                                          <ul className="list-none m-0 p-0 divide-y divide-borda/30 bg-sup/30">
+                                          <ul className="list-none m-0 p-0 ml-2.5 pl-1.5 border-l-2 border-acento/30 divide-y divide-borda/30 bg-bg/70 rounded-br-raio-s">
                                             {pessoas.map((p) => renderPessoaItem(p))}
                                           </ul>
                                         )}

@@ -267,18 +267,37 @@ export function SeletorDeArvore({
                               onSelecionarArvore(a);
                               setMenuAberto(false);
                             }}
-                            className={`w-full text-left px-3 py-2 text-xs flex items-center justify-between gap-2 hover:bg-sup cursor-pointer transition-colors ${
-                              isAtiva ? 'bg-acento/10 font-semibold text-tinta' : 'text-tinta2'
+                            className={`w-full text-left px-3 py-2 text-xs flex items-center justify-between gap-2 hover:bg-sup cursor-pointer transition-colors border-l-4 ${
+                              isAtiva
+                                ? 'bg-acento/15 border-l-acento font-bold text-acento'
+                                : 'border-l-transparent text-tinta2'
                             }`}
                           >
                             <div className="flex flex-col min-w-0 flex-1">
-                              <span className="truncate text-tinta font-medium">{a.nome}</span>
+                              <span
+                                className={`truncate ${
+                                  isAtiva ? 'text-acento font-bold' : 'text-tinta font-medium'
+                                }`}
+                              >
+                                {a.nome}
+                              </span>
                               <div className="flex items-center gap-1.5 text-[10px] text-tinta3 truncate mt-0.5">
-                                {a.raiz_pessoa_nome && <span>{t('arvore', 'raiz')}: {a.raiz_pessoa_nome}</span>}
-                                <span>· {a.total_membros} {t('arvore', 'membros')}</span>
+                                {a.raiz_pessoa_nome && (
+                                  <span>
+                                    {t('arvore', 'raiz')}: {a.raiz_pessoa_nome}
+                                  </span>
+                                )}
+                                <span>
+                                  · {a.total_membros} {t('arvore', 'membros')}
+                                </span>
                               </div>
                             </div>
-                            {isAtiva && <Check className="w-3.5 h-3.5 text-acento flex-none" />}
+                            {isAtiva && (
+                              <span className="px-2 py-0.5 rounded bg-acento text-acento-tinta text-[9px] font-bold flex items-center gap-1 flex-none shadow-2xs">
+                                <Check className="w-3 h-3 stroke-[2.5]" />
+                                {t('busca', 'arvoreAtivaBadge')}
+                              </span>
+                            )}
                           </button>
                         );
                       })}
@@ -299,42 +318,76 @@ export function SeletorDeArvore({
                       </span>
                     </div>
 
-                    {Object.entries(categoriasHistoricas).map(([catNome, arvoresDaCat]) => (
-                      <div key={catNome} className="border-b border-borda/20 last:border-b-0">
-                        <div className="px-3 py-1 text-[9px] font-bold text-tinta3 uppercase tracking-wider bg-sup/40 flex items-center justify-between">
-                          <span>{catNome}</span>
-                          <span className="font-num text-[9px] text-tinta3">{arvoresDaCat.length}</span>
-                        </div>
-                        {arvoresDaCat.map((a) => {
-                          const isAtiva = a.id === arvoreAtiva?.id;
-                          return (
-                            <button
-                              key={a.id}
-                              type="button"
-                              onClick={() => {
-                                onSelecionarArvore(a);
-                                setMenuAberto(false);
-                              }}
-                              className={`w-full text-left px-3 py-2 text-xs flex items-center justify-between gap-2 hover:bg-sup cursor-pointer transition-colors ${
-                                isAtiva ? 'bg-acento/10 font-semibold text-tinta' : 'text-tinta2'
+                    {Object.entries(categoriasHistoricas).map(([catNome, arvoresDaCat]) => {
+                      const contemAtiva = arvoresDaCat.some((a) => a.id === arvoreAtiva?.id);
+                      return (
+                        <div key={catNome} className="border-b border-borda/30 last:border-b-0">
+                          <div
+                            className={`px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider flex items-center justify-between border-l-4 ${
+                              contemAtiva
+                                ? 'bg-acento/15 border-l-acento text-tinta'
+                                : 'bg-sup/60 border-l-transparent text-tinta2'
+                            }`}
+                          >
+                            <span className="truncate">{catNome}</span>
+                            <span
+                              className={`font-num text-[9.5px] px-1.5 py-0.2 rounded ${
+                                contemAtiva
+                                  ? 'bg-acento/20 text-acento font-bold'
+                                  : 'bg-card text-tinta3 border border-borda'
                               }`}
                             >
-                              <div className="flex flex-col min-w-0 flex-1">
-                                <span className="truncate text-tinta font-medium">{a.nome}</span>
-                                <div className="flex items-center gap-1.5 text-[10px] text-tinta3 truncate mt-0.5">
-                                  {a.pais && (
-                                    <span className="font-semibold text-tinta2">{a.pais}</span>
+                              {arvoresDaCat.length}
+                            </span>
+                          </div>
+                          <div className="pl-2 border-l-2 border-acento/30 ml-2 my-1 flex flex-col gap-0.5">
+                            {arvoresDaCat.map((a) => {
+                              const isAtiva = a.id === arvoreAtiva?.id;
+                              return (
+                                <button
+                                  key={a.id}
+                                  type="button"
+                                  onClick={() => {
+                                    onSelecionarArvore(a);
+                                    setMenuAberto(false);
+                                  }}
+                                  className={`w-full text-left px-2.5 py-2 text-xs flex items-center justify-between gap-2 hover:bg-sup cursor-pointer transition-colors border-l-4 rounded-r-raio-s ${
+                                    isAtiva
+                                      ? 'bg-acento/15 border-l-acento font-bold text-acento shadow-2xs'
+                                      : 'border-l-transparent text-tinta2'
+                                  }`}
+                                >
+                                  <div className="flex flex-col min-w-0 flex-1">
+                                    <span
+                                      className={`truncate ${
+                                        isAtiva ? 'text-acento font-bold' : 'text-tinta font-medium'
+                                      }`}
+                                    >
+                                      {a.nome}
+                                    </span>
+                                    <div className="flex items-center gap-1.5 text-[10px] text-tinta3 truncate mt-0.5">
+                                      {a.pais && (
+                                        <span className="font-semibold text-tinta2">{a.pais}</span>
+                                      )}
+                                      {a.periodo && <span>· {a.periodo}</span>}
+                                      <span>
+                                        · {a.total_membros} {t('arvore', 'membros')}
+                                      </span>
+                                    </div>
+                                  </div>
+                                  {isAtiva && (
+                                    <span className="px-2 py-0.5 rounded bg-acento text-acento-tinta text-[9px] font-bold flex items-center gap-1 flex-none shadow-2xs">
+                                      <Check className="w-3 h-3 stroke-[2.5]" />
+                                      {t('busca', 'arvoreAtivaBadge')}
+                                    </span>
                                   )}
-                                  {a.periodo && <span>· {a.periodo}</span>}
-                                  <span>· {a.total_membros} {t('arvore', 'membros')}</span>
-                                </div>
-                              </div>
-                              {isAtiva && <Check className="w-3.5 h-3.5 text-acento flex-none" />}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    ))}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 )}
 

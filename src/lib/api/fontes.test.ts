@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import type { TipoFonte, GrauConfianca, NovaFonte, NovaCitacao } from './fontes';
+import type { NovaFonte, NovaCitacao } from './fontes';
 
 describe('Tipos e Estrutura de Fontes e Citações', () => {
   it('cria payload de nova fonte primária com metadados arquivísticos', () => {
