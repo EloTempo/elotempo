@@ -1641,9 +1641,52 @@ mod testes {
         .await
         .unwrap();
         println!("CICLOS CONJUGE-FILHO: {:?}", ciclos_conjuge);
+
+        let cats_arv: Vec<(Option<String>, String, String)> = sqlx::query_as(
+            "SELECT categoria, id, nome FROM arvores WHERE is_publico = 1 ORDER BY categoria, nome"
+        )
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+        println!("=== ARVORES POR CATEGORIA ({}) ===", cats_arv.len());
+        for (cat, id, nome) in &cats_arv {
+            println!("  [{}] {} ({})", cat.as_deref().unwrap_or("SEM_CAT"), nome, id);
+        }
+
+        let sem_arvore: Vec<(String, String, Option<String>, Option<String>)> = sqlx::query_as(
+            "SELECT p.id, p.nome, p.sobrenome, p.categoria
+             FROM pessoas p
+             WHERE p.is_publico = 1
+               AND NOT EXISTS (SELECT 1 FROM arvore_membros am WHERE am.pessoa_id = p.id)"
+        )
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+        println!("=== PESSOAS PUBLICAS SEM ARVORE ({}) ===", sem_arvore.len());
+        for (id, nome, sob, cat) in &sem_arvore {
+            println!("  {} {} ({}) -> cat={:?}", nome, sob.as_deref().unwrap_or(""), id, cat);
+        }
+
+        let cats_distintas_arv: Vec<String> = sqlx::query_scalar(
+            "SELECT DISTINCT categoria FROM arvores WHERE is_publico = 1 ORDER BY categoria"
+        )
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+        let cats_distintas_pes: Vec<String> = sqlx::query_scalar(
+            "SELECT DISTINCT categoria FROM pessoas WHERE is_publico = 1 ORDER BY categoria"
+        )
+        .fetch_all(&pool)
+        .await
+        .unwrap();
+        println!("CATEGORIAS DISTINTAS ARVORES ({}): {:?}", cats_distintas_arv.len(), cats_distintas_arv);
+        println!("CATEGORIAS DISTINTAS PESSOAS ({}): {:?}", cats_distintas_pes.len(), cats_distintas_pes);
+
         assert_eq!(total_solitarias, 0, "Existem pessoas solitarias!");
         assert!(ciclos_conjuge.is_empty(), "Existem ciclos conjuge-filho!");
         assert_eq!(arvores_multi_comp, 0, "Existem arvores com multiplas ilhas desconexas!");
+        assert_eq!(sem_arvore.len(), 0, "Existem pessoas publicas sem arvore!");
+        assert_eq!(cats_distintas_arv, cats_distintas_pes, "Categorias de pessoas divergem das categorias das arvores!");
     }
 }
 
