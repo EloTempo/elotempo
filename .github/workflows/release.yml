@@ -69,34 +69,47 @@ jobs:
       - name: Validação e Testes Automatizados (CI)
         run: npm run verificar
 
+      # As notas do release vem de RELEASE_NOTES_v<versao>.md, versionado no
+      # repositorio, e nao de um texto fixo aqui. O texto fixo que existia
+      # descrevia uma versao antiga e afirmava uma cifra (ChaCha20-Poly1305)
+      # que o programa nunca usou -- e saiu igual em todos os releases.
+      #
+      # Sem o arquivo, o release FALHA de proposito: publicar sem notas
+      # escritas foi o que deixou o texto errado se repetir.
+      - name: Ler notas de lancamento
+        id: notas
+        shell: bash
+        env:
+          # No disparo manual, github.ref_name e o nome do branch ("main"),
+          # nao a versao -- por isso a escolha depende do evento.
+          TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.version || github.ref_name }}
+        run: |
+          case "$TAG" in
+            v[0-9]*) ;;
+            *) echo "::error::Tag invalida: '$TAG'. Esperado algo como v1.4.0."; exit 1 ;;
+          esac
+          ARQUIVO="RELEASE_NOTES_${TAG}.md"
+          if [ ! -f "$ARQUIVO" ]; then
+            echo "::error::Faltam as notas: $ARQUIVO nao existe. Escreva-as antes de publicar."
+            exit 1
+          fi
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          DELIM="FIM_DAS_NOTAS_$(date +%s%N)"
+          {
+            echo "corpo<<$DELIM"
+            cat "$ARQUIVO"
+            echo ""
+            echo "$DELIM"
+          } >> "$GITHUB_OUTPUT"
+
       - name: Compilar e Publicar com Tauri Action
         uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tagName: ${{ github.ref_name || inputs.version }}
-          releaseName: 'EloTempo ${{ github.ref_name || inputs.version }}'
-          releaseBody: |
-            ## EloTempo — Árvore Genealógica Offline & Histórica
-            
-            Software desktop gratuito, local-first e compatível com GEDCOM 7.0.
-            
-            ### Arquivos Disponíveis para Download:
-            - **Windows:**
-              - `EloTempo_*_x64-setup.exe` (Instalador assistido padrão)
-              - `EloTempo_*_x64_pt-BR.msi` (Pacote de instalação corporativa Windows Installer)
-            - **Linux:**
-              - `elotempo_*_amd64.deb` (Instalador para Ubuntu, Debian, Linux Mint, Pop!_OS)
-              - `elotempo_*_amd64.AppImage` (Executável universal portátil - basta dar permissão de execução e rodar)
-            
-            ### Novidades desta Versão:
-            - **Atlas Biográfico & Mapa Interativo de Trajetórias de Vida**: Visualização de deslocamento geográfico e marcos de vida através do OpenStreetMap (100% gratuito e sem chave de API), animações suaves (*flyTo*), anéis pulsantes, trilha de migração sequencial e atalhos na Linha do Tempo.
-            - **Geocodificação Local Offline**: Centróides geoespaciais integrados para todos os 5.571 municípios do IBGE e cidades históricas de imigração mundial.
-            - Catálogo completo de 37 Linhas de Contexto Histórico e 431 eventos cronológicos.
-            - 40+ Árvores Genealógicas Públicas de referência pré-carregadas.
-            - Estúdio de Linhas do Tempo com comparação simultânea de vidas e zoom milenar a.C./d.C.
-            - Cofre Pessoal Criptografado com padrão militar (Argon2id + ChaCha20-Poly1305).
-            - Central de Impressão de alta definição e relatórios genealógicos.
+          tagName: ${{ steps.notas.outputs.tag }}
+          releaseName: 'EloTempo ${{ steps.notas.outputs.tag }}'
+          releaseBody: ${{ steps.notas.outputs.corpo }}
           releaseDraft: false
           prerelease: false
           args: ${{ matrix.args }}
