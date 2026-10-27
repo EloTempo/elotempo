@@ -47,6 +47,7 @@ import { PainelBusca } from './features/search/components/PainelBusca';
 import { CentralImpressaoModal } from './features/reports/components/CentralImpressaoModal';
 import { DialogoExportar } from './features/export/components/DialogoExportar';
 import { DialogoExportarArvore } from './features/export/components/DialogoExportarArvore';
+import { DialogoExportarAcervoWeb } from './features/export/components/DialogoExportarAcervoWeb';
 import { DialogoImportar } from './features/import/components/DialogoImportar';
 import { DialogoEstatisticas } from './features/statistics/components/DialogoEstatisticas';
 import { SeletorDeArvore } from './features/trees/components/SeletorDeArvore';
@@ -107,6 +108,7 @@ export default function App() {
   const [abaImpressaoInicial, setAbaImpressaoInicial] = useState<'arvore' | 'timeline'>('arvore');
   const [dadosImpressaoTimeline, setDadosImpressaoTimeline] = useState<DadosImpressaoTimeline | null>(null);
   const [exportarAberto, setExportarAberto] = useState(false);
+  const [exportarAcervoWebAberto, setExportarAcervoWebAberto] = useState(false);
   const [exportarPosterAberto, setExportarPosterAberto] = useState(false);
   const [importarAberto, setImportarAberto] = useState(false);
   const [estatisticasAbertas, setEstatisticasAbertas] = useState(false);
@@ -472,6 +474,17 @@ export default function App() {
                 descricao: t('topo', 'exportarGedcomDesc'),
                 icone: <FileDown className="w-4 h-4 text-acento" />,
                 onClick: () => setExportarAberto(true),
+                separadorApos: true,
+              },
+              {
+                // Separado dos dois acima de proposito: importar e exportar
+                // GEDCOM mexem nos dados do usuario; este leva o acervo
+                // publico para o site e nao toca na familia dele.
+                id: 'exportar-acervo-web',
+                rotulo: t('topo', 'exportarAcervoWeb'),
+                descricao: t('topo', 'exportarAcervoWebDesc'),
+                icone: <Globe className="w-4 h-4 text-acento" />,
+                onClick: () => setExportarAcervoWebAberto(true),
               },
             ]}
             title={t('topo', 'dadosGedcom')}
@@ -897,6 +910,10 @@ export default function App() {
             setRaizId(null);
           }}
         />
+      )}
+
+      {exportarAcervoWebAberto && (
+        <DialogoExportarAcervoWeb onFechar={() => setExportarAcervoWebAberto(false)} />
       )}
 
       {exportarAberto && (
