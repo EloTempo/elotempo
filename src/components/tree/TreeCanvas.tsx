@@ -10,10 +10,14 @@ import { NodeCard } from './NodeCard';
 import { BarraControlesArvore, type ModoVisaoArvore } from './BarraControlesArvore';
 import { MinimapaArvore } from './MinimapaArvore';
 import { LocalizadorArvoreModal } from './LocalizadorArvoreModal';
+import { IconeArvore } from '../icons';
 
 interface TreeCanvasProps {
   grafo: TreeGraph;
   raizId?: string | null;
+  arvoreNome?: string | null;
+  arvoreCategoria?: string | null;
+  arvorePeriodo?: string | null;
   pessoaSelecionadaId?: string | null;
   destacadosIds?: string[] | null;
   unioesColapsadas?: Set<string>;
@@ -45,6 +49,9 @@ function estiloAnel(estado: string): { preenchido: boolean; tracejado: boolean }
 export function TreeCanvas({
   grafo,
   raizId,
+  arvoreNome,
+  arvoreCategoria,
+  arvorePeriodo,
   pessoaSelecionadaId,
   destacadosIds,
   unioesColapsadas,
@@ -105,14 +112,17 @@ export function TreeCanvas({
     const selecao = d3.select(svg);
     selecao.call(zoom);
 
-    // Enquadramento inicial: a árvore inteira visível, sem passar de 100%.
+    // Enquadramento inicial: a árvore inteira visível, sem passar de 100%,
+    // reservando folga superior (56px) para o cabeçalho central da família.
     const largura = svg.clientWidth || 1;
     const altura = svg.clientHeight || 1;
     setContainerDimensoes({ largura, altura });
-    const escala = Math.min(largura / layout.largura, altura / layout.altura, 1);
+    const alturaUtil = Math.max(200, altura - 72);
+    const escala = Math.min(largura / layout.largura, alturaUtil / layout.altura, 1);
     const deslocX = (largura - layout.largura * escala) / 2;
+    const deslocY = Math.max(56, METRICAS.margem * escala);
 
-    const transformInicial = d3.zoomIdentity.translate(deslocX, METRICAS.margem * escala).scale(escala);
+    const transformInicial = d3.zoomIdentity.translate(deslocX, deslocY).scale(escala);
     selecao.call(zoom.transform, transformInicial);
     setViewportTransform({
       x: transformInicial.x,
@@ -168,14 +178,16 @@ export function TreeCanvas({
     if (!svg || !zoom) return;
     const largura = svg.clientWidth || 1;
     const altura = svg.clientHeight || 1;
-    const escala = Math.min(largura / layout.largura, altura / layout.altura, 1);
+    const alturaUtil = Math.max(200, altura - 72);
+    const escala = Math.min(largura / layout.largura, alturaUtil / layout.altura, 1);
     const deslocX = (largura - layout.largura * escala) / 2;
+    const deslocY = Math.max(56, METRICAS.margem * escala);
     d3.select(svg)
       .transition()
       .duration(350)
       .call(
         zoom.transform,
-        d3.zoomIdentity.translate(deslocX, METRICAS.margem * escala).scale(escala),
+        d3.zoomIdentity.translate(deslocX, deslocY).scale(escala),
       );
   };
 
@@ -248,6 +260,29 @@ export function TreeCanvas({
     [layout.pessoas, containerDimensoes, onSelecionarPessoa],
   );
 
+  const tituloFamilia = useMemo(() => {
+    if (arvoreNome && arvoreNome.trim()) return arvoreNome.trim();
+    const noFoco =
+      grafo.nodes.find((n) => n.id === raizId) ??
+      grafo.nodes.find((n) => n.id === pessoaSelecionadaId) ??
+      grafo.nodes[0];
+    if (!noFoco) return null;
+    if (noFoco.arvore_nome && noFoco.arvore_nome.trim()) return noFoco.arvore_nome.trim();
+    if (noFoco.sobrenome && noFoco.sobrenome.trim()) {
+      return `Família ${noFoco.sobrenome.trim()}`;
+    }
+    return `Linhagem de ${noFoco.nome}`;
+  }, [arvoreNome, grafo.nodes, raizId, pessoaSelecionadaId]);
+
+  const categoriaFamilia = useMemo(() => {
+    if (arvoreCategoria && arvoreCategoria.trim()) return arvoreCategoria.trim();
+    const noFoco =
+      grafo.nodes.find((n) => n.id === raizId) ??
+      grafo.nodes.find((n) => n.id === pessoaSelecionadaId) ??
+      grafo.nodes[0];
+    return noFoco?.categoria ?? null;
+  }, [arvoreCategoria, grafo.nodes, raizId, pessoaSelecionadaId]);
+
   return (
     <div className="relative w-full h-full overflow-hidden bg-bg">
       {/* Papel milimetrado de fundo — fica estático no fundo z-0 */}
@@ -255,6 +290,36 @@ export function TreeCanvas({
         className="absolute inset-0 bg-[radial-gradient(var(--borda)_1px,transparent_1px)] bg-[size:26px_26px] opacity-40 pointer-events-none z-0"
         aria-hidden
       />
+
+      {/* Cabeçalho central superior com o nome da família / árvore selecionada */}
+      {tituloFamilia && (
+        <div
+          data-testid="cabecalho-familia-arvore"
+          className="absolute top-3 left-1/2 -translate-x-1/2 z-20 pointer-events-none flex justify-center max-w-[min(640px,calc(100%-270px))]"
+        >
+          <button
+            type="button"
+            onClick={ajustarTela}
+            title={`${tituloFamilia} — clique para enquadrar a árvore na tela`}
+            className="pointer-events-auto bg-card/95 backdrop-blur-md border border-borda shadow-sombra rounded-raio px-4 py-1.5 flex items-center gap-2.5 hover:border-acento/50 transition-colors cursor-pointer select-none max-w-full"
+          >
+            <IconeArvore className="w-4 h-4 text-acento flex-none" />
+            <span className="font-tit font-bold text-sm text-tinta truncate">
+              {tituloFamilia}
+            </span>
+            {categoriaFamilia && (
+              <span className="hidden md:inline-flex items-center px-2 py-0.5 rounded bg-sup border border-borda/70 text-[11px] font-semibold text-tinta2 truncate max-w-[200px]">
+                {categoriaFamilia}
+              </span>
+            )}
+            {arvorePeriodo && (
+              <span className="hidden lg:inline-flex items-center font-num text-[11px] font-bold text-acento flex-none">
+                {arvorePeriodo}
+              </span>
+            )}
+          </button>
+        </div>
+      )}
 
       <svg ref={svgRef} className="relative z-10 w-full h-full cursor-grab active:cursor-grabbing select-none">
         <g ref={palcoRef}>

@@ -101,10 +101,12 @@ Os `#[tauri::command]` em `core_cmds.rs` são cascas finas. Regra nova vai em
   permita o usuário editá-las (`is_bloqueada`).
 - **Nada de rede em tempo de execução**, com duas exceções escritas:
   `scripts/gerar-seed-ibge.mjs`, que roda na máquina de quem desenvolve e cujo
-  resultado é versionado; e o **download sob demanda do modelo de IA**
+  resultado é versionado; e o **download sob demanda da IA local**
   (`assistente_ia::gerenciador_modelo`), que só acontece quando o usuário clica
-  para baixar, vai para uma revisão fixa no Hugging Face e é conferido por
-  SHA-256 antes de ser aceito. Fora isso, se você se pegar escrevendo uma URL
+  para baixar o modelo `.gguf` (revisão fixa no Hugging Face) ou para ativar o
+  motor `llama-server` no Windows x64 quando ausente (release `b11715` fixa do
+  `llama.cpp` no GitHub), sempre conferido por SHA-256 em blocos de 1 MB antes
+  de ser aceito ou extraído. Fora isso, se você se pegar escrevendo uma URL
   `https://` em código de runtime, está errado.
 
   **O endpoint do motor de IA é só de laço de retorno, e há teste prendendo
@@ -301,7 +303,9 @@ mudar, muda lá primeiro.
 (`pessoas.nome`/`sobrenome`), qualquer nome de `nomes_pessoa`, e os apelidos.
 E **ignora acento dos dois lados** — `domain::texto::sem_acento_sql` gera a
 expressão que normaliza a coluna, e `normalizar_busca` normaliza o termo. As
-duas saem da mesma tabela `SUBSTITUICOES`, então não têm como divergir.
+duas saem do encadeamento `SUBSTITUICOES` + `EXTRAS_RUST`, então não têm como
+divergir (preso pelo teste `o_termo_e_a_coluna_normalizam_igual`, que roda a
+expressão num SQLite real).
 
 Cuidado ao mexer: o `COLLATE NOCASE` do SQLite **só conhece ASCII**, e o
 `lower()` embutido não mexe em letra acentuada — `lower('JOSÉ')` devolve
@@ -436,22 +440,19 @@ lados, é ele que vai avisar.**
 
 ---
 
-## O MVP está completo
+## O MVP e as fatias principais estão completos
 
-Os 9 itens da seção 9 estão entregues, e o primeiro item do "depois do MVP"
-— exportar GEDCOM — também. Falta do mesmo item: **importar** GEDCOM (5.5.1 e
-7.0), estatísticas, o estúdio de linhas do tempo e o zoom semântico, múltiplas
-árvores nomeadas (seção 5 — as tabelas `arvores` e `arvore_membros` existem sem
-comando nem tela), undo/redo.
-
-**Fora de escopo por decisão:** prosopografia e a tela de fontes/citações
-(29/08/2026).
+Os 9 itens da seção 9 estão entregues, assim como exportar e importar GEDCOM
+(5.5.1 e 7.0, `.ged` e `.gdz`), estatísticas do acervo, o estúdio de linhas do
+tempo com zoom semântico, múltiplas árvores nomeadas (`arvores` e
+`arvore_membros`), undo/redo, cofre criptográfico híbrido (SQLCipher +
+Argon2id/AES-256-GCM) e o Assistente de IA Local v2.0 (Estágio 0 de escopo e
+anti-treinamento, busca híbrida determinística e integração opcional com
+`llama-server` em loopback).
 
 **Fora de escopo por decisão de 29/08/2026:** prosopografia (relações não
-familiares, instituições, hierarquias) e a tela de fontes/citações. As tabelas
-`fontes` e `citacoes` da migration 007 ficam preparadas e vazias, que é o que a
-seção 2.7 pede. O produto é **árvore genealógica familiar** — não reabrir sem o
-Gabriel pedir.
+familiares, instituições, hierarquias) e a tela de fontes/citações dedicada. O
+produto é **árvore genealógica familiar** — não reabrir sem o Gabriel pedir.
 
 Trabalhe em **fatias verticais**: cada feature ponta a ponta (dado → domínio →
 UI) antes de começar a próxima.

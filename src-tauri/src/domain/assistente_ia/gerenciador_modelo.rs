@@ -69,6 +69,7 @@ pub struct EstadoIaLocal {
     pub download_bytes_atuais: Arc<AtomicU64>,
     pub download_bytes_totais: Arc<AtomicU64>,
     pub ultimo_erro_download: Arc<Mutex<Option<String>>>,
+    pub contexto_conversa: Mutex<super::ContextoConversaIa>,
 }
 
 impl EstadoIaLocal {
@@ -79,7 +80,7 @@ impl EstadoIaLocal {
 
         Self {
             pasta_ia,
-            endpoint_local: Mutex::new("http://127.0.0.1:8080".to_string()),
+            endpoint_local: Mutex::new("http://127.0.0.1:18080".to_string()),
             modelo_ativo_id: Mutex::new(None),
             processo_servidor: Mutex::new(None),
             download_em_andamento: Arc::new(AtomicBool::new(false)),
@@ -88,6 +89,7 @@ impl EstadoIaLocal {
             download_bytes_atuais: Arc::new(AtomicU64::new(0)),
             download_bytes_totais: Arc::new(AtomicU64::new(0)),
             ultimo_erro_download: Arc::new(Mutex::new(None)),
+            contexto_conversa: Mutex::new(super::ContextoConversaIa::default()),
         }
     }
 
@@ -127,18 +129,20 @@ impl EstadoIaLocal {
                     if !modelos.iter().any(|m| m.arquivo == nome_arq) {
                         let tam = entry.metadata().map(|m| m.len()).unwrap_or(0);
                         if tam > 1_024 {
+                            let eh_embedding = nome_arq.to_lowercase().contains("embed");
                             modelos.push(InfoModeloCatalogo {
                                 id: format!("custom_{}", nome_arq),
                                 nome: format!("Modelo Importado ({})", nome_arq),
                                 arquivo: nome_arq,
                                 url_download: String::new(),
-                                // Arquivo que o proprio usuario trouxe: nao ha
-                                // hash de catalogo para comparar, e nao ha
-                                // download a conferir.
                                 sha256_esperado: String::new(),
                                 tamanho_bytes_estimado: tam,
                                 ram_recomendada_gb: 4,
-                                descricao: "Modelo GGUF importado localmente pelo usuário.".to_string(),
+                                descricao: if eh_embedding {
+                                    "Modelo apenas de embeddings/vetores (não gera texto de chat). Use o Qwen 2.5 Instruct para conversar.".to_string()
+                                } else {
+                                    "Modelo GGUF importado localmente pelo usuário.".to_string()
+                                },
                                 instalado: true,
                                 tamanho_em_disco: tam,
                             });
@@ -152,10 +156,12 @@ impl EstadoIaLocal {
         let servidor_respondendo = verificar_endpoint_ativo(&endpoint).await;
 
         let mut ativo = self.modelo_ativo_id.lock().await.clone();
-        if ativo.is_none() {
-            if let Some(primeiro_inst) = modelos.iter().find(|m| m.instalado) {
+        if servidor_respondendo && ativo.is_none() {
+            if let Some(primeiro_inst) = modelos.iter().find(|m| m.instalado && !m.arquivo.to_lowercase().contains("embed")) {
                 ativo = Some(primeiro_inst.id.clone());
             }
+        } else if !servidor_respondendo {
+            ativo = None;
         }
 
         let bin_motor = caminho_binario_llama_server(&self.pasta_motor());
@@ -376,15 +382,21 @@ impl EstadoIaLocal {
         self.download_cancelado.store(true, Ordering::SeqCst);
     }
 
-    /// Inicia o processo local `llama-server` se o binário e um modelo `.gguf` estiverem disponíveis.
+    /// Inicia o processo local `llama-server` com o modelo `.gguf` escolhido.
+    /// No Windows x64, se o binário `llama-server.exe` ainda não estiver na pasta `engine/`,
+    /// baixa e extrai automaticamente o pacote oficial do `llama.cpp` com verificação SHA-256.
     pub async fn iniciar_servidor_local(&self, modelo_id: Option<String>) -> Resultado<()> {
         let status = self.obter_status().await;
-        if status.servidor_online {
-            return Ok(());
-        }
 
         let id_escolhido = modelo_id
-            .or(status.modelo_ativo_id)
+            .or(status.modelo_ativo_id.clone())
+            .or_else(|| {
+                status
+                    .modelos_catalogo
+                    .iter()
+                    .find(|m| m.instalado && !m.arquivo.to_lowercase().contains("embed"))
+                    .map(|m| m.id.clone())
+            })
             .ok_or_else(|| ErroDominio::Validacao("Nenhum modelo GGUF instalado para iniciar.".to_string()))?;
 
         let info = status
@@ -393,21 +405,56 @@ impl EstadoIaLocal {
             .find(|m| m.id == id_escolhido && m.instalado)
             .ok_or_else(|| ErroDominio::Validacao("O modelo selecionado ainda não está instalado.".to_string()))?;
 
+        if info.arquivo.to_lowercase().contains("embed") {
+            return Err(ErroDominio::Validacao(format!(
+                "O arquivo '{}' é um modelo apenas de vetores (embeddings) e não gera texto de conversa. Clique em 'Ativar' no modelo Qwen 2.5 Instruct.",
+                info.arquivo
+            )));
+        }
+
+        // Se já está online com este mesmo modelo, nada a fazer
+        if status.servidor_online && status.modelo_ativo_id.as_deref() == Some(id_escolhido.as_str()) {
+            return Ok(());
+        }
+
+        // Encerra instância anterior gerenciada pelo EloTempo, se houver
+        self.parar_servidor_local().await?;
+
         let caminho_gguf = self.pasta_modelos().join(&info.arquivo);
         let bin = caminho_binario_llama_server(&self.pasta_motor());
         if !bin.exists() {
-            return Err(ErroDominio::Validacao(
-                "Binário llama-server não encontrado na pasta engine. Você pode usar um servidor local compatível (llama-server ou Ollama) em 127.0.0.1:8080.".to_string(),
-            ));
+            #[cfg(target_os = "windows")]
+            {
+                let pasta_motor = self.pasta_motor();
+                tokio::task::spawn_blocking(move || baixar_e_extrair_llama_server_windows(&pasta_motor))
+                    .await
+                    .map_err(|e| {
+                        ErroDominio::Validacao(format!(
+                            "Falha na tarefa de download do motor llama-server: {}",
+                            e
+                        ))
+                    })??;
+            }
+            if !bin.exists() {
+                return Err(ErroDominio::Validacao(
+                    "Binário llama-server não encontrado na pasta engine. Você pode usar um servidor local compatível (llama-server ou Ollama) em 127.0.0.1:18080 ou 127.0.0.1:11434.".to_string(),
+                ));
+            }
         }
 
+        // Usa a porta 18080 para evitar conflitos com processos de terceiros (como NVIDIA Broadcast na porta 8080)
+        let porta_escolhida = 18080u16;
+        let novo_endpoint = format!("http://127.0.0.1:{}", porta_escolhida);
+        *self.endpoint_local.lock().await = novo_endpoint.clone();
+
         let mut cmd = Command::new(&bin);
-        cmd.arg("-m")
+        cmd.current_dir(self.pasta_motor())
+            .arg("-m")
             .arg(&caminho_gguf)
             .arg("--host")
             .arg("127.0.0.1")
             .arg("--port")
-            .arg("8080")
+            .arg(porta_escolhida.to_string())
             .arg("-c")
             .arg("4096")
             .stdout(Stdio::null())
@@ -426,6 +473,15 @@ impl EstadoIaLocal {
 
         *self.processo_servidor.lock().await = Some(child);
         *self.modelo_ativo_id.lock().await = Some(id_escolhido);
+
+        // Aguarda até 15 segundos para o llama-server carregar os pesos GGUF na RAM e responder HTTP 200
+        for _ in 0..50 {
+            if verificar_endpoint_ativo(&novo_endpoint).await {
+                return Ok(());
+            }
+            tokio::time::sleep(Duration::from_millis(300)).await;
+        }
+
         Ok(())
     }
 
@@ -436,8 +492,75 @@ impl EstadoIaLocal {
             let _ = child.kill();
             let _ = child.wait();
         }
+        *self.modelo_ativo_id.lock().await = None;
         Ok(())
     }
+}
+
+#[cfg(target_os = "windows")]
+fn baixar_e_extrair_llama_server_windows(pasta_motor: &Path) -> Resultado<()> {
+    const URL_LLAMA_WIN: &str = "https://github.com/ggml-org/llama.cpp/releases/download/b11715/llama-b11715-bin-win-cpu-x64.zip";
+    const SHA256_LLAMA_WIN: &str = "d50ea1fc9283c3dc9d9aba160b88f722628d42eede09556447663e8833a43327";
+
+    let _ = fs::create_dir_all(pasta_motor);
+    let zip_path = pasta_motor.join("llama-win-cpu-x64.zip");
+
+    let mut cmd_curl = Command::new("curl");
+    cmd_curl
+        .arg("-L")
+        .arg("--fail")
+        .arg("--silent")
+        .arg("--show-error")
+        .arg("-o")
+        .arg(&zip_path)
+        .arg(URL_LLAMA_WIN);
+
+    {
+        use std::os::windows::process::CommandExt;
+        const CREATE_NO_WINDOW: u32 = 0x08000000;
+        cmd_curl.creation_flags(CREATE_NO_WINDOW);
+    }
+
+    let status_dl = cmd_curl.status().map_err(|e| {
+        ErroDominio::Validacao(format!(
+            "Não foi possível baixar automaticamente o motor llama-server: {}",
+            e
+        ))
+    })?;
+
+    if !status_dl.success() {
+        let _ = fs::remove_file(&zip_path);
+        return Err(ErroDominio::Validacao(
+            "Falha ao baixar o motor llama-server oficial. Verifique sua conexão com a internet.".to_string(),
+        ));
+    }
+
+    if let Err(motivo) = conferir_sha256(&zip_path, SHA256_LLAMA_WIN) {
+        let _ = fs::remove_file(&zip_path);
+        return Err(ErroDominio::Validacao(motivo));
+    }
+
+    let mut cmd_tar = Command::new("tar");
+    cmd_tar.arg("-xf").arg(&zip_path).arg("-C").arg(pasta_motor);
+    {
+        use std::os::windows::process::CommandExt;
+        const CREATE_NO_WINDOW: u32 = 0x08000000;
+        cmd_tar.creation_flags(CREATE_NO_WINDOW);
+    }
+
+    let status_tar = cmd_tar.status().map_err(|e| {
+        let _ = fs::remove_file(&zip_path);
+        ErroDominio::Validacao(format!("Erro ao descompactar motor llama-server: {}", e))
+    })?;
+
+    let _ = fs::remove_file(&zip_path);
+    if !status_tar.success() {
+        return Err(ErroDominio::Validacao(
+            "Não foi possível extrair os arquivos do motor llama-server.".to_string(),
+        ));
+    }
+
+    Ok(())
 }
 
 fn caminho_binario_llama_server(pasta_motor: &Path) -> PathBuf {
@@ -456,23 +579,59 @@ fn extrair_host_porta(endpoint: &str) -> (String, u16) {
         .trim()
         .trim_start_matches("http://")
         .trim_start_matches("https://");
-    let host_port = sem_proto.split('/').next().unwrap_or("127.0.0.1:8080");
+    let host_port = sem_proto.split('/').next().unwrap_or("127.0.0.1:18080");
     if let Some((h, p)) = host_port.split_once(':') {
-        let porta = p.parse::<u16>().unwrap_or(8080);
+        let porta = p.parse::<u16>().unwrap_or(18080);
         (h.to_string(), porta)
     } else {
-        (host_port.to_string(), 8080)
+        (host_port.to_string(), 18080)
     }
 }
 
-/// Verifica rapidamente via TCP se há um motor de inferência local escutando na porta configurada.
+/// Verifica via requisição HTTP real (`/v1/models` ou `/health`) se há um motor de inferência LLM
+/// (`llama-server` ou `Ollama`) genuinamente ativo na porta configurada, evitando falsos positivos
+/// com outros programas (como NVIDIA Broadcast na porta 8080).
 pub async fn verificar_endpoint_ativo(endpoint: &str) -> bool {
     let (host, porta) = extrair_host_porta(endpoint);
     let addr = format!("{}:{}", host, porta);
-    timeout(Duration::from_millis(250), TcpStream::connect(&addr))
-        .await
-        .map(|r| r.is_ok())
-        .unwrap_or(false)
+
+    for rota in ["/v1/models", "/health", "/api/tags"] {
+        let Ok(Ok(mut stream)) = timeout(Duration::from_millis(300), TcpStream::connect(&addr)).await else {
+            return false;
+        };
+
+        let req = format!(
+            "GET {} HTTP/1.1\r\nHost: {}:{}\r\nConnection: close\r\n\r\n",
+            rota, host, porta
+        );
+        if timeout(Duration::from_millis(300), stream.write_all(req.as_bytes()))
+            .await
+            .is_err()
+        {
+            continue;
+        }
+
+        let mut buf = Vec::new();
+        if timeout(Duration::from_millis(450), stream.read_to_end(&mut buf))
+            .await
+            .is_err()
+        {
+            continue;
+        }
+
+        let texto = String::from_utf8_lossy(&buf);
+        let primeira_linha = texto.lines().next().unwrap_or("");
+        if primeira_linha.contains("200 OK")
+            && (texto.contains("\"models\"")
+                || texto.contains("\"data\"")
+                || texto.contains("\"object\"")
+                || texto.contains("\"status\":\"ok\""))
+        {
+            return true;
+        }
+    }
+
+    false
 }
 
 /// Envia uma requisição `/v1/chat/completions` para a LLM local via HTTP/1.1 sobre `TcpStream`
@@ -486,12 +645,13 @@ pub async fn chamar_llm_local_chat(
     let (host, porta) = extrair_host_porta(endpoint);
     let addr = format!("{}:{}", host, porta);
 
-    let mut stream = timeout(Duration::from_millis(800), TcpStream::connect(&addr))
+    let mut stream = timeout(Duration::from_millis(1200), TcpStream::connect(&addr))
         .await
         .ok()?
         .ok()?;
 
     let mut payload = serde_json::json!({
+        "model": "qwen2.5",
         "messages": [
             { "role": "system", "content": system_prompt },
             { "role": "user", "content": user_prompt }
@@ -525,7 +685,7 @@ pub async fn chamar_llm_local_chat(
         .ok()?;
 
     let mut buffer = Vec::new();
-    timeout(Duration::from_secs(25), stream.read_to_end(&mut buffer))
+    timeout(Duration::from_secs(45), stream.read_to_end(&mut buffer))
         .await
         .ok()?
         .ok()?;
@@ -536,7 +696,7 @@ pub async fn chamar_llm_local_chat(
     // Lida tanto com corpo direto quanto com Transfer-Encoding: chunked simples
     let inicio_json = json_body.find('{')?;
     let fim_json = json_body.rfind('}')?;
-    let fatia_json = &json_body[inicio_json..=fim_json];
+    let fatia_json = json_body.get(inicio_json..=fim_json)?;
 
     let parsed: serde_json::Value = serde_json::from_str(fatia_json).ok()?;
     parsed["choices"]
@@ -580,10 +740,12 @@ fn conferir_sha256(caminho: &Path, esperado: &str) -> Result<(), String> {
     if obtido.eq_ignore_ascii_case(esperado) {
         Ok(())
     } else {
+        let esp_curto: String = esperado.chars().take(12).collect();
+        let obt_curto: String = obtido.chars().take(12).collect();
         Err(format!(
-            "O modelo baixado nao confere com o esperado e foi descartado.              Esperado {}, obtido {}. Tente baixar de novo.",
-            &esperado[..12.min(esperado.len())],
-            &obtido[..12]
+            "O modelo baixado nao confere com o esperado e foi descartado. \
+             Esperado {}, obtido {}. Tente baixar de novo.",
+            esp_curto, obt_curto
         ))
     }
 }

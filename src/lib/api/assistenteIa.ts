@@ -1,5 +1,5 @@
 /**
- * API do Assistente de IA Local Sob Demanda + Pipeline Neuro-Simbólico.
+ * API do Assistente de IA Local Sob Demanda + Pipeline Neuro-Simbólico (v2.0).
  */
 
 import { chamar } from './index';
@@ -33,10 +33,35 @@ export interface StatusIaLocal {
 }
 
 export interface CitacaoAcervoIa {
-  tipo: 'pessoa' | 'marco' | 'estatistica' | string;
+  tipo: 'pessoa' | 'marco' | 'arvore' | 'estatistica' | string;
   id: string;
   titulo: string;
   detalhe: string;
+  arvore_id?: string | null;
+}
+
+export interface RascunhoCadastroPessoaIa {
+  nome: string;
+  sobrenome: string | null;
+  sexo: string;
+  ano_nascimento: number | null;
+  ano_falecimento: number | null;
+  minibiografia: string | null;
+}
+
+export interface OpcaoNavegacaoIa {
+  acao:
+    | 'abrir_arvore'
+    | 'abrir_linha_tempo'
+    | 'abrir_ficha_pessoa'
+    | 'abrir_cadastro_pessoa'
+    | 'enviar_prompt'
+    | string;
+  rotulo: string;
+  pessoa_id?: string | null;
+  arvore_id?: string | null;
+  prompt_sugerido?: string | null;
+  rascunho_pessoa?: RascunhoCadastroPessoaIa | null;
 }
 
 export interface ItemPessoaProposta {
@@ -88,9 +113,50 @@ export interface PropostaCriarLinhaTempo {
   alertas_auditoria: string[];
 }
 
+export interface PropostaEditarPessoa {
+  pessoa_id: string;
+  pessoa_nome: string;
+  arvore_id: string | null;
+  nova_minibiografia: string | null;
+  ano_nascimento: number | null;
+  ano_falecimento: number | null;
+  nova_profissao: string | null;
+  nova_obra_titulo: string | null;
+  nova_obra_ano: number | null;
+  novo_apelido: string | null;
+  nova_escolaridade: string | null;
+  nova_religiao: string | null;
+  novo_idioma: string | null;
+  resumo_alteracoes: string[];
+}
+
+export interface PropostaAdicionarParentesco {
+  pessoa_base_id: string;
+  pessoa_base_nome: string;
+  arvore_id: string | null;
+  tipo_parentesco: string;
+  familiar_existente_id: string | null;
+  familiar_nome: string;
+  familiar_sobrenome: string | null;
+  familiar_sexo: string;
+  familiar_ano_nascimento: number | null;
+  familiar_ano_falecimento: number | null;
+  familiar_minibiografia: string | null;
+  ano_casamento: number | null;
+}
+
+export interface PropostaEditarLinhaTempo {
+  linha_id: string;
+  titulo_linha: string;
+  marcos_para_adicionar: ItemMarcoProposto[];
+}
+
 export type PropostaAcaoIa =
   | { tipo_acao: 'criar_arvore'; dados: PropostaCriarArvore }
-  | { tipo_acao: 'criar_linha_tempo'; dados: PropostaCriarLinhaTempo };
+  | { tipo_acao: 'criar_linha_tempo'; dados: PropostaCriarLinhaTempo }
+  | { tipo_acao: 'editar_pessoa'; dados: PropostaEditarPessoa }
+  | { tipo_acao: 'adicionar_parentesco'; dados: PropostaAdicionarParentesco }
+  | { tipo_acao: 'editar_linha_tempo'; dados: PropostaEditarLinhaTempo };
 
 export interface RespostaAssistenteIa {
   resposta_markdown: string;
@@ -99,10 +165,16 @@ export interface RespostaAssistenteIa {
   modo_execucao: string;
   citacoes: CitacaoAcervoIa[];
   proposta_acao: PropostaAcaoIa | null;
+  opcoes_navegacao?: OpcaoNavegacaoIa[];
+  foco_pessoa_id?: string | null;
+  foco_arvore_id?: string | null;
+  abrir_linha_tempo?: boolean;
+  abrir_ficha_pessoa_id?: string | null;
+  rascunho_nova_pessoa?: RascunhoCadastroPessoaIa | null;
 }
 
 export interface ResultadoExecucaoIa {
-  tipo: 'arvore' | 'linha_tempo' | string;
+  tipo: 'arvore' | 'linha_tempo' | 'edicao_pessoa' | 'parentesco' | string;
   entidade_id: string;
   raiz_pessoa_id: string | null;
   titulo: string;

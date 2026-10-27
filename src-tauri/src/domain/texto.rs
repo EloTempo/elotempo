@@ -30,13 +30,34 @@ const SUBSTITUICOES: [(char, char); 34] = [
     ('ú', 'u'), ('Ú', 'u'), ('ü', 'u'), ('Ü', 'u'),
 ];
 
-/// Letras que só o lado Rust precisa tratar — o SQL as cobre pela tabela
-/// acima mais o `lower()`, e acrescentá-las lá só engordaria a expressão.
-const EXTRAS_RUST: [(char, char); 8] = [
+/// Letras fora do português que aparecem em nomes de imigração.
+///
+/// **Esta tabela alimenta os DOIS lados**, como a de cima. O comentário
+/// anterior dizia que só o Rust precisava dela, porque "o SQL as cobre pelo
+/// `lower()`" — o que é falso: `lower()` não transforma `č` em `c`. Enquanto
+/// o termo digitado era normalizado por aqui e a coluna não, buscar "Čapek"
+/// deixava de achar "Čapek". Nomes assim funcionavam ANTES de a tabela
+/// crescer, porque os dois lados deixavam o caractere intacto.
+///
+/// Acrescentar aqui engorda a expressão SQL da busca. É o preço de as duas
+/// pontas não divergirem — e divergir em silêncio é pior do que ser lento.
+const EXTRAS_RUST: &[(char, char)] = &[
     ('ç', 'c'), ('Ç', 'c'),
     ('ñ', 'n'), ('Ñ', 'n'),
     ('ý', 'y'), ('Ý', 'y'),
-    ('ÿ', 'y'), ('å', 'a'),
+    ('ÿ', 'y'), ('å', 'a'), ('Å', 'a'),
+    ('ā', 'a'), ('Ā', 'a'),
+    ('ē', 'e'), ('Ē', 'e'),
+    ('ī', 'i'), ('Ī', 'i'),
+    ('ō', 'o'), ('Ō', 'o'),
+    ('ū', 'u'), ('Ū', 'u'),
+    ('š', 's'), ('Š', 's'),
+    ('č', 'c'), ('Č', 'c'),
+    ('ć', 'c'), ('Ć', 'c'),
+    ('ř', 'r'), ('Ř', 'r'),
+    ('ž', 'z'), ('Ž', 'z'),
+    ('ł', 'l'), ('Ł', 'l'),
+    ('ø', 'o'), ('Ø', 'o'),
 ];
 
 /// Minúsculas e sem acento, preservando o resto.
@@ -76,12 +97,11 @@ pub fn normalizar_busca(texto: &str) -> String {
 /// por ser fixa e grande; nomes de pessoa mudam o tempo todo.
 pub fn sem_acento_sql(coluna: &str) -> String {
     let mut expressao = format!("lower({coluna})");
-    for (de, para) in SUBSTITUICOES {
+    // As duas tabelas, na mesma ordem que `sem_acento` usa. O cedilha já está
+    // em EXTRAS_RUST e por isso saiu do caso especial que havia aqui.
+    for (de, para) in SUBSTITUICOES.iter().chain(EXTRAS_RUST.iter()) {
         expressao = format!("replace({expressao},'{de}','{para}')");
     }
-    // O cedilha entra à parte para a expressão não crescer mais do que precisa:
-    // é a única consoante acentuada frequente em português.
-    expressao = format!("replace(replace({expressao},'ç','c'),'Ç','c')");
     expressao
 }
 
@@ -167,6 +187,54 @@ mod testes {
             ("Três Corações", "tres coracoes"),
         ] {
             assert_eq!(sem_acento(entrada), esperado, "falhou em {entrada}");
+        }
+    }
+
+    /// As duas pontas da busca normalizam igual — conferido rodando o SQL.
+    ///
+    /// A busca compara o TERMO, normalizado por `normalizar_busca` (Rust), com
+    /// a COLUNA, normalizada por `sem_acento_sql` (SQLite). Se as duas tabelas
+    /// divergirem, a busca erra em silêncio: o usuário digita o nome certo e
+    /// não acha ninguém. Foi o que aconteceu quando `EXTRAS_RUST` cresceu e só
+    /// o lado Rust passou a usar os caracteres novos.
+    ///
+    /// Este teste não emula o SQL: ele executa a expressão no SQLite e compara
+    /// com a função Rust, caractere por caractere das duas tabelas.
+    #[tokio::test]
+    async fn o_termo_e_a_coluna_normalizam_igual() {
+        use sqlx::sqlite::SqlitePoolOptions;
+        use sqlx::Row;
+
+        let pool = SqlitePoolOptions::new()
+            .max_connections(1)
+            .connect("sqlite::memory:")
+            .await
+            .expect("banco em memória");
+
+        let mut amostras: Vec<String> = vec![
+            "José".into(), "Conceição".into(), "Gonçalves".into(),
+            "Čapek".into(), "Miloš".into(), "Jiří".into(),
+            "Åke".into(), "Ōtomo".into(), "Łukasz".into(), "Ørsted".into(),
+            "Muñoz".into(), "Dvořák".into(),
+        ];
+        // E cada caractere das duas tabelas, isolado, para nenhum escapar.
+        for (de, _) in SUBSTITUICOES.iter().chain(EXTRAS_RUST.iter()) {
+            amostras.push(format!("x{de}x"));
+        }
+
+        for amostra in &amostras {
+            let expr = sem_acento_sql("?");
+            let do_sql: String = sqlx::query(&format!("SELECT {expr} AS v"))
+                .bind(amostra)
+                .fetch_one(&pool)
+                .await
+                .expect("consulta")
+                .get("v");
+            let do_rust = normalizar_busca(amostra);
+            assert_eq!(
+                do_rust, do_sql,
+                "'{amostra}': o Rust normaliza para '{do_rust}' e o SQL para '{do_sql}'.                  Caractere novo precisa entrar numa das tabelas que alimentam os DOIS lados."
+            );
         }
     }
 }

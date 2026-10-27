@@ -62,6 +62,7 @@ import { GavetaLinhaTempo } from './features/timeline/components/GavetaLinhaTemp
 import type { DadosImpressaoTimeline } from './features/timeline/tiposImpressao';
 import { useCriarPessoa, usePessoas } from './features/person/hooks/usePessoas';
 import { buscarGrafoArvore, definirRaizArvore, listarArvores, type ArvoreInfo } from './lib/api';
+import { DATA_VAZIA, type DataEscolhida, type Person } from './types';
 import { useSeguranca, useGatekeeper, TelaDesbloqueio, ModalGerenciarSeguranca } from './features/security';
 
 type Tema = 'classico-claro' | 'classico-escuro' | 'moderno-claro' | 'moderno-escuro';
@@ -98,6 +99,9 @@ export default function App() {
   const [raizId, setRaizId] = useState<string | null>(null);
   const [selecionadaId, setSelecionadaId] = useState<string | null>(null);
   const [formAberto, setFormAberto] = useState(false);
+  const [dadosIniciaisFormPessoa, setDadosIniciaisFormPessoa] = useState<
+    (Partial<Person> & { nascimento?: DataEscolhida; falecimento?: DataEscolhida }) | undefined
+  >(undefined);
   const [fichaAberta, setFichaAberta] = useState<string | null>(null);
   const [centralImpressaoAberta, setCentralImpressaoAberta] = useState(false);
   const [abaImpressaoInicial, setAbaImpressaoInicial] = useState<'arvore' | 'timeline'>('arvore');
@@ -597,12 +601,20 @@ export default function App() {
           <div className="flex items-center gap-1">
             <button
               type="button"
-              onClick={() => setAssistenteIaAberto(true)}
+              onClick={() => setAssistenteIaAberto((prev) => !prev)}
               title="Assistente de IA Local & Motor Neuro-Simbólico"
               aria-label="Assistente de IA Local"
-              className="px-2 py-1 rounded-raio-s border border-acento/50 bg-acento/10 hover:bg-acento/20 text-acento font-semibold text-xs transition-colors cursor-pointer flex items-center gap-1.5 shadow-xs"
+              className={`px-2 py-1 rounded-raio-s border font-semibold text-xs transition-colors cursor-pointer flex items-center gap-1.5 shadow-xs ${
+                assistenteIaAberto
+                  ? 'border-acento bg-acento text-acento-tinta'
+                  : 'border-acento/50 bg-acento/10 hover:bg-acento/20 text-acento'
+              }`}
             >
-              <Bot className="w-3.5 h-3.5 text-acento" />
+              <Bot
+                className={`w-3.5 h-3.5 ${
+                  assistenteIaAberto ? 'text-acento-tinta' : 'text-acento'
+                }`}
+              />
               <span className="hidden sm:inline">Assistente IA</span>
             </button>
 
@@ -724,24 +736,35 @@ export default function App() {
             </div>
           )}
 
-          {!acervoVazio && raizId && grafo && !carregandoArvore && (
-            <TreeCanvas
-              grafo={grafo}
-              raizId={raizId}
-              pessoaSelecionadaId={selecionadaId}
-              destacadosIds={destacadosIds}
-              unioesColapsadas={unioesColapsadas}
-              onToggleColapsarUniao={handleToggleColapsarUniao}
-              onSelecionarPessoa={setSelecionadaId}
-              onAbrirDetalhes={setFichaAberta}
-              modoVisao={modoVisao}
-              onMudarModo={setModoVisao}
-              geracoes={geracoes}
-              onMudarGeracoes={setGeracoes}
-              onAbrirAhnentafel={() => setAhnentafelAberto(true)}
-              onExportarPoster={() => setExportarPosterAberto(true)}
-            />
-          )}
+          {!acervoVazio && raizId && grafo && !carregandoArvore && (() => {
+            const noRaiz = grafo.nodes.find((n) => n.id === raizId) ?? grafo.nodes[0];
+            const arvoreResolvida =
+              listaArvores.find((a) => a.id === arvoreAtivaId) ??
+              listaArvores.find((a) => a.id === noRaiz?.arvore_id) ??
+              listaArvores.find((a) => a.raiz_pessoa_id === raizId) ??
+              null;
+            return (
+              <TreeCanvas
+                grafo={grafo}
+                raizId={raizId}
+                arvoreNome={arvoreResolvida?.nome ?? noRaiz?.arvore_nome ?? null}
+                arvoreCategoria={arvoreResolvida?.categoria ?? noRaiz?.categoria ?? null}
+                arvorePeriodo={arvoreResolvida?.periodo ?? null}
+                pessoaSelecionadaId={selecionadaId}
+                destacadosIds={destacadosIds}
+                unioesColapsadas={unioesColapsadas}
+                onToggleColapsarUniao={handleToggleColapsarUniao}
+                onSelecionarPessoa={setSelecionadaId}
+                onAbrirDetalhes={setFichaAberta}
+                modoVisao={modoVisao}
+                onMudarModo={setModoVisao}
+                geracoes={geracoes}
+                onMudarGeracoes={setGeracoes}
+                onAbrirAhnentafel={() => setAhnentafelAberto(true)}
+                onExportarPoster={() => setExportarPosterAberto(true)}
+              />
+            );
+          })()}
         </main>
 
         {/* Painel lateral de perfil e conexões da pessoa selecionada */}
@@ -762,6 +785,64 @@ export default function App() {
             }}
           />
         )}
+
+        {/* Painel do Assistente de IA Local acoplado ao ambiente do EloTempo */}
+        <ModalAssistenteIa
+          aberto={assistenteIaAberto}
+          onFechar={() => setAssistenteIaAberto(false)}
+          onSelecionarPessoa={(id, arvoreId) => {
+            if (arvoreId) {
+              setArvoreAtivaId(arvoreId);
+              try {
+                localStorage.setItem('arvore-ativa-id', arvoreId);
+              } catch {}
+            }
+            setRaizId(id);
+            setSelecionadaId(id);
+          }}
+          onAbrirLinhaTempo={() => {
+            setTimelineAberta(true);
+          }}
+          onAbrirFichaPessoa={(id, arvoreId) => {
+            if (arvoreId) {
+              setArvoreAtivaId(arvoreId);
+              try {
+                localStorage.setItem('arvore-ativa-id', arvoreId);
+              } catch {}
+            }
+            setRaizId(id);
+            setSelecionadaId(id);
+            setTimelineAberta(true);
+            setFichaAberta(id);
+          }}
+          onAbrirCadastroNovaPessoa={(rascunho) => {
+            setDadosIniciaisFormPessoa({
+              nome: rascunho.nome,
+              sobrenome: rascunho.sobrenome,
+              sexo: rascunho.sexo === 'F' ? 'F' : rascunho.sexo === 'M' ? 'M' : 'U',
+              is_vivo: rascunho.ano_falecimento == null,
+              minibiografia: rascunho.minibiografia,
+              nascimento: rascunho.ano_nascimento
+                ? { ...DATA_VAZIA, qualificador: 'exata', ano: rascunho.ano_nascimento }
+                : undefined,
+              falecimento: rascunho.ano_falecimento
+                ? { ...DATA_VAZIA, qualificador: 'exata', ano: rascunho.ano_falecimento }
+                : undefined,
+            });
+            setFormAberto(true);
+          }}
+          onArvoreCriada={(arvoreId, novaRaizId) => {
+            setArvoreAtivaId(arvoreId);
+            if (novaRaizId) {
+              setRaizId(novaRaizId);
+              setSelecionadaId(novaRaizId);
+            }
+            setTimelineAberta(true);
+          }}
+          onLinhaTempoCriada={() => {
+            setTimelineAberta(true);
+          }}
+        />
       </div>
 
       {/* A gaveta divide a tela com a árvore — split, não overlay (seção 8). */}
@@ -927,44 +1008,30 @@ export default function App() {
         onClose={() => setSegurancaAberta(false)}
       />
 
-      <ModalAssistenteIa
-        aberto={assistenteIaAberto}
-        onFechar={() => setAssistenteIaAberto(false)}
-        onSelecionarPessoa={(id) => {
-          setRaizId(id);
-          setSelecionadaId(id);
-        }}
-        onArvoreCriada={(arvoreId, novaRaizId) => {
-          setArvoreAtivaId(arvoreId);
-          if (novaRaizId) {
-            setRaizId(novaRaizId);
-            setSelecionadaId(novaRaizId);
-          }
-          setAssistenteIaAberto(false);
-        }}
-        onLinhaTempoCriada={() => {
-          setTimelineAberta(true);
-          setAssistenteIaAberto(false);
-        }}
-      />
-
-
       <Modal
         isOpen={formAberto}
-        onClose={() => setFormAberto(false)}
+        onClose={() => {
+          setFormAberto(false);
+          setDadosIniciaisFormPessoa(undefined);
+        }}
         title={t('ficha', 'criarPessoa')}
         className="max-w-2xl"
       >
         <PersonForm
+          inicial={dadosIniciaisFormPessoa}
           salvando={criar.isPending}
           erro={criar.error}
           arvoresDisponiveis={arvoresPessoais}
           arvoreAtivaId={arvoreAtivaId}
-          onCancelar={() => setFormAberto(false)}
+          onCancelar={() => {
+            setFormAberto(false);
+            setDadosIniciaisFormPessoa(undefined);
+          }}
           onSalvar={(dados) =>
             criar.mutate(dados, {
               onSuccess: async (id) => {
                 setFormAberto(false);
+                setDadosIniciaisFormPessoa(undefined);
                 setSelecionadaId(id);
                 qc.invalidateQueries({ queryKey: ['arvores'] });
                 qc.invalidateQueries({ queryKey: ['pessoas-arvore-timeline'] });
