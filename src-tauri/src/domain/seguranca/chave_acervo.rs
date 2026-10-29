@@ -66,6 +66,44 @@ fn empacotar_envelope(chave: &[u8; TAMANHO_CHAVE_ACERVO], kek: &[u8; TAMANHO_CHA
     Ok(envelope)
 }
 
+/// Abre um envelope e devolve a chave, ou `None` se não decifrar com esta KEK.
+fn desenvelopar(envelope: &[u8], kek: &[u8; TAMANHO_CHAVE]) -> Option<[u8; TAMANHO_CHAVE_ACERVO]> {
+    let min_len = HEADER_KEY_ENVELOPE.len() + TAMANHO_NONCE + TAMANHO_CHAVE_ACERVO;
+    if envelope.len() < min_len || &envelope[..HEADER_KEY_ENVELOPE.len()] != HEADER_KEY_ENVELOPE {
+        return None;
+    }
+    let inicio_nonce = HEADER_KEY_ENVELOPE.len();
+    let fim_nonce = inicio_nonce + TAMANHO_NONCE;
+    let mut nonce = [0u8; TAMANHO_NONCE];
+    nonce.copy_from_slice(&envelope[inicio_nonce..fim_nonce]);
+    let decifrado = decifrar_payload(&envelope[fim_nonce..], kek, &nonce).ok()?;
+    if decifrado.len() != TAMANHO_CHAVE_ACERVO {
+        return None;
+    }
+    let mut chave = [0u8; TAMANHO_CHAVE_ACERVO];
+    chave.copy_from_slice(&decifrado);
+    Some(chave)
+}
+
+/// Grava o arquivo de chave sem nunca deixá-lo truncado no disco.
+///
+/// `fs::write` trunca o arquivo antes de escrever. Entre as duas operações, a
+/// única cópia da chave do acervo existe vazia, e uma queda de energia nesse
+/// instante perde o acervo inteiro -- exatamente a classe de defeito que esta
+/// função existe para impedir. Aqui o conteúdo vai para um temporário, é
+/// sincronizado com o disco, e só então substitui o original por rename, que
+/// no mesmo volume é atômico: ou o arquivo antigo, ou o novo, nunca o meio.
+fn gravar_chave_atomico(caminho: &Path, conteudo: &[u8]) -> std::io::Result<()> {
+    use std::io::Write;
+    let temporario = caminho.with_extension("key.tmp");
+    {
+        let mut arquivo = fs::File::create(&temporario)?;
+        arquivo.write_all(conteudo)?;
+        arquivo.sync_all()?;
+    }
+    fs::rename(&temporario, caminho)
+}
+
 /// Obtém a chave mestra de 256 bits do acervo para o SQLCipher.
 ///
 /// Regra crítica de integridade (Zero Data Loss):
@@ -105,9 +143,16 @@ pub fn obter_ou_criar_chave_acervo(pasta_dados: &Path) -> Resultado<[u8; TAMANHO
                 if decifrado.len() == TAMANHO_CHAVE_ACERVO {
                     let mut chave = [0u8; TAMANHO_CHAVE_ACERVO];
                     chave.copy_from_slice(&decifrado);
-                    // Migra transparentemente o envelope para o formato portável
+                    // Migra transparentemente o envelope para o formato portável.
+                    // Só troca o envelope antigo pelo novo depois de conferir que
+                    // o novo devolve a mesma chave: substituir um envelope que
+                    // funciona por um defeituoso perderia o acervo pelo caminho da
+                    // própria migração. Se a gravação falhar, o antigo continua no
+                    // disco e a migração é tentada de novo na próxima abertura.
                     if let Ok(novo_envelope) = empacotar_envelope(&chave, &kek_portavel) {
-                        let _ = fs::write(&caminho_chave, &novo_envelope);
+                        if desenvelopar(&novo_envelope, &kek_portavel) == Some(chave) {
+                            let _ = gravar_chave_atomico(&caminho_chave, &novo_envelope);
+                        }
                     }
                     return Ok(chave);
                 }
@@ -153,7 +198,7 @@ pub fn obter_ou_criar_chave_acervo(pasta_dados: &Path) -> Resultado<[u8; TAMANHO
     // Envelopar com a KEK portável antes de salvar em disco
     let envelope = empacotar_envelope(&nova_chave, &kek_portavel)?;
 
-    fs::write(&caminho_chave, &envelope)
+    gravar_chave_atomico(&caminho_chave, &envelope)
         .map_err(|e| ErroDominio::Persistencia(format!("Falha ao persistir chave do acervo: {e}")))?;
 
     Ok(nova_chave)
@@ -337,5 +382,43 @@ mod testes {
         assert_eq!(decifrado_portavel.as_slice(), &chave_legada);
 
         let _ = fs::remove_dir_all(&temp_dir);
+    }
+
+    /// A chave é gravada sem passar por um estado truncado, e nada sobra.
+    ///
+    /// Gravar com `fs::write` truncaria o arquivo antes de escrever, deixando a
+    /// única cópia da chave vazia por um instante. A gravação atômica passa por
+    /// um temporário e um rename. Este teste prende o resultado observável: a
+    /// chave criada e a migrada abrem de novo, e o temporário não fica para trás.
+    #[test]
+    fn chave_e_gravada_de_forma_atomica_sem_deixar_temporario() {
+        let temp_dir = std::env::temp_dir().join(format!("elotempo_atomico_{}", uuid::Uuid::new_v4()));
+        fs::create_dir_all(&temp_dir).unwrap();
+        let caminho_chave = temp_dir.join(NOME_ARQUIVO_CHAVE);
+        let temporario = caminho_chave.with_extension("key.tmp");
+
+        // Chave nova
+        let criada = obter_ou_criar_chave_acervo(&temp_dir).unwrap();
+        assert!(!temporario.exists(), "o temporário da criação ficou no disco");
+        assert_eq!(
+            desenvelopar(&fs::read(&caminho_chave).unwrap(), &derivar_kek_portavel()),
+            Some(criada),
+            "a chave gravada não abre de volta"
+        );
+
+        // Chave legada desta máquina, que precisa ser migrada
+        let legada: [u8; TAMANHO_CHAVE_ACERVO] = [0x5C; TAMANHO_CHAVE_ACERVO];
+        let env_legado = empacotar_envelope(&legada, &derivar_kek_legada_atual()).unwrap();
+        fs::write(&caminho_chave, &env_legado).unwrap();
+
+        assert_eq!(obter_ou_criar_chave_acervo(&temp_dir).unwrap(), legada);
+        assert!(!temporario.exists(), "o temporário da migração ficou no disco");
+        assert_eq!(
+            desenvelopar(&fs::read(&caminho_chave).unwrap(), &derivar_kek_portavel()),
+            Some(legada),
+            "a migração gravou um envelope que não devolve a mesma chave"
+        );
+
+        fs::remove_dir_all(&temp_dir).ok();
     }
 }
