@@ -380,6 +380,21 @@ pub async fn executar_editar_pessoa_db(
     pool: &SqlitePool,
     edicao: PropostaEditarPessoa,
 ) -> Resultado<ResultadoExecucaoIa> {
+    let eh_publica: bool = sqlx::query_scalar(
+        "SELECT COALESCE(is_publico, 0) != 0 FROM pessoas WHERE id = ?",
+    )
+    .bind(&edicao.pessoa_id)
+    .fetch_optional(pool)
+    .await?
+    .unwrap_or(false);
+
+    if eh_publica {
+        return Err(ErroDominio::Validacao(format!(
+            "'{}' pertence ao acervo histórico público curado e é protegido contra alterações.",
+            edicao.pessoa_nome
+        )));
+    }
+
     let mut tx = pool.begin().await?;
     let mut alteracoes = 0usize;
 
@@ -896,6 +911,21 @@ pub async fn executar_editar_linha_tempo_db(
     pool: &SqlitePool,
     ed: PropostaEditarLinhaTempo,
 ) -> Resultado<ResultadoExecucaoIa> {
+    let bloqueada: bool = sqlx::query_scalar(
+        "SELECT (COALESCE(is_bloqueada, 0) != 0 OR COALESCE(is_contexto, 0) != 0) FROM linhas_tempo WHERE id = ?",
+    )
+    .bind(&ed.linha_id)
+    .fetch_optional(pool)
+    .await?
+    .unwrap_or(false);
+
+    if bloqueada {
+        return Err(ErroDominio::Validacao(format!(
+            "A linha do tempo '{}' é uma linha histórica de referência (somente leitura) e não pode receber marcos.",
+            ed.titulo_linha
+        )));
+    }
+
     let mut tx = pool.begin().await?;
     let mut criados = 0usize;
 
@@ -1063,6 +1093,72 @@ mod testes {
         assert!(
             !r.avisos.iter().any(|a| a.contains("já tem pai")),
             "trocar placeholder não é substituição e não deve gerar aviso"
+        );
+    }
+
+    #[tokio::test]
+    async fn recusa_editar_pessoa_publica_ou_linha_de_contexto_bloqueada() {
+        let p = banco().await;
+        sqlx::query(
+            "INSERT INTO pessoas (id,nome,sobrenome,sexo,minibiografia,is_vivo,is_placeholder,is_publico)
+             VALUES ('pub_machado','Machado','de Assis','M','Biografia curada original',0,0,1)",
+        )
+        .execute(&p)
+        .await
+        .unwrap();
+
+        let res_pessoa = executar_editar_pessoa_db(
+            &p,
+            PropostaEditarPessoa {
+                pessoa_id: "pub_machado".into(),
+                pessoa_nome: "Machado de Assis".into(),
+                arvore_id: None,
+                nova_minibiografia: Some("Texto alterado".into()),
+                ano_nascimento: None,
+                ano_falecimento: None,
+                nova_profissao: None,
+                nova_obra_titulo: None,
+                nova_obra_ano: None,
+                novo_apelido: None,
+                nova_escolaridade: None,
+                nova_religiao: None,
+                novo_idioma: None,
+                resumo_alteracoes: Vec::new(),
+            },
+        )
+        .await;
+        assert!(
+            res_pessoa.is_err(),
+            "deveria recusar edição de pessoa pública curada"
+        );
+
+        let linha_bloqueada_id: String = sqlx::query_scalar(
+            "SELECT id FROM linhas_tempo WHERE is_bloqueada = 1 OR is_contexto = 1 LIMIT 1",
+        )
+        .fetch_one(&p)
+        .await
+        .unwrap();
+
+        let res_linha = executar_editar_linha_tempo_db(
+            &p,
+            PropostaEditarLinhaTempo {
+                linha_id: linha_bloqueada_id,
+                titulo_linha: "História do Brasil".into(),
+                marcos_para_adicionar: vec![crate::domain::assistente_ia::ItemMarcoProposto {
+                    ano_inicio: 2026,
+                    ano_fim: None,
+                    data_periodo_texto: "2026".into(),
+                    titulo: "Marco indevido".into(),
+                    descricao: None,
+                    relevancia: "alta".into(),
+                    trecho_evidencia: "2026".into(),
+                }],
+            },
+        )
+        .await;
+        assert!(
+            res_linha.is_err(),
+            "deveria recusar inserção de marco em linha de contexto bloqueada"
         );
     }
 }

@@ -185,7 +185,7 @@ pub async fn exportar_acervo_para(
                     p.is_placeholder, p.foto_url, p.categoria, p.tipo_tempo
              FROM arvore_membros am
              JOIN pessoas p ON am.pessoa_id = p.id
-             WHERE am.arvore_id = ?
+             WHERE am.arvore_id = ? AND p.is_publico = 1
              ORDER BY p.nome",
         )
         .bind(&aid)
@@ -268,8 +268,14 @@ pub async fn exportar_acervo_para(
             "SELECT DISTINCT u.id, u.slot_masculino_id, u.slot_feminino_id,
                     u.estado_vinculo, u.nota
              FROM unioes u
-             WHERE u.slot_masculino_id IN (SELECT pessoa_id FROM arvore_membros WHERE arvore_id = ?)
-                OR u.slot_feminino_id IN (SELECT pessoa_id FROM arvore_membros WHERE arvore_id = ?)",
+             LEFT JOIN pessoas pm ON pm.id = u.slot_masculino_id
+             LEFT JOIN pessoas pf ON pf.id = u.slot_feminino_id
+             WHERE (
+                    u.slot_masculino_id IN (SELECT am.pessoa_id FROM arvore_membros am JOIN pessoas p ON p.id = am.pessoa_id WHERE am.arvore_id = ? AND p.is_publico = 1)
+                 OR u.slot_feminino_id IN (SELECT am.pessoa_id FROM arvore_membros am JOIN pessoas p ON p.id = am.pessoa_id WHERE am.arvore_id = ? AND p.is_publico = 1)
+             )
+               AND (u.slot_masculino_id IS NULL OR pm.is_publico = 1)
+               AND (u.slot_feminino_id IS NULL OR pf.is_publico = 1)",
         )
         .bind(&aid)
         .bind(&aid)
@@ -280,8 +286,11 @@ pub async fn exportar_acervo_para(
         for u in &unioes_raw {
             let uid: String = u.get("id");
             let filhos_raw = sqlx::query(
-                "SELECT pessoa_id, tipo_vinculo, ordem FROM uniao_filhos
-                 WHERE uniao_id = ? ORDER BY ordem ASC",
+                "SELECT uf.pessoa_id, uf.tipo_vinculo, uf.ordem
+                 FROM uniao_filhos uf
+                 JOIN pessoas p ON p.id = uf.pessoa_id
+                 WHERE uf.uniao_id = ? AND p.is_publico = 1
+                 ORDER BY uf.ordem ASC",
             )
             .bind(&uid)
             .fetch_all(db)
@@ -469,10 +478,15 @@ pub async fn exportar_acervo_para(
     }
 
     // -------------------------------------------------------- estatísticas
-    let total_obras: i64 = sqlx::query("SELECT COUNT(*) AS n FROM obras_culturais")
-        .fetch_one(db)
-        .await?
-        .get("n");
+    let total_obras: i64 = sqlx::query(
+        "SELECT COUNT(*) AS n
+         FROM obras_culturais oc
+         JOIN pessoas p ON p.id = oc.pessoa_id
+         WHERE p.is_publico = 1",
+    )
+    .fetch_one(db)
+    .await?
+    .get("n");
 
     escrever_json(
         &dados.join("estatisticas.json"),
@@ -676,6 +690,110 @@ mod testes {
 
         // E a união em si carrega o casal e sobrevive à exportação.
         assert_eq!(arvore["unioes"].as_array().unwrap().len(), 1);
+
+        std::fs::remove_dir_all(&destino).ok();
+    }
+
+    /// Vincular uma pessoa pessoal (`is_publico = 0`) a uma figura histórica
+    /// (`is_publico = 1`) jamais pode vazar a família do usuário na exportação
+    /// do acervo público para o site.
+    #[tokio::test]
+    async fn familia_pessoal_vinculada_a_figura_publica_nao_vaza_na_exportacao() {
+        let pool = SqlitePoolOptions::new()
+            .max_connections(1)
+            .connect("sqlite::memory:")
+            .await
+            .expect("banco em memória");
+        sqlx::migrate!("./migrations").run(&pool).await.expect("migrations");
+
+        // Figura pública curada + árvore pública
+        sqlx::query(
+            "INSERT INTO pessoas (id, nome, sobrenome, sexo, is_vivo, is_placeholder, is_publico)
+             VALUES ('pub_machado', 'Machado', 'de Assis', 'M', 0, 0, 1),
+                    ('pub_carolina', 'Carolina', 'Novais', 'F', 0, 0, 1),
+                    ('usr_vovo', 'Antepassado', 'DaFamilia', 'M', 0, 0, 0),
+                    ('usr_vivo', 'Usuario', 'VivoDaFamilia', 'M', 1, 0, 0)",
+        )
+        .execute(&pool)
+        .await
+        .unwrap();
+
+        sqlx::query(
+            "INSERT INTO arvores (id, nome, raiz_pessoa_id, is_publico)
+             VALUES ('arv_pub_machado', 'Machado de Assis', 'pub_machado', 1)",
+        )
+        .execute(&pool)
+        .await
+        .unwrap();
+
+        sqlx::query(
+            "INSERT INTO unioes (id, slot_masculino_id, slot_feminino_id, estado_vinculo)
+             VALUES ('u_pub', 'pub_machado', 'pub_carolina', 'casamento')",
+        )
+        .execute(&pool)
+        .await
+        .unwrap();
+
+        // Mesmo que `usr_vovo` e `usr_vivo` tenham sido ligados na união e até inseridos em `arvore_membros`
+        // da árvore pública, a exportação pública DEVE filtrá-los!
+        sqlx::query(
+            "INSERT INTO uniao_filhos (uniao_id, pessoa_id, tipo_vinculo, ordem)
+             VALUES ('u_pub', 'usr_vovo', 'biologico', 1)",
+        )
+        .execute(&pool)
+        .await
+        .unwrap();
+
+        sqlx::query(
+            "INSERT INTO arvore_membros (arvore_id, pessoa_id)
+             VALUES ('arv_pub_machado', 'pub_machado'),
+                    ('arv_pub_machado', 'pub_carolina'),
+                    ('arv_pub_machado', 'usr_vovo'),
+                    ('arv_pub_machado', 'usr_vivo')",
+        )
+        .execute(&pool)
+        .await
+        .unwrap();
+
+        // Sincronizar também não deve puxar pessoas privadas para dentro de árvore pública
+        crate::domain::arvores_cmds::sincronizar_membros_arvore(
+            &pool,
+            "arv_pub_machado",
+            Some("pub_machado"),
+        )
+        .await
+        .unwrap();
+
+        let destino = std::env::temp_dir().join(format!(
+            "elotempo_no_leak_{}",
+            uuid::Uuid::new_v4()
+        ));
+        std::fs::create_dir_all(&destino).unwrap();
+        let rel = exportar_acervo_para(&pool, &destino, &destino.join("sem_midia"))
+            .await
+            .expect("exportação");
+
+        assert_eq!(
+            rel.pessoas, 2,
+            "apenas as 2 figuras públicas devem sair na exportação"
+        );
+
+        let arvore_json =
+            std::fs::read_to_string(destino.join("dados/arvores/arv_pub_machado.json")).unwrap();
+        let catalogo_json =
+            std::fs::read_to_string(destino.join("dados/catalogo_arvores.json")).unwrap();
+
+        assert!(
+            !arvore_json.contains("usr_vovo")
+                && !arvore_json.contains("DaFamilia")
+                && !arvore_json.contains("usr_vivo")
+                && !arvore_json.contains("VivoDaFamilia"),
+            "CRÍTICO: dados da família do usuário vazaram no JSON da árvore pública: {arvore_json}"
+        );
+        assert!(
+            !catalogo_json.contains("DaFamilia") && !catalogo_json.contains("VivoDaFamilia"),
+            "CRÍTICO: nomes da família do usuário vazaram em catalogo_arvores.json"
+        );
 
         std::fs::remove_dir_all(&destino).ok();
     }

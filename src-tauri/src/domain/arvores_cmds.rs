@@ -68,21 +68,84 @@ pub async fn sincronizar_membros_arvore(
     arvore_id: &str,
     raiz_pessoa_id: Option<&str>,
 ) -> Resultado<()> {
+    let arvore_eh_publica: bool = sqlx::query_scalar(
+        "SELECT COALESCE(is_publico, 0) != 0 FROM arvores WHERE id = ?",
+    )
+    .bind(arvore_id)
+    .fetch_optional(pool)
+    .await?
+    .unwrap_or(false);
+
     if let Some(rid) = raiz_pessoa_id {
-        // 1. Insere a própria raiz
-        sqlx::query(
-            "INSERT OR IGNORE INTO arvore_membros (id, arvore_id, pessoa_id, uniao_id)
-             VALUES (lower(hex(randomblob(16))), ?, ?, NULL)",
-        )
-        .bind(arvore_id)
-        .bind(rid)
-        .execute(pool)
-        .await?;
+        if !arvore_eh_publica {
+            // 1. Insere a própria raiz (em árvore pessoal)
+            sqlx::query(
+                "INSERT OR IGNORE INTO arvore_membros (id, arvore_id, pessoa_id, uniao_id)
+                 VALUES (lower(hex(randomblob(16))), ?, ?, NULL)",
+            )
+            .bind(arvore_id)
+            .bind(rid)
+            .execute(pool)
+            .await?;
+        } else {
+            sqlx::query(
+                "INSERT OR IGNORE INTO arvore_membros (id, arvore_id, pessoa_id, uniao_id)
+                 SELECT lower(hex(randomblob(16))), ?1, p.id, NULL
+                 FROM pessoas p WHERE p.id = ?2 AND p.is_publico = 1",
+            )
+            .bind(arvore_id)
+            .bind(rid)
+            .execute(pool)
+            .await?;
+        }
     }
 
     // 2. Insere todos os membros conectados recursivamente no grafo familiar
-    // a partir dos membros já presentes nesta árvore (ou da raiz)
-    let sql_conexos = r#"
+    // a partir dos membros já presentes nesta árvore (ou da raiz).
+    // Se a árvore for pública (`is_publico = 1`), jamais incorpora pessoas pessoais (`is_publico = 0`).
+    let sql_conexos = if arvore_eh_publica {
+        r#"
+        INSERT OR IGNORE INTO arvore_membros (id, arvore_id, pessoa_id, uniao_id)
+        WITH RECURSIVE conexos(id) AS (
+            SELECT am.pessoa_id FROM arvore_membros am
+            JOIN pessoas p ON p.id = am.pessoa_id
+            WHERE am.arvore_id = ?1 AND am.pessoa_id IS NOT NULL AND p.is_publico = 1
+            UNION
+            -- Pais públicos
+            SELECT u.slot_masculino_id FROM conexos c
+            JOIN uniao_filhos uf ON uf.pessoa_id = c.id
+            JOIN unioes u ON u.id = uf.uniao_id
+            JOIN pessoas p ON p.id = u.slot_masculino_id
+            WHERE u.slot_masculino_id IS NOT NULL AND p.is_publico = 1
+            UNION
+            SELECT u.slot_feminino_id FROM conexos c
+            JOIN uniao_filhos uf ON uf.pessoa_id = c.id
+            JOIN unioes u ON u.id = uf.uniao_id
+            JOIN pessoas p ON p.id = u.slot_feminino_id
+            WHERE u.slot_feminino_id IS NOT NULL AND p.is_publico = 1
+            UNION
+            -- Filhos públicos
+            SELECT uf.pessoa_id FROM conexos c
+            JOIN unioes u ON u.slot_masculino_id = c.id OR u.slot_feminino_id = c.id
+            JOIN uniao_filhos uf ON uf.uniao_id = u.id
+            JOIN pessoas p ON p.id = uf.pessoa_id
+            WHERE p.is_publico = 1
+            UNION
+            -- Cônjuges públicos
+            SELECT u.slot_masculino_id FROM conexos c
+            JOIN unioes u ON u.slot_feminino_id = c.id
+            JOIN pessoas p ON p.id = u.slot_masculino_id
+            WHERE u.slot_masculino_id IS NOT NULL AND p.is_publico = 1
+            UNION
+            SELECT u.slot_feminino_id FROM conexos c
+            JOIN unioes u ON u.slot_masculino_id = c.id
+            JOIN pessoas p ON p.id = u.slot_feminino_id
+            WHERE u.slot_feminino_id IS NOT NULL AND p.is_publico = 1
+        )
+        SELECT lower(hex(randomblob(16))), ?1, id, NULL FROM conexos WHERE id IS NOT NULL;
+        "#
+    } else {
+        r#"
         INSERT OR IGNORE INTO arvore_membros (id, arvore_id, pessoa_id, uniao_id)
         WITH RECURSIVE conexos(id) AS (
             SELECT pessoa_id FROM arvore_membros WHERE arvore_id = ?1 AND pessoa_id IS NOT NULL
@@ -113,7 +176,8 @@ pub async fn sincronizar_membros_arvore(
             WHERE u.slot_feminino_id IS NOT NULL
         )
         SELECT lower(hex(randomblob(16))), ?1, id, NULL FROM conexos WHERE id IS NOT NULL;
-    "#;
+        "#
+    };
     let _ = sqlx::query(sql_conexos)
         .bind(arvore_id)
         .execute(pool)

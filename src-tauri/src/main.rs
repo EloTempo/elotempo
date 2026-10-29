@@ -367,6 +367,7 @@ fn migrar_dados_legados_se_necessario(pasta_dados_atual: &std::path::Path) {
 
     // Arquivos a migrar da raiz da pasta de dados
     let arquivos = [
+        "acervo.key",
         ARQUIVO_ACERVO,
         "acervo.sqlite-wal",
         "acervo.sqlite-shm",
