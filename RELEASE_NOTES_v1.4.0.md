@@ -2,6 +2,16 @@
 
 Programa gratuito e offline para árvores genealógicas, que põe a vida de cada pessoa da família no mesmo eixo que a história do país. Software livre, sob licença GPL-3.0-or-later.
 
+> ### Se você usa a 1.2 ou a 1.3, atualize antes de trocar de computador
+>
+> Nas versões 1.2 e 1.3, a chave que protege o acervo ficava presa ao nome do computador e ao nome do usuário do Windows. Renomear o computador, reinstalar o sistema com outro nome ou levar a pasta do EloTempo para uma máquina nova podia tornar o acervo **impossível de abrir**, sem recuperação.
+>
+> A 1.4 corrige isso. Ao abrir pela primeira vez **no mesmo computador em que você já usa o EloTempo**, a chave é convertida para um formato que acompanha o acervo para qualquer máquina. E o programa nunca mais substitui uma chave que não consegue abrir: em vez disso, avisa e preserva o arquivo.
+>
+> **O que fazer:** instale a 1.4 no computador atual e abra o programa uma vez. Só depois troque de computador. Se puder, exporte também uma cópia em GEDCOM — é o formato que qualquer programa de genealogia lê.
+>
+> **Se você já copiou a pasta para outro computador** e a 1.4 avisar que não consegue abrir a chave do acervo, **não apague nada**. Instale a 1.4 no computador antigo, abra o programa uma vez lá e copie a pasta de novo.
+
 ### Downloads
 
 - **Windows 10 e 11** — `EloTempo_1.4.0_x64-setup.exe` (instalador) ou `EloTempo_1.4.0_x64_pt-BR.msi`
@@ -15,14 +25,14 @@ O GitHub mostra o SHA-256 de cada arquivo ao lado do nome. Confira antes de inst
 
 Na 1.3 o assistente respondia sobre o acervo e montava árvores a partir de um texto colado. Agora ele também:
 
-- **edita uma pessoa** que já está no acervo — biografia, datas, profissão, apelido;
+- **edita uma pessoa** da sua família — biografia, datas, profissão, apelido;
 - **acrescenta parentesco** — pai, mãe, cônjuge, filho ou filha;
 - **acrescenta marcos** a uma linha do tempo sua;
 - **escreve uma biografia** a partir do que já está registrado;
 - **aponta lacunas** no acervo, como pessoas sem data de nascimento ou sem biografia;
 - conduz uma **entrevista familiar guiada**, pergunta por pergunta.
 
-Nada é gravado sem passar por um cartão de revisão. E quando o banco recusa algo que a revisão mostrava — por exemplo, trocar um pai que já estava registrado —, o assistente diz o que ficou de fora em vez de gravar outra coisa.
+Nada é gravado sem passar por um cartão de revisão. E quando o banco recusa algo que a revisão mostrava — por exemplo, trocar um pai que já estava registrado —, o assistente diz o que ficou de fora em vez de gravar outra coisa. As pessoas do acervo histórico e as linhas do tempo de referência ficam protegidas: o assistente não as altera.
 
 **Continua funcionando sem baixar nada.** O assistente roda dentro do programa, sem internet, e se recusa a responder quando a informação não está no seu acervo nem no texto que você colou.
 
